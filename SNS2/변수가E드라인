@@ -1,0 +1,9 @@
+비로그인 화면 : index
+메인 화면 : main
+회원 가입 : regmember
+개인 페이지 : mypage
+글 작성 : writeform
+회원정보 수정 : modmember
+구독 리스트 : sublist
+관리자 페이지 : adminpage
+탈퇴 : exit
