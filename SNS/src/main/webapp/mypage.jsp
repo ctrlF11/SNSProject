@@ -4,9 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>fuck</title>
+<link rel="stylesheet" href="resource/bootstrap/bootstrap.css">
+<title>사용자 정보</title>
 </head>
 <body>
-fuck
+	<div>
+	
+	</div>
 </body>
 </html>
