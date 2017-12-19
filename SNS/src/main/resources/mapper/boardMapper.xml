@@ -2,5 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
 
-<mapper namespace="com.spring.sns.*" >
+<mapper namespace="com.project.sns.mapper.memberMapper">
+		<select id="getBoardList" resultType="BoardVO">
+			select * from board
+		</select>
 </mapper>

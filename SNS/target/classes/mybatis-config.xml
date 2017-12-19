@@ -5,6 +5,6 @@
 
 <configuration>
 	<typeAliases>
-		<!-- 이건 설정 필요. -->
+		<typeAlias type="com.project.sns.board.vo.BoardVO" alias="BoardVO"/>
 	</typeAliases>
 </configuration>
