@@ -3,4 +3,10 @@
 
 
 <mapper namespace="com.spring.sns.*" >
+
+	<insert id="insertUser">
+	insert into snsUser (ID,NAME,PASSWORD,BIRTHDAY,SEX,EMAIL,PROFILE_IMG,SEQ) values
+	(#{ID},#{NAME},#{PASSWORD},#{BIRTHDAY},#{SEX},#{EMAIL},#{PROFILE_IMG},#{SEQ})
+	</insert>
+
 </mapper>
