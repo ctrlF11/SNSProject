@@ -15,8 +15,8 @@ public class UserController {
 	
 	@RequestMapping("/write.do")
 	public String write(UserVO vo){
-		userService.insertArticle(vo);
-		return "index.html";
+		userService.insertUser(vo);
+		return "temp";
 	}
 	
 	@RequestMapping("/writeForm.do")

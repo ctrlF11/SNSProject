@@ -1,17 +1,25 @@
 package com.project.vo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class UserVO {
 
 	String ID;
 	String NAME;
 	String PASSWORD;
-	Date BIRTHDA;
+	Date BIRTHDAY;
 	int SEX;
 	String EMAIL;
 	String PROFILE_IMG;
 	int SEQ;
+	
+	
+	public Date getBIRTHDAY() {
+		return BIRTHDAY;
+	}
+	public void setBIRTHDAY(Date bIRTHDAY) {
+		BIRTHDAY = bIRTHDAY;
+	}
 	public String getID() {
 		return ID;
 	}
@@ -29,12 +37,6 @@ public class UserVO {
 	}
 	public void setPASSWORD(String pASSWORD) {
 		PASSWORD = pASSWORD;
-	}
-	public Date getBIRTHDA() {
-		return BIRTHDA;
-	}
-	public void setBIRTHDA(Date bIRTHDA) {
-		BIRTHDA = bIRTHDA;
 	}
 	public int getSEX() {
 		return SEX;

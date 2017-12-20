@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
 
-<mapper namespace="com.spring.sns.*" >
+<mapper namespace="User" >
 
-	<insert id="insertUser">
-	insert into snsUser (ID,NAME,PASSWORD,BIRTHDAY,SEX,EMAIL,PROFILE_IMG,SEQ) values
-	(#{ID},#{NAME},#{PASSWORD},#{BIRTHDAY},#{SEX},#{EMAIL},#{PROFILE_IMG},#{SEQ})
+	<insert id="insertUser" parameterType="com.project.vo.UserVO">
+	insert into snsUser (ID,NAME,PASSWORD,BIRTHDAY, SEX,EMAIL) values
+	(#{ID},#{NAME},#{PASSWORD},#{BIRTHDAY},#{SEX},#{EMAIL})
 	</insert>
 
 </mapper>
