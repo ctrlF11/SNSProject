@@ -23,7 +23,16 @@
 	        dateFormat: "yy-mm-dd"
 	    });
 	});
-  </script>
+  
+  function check(){
+	  if($('input[name=NAME]').val().length==0){
+		  $('input[name=NAME]').innerHTML = "<font color='red'>you must be</font>";
+	  } else {
+		  $('input[name=NAME]').innerHTML = "";	  
+	}  
+  }; 
+
+</script>
   
 </head>
 
@@ -32,7 +41,7 @@
 		<div class="card card-register mx-auto mt-5">
 			<div class="card-header">Register an Account</div>
 			<div class="card-body">
-				<form>
+				<form action="register.do">
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputEmail1">Email address</label>
@@ -68,7 +77,18 @@
 							</div>
 						</div>
 					</div>
-					<a class="btn btn-primary btn-block" href="login.html">Register</a>
+				   <div class="form-group">
+						<div class="form-row">
+							<div class="col-md-6">
+								
+							<label><input class="form-control" name="SEX" type="radio" value = "1"/> MAN</label>
+							</div>
+							<div class="col-md-6">
+								
+								<label><input class="form-control" name="SEX" type="radio" value="2">WOMAN</label>
+							</div>
+						</div>
+				<input type="submit" class="btn btn-primary btn-block" value="Register" onclick="check()">
 				</form>
 				<div class="text-center">
 					<a class="d-block small mt-3" href="login.html">Login Page</a>
@@ -77,11 +97,11 @@
 			</div>
 		</div>
 	</div>
-	<!-- Bootstrap core JavaScript-->
+	<!-- Bootstrap core JavaScript
 	<script src="resources/vendor/jquery/jquery.min.js"></script>
 	<script src="resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<!-- Core plugin JavaScript-->
-	<script src="resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+	 Core plugin JavaScript
+	<script src="resources/vendor/jquery-easing/jquery.easing.min.js"></script> -->
 </body>
 
 </html>
