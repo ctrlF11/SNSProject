@@ -2,14 +2,19 @@ package com.project.sns.board.vo;
 
 import java.sql.Date;
 
-public class BoardVO {
+public class ReplyVO {
+	private Integer seq;
 	private Integer board_seq;
 	private Integer line_seq;
-	private String title;
 	private String writer;
 	private String content;
 	private Date regdate;
-	private Integer heart;
+	public Integer getSeq() {
+		return seq;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
 	public Integer getBoard_seq() {
 		return board_seq;
 	}
@@ -21,12 +26,6 @@ public class BoardVO {
 	}
 	public void setLine_seq(Integer line_seq) {
 		this.line_seq = line_seq;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	public String getWriter() {
 		return writer;
@@ -46,13 +45,5 @@ public class BoardVO {
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
-	public Integer getHeart() {
-		return heart;
-	}
-	public void setHeart(Integer heart) {
-		this.heart = heart;
-	}
-	
-	
 	
 }

@@ -29,7 +29,7 @@ public class BoardController {
     /**
      * Simply selects the home view to render by returning its name.
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping("/do")
     public String home(Locale locale, Model model) throws Exception{
  
         logger.info("home");
@@ -41,4 +41,16 @@ public class BoardController {
         return "home";
     }
     
+    @RequestMapping("/test")
+    public String test() {
+    	return "test";
+    }
+    
+    @RequestMapping("/testGet")
+    public String testGet(BoardVO vo) {
+    	logger.info("testGet");
+    	vo.setTitle(vo.getTitle());
+    	service.inputBoard(vo);
+    	return "redirect:do.do";
+    }
 }

@@ -20,7 +20,7 @@
 			/> -->
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
 		<property name="url"
-			value="jdbc:log4jdbc:mysql://ctrlf11.cqfwljmig7zs.ap-northeast-2.rds.amazonaws.com/ctrlf11?useSSL=false&amp;serverTimezone=UTC"/>
+			value="jdbc:log4jdbc:mysql://ctrlf11.cqfwljmig7zs.ap-northeast-2.rds.amazonaws.com/ctrlf11?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=utf-8"/>
 		<property name="username" value="BaeNuri"></property>
 		<property name="password" value="clftjdtkdlek77!"></property>
 	</bean>
@@ -38,7 +38,6 @@
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
 	</bean>
 	
-	<context:component-scan base-package="com.project.sns.dao"></context:component-scan>
-	<context:component-scan base-package="com.project.sns.service"></context:component-scan>
+	<context:component-scan base-package="com.project.sns.**"></context:component-scan>
 	
 </beans>
