@@ -7,7 +7,7 @@
 <script src="./jquery-ui-1.12.1/datepicker-ko.js"></script>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>회원가입</title>
 <script type="text/javascript">
 $(function(){

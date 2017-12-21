@@ -21,7 +21,7 @@ public class UserController {
 	
 	@RequestMapping("/writeForm.do")
 	public String writeForm(){
-		return "login";
+		return "register";
 	}
 	
 }
