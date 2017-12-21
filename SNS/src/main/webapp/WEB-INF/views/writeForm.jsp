@@ -16,14 +16,14 @@ $(function(){
     });
 });
 
-function check(){
+/* function check(){
 	if(reg.ID.value==""){
 		$(this).css('background','red');
 		alert("아이디입력");
 		preventDefault();
 		return false;
 	}	
-}
+} */
 </script>
 
 </head>
