@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
 
-<mapper namespace="User" >
-
-	<insert id="insertUser" parameterType="com.project.vo.UserVO">
-	insert into snsUser (ID,NAME,PASSWORD,BIRTHDAY, SEX,EMAIL) values
-	(#{ID},#{NAME},#{PASSWORD},#{BIRTHDAY},#{SEX},#{EMAIL})
-	</insert>
-
+<mapper namespace="com.project.sns.mapper.boardMapper">
+		<select id="getBoardList" resultType="BoardVO">
+			select * from board
+		</select>
+		<insert id="inputBoard" parameterType="BoardVO">
+			insert into board(board_seq, line_seq, title, writer, content, regdate, heart)
+			values(8, 1, #{title}, 'kimit93', #{content}, sysdate(), 0)	
+		</insert>
 </mapper>
