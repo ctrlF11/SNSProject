@@ -8,6 +8,13 @@
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 
+<<<<<<< HEAD
+=======
+
+	
+
+
+>>>>>>> refs/remotes/origin/master
 	<properties>
 		<java-version>1.8</java-version>
 		<org.springframework-version>4.3.4.RELEASE</org.springframework-version>
@@ -43,6 +50,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
 
@@ -104,6 +116,7 @@
 		</dependency>
 
 		<!-- Servlet -->
+		<!-- 버전이 다름, scope가 없음 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -122,6 +135,7 @@
 		</dependency>
 
 		<!-- Test -->
+		<!-- 버전이 다름 -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -143,6 +157,7 @@
 			<version>1.3.0</version>
 		</dependency>
 		
+<<<<<<< HEAD
 		<!-- spring-test -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -152,6 +167,9 @@
 		
 		
 		<!--  https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+=======
+		<!-- 마이sql 버전이 다름 -->
+>>>>>>> refs/remotes/origin/master
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -163,7 +181,11 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
+<<<<<<< HEAD
 	
+=======
+		
+>>>>>>> refs/remotes/origin/master
 		<!-- mybatis log -->
 		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
 		<dependency>
