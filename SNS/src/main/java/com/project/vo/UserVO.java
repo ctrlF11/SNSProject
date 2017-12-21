@@ -4,14 +4,14 @@ import java.sql.Date;
 
 public class UserVO {
 
-	String ID;
-	String NAME;
-	String PASSWORD;
-	Date BIRTHDAY;
-	int SEX;
-	String EMAIL;
-	String PROFILE_IMG;
-	int SEQ;
+	private String ID;
+	private String NAME;
+	private String PASSWORD;
+	private Date BIRTHDAY;
+	private int SEX;
+	private String EMAIL;
+	private String PROFILE_IMG;
+	private int SEQ;
 	
 	
 	public Date getBIRTHDAY() {

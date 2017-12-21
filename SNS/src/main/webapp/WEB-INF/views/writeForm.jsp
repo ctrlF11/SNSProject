@@ -7,7 +7,7 @@
 <script src="./jquery-ui-1.12.1/datepicker-ko.js"></script>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>회원가입</title>
 <script type="text/javascript">
 $(function(){
@@ -16,14 +16,14 @@ $(function(){
     });
 });
 
-function check(){
+/* function check(){
 	if(reg.ID.value==""){
 		$(this).css('background','red');
 		alert("아이디입력");
 		preventDefault();
 		return false;
 	}	
-}
+} */
 </script>
 
 </head>
