@@ -1,20 +1,26 @@
 package com.project.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.service.UserService;
+import com.project.sns.board.controller.BoardController;
 import com.project.vo.UserVO;
 
 @Controller
 public class UserController {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@RequestMapping("/register.do")
 	public String write(UserVO vo){
+		logger.info("write");
 		userService.insertUser(vo);
 		return "writeForm";
 	}

@@ -5,8 +5,8 @@
 <mapper namespace="User" >
 
 	<insert id="insertUser" parameterType="com.project.vo.UserVO">
-	insert into snsUser (ID,NAME,PASSWORD,BIRTHDAY, SEX) values
-	(#{ID},#{NAME},#{PASSWORD},#{BIRTHDAY},#{SEX})
+	insert into snsUser (ID,NAME,PASSWORD,BIRTHDAY, SEX, EMAIL) values
+	(#{ID},#{NAME},#{PASSWORD},#{BIRTHDAY},#{SEX},#{EMAIL})
 	</insert>
 
 </mapper>
