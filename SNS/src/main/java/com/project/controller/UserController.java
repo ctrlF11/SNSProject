@@ -13,13 +13,13 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@RequestMapping("/write.do")
+	@RequestMapping("/register.do")
 	public String write(UserVO vo){
 		userService.insertUser(vo);
-		return "temp";
+		return "writeForm";
 	}
 	
-	@RequestMapping("/writeForm.do")
+	@RequestMapping("/registerForm.do")
 	public String writeForm(){
 		return "register";
 	}
