@@ -29,16 +29,24 @@ public class BoardController {
     /**
      * Simply selects the home view to render by returning its name.
      */
-    @RequestMapping("/do")
-    public String home(Locale locale, Model model) throws Exception{
+    @RequestMapping("/getBoardList.do")
+    public String getBoardList(Locale locale, Model model) throws Exception{
  
-        logger.info("home");
+        logger.info("getBoardList");
         
         List<BoardVO> boardList = service.getBoardList();
         
         model.addAttribute("boardList", boardList);
  
-        return "home";
+        return "BoardList";
+    }
+    
+    @RequestMapping("/getBoardValue.do")
+    public String getBoardValue(int board_seq) {
+    	logger.info("getBoardValue");
+    	BoardVO vo = service.getBoardValue(board_seq);
+    	
+    	return "BoardValue";
     }
     
     @RequestMapping("/test")
@@ -49,7 +57,6 @@ public class BoardController {
     @RequestMapping("/testGet")
     public String testGet(BoardVO vo) {
     	logger.info("testGet");
-    	vo.setTitle(vo.getTitle());
     	service.inputBoard(vo);
     	return "redirect:do.do";
     }

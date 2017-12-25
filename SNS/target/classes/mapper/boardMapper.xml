@@ -6,8 +6,31 @@
 		<select id="getBoardList" resultType="BoardVO">
 			select * from board
 		</select>
+		<select id="getBoardCount" parameterType="int">
+			select count(*) from board
+			<where>
+				line_seq = #{line_seq}
+			</where>
+		</select>		
+		<select id="getBoardValue" resultType="BoardVO" parameterType="int">
+			select * from board
+			<where>
+				board_seq = #{board_seq}
+				and
+				line_seq = #{line_seq}
+			</where>
+		</select>
+		<update id="upBoardHeart" parameterType="BoardVO">
+			update board set heart = heart+1 and heart_id = heart_id
+			<where>
+				board_seq = #{board_seq}
+				and
+				line_seq = #{line_seq}
+			</where>
+		</update>
 		<insert id="inputBoard" parameterType="BoardVO">
 			insert into board(board_seq, line_seq, title, writer, content, regdate, heart)
 			values(8, 1, #{title}, 'kimit93', #{content}, sysdate(), 0)	
 		</insert>
+		
 </mapper>

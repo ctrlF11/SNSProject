@@ -20,23 +20,17 @@ public class BoardDAOImpl implements BoardDAO {
 	private static final String namespace = "com.project.sns.mapper.boardMapper";
 	
 	@Override
-	public List<BoardVO> getBoardList() throws Exception {
+	public List<BoardVO> getBoardList(int line_seq) throws Exception {
 		return sqlSession.selectList(namespace+".getBoardList");
 	}
 
 	@Override
-	public int getBoardCount() throws Exception {
-		
-		return 0;
+	public int getBoardCount(int line_seq) throws Exception {
+		return sqlSession.selectOne(namespace+".getBoardCount", line_seq);
 	}
 
 	@Override
-	public void upBoardCount(int board_seq) {
-		
-	}
-
-	@Override
-	public BoardVO getBoardValue(int board_seq) {
+	public BoardVO getBoardValue(int board_seq, int line_seq) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -45,6 +39,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public List<ReplyVO> getBoardReply(int board_seq) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public void upBoardHeart(BoardVO vo) {
+		sqlSession.update(namespace+".upBoardHeart", vo);
 	}
 
 	@Override

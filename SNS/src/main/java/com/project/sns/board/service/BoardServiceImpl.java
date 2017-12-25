@@ -16,24 +16,18 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO dao;
 	
 	@Override
-	public List<BoardVO> getBoardList() throws Exception {
-		return dao.getBoardList();
+	public List<BoardVO> getBoardList(int line_seq) throws Exception {
+		return dao.getBoardList(line_seq);
 	}
 
 	@Override
-	public int getBoardCount() throws Exception {
+	public int getBoardCount(int line_seq) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void upBoardCount(int board_seq) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public BoardVO getBoardValue(int board_seq) {
+	public BoardVO getBoardValue(int board_seq, int line_seq) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -45,6 +39,12 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	public void upBoardHeart(BoardVO vo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public int inputBoardReply(ReplyVO vo) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -52,7 +52,8 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int inputBoard(BoardVO vo) {
-		return dao.inputBoard(vo);
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -72,4 +73,6 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
 }
