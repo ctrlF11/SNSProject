@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
@@ -30,21 +31,32 @@ public class BoardController {
      * Simply selects the home view to render by returning its name.
      */
     @RequestMapping("/getBoardList.do")
-    public String getBoardList(Locale locale, Model model) throws Exception{
+    public String getBoardList(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
  
         logger.info("getBoardList");
         
-        List<BoardVO> boardList = service.getBoardList();
+        List<BoardVO> boardList = service.getBoardList(line_seq);
         
         model.addAttribute("boardList", boardList);
  
         return "BoardList";
     }
+    @RequestMapping("/getBoardList2.do")
+    public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
+    	
+    	logger.info("getBoardList2");
+    	
+    	List<BoardVO> boardList = service.getBoardList(line_seq);
+    	System.out.println(boardList.get(0).getLine_seq());
+    	model.addAttribute("boardList", boardList);
+    	
+    	return "BoardList2";
+    }
     
     @RequestMapping("/getBoardValue.do")
-    public String getBoardValue(int board_seq) {
+    public String getBoardValue(@RequestParam("board_seq") int board_seq, @RequestParam("line_seq") int line_seq) {
     	logger.info("getBoardValue");
-    	BoardVO vo = service.getBoardValue(board_seq);
+    	BoardVO vo = service.getBoardValue(line_seq, board_seq);
     	
     	return "BoardValue";
     }

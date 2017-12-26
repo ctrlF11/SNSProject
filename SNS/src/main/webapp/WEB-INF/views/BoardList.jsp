@@ -11,9 +11,13 @@
     <table>
         <thead>
             <tr>
-                <th>아이디</th>
-                <th>비밀번호</th>
-                <th>이름</th>
+                <th>글번호</th>
+                <th>라인번호</th>
+                <th>제목</th>
+                <th>글쓴이</th>
+                <th>글내용</th>
+                <th>글쓴날</th>
+                <th>좋냐?</th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +36,7 @@
         </tbody>
         </tbody>
     </table>
- 
- 
+ 	<hr style="border: 2px solid red;" width="100px" />
+ 	<img>
 </body>
 </html>

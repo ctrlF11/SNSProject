@@ -21,7 +21,7 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	@Override
 	public List<BoardVO> getBoardList(int line_seq) throws Exception {
-		return sqlSession.selectList(namespace+".getBoardList");
+		return sqlSession.selectList(namespace+".getBoardList", line_seq);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public BoardVO getBoardValue(int board_seq, int line_seq) {
+	public BoardVO getBoardValue(int line_seq, int board_seq) {
 		// TODO Auto-generated method stub
 		return null;
 	}

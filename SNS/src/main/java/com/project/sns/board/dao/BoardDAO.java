@@ -13,7 +13,7 @@ public interface BoardDAO {
 	public int getBoardCount(int line_seq) throws Exception;
 
 	// 글 상세(글 번호, 라인 번호[BoardVO])
-	public BoardVO getBoardValue(int board_seq, int line_seq);
+	public BoardVO getBoardValue(int line_seq, int board_seq);
 	public List<ReplyVO> getBoardReply(int board_seq);
 	
 	

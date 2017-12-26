@@ -2,8 +2,7 @@ package com.project.sns.board.service;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.sns.board.dao.BoardDAO;
@@ -12,7 +11,7 @@ import com.project.sns.board.vo.ReplyVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
-	@Inject
+	@Autowired
 	private BoardDAO dao;
 	
 	@Override
@@ -27,7 +26,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardVO getBoardValue(int board_seq, int line_seq) {
+	public BoardVO getBoardValue(int line_seq, int board_seq) {
 		// TODO Auto-generated method stub
 		return null;
 	}

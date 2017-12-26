@@ -3,8 +3,11 @@
 
 
 <mapper namespace="com.project.sns.mapper.boardMapper">
-		<select id="getBoardList" resultType="BoardVO">
+		<select id="getBoardList" resultType="BoardVO" parameterType="int">
 			select * from board
+			<where>
+				line_seq = #{line_seq}
+			</where>
 		</select>
 		<select id="getBoardCount" parameterType="int">
 			select count(*) from board
