@@ -72,4 +72,9 @@ public class BoardController {
     	service.inputBoard(vo);
     	return "redirect:do.do";
     }
+    
+    @RequestMapping("/getTest")
+    public String getTest() {
+    	return "getTest";
+    }
 }
