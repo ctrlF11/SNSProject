@@ -14,6 +14,7 @@ public class UserVO {
 	private int SEQ;
 	
 	
+	
 	public Date getBIRTHDAY() {
 		return BIRTHDAY;
 	}

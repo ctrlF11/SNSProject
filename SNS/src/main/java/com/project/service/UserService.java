@@ -1,10 +1,13 @@
 package com.project.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.dao.UserMapper;
+import com.project.vo.AddrVO;
 import com.project.vo.UserVO;
 
 @Service
@@ -16,4 +19,9 @@ public class UserService {
 	public int insertUser(UserVO vo){
 		return userDao.insertUser(vo);	
 }
+	public List<AddrVO> list()
+	{
+		return userDao.list();
+	}
+	
 }
