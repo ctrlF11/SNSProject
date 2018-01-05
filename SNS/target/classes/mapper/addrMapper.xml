@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+
+<mapper namespace="com.project.sns.mapper.addrMapper">
+		<insert id="inputAddr" parameterType="java.util.List">
+			insert into Address(addr1, title, mapX, mapY)
+			values
+			<foreach collection="list" item="item" separator=",">
+				(#{item.addr1}, #{item.title}, #{item.mapX}, #{item.mapY})
+			</foreach> 
+		</insert>
+</mapper>

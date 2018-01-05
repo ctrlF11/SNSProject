@@ -1,10 +1,9 @@
-package com.project.sns.addr.dao;
+package com.project.sns.addr.service;
 
 import java.util.List;
 
 import com.project.sns.addr.vo.AddrVO;
 
-public interface AddrDAO {
+public interface AddrService {
 	public int inputAddr(List<AddrVO> vo);
-	public void getAddr(int first, int last);
 }

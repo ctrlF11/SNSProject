@@ -7,5 +7,7 @@
 	<typeAliases>
 		<typeAlias type="com.project.sns.board.vo.BoardVO" alias="BoardVO"/>
 		<typeAlias type="com.project.sns.board.vo.ReplyVO" alias="ReplyVO"/>
+
+		<typeAlias type="com.project.sns.addr.vo.AddrVO" alias="AddrVO"/>
 	</typeAliases>
 </configuration>
