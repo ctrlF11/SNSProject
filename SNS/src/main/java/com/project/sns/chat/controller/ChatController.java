@@ -34,7 +34,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping(value = "/chat")
 public class ChatController {
 
 	@Autowired
@@ -53,6 +53,7 @@ public class ChatController {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+		System.out.println("entity : " + entity);
 		return entity;
 	}
 
@@ -71,6 +72,7 @@ public class ChatController {
 			e.printStackTrace();
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+		System.out.println("entity : " + entity);
 		return entity;
 	}
 

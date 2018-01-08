@@ -60,7 +60,7 @@ String toID="456";
 			contentType : "application/json; charset=UTF-8",
 			success: function(data){
 				if(data =="") return;
-				console.log(data);
+				console.log("data : " + data);
 				for(var i = 0; i < data.length; i++){
 					addChat(data[i].fromID, data[i].chatContent, data[i].chatTime);
 					console.log(data[i].fromID);
