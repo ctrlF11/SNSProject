@@ -8,6 +8,6 @@
 			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
 		</insert>
 		<select id="getAddress" parameterType="int" resultType="AddrVO">
-			select * from Address
+			select * from TourMap
 		</select>
 </mapper>

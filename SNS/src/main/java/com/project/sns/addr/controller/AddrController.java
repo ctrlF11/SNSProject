@@ -36,7 +36,7 @@ public class AddrController {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
-		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=";
+		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
 		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
 		String parameter = "";
 		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
@@ -46,9 +46,8 @@ public class AddrController {
 		// Writer(response.getOutputStream(),"KSC5601"));
 		// ServletOutputStream out = response.getOutputStream();
 		parameter = parameter + "&" + "areaCode=1";
-		parameter = parameter + "&" + "eventStartDate=20171201";
-		parameter = parameter + "&" + "eventEndDate=20171231";
-		parameter = parameter + "&" + "pageNo=1&numOfRows=10";
+		parameter = parameter + "&" + "numOfRows=4000";
+		parameter = parameter + "&" + "cat2=A0102";
 		parameter = parameter + "&" + "MobileOS=ETC";
 		parameter = parameter + "&" + "MobileApp=aa";
 		parameter = parameter + "&" + "_type=json";
@@ -94,16 +93,30 @@ public class AddrController {
 
 		
 		List<AddrVO> list = new ArrayList<AddrVO>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 3361; i++) {
 			JSONObject a = jArray.getJSONObject(i);
 			
 			AddrVO vo = new AddrVO();
-			vo.setAddr1(a.getString("addr1"));
+
+//TourMap DB			
+			if(a.has("contenttypeid")&&a.has("contentid")&&a.has("title")&&a.has("tel")&&a.has("addr1")&&a.has("firstimage")&&
+				a.has("firstimage2") && a.has("cat2") && a.has("cat3") && a.has("mapx") && a.has("mapy")){
+			vo.setContentTypeId(a.getString("contenttypeid"));
+			vo.setContentId(a.getString("contentid"));
 			vo.setTitle(a.getString("title"));
-			vo.setMapX(a.getString("mapx"));
-			vo.setMapY(a.getString("mapy"));
+			vo.setTel(a.getString("tel"));
+			vo.setAddr1(a.getString("addr1"));
+			vo.setFirstimage(a.getString("firstimage"));
+			vo.setFirstimage2(a.getString("firstimage2"));
+			vo.setCat2(a.getString("cat2"));
+			vo.setCat3(a.getString("cat3"));			
+			vo.setMapx(a.getString("mapx"));
+			vo.setMapy(a.getString("mapy"));
 			list.add(vo);
+			}
 		}
+		
+//		int i = service.deleteAddr(list);
 		int i = service.inputAddr(list);
 		System.out.println(i);
 		return "test";

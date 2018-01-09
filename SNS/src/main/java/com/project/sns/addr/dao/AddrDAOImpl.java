@@ -19,6 +19,16 @@ public class AddrDAOImpl implements AddrDAO{
 	public int inputAddr(List<AddrVO> vo) {
 		return sqlSession.insert(namespace+".inputAddr", vo);
 	}
+	
+	@Override
+	public int inputAddrCat(List<AddrVO> vo) {
+		return sqlSession.insert(namespace+".inputAddrCat", vo);
+	}
+	
+	@Override
+	public int deleteAddr(List<AddrVO> vo) {
+		return sqlSession.delete(namespace+".deleteAddr", vo);
+	}
 
 	@Override
 	public void getAddr(int first, int last) {

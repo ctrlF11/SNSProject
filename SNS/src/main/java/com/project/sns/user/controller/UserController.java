@@ -36,7 +36,7 @@ public class UserController {
 	@RequestMapping("/Address.do")
 	public String Address(HttpServletRequest req) throws Exception{
 		List<AddrVO> list = userService.getAddress();
-		System.out.println(list.get(1).getMapX());
+		System.out.println(list.get(1).getMapx());
 		req.setAttribute("list", list);
 		return "result";
 	}
