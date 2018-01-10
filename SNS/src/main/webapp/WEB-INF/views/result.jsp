@@ -6,7 +6,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
 <title>Insert title here</title>
+    <style>
+        #setDiv {
+            padding-top: 100px;
+            text-align: center;
+        }
+        #mask {
+            position:absolute;
+            left:0;
+            top:0;
+            z-index:9999;
+            background-color:#000;
+            display:none;
+        }
+        #window {
+            display: none;
+            background-color: #ffffff;
+            height: 200px;
+            z-index:99999;
+        }
+    </style>	
 </head>
 <body>
 
@@ -16,8 +39,8 @@
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
-        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 15 // 지도의 확대 레벨
+        center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨
     };
 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -38,49 +61,61 @@ var positions =  [
 	   }
 	%>
 	];
+	selectedMarker = null; // 클릭한 마커를 담을 변수
+	
+	// 마커 이미지의 이미지 주소입니다
+	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+	    
+	for (var i = 0; i < positions.length; i ++) {
+	    
+	    // 마커 이미지의 이미지 크기 입니다
+	    var imageSize = new daum.maps.Size(24, 35); 
+	    
+	    // 마커 이미지를 생성합니다    
+	    var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
+	    
+	    // 마커를 생성합니다
+	    var marker = new daum.maps.Marker({
+	        map: map, // 마커를 표시할 지도
+	        position: positions[i].latlng, // 마커를 표시할 위치
+	        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+	        image : markerImage // 마커 이미지 
+	    });
+	    addMarker(positions[i].latlng);
+	}
+	
+function addMarker(position) {	
 
-  // 마커 이미지의 이미지 주소입니다
-var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-    
-for (var i = 0; i < positions.length; i ++) {
-    
-    // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new daum.maps.Size(24, 35); 
-    
-    // 마커 이미지를 생성합니다    
-    var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
-    
-    // 마커를 생성합니다
-    var marker = new daum.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: positions[i].latlng, // 마커를 표시할 위치
-        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image : markerImage, // 마커 이미지
-        clickable: true
-    }); 
-    
-}
-
-marker.setMap(map);
-
-
-//마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-// 인포윈도우를 생성합니다
-var infowindow = new daum.maps.InfoWindow({
-    content : iwContent,
-    removable : iwRemoveable
-});
-
-// 마커에 클릭이벤트를 등록합니다
 daum.maps.event.addListener(marker, 'click', function() {
-      // 마커 위에 인포윈도우를 표시합니다
-      infowindow.open(map, marker);  
+	wrapWindowByMask();
 });
 
 
+    // 클릭된 마커가 없고,click된 마커가 클릭된 마커가 아니면
+    // 마커의 이미지를 오버 이미지로 변경합니다
+    
+    if (!selectedMarker || selectedMarker !== marker) {
+    	
+    <%
+ 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
+ 	   for (int i = 0; i < list2.size(); i++) {
+ 	%>
+ 	
+
+ 	
+    	
+    <%
+
+ 	   }
+ 	%>
+
+    }
+    
+    // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+   
+
+}
+	
 <%-- var linePath =  [
 	<%
 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
@@ -107,7 +142,32 @@ daum.maps.event.addListener(marker, 'click', function() {
 // 지도에 선을 표시합니다 
 polyline.setMap(map);    --%>
 
+	 function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
+		 
+		var maskHeight = $(document).height();
+		var maskWidth = $(window).width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+		
+		$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
+		$('#mask').fadeTo("slow",0.8);
 
+		var left = ( $(window).scrollLeft() + ( $(window).width() - $('#window').width()) / 2 );
+        var top = ( $(window).scrollTop() + ( $(window).height() - $('#window').height()) / 2 );
+        
+        $('#window').css({'left':left,'top':top, 'position':'absolute'});
+        
+        $('#window').show();
+		}
+	
 </script>
+
+
+<div id="setDiv">
+
+    <div id="mask"></div>
+    <div id="window"></div>
+    
+</div>
+
+
 </body>
 </html>
