@@ -6,7 +6,30 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
 <title>Insert title here</title>
+    <style>
+        #setDiv {
+            padding-top: 100px;
+            text-align: center;
+        }
+        #mask {
+            position:absolute;
+            left:0;
+            top:0;
+            z-index:9999;
+            background-color:#000;
+            display:none;
+        }
+        #window {
+            display: none;
+            background-color: #ffffff;
+            height: 200px;
+            z-index:99999;
+        }
+    </style>	
 </head>
 <body>
 
@@ -64,6 +87,9 @@ var positions =  [
 function addMarker(position) {	
 
 daum.maps.event.addListener(marker, 'click', function() {
+	wrapWindowByMask();
+});
+
 
     // 클릭된 마커가 없고,click된 마커가 클릭된 마커가 아니면
     // 마커의 이미지를 오버 이미지로 변경합니다
@@ -75,39 +101,21 @@ daum.maps.event.addListener(marker, 'click', function() {
  	   for (int i = 0; i < list2.size(); i++) {
  	%>
  	
-	String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
-	String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
-	String parameter = "";
-	// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
 
-	PrintWriter out = response.getWriter();
-	// PrintWriter out = new PrintWriter(new OutputStream
-	// Writer(response.getOutputStream(),"KSC5601"));
-	// ServletOutputStream out = response.getOutputStream();
-	parameter = parameter + "&" + "contentId=<%=list2.get(i).getContentId()%>";
-	parameter = parameter + "&" + "contentTypeId=<%=list2.get(i).getContentTypeId()%>";
-	parameter = parameter + "&" + "MobileOS=ETC";
-	parameter = parameter + "&" + "MobileApp=aa";
-	parameter = parameter + "&" + "_type=json";
-
-	addr = addr + serviceKey + parameter;
-	URL url = new URL(addr);
  	
-    	var popUrl = url;	//팝업창에 출력될 페이지 URL
-    	var popOption = "width=370, height=360, resizable=no, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+    	
     <%
 
  	   }
  	%>
-		window.open(popUrl,"",popOption);
 
     }
     
     // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
    
-});
 
-	}
+}
+	
 <%-- var linePath =  [
 	<%
 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
@@ -134,7 +142,32 @@ daum.maps.event.addListener(marker, 'click', function() {
 // 지도에 선을 표시합니다 
 polyline.setMap(map);    --%>
 
+	 function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
+		 
+		var maskHeight = $(document).height();
+		var maskWidth = $(window).width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+		
+		$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
+		$('#mask').fadeTo("slow",0.8);
 
+		var left = ( $(window).scrollLeft() + ( $(window).width() - $('#window').width()) / 2 );
+        var top = ( $(window).scrollTop() + ( $(window).height() - $('#window').height()) / 2 );
+        
+        $('#window').css({'left':left,'top':top, 'position':'absolute'});
+        
+        $('#window').show();
+		}
+	
 </script>
+
+
+<div id="setDiv">
+
+    <div id="mask"></div>
+    <div id="window"></div>
+    
+</div>
+
+
 </body>
 </html>
