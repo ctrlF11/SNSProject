@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
@@ -124,12 +125,15 @@ public class AddrController {
 	
 	
 	@RequestMapping("/callDetail.do")
-	public void callDetail(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		logger.info("PublicData2");
+	public void callDetail(HttpServletRequest request, HttpServletResponse response, @RequestParam String contentId, @RequestParam String contentTypeId) throws Exception {
+		logger.info("callDetail");
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
-		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
+		System.out.println(contentId);
+		System.out.println(contentTypeId);	
+		
+		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
 		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
 		String parameter = "";
 		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
@@ -138,9 +142,9 @@ public class AddrController {
 		// PrintWriter out = new PrintWriter(new OutputStream
 		// Writer(response.getOutputStream(),"KSC5601"));
 		// ServletOutputStream out = response.getOutputStream();
-		parameter = parameter + "&" + "areaCode=1";
-		parameter = parameter + "&" + "numOfRows=4000";
-		parameter = parameter + "&" + "cat2=A0102";
+		parameter = parameter + "&" + "contentId=" + contentId;
+		parameter = parameter + "&" + "contentTypeId=" + contentTypeId;
+
 		parameter = parameter + "&" + "MobileOS=ETC";
 		parameter = parameter + "&" + "MobileApp=aa";
 		parameter = parameter + "&" + "_type=json";
@@ -170,5 +174,7 @@ public class AddrController {
 
 		JSONObject json = new JSONObject();
 		json.put("data", s);
+
+		
 	}
 }
