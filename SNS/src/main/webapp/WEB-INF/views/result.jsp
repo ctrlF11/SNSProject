@@ -42,24 +42,7 @@
 
     <div id="mask"></div>
     <div id="window">
-    <table>
-     <%
- 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
- 	   for (int i = 0; i < list2.size(); i++) {
- 	%>
- 	<tr>
- 		<td>
- 
- 
- 
- 	
-    	
-    <%
 
- 	   }
- 	%>
-
-    </table>
     
     
     
@@ -86,8 +69,9 @@ var positions =  [
 	   List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
 	   for (int i = 0; i < list.size(); i++) {
 	%>
-	{contenttypeid : ,
-	 contentid : ,
+	{title : "<%=list.get(i).getTitle()%>",
+	 contenttypeid : "<%=list.get(i).getContentTypeId()%>",
+	 contentid : "<%=list.get(i).getContentId()%>",
 	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
 	}
 
@@ -105,21 +89,10 @@ var positions =  [
 	    
 	for (var i = 0; i < positions.length; i ++) {
 	    
-	    // 마커 이미지의 이미지 크기 입니다
-	    var imageSize = new daum.maps.Size(24, 35); 
-	    
-	    // 마커 이미지를 생성합니다    
-	    var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
-	    
-	    // 마커를 생성합니다
-	    var marker = new daum.maps.Marker({
-	        map: map, // 마커를 표시할 지도
-	        position: positions[i].latlng, // 마커를 표시할 위치
-	        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-	        image : markerImage // 마커 이미지 
-	    });
-	    addMarker(positions[i].latlng);    //이 function이 필요할까
-	   //function(positions[i].contentId); 해서 calldetail로 값을 넘겨주고 ajax로 받아와서 출력해보자
+
+	    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);    
+	   	
+
 	}
 
 	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
@@ -127,12 +100,52 @@ var positions =  [
         $(this).hide();
         $('#window').hide();
     });	
-    
-function addMarker(position) {	
+	 
+	 
+function addMarker(position, title, contentid, contenttypeid) {	
 
-daum.maps.event.addListener(marker, 'click', function() {
-	wrapWindowByMask();
-});
+    // 마커 이미지의 이미지 크기 입니다
+    var imageSize = new daum.maps.Size(24, 35); 
+    
+    // 마커 이미지를 생성합니다    
+    var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
+    
+    // 마커를 생성합니다
+    var marker = new daum.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: position, // 마커를 표시할 위치
+        title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : markerImage // 마커 이미지 
+    });
+	
+	
+    
+	daum.maps.event.addListener(marker, 'click', function() {
+
+		
+		wrapWindowByMask();
+		
+		$.ajax({        
+		      url: 'callDetail.do',
+		      type: 'get',
+		      data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		      dataType: 'json',
+		      success: function(data){
+		    	  console.log(data);
+	 	          console.log(data.response.body.items.item);
+ 		          var myItem = data.response.body.items.item;
+		              var output = '';
+		              output += '<h4>'+myItem.treatmenu+'</h4>';
+		              output += '<h4>'+myItem.opentimefood+'</h4>';
+		              output += '<h4>'+myItem.reservationfood+'</h4>'; 
+		              
+			          $('#window').html(output);
+		      },
+	    	error: function(XMLHttpRequest, textStatus, errorThrown) { 
+	        	alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+	    	} 
+	});
+	});
 
    
     
