@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 
 <title>Insert title here</title>
@@ -28,15 +28,50 @@
             background-color: #ffffff;
             height: 200px;
             z-index:99999;
+            width:600px;
+            height:250px;
+            border:1px;
+            solid #ccc;
+            position:fixed;
+            
         }
     </style>	
 </head>
 <body>
+<div id="setDiv">
 
-<div id="map" style="width:100%;height:850px;"></div>
+    <div id="mask"></div>
+    <div id="window">
+    <table>
+     <%
+ 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
+ 	   for (int i = 0; i < list2.size(); i++) {
+ 	%>
+ 	<tr>
+ 		<td>
+ 
+ 
+ 
+ 	
+    	
+    <%
+
+ 	   }
+ 	%>
+
+    </table>
+    
+    
+    
+    </div>
+    <div id="map" style="width:100%;height:850px;"></div>
+</div>
+
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script>
+
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
         center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
@@ -51,7 +86,9 @@ var positions =  [
 	   List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
 	   for (int i = 0; i < list.size(); i++) {
 	%>
-	{latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
+	{contenttypeid : ,
+	 contentid : ,
+	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
 	}
 
 	<%
@@ -61,7 +98,7 @@ var positions =  [
 	   }
 	%>
 	];
-	selectedMarker = null; // 클릭한 마커를 담을 변수
+
 	
 	// 마커 이미지의 이미지 주소입니다
 	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
@@ -81,37 +118,42 @@ var positions =  [
 	        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
 	        image : markerImage // 마커 이미지 
 	    });
-	    addMarker(positions[i].latlng);
+	    addMarker(positions[i].latlng);    //이 function이 필요할까
+	   //function(positions[i].contentId); 해서 calldetail로 값을 넘겨주고 ajax로 받아와서 출력해보자
 	}
-	
+
+	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+    $('#mask').click(function () {
+        $(this).hide();
+        $('#window').hide();
+    });	
+    
 function addMarker(position) {	
 
 daum.maps.event.addListener(marker, 'click', function() {
 	wrapWindowByMask();
 });
 
-
-    // 클릭된 마커가 없고,click된 마커가 클릭된 마커가 아니면
-    // 마커의 이미지를 오버 이미지로 변경합니다
+   
     
-    if (!selectedMarker || selectedMarker !== marker) {
-    	
-    <%
- 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
- 	   for (int i = 0; i < list2.size(); i++) {
- 	%>
- 	
+	}
+  
 
- 	
-    	
-    <%
+function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
+	 
+	var maskHeight = $(document).height();
+	var maskWidth = $(window).width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	
+	$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
+	$('#mask').fadeTo("slow",0.8);
 
- 	   }
- 	%>
-
-    }
+	var left = ( $(window).scrollLeft() + ( $(window).width() - $('#window').width()) / 2 );
+    var top = ( $(window).scrollTop() + ( $(window).height() - $('#window').height()) / 2 );
     
-    // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+    $('#window').css({'left':left,'top':top, 'position':'absolute'});
+    
+    $('#window').show();
+ 
    
 
 }
@@ -142,31 +184,12 @@ daum.maps.event.addListener(marker, 'click', function() {
 // 지도에 선을 표시합니다 
 polyline.setMap(map);    --%>
 
-	 function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
-		 
-		var maskHeight = $(document).height();
-		var maskWidth = $(window).width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
-		
-		$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
-		$('#mask').fadeTo("slow",0.8);
 
-		var left = ( $(window).scrollLeft() + ( $(window).width() - $('#window').width()) / 2 );
-        var top = ( $(window).scrollTop() + ( $(window).height() - $('#window').height()) / 2 );
-        
-        $('#window').css({'left':left,'top':top, 'position':'absolute'});
-        
-        $('#window').show();
-		}
 	
 </script>
 
 
-<div id="setDiv">
 
-    <div id="mask"></div>
-    <div id="window"></div>
-    
-</div>
 
 
 </body>

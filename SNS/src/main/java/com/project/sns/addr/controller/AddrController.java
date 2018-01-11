@@ -121,4 +121,54 @@ public class AddrController {
 		System.out.println(i);
 		return "test";
 	}
+	
+	
+	@RequestMapping("/callDetail.do")
+	public void callDetail(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		logger.info("PublicData2");
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+
+		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
+		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
+		String parameter = "";
+		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
+
+		PrintWriter out = response.getWriter();
+		// PrintWriter out = new PrintWriter(new OutputStream
+		// Writer(response.getOutputStream(),"KSC5601"));
+		// ServletOutputStream out = response.getOutputStream();
+		parameter = parameter + "&" + "areaCode=1";
+		parameter = parameter + "&" + "numOfRows=4000";
+		parameter = parameter + "&" + "cat2=A0102";
+		parameter = parameter + "&" + "MobileOS=ETC";
+		parameter = parameter + "&" + "MobileApp=aa";
+		parameter = parameter + "&" + "_type=json";
+
+		addr = addr + serviceKey + parameter;
+		URL url = new URL(addr);
+
+		System.out.println(addr);
+
+		// BufferedReader in = new BufferedReader(new
+		// InputStreamReader(url.openStream(), "UTF-8"));
+
+		InputStream in = url.openStream();
+		// CachedOutputStream bos = new CachedOutputStream();
+		ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
+		IOUtils.copy(in, bos1);
+		in.close();
+		bos1.close();
+
+		String mbos = bos1.toString("UTF-8");
+		System.out.println("mb: " + mbos);
+
+		byte[] b = mbos.getBytes("UTF-8");
+		String s = new String(b, "UTF-8");
+		out.println(s);
+		System.out.println("s: " + s);
+
+		JSONObject json = new JSONObject();
+		json.put("data", s);
+	}
 }
