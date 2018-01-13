@@ -15,5 +15,7 @@
 		<typeAlias type="com.project.sns.user.vo.UserVO" alias="UserVO"/>
 		<!-- 채팅 VO -->
 		<typeAlias type="com.project.sns.chat.vo.ChatVO" alias="ChatVO"/>
+		<!-- TourReviewVO -->
+		<typeAlias type="com.project.sns.tour.vo.TourReviewVO" alias="TourReviewVO"/>
 	</typeAliases>
 </configuration>

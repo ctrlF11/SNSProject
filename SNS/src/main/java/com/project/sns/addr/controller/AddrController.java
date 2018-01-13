@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
@@ -29,7 +30,8 @@ public class AddrController {
 
 	@Autowired
 	private AddrService service;
-//
+
+	//
 	@RequestMapping("/inputAddr.do")
 	public String inputAddr(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.info("PublicData2");
@@ -80,7 +82,7 @@ public class AddrController {
 		json.put("data", s);
 		// json.put("data", data);
 		System.out.println("json: " + json);
-		
+
 		JSONObject jso = json.getJSONObject("data");
 		System.out.println("json1: " + jso);
 		JSONObject js = jso.getJSONObject("response");
@@ -92,20 +94,70 @@ public class AddrController {
 		JSONArray jArray = items.getJSONArray("item");
 		System.out.println("json5: " + jArray);
 
-		
-		List<AddrVO> list = new ArrayList<AddrVO>();
-		for (int i = 0; i < 10; i++) {
-			JSONObject a = jArray.getJSONObject(i);
-			
-			AddrVO vo = new AddrVO();
-			vo.setAddr1(a.getString("addr1"));
-			vo.setTitle(a.getString("title"));
-			vo.setMapX(a.getString("mapx"));
-			vo.setMapY(a.getString("mapy"));
-			list.add(vo);
-		}
-		int i = service.inputAddr(list);
-		System.out.println(i);
+		/*
+		 * List<AddrVO> list = new ArrayList<AddrVO>(); for (int i = 0; i < 10; i++) {
+		 * JSONObject a = jArray.getJSONObject(i);
+		 * 
+		 * AddrVO vo = new AddrVO(); vo.setAddr1(a.getString("addr1"));
+		 * vo.setTitle(a.getString("title")); vo.setMapX(a.getString("mapx"));
+		 * vo.setMapY(a.getString("mapy")); list.add(vo); } int i =
+		 * service.inputAddr(list); System.out.println(i);
+		 */
 		return "test";
 	}
+
+	@RequestMapping("/callDetail.do")
+	public String callDetail(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("contentId") String contentId, @RequestParam("contentTypeId") String contentTypeId) throws Exception {
+		logger.info("callDetail");
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+		System.out.println("contentId : " + contentId);
+		System.out.println("contentTypeId : " + contentTypeId);
+		
+		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
+		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
+		String parameter = "";
+		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
+
+		PrintWriter out = response.getWriter();
+		// PrintWriter out = new PrintWriter(new OutputStream
+		// Writer(response.getOutputStream(),"KSC5601"));
+		// ServletOutputStream out = response.getOutputStream();
+		parameter = parameter + "&" + "contentId=" + contentId;
+		parameter = parameter + "&" + "contentTypeId=" + contentTypeId;
+
+		parameter = parameter + "&" + "MobileOS=ETC";
+		parameter = parameter + "&" + "MobileApp=aa";
+		parameter = parameter + "&" + "_type=json";
+
+		addr = addr + serviceKey + parameter;
+		URL url = new URL(addr);
+
+		System.out.println(addr);
+
+		// BufferedReader in = new BufferedReader(new
+		// InputStreamReader(url.openStream(), "UTF-8"));
+
+		InputStream in = url.openStream();
+		// CachedOutputStream bos = new CachedOutputStream();
+		ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
+		IOUtils.copy(in, bos1);
+		in.close();
+		bos1.close();
+
+		String mbos = bos1.toString("UTF-8");
+		System.out.println("mb: " + mbos);
+
+		byte[] b = mbos.getBytes("UTF-8");
+		String s = new String(b, "UTF-8");
+//		out.println(s);
+		System.out.println("s: " + s);
+
+		JSONObject json = new JSONObject();
+		json.put("data", s);
+		
+		return "result";
+	}
+
 }
