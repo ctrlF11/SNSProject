@@ -3961,7 +3961,8 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 
 @media ( min-width :768px) {
 	.navbar-header {
-		float: left
+		float: left;
+		height: 70px;
 	}
 }
 
@@ -4074,7 +4075,7 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 	float: left;
 	padding: 15px 15px;
 	font-size: 18px;
-	line-height: 20px
+	line-height: 24px;
 }
 
 .navbar-brand:hover, .navbar-brand:focus {
