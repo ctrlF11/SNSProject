@@ -3,6 +3,13 @@
 
 
 <mapper namespace="com.project.sns.mapper.userMapper">
+		
+		<select id="getUser1" parameterType="int" resultType="UserVO" >
+			select * 
+			from SnsUser
+			LIMIT #{index},2;
+		</select>
+		
 		<insert id="insertUser" parameterType="UserVO">
 			insert into snsUser(id, name, password, birthday, sex, email)
 			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
@@ -10,4 +17,6 @@
 		<select id="getAddress" parameterType="int" resultType="AddrVO">
 			select * from TourMap
 		</select>
+		
+
 </mapper>

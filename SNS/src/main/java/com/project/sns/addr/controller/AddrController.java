@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.board.vo.ReplyVO;
+import com.project.sns.user.vo.UserVO;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -30,6 +32,22 @@ public class AddrController {
 
 	@Autowired
 	private AddrService service;
+	
+    @RequestMapping("/getTourBoard.do")
+    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+    	
+        logger.info("getTourBoard");
+        System.out.println("index : " + index);
+        List<AddrVO> user = service.getTourBoard(index);
+        req.setAttribute("user", user);
+        //List<ReplyVO> reply = service.getReplyList(12);
+        //req.setAttribute("reply", reply);
+        
+        if(index == 0)
+          return "home1";
+        else 
+        	return "table";
+    }
 //
 	@RequestMapping("/inputAddr.do")
 	public String inputAddr(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -174,7 +192,10 @@ public class AddrController {
 
 		JSONObject json = new JSONObject();
 		json.put("data", s);
-
+		
 		
 	}
+	
+	
+	
 }

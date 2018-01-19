@@ -9,4 +9,6 @@ public interface UserService {
 
 	public int insertUser(UserVO vo);
 	public List<AddrVO> getAddress() throws Exception;
+	public List<UserVO> getUser(UserVO vo);
+	public List<UserVO> getUser1(int index);
 }

@@ -24,8 +24,18 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public List<AddrVO> getAddress() throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList(namespace+".getAddress");
-				
-			
+		return sqlSession.selectList(namespace+".getAddress");	
+	}
+	
+	@Override
+	public List<UserVO> getUser(UserVO vo){
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(namespace+".getUser",vo);	
+	}
+	
+	@Override
+	public List<UserVO> getUser1(int index){
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(namespace+".getUser1",index);	
 	}
 }

@@ -24,4 +24,16 @@ public class UserServiceImpl implements UserService {
 	public List<AddrVO> getAddress() throws Exception {
 		return userDao.getAddress();
 	}
+	
+	
+	@Override
+	public List<UserVO> getUser(UserVO vo){
+		return userDao.getUser(vo);
+	}
+	
+	
+	@Override
+	public List<UserVO> getUser1(int index){
+		return userDao.getUser1(index);
+	}
 }

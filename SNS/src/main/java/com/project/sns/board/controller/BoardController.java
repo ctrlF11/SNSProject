@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Locale;
  
 import javax.inject.Inject;
- 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
+import com.project.sns.board.vo.ReplyVO;
  
 /**
  * Handles requests for the application home page.
@@ -24,6 +26,7 @@ import com.project.sns.board.vo.BoardVO;
 public class BoardController {
     
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
+    
     
 	@Autowired
     private BoardService service;
@@ -42,6 +45,7 @@ public class BoardController {
  
         return "BoardList";
     }
+    
     @RequestMapping("/getBoardList2.do")
     public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
     	
@@ -78,4 +82,14 @@ public class BoardController {
     public String getTest() {
     	return "getTest";
     }
+    
+    
+    @RequestMapping("insertReply.do")
+    String insertReply(ReplyVO vo,Model model){ 
+    	service.insertReply(vo);
+    	model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
+       return "replylist";
+    }
+    
+    
 }

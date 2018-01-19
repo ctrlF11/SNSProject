@@ -20,6 +20,8 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	private static final String namespace = "com.project.sns.mapper.boardMapper";
 	
+
+	
 	@Override
 	public List<BoardVO> getBoardList(int line_seq) throws Exception {
 		return sqlSession.selectList(namespace+".getBoardList", line_seq);
@@ -36,11 +38,7 @@ public class BoardDAOImpl implements BoardDAO {
 		return null;
 	}
 
-	@Override
-	public List<ReplyVO> getBoardReply(int board_seq) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	
 	@Override
 	public void upBoardHeart(BoardVO vo) {
@@ -75,6 +73,18 @@ public class BoardDAOImpl implements BoardDAO {
 	public int boardModify(BoardVO vo) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	
+	@Override
+	public List<ReplyVO> getBoardReply(int board_seq) {
+		return sqlSession.selectList( "com.project.sns.mapper.boardMapper.getBoardReply",board_seq);
+	}
+	
+	@Override
+	public int insertReply(ReplyVO vo) {
+		int a = sqlSession.insert(namespace+".insertReply", vo);
+		return a;
 	}
 	
 }
