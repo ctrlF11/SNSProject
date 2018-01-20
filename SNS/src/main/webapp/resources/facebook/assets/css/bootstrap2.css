@@ -28,7 +28,8 @@ audio:not ([controls] ){
 html {
 	font-family: sans-serif;
 	-webkit-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%
+	-ms-text-size-adjust: 100%;
+	overflow-y: scroll;
 }
 
 body {
@@ -299,7 +300,9 @@ img {
 .img-responsive {
 	display: block;
 	height: auto;
-	max-width: 100%
+	max-width: 500px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .img-rounded {
@@ -3114,7 +3117,8 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 }
 
 .dropdown {
-	position: relative
+	position: relative;
+	margin-bottom: 13.5px;
 }
 
 .dropdown-toggle:focus {
@@ -3511,7 +3515,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 }
 
 .input-group .form-control {
-	width: 100%;
+	width: 89%;
 	margin-bottom: 0
 }
 
@@ -4017,7 +4021,9 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 		margin-left: -15px
 	}
 	.navbar-collapse .navbar-nav.navbar-right:last-child {
-		margin-right: -15px
+		margin-top: 10px;
+		margin-bottom: 10px;
+		margin-right: -15px;
 	}
 	.navbar-collapse .navbar-text:last-child {
 		margin-right: 0
@@ -4153,7 +4159,7 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 @media ( min-width :768px) {
 	.navbar-nav {
 		float: left;
-		margin: 0
+		margin: 0;
 	}
 	.navbar-nav>li {
 		float: left
@@ -4166,7 +4172,7 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 
 @media ( min-width :768px) {
 	.navbar-left {
-		float: left !important
+		float: left !important;
 	}
 	.navbar-right {
 		float: right !important
@@ -4175,7 +4181,7 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 
 .navbar-form {
 	padding: 10px 15px;
-	margin-top: 8px;
+	margin-top: 20px;
 	margin-right: -15px;
 	margin-bottom: 8px;
 	margin-left: -15px;
@@ -4217,9 +4223,8 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 
 @media ( min-width :768px) {
 	.navbar-form {
-		width: auto;
-		padding-top: 0;
-		padding-bottom: 0;
+		width: 100%;
+		padding: 0 0 0 0px;
 		margin-right: 0;
 		margin-left: 0;
 		border: 0;
@@ -4231,7 +4236,7 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 .navbar-nav>li>.dropdown-menu {
 	margin-top: 0;
 	border-top-right-radius: 0;
-	border-top-left-radius: 0
+	border-top-left-radius: 0;
 }
 
 .navbar-fixed-bottom .navbar-nav>li>.dropdown-menu {
