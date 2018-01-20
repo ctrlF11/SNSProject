@@ -17,5 +17,8 @@
 		<typeAlias type="com.project.sns.chat.vo.ChatVO" alias="ChatVO"/>
 		<!-- TourReviewVO -->
 		<typeAlias type="com.project.sns.tour.vo.TourReviewVO" alias="TourReviewVO"/>
+		<typeAlias type="com.project.sns.tour.vo.TourMapVO" alias="TourMapVO"/>
+		<!-- 검색에 필요한 VO -->
+		<typeAlias type="com.project.sns.search.vo.SearchVO" alias="SearchVO"/>
 	</typeAliases>
 </configuration>

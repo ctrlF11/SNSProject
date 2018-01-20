@@ -11,8 +11,8 @@
 	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
-<script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
-<script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -31,10 +31,10 @@
 						</ul>
 					   
 						<ul class="nav hidden-xs" id="lg-menu">
-							<li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> </a></li>
-							<li><a href="#stories"><i class="glyphicon glyphicon-list"></i> </a></li>
-							<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> </a></li>
-							<li><a href="#"><i class="glyphicon glyphicon-refresh"></i> </a></li>
+							<li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
+							<li><a href="#stories"><i class="glyphicon glyphicon-list"></i> Stories</a></li>
+							<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> Saved</a></li>
+							<li><a href="#"><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
 						</ul>
 						<ul class="list-unstyled hidden-xs" id="sidebar-footer">
 							<li>
@@ -42,7 +42,7 @@
 							</li>
 						</ul>
 					  
-						<!-- tiny only nav -->
+						tiny only nav
 						<ul class="nav visible-xs" id="xs-menu">
 							<li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
 							<li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
@@ -78,52 +78,44 @@
 						</div>
 						
 						<!-- 아이콘을 제외한 오른쪽 영역. -->
-						<nav class="navbar-collapse" role="navigation">
+						<nav class="collapse navbar-collapse" role="navigation">
 							<!-- 검색 폼. -->
-							<div class="search_wrap">
-								<form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
-									<div class="input-group input-group-sm">
-										<select id="search_category" style="height: 30px;" >
-											<option value="user">사람</option>
-											<option value="map">가게</option>
-											<option value="board">글</option>
-										</select>
-										<input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-										<div class="input-group-btn">
-											<button class="btn btn-default" type="submit">
-												<i class="glyphicon glyphicon-search"></i>
-											</button>
-										</div>
+							<form class="navbar-form navbar-left">
+								<div class="input-group input-group-sm"><!--  style="width: 800px;" -->
+									<input class="form-control" placeholder="Search"
+										name="srch-term" id="srch-term" type="text">
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
 									</div>
-								</form>
-							</div>
+								</div>
+							</form>
 							<!-- 오른쪽 아이콘 모음집. -->
-							<div>
-								<ul class="nav navbar-nav navbar-right">
-									<li>
-										<a href="#">로그인</a>
-									</li>
-									<li>
-										<a href="#postModal" role="button" data-toggle="modal">
-										추천 경로+</a>
-									</li>
-									<li>
-										<a href="#">스토리</a>
-									</li>
-									<!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
-									 <li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<i class="glyphicon glyphicon-user"></i></a>
-									<ul class="dropdown-menu">
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									</ul>
-								  </li>
+							<ul class="nav navbar-nav navbar-right">
+								<li>
+									<a href="#">로그인</a>
+								</li>
+								<li>
+									<a href="#postModal" role="button" data-toggle="modal">
+									추천 경로+</a>
+								</li>
+								<li>
+									<a href="#">스토리</a>
+								</li>
+								<!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
+								 <li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="glyphicon glyphicon-user"></i></a>
+								<ul class="dropdown-menu">
+								  <li><a href="">More</a></li>
+								  <li><a href="">More</a></li>
+								  <li><a href="">More</a></li>
+								  <li><a href="">More</a></li>
+								  <li><a href="">More</a></li>
 								</ul>
-							</div>
+							  </li>
+							</ul>
 						</nav>
 					</div>
 					<div class="padding">
@@ -140,7 +132,6 @@
 												<p>
 													<img src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
 												</p>
-												<input type="hidden" name="writer">
 											</div>
 										</div>
 										<div class="panel panel-default">
@@ -175,26 +166,6 @@
 				$('#btnShow').toggle();
 			});
         });
-		function checkgo() {
-			var check = document.getElementById("search_category").value;
-			var keyword = document.getElementById("srch-term").value;
-			alert(check);
-			alert(keyword);
-			if(keyword == "") {
-				alert("키워드를 입력해주세요.");
-				return false;
-			}			
-			if(check == "user") {
-				location.href = "searchAll.do?keyword=" + keyword + "&number=1";
-			}
-			if(check == "map") {
-				location.href = "searchAll.do?keyword=" + keyword + "&number=2";
-			}
-			if(check == "board") {
-				location.href = "searchAll.do?keyword=" + keyword + "&number=3";
-			}
-			return false;
-		}
-	</script>
+</script>
 </body>
 </html>
