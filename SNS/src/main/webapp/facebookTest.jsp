@@ -98,7 +98,7 @@
 								</form>
 							</div>
 							<!-- 오른쪽 아이콘 모음집. -->
-							<div>
+							<div class="icon_wrap">
 								<ul class="nav navbar-nav navbar-right">
 									<li>
 										<a href="#">로그인</a>

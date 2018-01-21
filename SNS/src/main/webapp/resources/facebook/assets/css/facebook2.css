@@ -293,6 +293,16 @@ small.text-muted {
 	justify-content: flex-start;
 	width: 620px;
 	height: 70px;
-	margin-left: 34px;
 	box-sizing: border-box;
+	float: left;
+}
+
+.icon_wrap {
+	flex: 1 1 auto;
+	justify-content: flex-start;
+	height: 70px;
+	box-sizing: border-box;
+	width: 880px;
+	display: inline-block;	
+	
 }
