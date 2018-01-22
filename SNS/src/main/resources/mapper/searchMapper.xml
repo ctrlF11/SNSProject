@@ -7,7 +7,7 @@
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from SnsUser
 				<where>
-					id like '%'#{keyword}'%'
+					id like #{keyword}
 				</where>
 			) a,
 		(select @rnum := 0) b
@@ -20,7 +20,7 @@
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from TourMap
 				<where>
-				title like '%'#{keyword}'%'
+				title like #{keyword}
 				</where>
 			) a,
 		(select @rnum := 0) b
@@ -32,7 +32,7 @@
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from Board
 				<where>
-				title like '%'#{keyword}'%'
+				title like #{keyword}
 				</where>
 			) a,
 		(select @rnum := 0) b
@@ -44,7 +44,7 @@
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from SnsUser
 				<where>
-					id like '%'#{keyword}'%'
+					id like #{keyword}
 				</where>
 			) a,
 		(select @rnum := 0) b
@@ -57,7 +57,7 @@
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from Board
 				<where>
-				title like '%'#{keyword}'%'
+				title like #{keyword}
 				</where>
 			) a,
 		(select @rnum := 0) b

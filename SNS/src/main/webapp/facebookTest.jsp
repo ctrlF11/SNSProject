@@ -97,7 +97,7 @@
 									</div>
 								</form>
 							</div>
-							<!-- 오른쪽 아이콘 모음집. -->
+							<!-- 오른쪽 아이콘 모음집. 가로 957.333px에 찌그러짐-->
 							<div class="icon_wrap">
 								<ul class="nav navbar-nav navbar-right">
 									<li>

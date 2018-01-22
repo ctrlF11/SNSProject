@@ -295,6 +295,7 @@ small.text-muted {
 	height: 70px;
 	box-sizing: border-box;
 	float: left;
+	margin-left: 2px;
 }
 
 .icon_wrap {
@@ -302,7 +303,8 @@ small.text-muted {
 	justify-content: flex-start;
 	height: 70px;
 	box-sizing: border-box;
-	width: 880px;
-	display: inline-block;	
+	width: 275px;
+	display: inline-block;
+	float: right;
 	
 }

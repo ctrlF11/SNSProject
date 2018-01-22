@@ -32,6 +32,7 @@ public class SearchController{
 		request.setAttribute("list", list);
 		HashMap<Integer, List> map = new HashMap<Integer, List>();
 		PrintWriter out = response.getWriter();
+		keyword = '%'+keyword+'%';
 		List<UserVO> userList = service.searchUser(keyword);
 		List<TourMapVO> tourMapList = service.searchMap(keyword);
 		List<BoardVO> boardList = service.searchBoard(keyword);
