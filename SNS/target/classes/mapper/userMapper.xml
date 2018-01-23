@@ -4,7 +4,7 @@
 
 <mapper namespace="com.project.sns.mapper.userMapper">
 		<insert id="insertUser" parameterType="UserVO">
-			insert into snsUser(id, name, password, birthday, sex, email)
+			insert into SnsUser(id, name, password, birthday, sex, email)
 			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
 		</insert>
 		<select id="getAddress" parameterType="int" resultType="AddrVO">

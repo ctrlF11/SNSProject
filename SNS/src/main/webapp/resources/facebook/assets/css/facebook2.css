@@ -308,3 +308,7 @@ small.text-muted {
 	float: right;
 	
 }
+
+#col-sm-6 {
+	overflow-y: auto;
+}

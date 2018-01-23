@@ -19,4 +19,18 @@ public class AddrServiceImpl implements AddrService{
 		return dao.inputAddr(vo);
 	}
 	
+	@Override
+	public int inputAddrCat(List<AddrVO> vo) {
+		return dao.inputAddrCat(vo);
+	}
+	
+	@Override
+	public int deleteAddr(List<AddrVO> vo) {
+		return dao.deleteAddr(vo);
+	}
+	
+	@Override
+	public List<AddrVO> getAddress() throws Exception {
+		return dao.getAddress();
+	}
 }

@@ -2,19 +2,20 @@ package com.project.sns.board.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ReplyVO;
 
 public interface BoardDAO {
-	// 글 리스트(라인 번호)
-	public List<BoardVO> getBoardList(int line_seq) throws Exception;
-	
-	// 글 개수(라인 번호)
+	public List<BoardVO> getBoardList(@Param("index") int index);
+	// 湲� 媛쒖닔(�씪�씤 踰덊샇)
 	public int getBoardCount(int line_seq) throws Exception;
 
-	// 글 상세(글 번호, 라인 번호[BoardVO])
+	// 湲� �긽�꽭(湲� 踰덊샇, �씪�씤 踰덊샇[BoardVO])
 	public BoardVO getBoardValue(int line_seq, int board_seq);
-	public List<ReplyVO> getBoardReply(int board_seq);
+	
 	
 	
 	public void upBoardHeart(BoardVO vo);
@@ -23,4 +24,8 @@ public interface BoardDAO {
 	public int delBoard(int seq);
 	public int delBoardReply(int seq);
 	public int boardModify(BoardVO vo);
+	
+	public List<ReplyVO> getBoardReply(int board_seq);
+	public int insertReply(ReplyVO vo);
+	
 }

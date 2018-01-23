@@ -9,13 +9,13 @@
 <meta name="author" content="">
 <title>Register an Account</title>
 <!-- Bootstrap core CSS-->
-<link href="../../../../resources/vendor/bootstrap/css/bootstrap.min.css"
+<link href="resources/vendor/bootstrap/css/bootstrap.min.css"
 	rel="stylesheet">
 <!-- Custom fonts for this template-->
-<link href="../../resources/vendor/font-awesome/css/font-awesome.min.css"
+<link href="resources/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
 <!-- Custom styles for this template-->
-<link href="../../resources/css/sb-admin.css" rel="stylesheet">
+<link href="resources/css/sb-admin.css" rel="stylesheet">
 
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -87,7 +87,7 @@
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputEmail1">이메일</label> <input
-								class="form-control" name="ID" type="email"
+								class="form-control" name="id" type="email"
 								aria-describedby="emailHelp" placeholder="Enter email">
 						</div>
 						<div id="emailHelp" style="color: red">이메일을 입력해주세요.</div>
@@ -95,14 +95,14 @@
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputEmail1">Email test</label> <input
-								class="form-control" name="EMAIL" type="text"
+								class="form-control" name="email" type="text"
 								aria-describedby="emailHelp" placeholder="Enter email">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputName">이름</label> <input
-								class="form-control" name="NAME" type="text"
+								class="form-control" name="name" type="text"
 								aria-describedby="nameHelp" placeholder="Enter user name">
 						</div>
 						<div id="nameHelp" style="color: red">이름을 입력해주세요.</div>
@@ -110,7 +110,7 @@
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputPassword1">비밀번호</label> <input
-								class="form-control" name="PASSWORD" type="password"
+								class="form-control" name="password" type="password"
 								placeholder="Password">
 						</div>
 						<div id="passwordHelp" style="color: red">비밀번호를 입력해주세요.</div>
@@ -118,7 +118,7 @@
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputName">생일</label> <input
-								class="form-control" name="BIRTHDAY" id="date1" type="text"
+								class="form-control" name="birthday" id="date1" type="text"
 								aria-describedby="dayHelp" placeholder="Enter user birthday">
 						</div>
 						<div id="dayHelp" style="color: red">생일를 입력해주세요.</div>
@@ -127,11 +127,11 @@
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-6">
-								<label><input class="form-control" name="SEX"
+								<label><input class="form-control" name="sex"
 									type="radio" value="1" /> 남자</label>
 							</div>
 							<div class="col-md-6">
-								<label><input class="form-control" name="SEX"
+								<label><input class="form-control" name="sex"
 									type="radio" value="2">여자 </label>
 							</div>
 

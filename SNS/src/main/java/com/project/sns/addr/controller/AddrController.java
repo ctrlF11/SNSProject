@@ -30,15 +30,14 @@ public class AddrController {
 
 	@Autowired
 	private AddrService service;
-
-	//
+//
 	@RequestMapping("/inputAddr.do")
 	public String inputAddr(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.info("PublicData2");
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
-		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchFestival?ServiceKey=";
+		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
 		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
 		String parameter = "";
 		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
@@ -48,9 +47,8 @@ public class AddrController {
 		// Writer(response.getOutputStream(),"KSC5601"));
 		// ServletOutputStream out = response.getOutputStream();
 		parameter = parameter + "&" + "areaCode=1";
-		parameter = parameter + "&" + "eventStartDate=20171201";
-		parameter = parameter + "&" + "eventEndDate=20171231";
-		parameter = parameter + "&" + "pageNo=1&numOfRows=10";
+		parameter = parameter + "&" + "numOfRows=4000";
+		parameter = parameter + "&" + "cat2=A0102";
 		parameter = parameter + "&" + "MobileOS=ETC";
 		parameter = parameter + "&" + "MobileApp=aa";
 		parameter = parameter + "&" + "_type=json";
@@ -82,7 +80,7 @@ public class AddrController {
 		json.put("data", s);
 		// json.put("data", data);
 		System.out.println("json: " + json);
-
+		
 		JSONObject jso = json.getJSONObject("data");
 		System.out.println("json1: " + jso);
 		JSONObject js = jso.getJSONObject("response");
@@ -94,36 +92,51 @@ public class AddrController {
 		JSONArray jArray = items.getJSONArray("item");
 		System.out.println("json5: " + jArray);
 
-		/*
-		 * List<AddrVO> list = new ArrayList<AddrVO>(); for (int i = 0; i < 10; i++) {
-		 * JSONObject a = jArray.getJSONObject(i);
-		 * 
-		 * AddrVO vo = new AddrVO(); vo.setAddr1(a.getString("addr1"));
-		 * vo.setTitle(a.getString("title")); vo.setMapX(a.getString("mapx"));
-		 * vo.setMapY(a.getString("mapy")); list.add(vo); } int i =
-		 * service.inputAddr(list); System.out.println(i);
-		 */
+		
+		List<AddrVO> list = new ArrayList<AddrVO>();
+		for (int i = 0; i < 3361; i++) {
+			JSONObject a = jArray.getJSONObject(i);
+			
+			AddrVO vo = new AddrVO();
+
+//TourMap DB			
+			if(a.has("contenttypeid")&&a.has("contentid")&&a.has("title")&&a.has("tel")&&a.has("addr1")&&a.has("firstimage")&&
+				a.has("firstimage2") && a.has("cat2") && a.has("cat3") && a.has("mapx") && a.has("mapy")){
+			vo.setContentTypeId(a.getString("contenttypeid"));
+			vo.setContentId(a.getString("contentid"));
+			vo.setTitle(a.getString("title"));
+			vo.setTel(a.getString("tel"));
+			vo.setAddr1(a.getString("addr1"));
+			vo.setFirstimage(a.getString("firstimage"));
+			vo.setFirstimage2(a.getString("firstimage2"));
+			vo.setCat2(a.getString("cat2"));
+			vo.setCat3(a.getString("cat3"));			
+			vo.setMapx(a.getString("mapx"));
+			vo.setMapy(a.getString("mapy"));
+			list.add(vo);
+			}
+		}
+		
+//		int i = service.deleteAddr(list);
+		int i = service.inputAddr(list);
+		System.out.println(i);
 		return "test";
 	}
-
+	
+	
 	@RequestMapping("/callDetail.do")
-	public String callDetail(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("contentId") String contentId, @RequestParam("contentTypeId") String contentTypeId) throws Exception {
+	public void callDetail(HttpServletRequest request, HttpServletResponse response, @RequestParam String contentId, @RequestParam String contentTypeId) throws Exception {
 		logger.info("callDetail");
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
-		System.out.println("contentId : " + contentId);
-		System.out.println("contentTypeId : " + contentTypeId);
+
 		
 		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
 		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
 		String parameter = "";
-		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
 
 		PrintWriter out = response.getWriter();
-		// PrintWriter out = new PrintWriter(new OutputStream
-		// Writer(response.getOutputStream(),"KSC5601"));
-		// ServletOutputStream out = response.getOutputStream();
+
 		parameter = parameter + "&" + "contentId=" + contentId;
 		parameter = parameter + "&" + "contentTypeId=" + contentTypeId;
 
@@ -132,32 +145,38 @@ public class AddrController {
 		parameter = parameter + "&" + "_type=json";
 
 		addr = addr + serviceKey + parameter;
-		URL url = new URL(addr);
+		URL url = new URL(addr);   //URL ��ü ����
 
 		System.out.println(addr);
 
-		// BufferedReader in = new BufferedReader(new
-		// InputStreamReader(url.openStream(), "UTF-8"));
+		InputStream in = url.openStream();   //URL ��ü�� ��Ʈ�� ����
 
-		InputStream in = url.openStream();
-		// CachedOutputStream bos = new CachedOutputStream();
 		ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
-		IOUtils.copy(in, bos1);
+		IOUtils.copy(in, bos1);  //InputStream ��ü�� OutputStream�� ����
 		in.close();
 		bos1.close();
 
 		String mbos = bos1.toString("UTF-8");
-		System.out.println("mb: " + mbos);
-
+		
 		byte[] b = mbos.getBytes("UTF-8");
 		String s = new String(b, "UTF-8");
-//		out.println(s);
-		System.out.println("s: " + s);
+		out.println(s);
 
 		JSONObject json = new JSONObject();
 		json.put("data", s);
-		
-		return "result";
+	}
+	
+	@RequestMapping("/Address.do")
+	public String Address(HttpServletRequest req) throws Exception{
+		List<AddrVO> list = service.getAddress();
+		req.setAttribute("list", list);
+		return "Map";
+	}
+	
+	@RequestMapping("/marker.do")
+	public String marker(HttpServletRequest req) throws Exception{
+
+		return "marker";
 	}
 
 }

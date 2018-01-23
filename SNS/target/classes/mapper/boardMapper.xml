@@ -3,37 +3,53 @@
 
 
 <mapper namespace="com.project.sns.mapper.boardMapper">
-		<select id="getBoardList" resultType="BoardVO" parameterType="int">
-			select * from board
-			<where>
-				line_seq = #{line_seq}
-			</where>
+		 <select id="getBoardList" parameterType="int" resultType="BoardVO" >
+			select * 
+			from Board
+			LIMIT #{index},1;
 		</select>
+		
 		<select id="getBoardCount" parameterType="int">
-			select count(*) from board
+			select count(*) from Board
 			<where>
 				line_seq = #{line_seq}
 			</where>
-		</select>		
+		</select>	
+			
 		<select id="getBoardValue" resultType="BoardVO" parameterType="int">
-			select * from board
+			select * from Board
 			<where>
 				board_seq = #{board_seq}
 				and
 				line_seq = #{line_seq}
 			</where>
 		</select>
-		<update id="upBoardHeart" parameterType="BoardVO">
-			update board set heart = heart+1 and heart_id = heart_id
+		<update id="upBoardHeart" parameterType="BoardVO" >
+			update Board set heart = heart+1 and heart_id = heart_id
 			<where>
 				board_seq = #{board_seq}
 				and
 				line_seq = #{line_seq}
 			</where>
 		</update>
+		
 		<insert id="inputBoard" parameterType="BoardVO">
-			insert into board(board_seq, line_seq, title, writer, content, regdate, heart)
+			insert into Board(board_seq, line_seq, title, writer, content, regdate, heart)
 			values(8, 1, #{title}, 'kimit93', #{content}, sysdate(), 0)	
 		</insert>
+		
+		
+   <select id="getBoardReply" parameterType="int" resultType="ReplyVO">
+     select rcontent,rwriter   
+     from Reply 
+     where board_seq = #{board_seq}
+     order by reply_seq  
+   </select>	
+		
+    <insert id="insertReply" parameterType="ReplyVO">
+      insert into Reply (board_seq, seq, writer, content) values
+      ( #{contentId},(select * from (select max(Reply_seq)+1 from tbl_board),
+      #{writer},#{content}  )
+   </insert>
 		
 </mapper>

@@ -4,10 +4,31 @@
 
 <mapper namespace="com.project.sns.mapper.addrMapper">
 		<insert id="inputAddr" parameterType="java.util.List">
-			insert into Address(addr1, title, mapX, mapY)
+			insert into TourMap(contentTypeId, contentId, title, tel, addr1, firstimage, firstimage2, cat2, cat3, mapx, mapy)
 			values
 			<foreach collection="list" item="item" separator=",">
-				(#{item.addr1}, #{item.title}, #{item.mapX}, #{item.mapY})
+				(#{item.contentTypeId}, #{item.contentId}, #{item.title, jdbcType=VARCHAR},
+				#{item.tel, jdbcType=VARCHAR}, #{item.addr1, jdbcType=VARCHAR},
+				#{item.firstimage, jdbcType=VARCHAR}, #{item.firstimage2, jdbcType=VARCHAR},
+				#{item.cat2, jdbcType=VARCHAR}, #{item.cat3, jdbcType=VARCHAR},
+				#{item.mapx, jdbcType=VARCHAR}, #{item.mapy, jdbcType=VARCHAR})
 			</foreach> 
 		</insert>
+		
+		<insert id="inputAddrCat" parameterType="java.util.List">
+			insert into TourMapCat(contentId, areacode, sigungucode)
+			values
+			<foreach collection="list" item="item" separator=",">
+				(#{item.contentId}, #{item.areacode, jdbcType=VARCHAR}, #{item.sigungucode, jdbcType=VARCHAR})
+			</foreach> 
+		</insert>
+		
+		<delete id="deleteAddr" parameterType="com.project.sns.addr.vo.AddrVO">
+			delete from TourMap <where>cat2=#{cat2}</where>
+		</delete>
+		
+		<select id="getAddress" parameterType="int" resultType="AddrVO">
+			select * from TourMap
+		</select>
+		
 </mapper>

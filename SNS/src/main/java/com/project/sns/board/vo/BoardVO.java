@@ -4,10 +4,37 @@ import java.sql.Date;
 
 public class BoardVO {
 	private Integer board_seq;
-	private Integer line_seq;
+	private Integer story_seq;
 	private String title;
 	private String writer;
+	private String tel;
 	private String content;
+	private String contentID;
+	private String mtitle;
+	public Integer getStory_seq() {
+		return story_seq;
+	}
+	public void setStory_seq(Integer story_seq) {
+		this.story_seq = story_seq;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getContentID() {
+		return contentID;
+	}
+	public void setContentID(String contentID) {
+		this.contentID = contentID;
+	}
+	public String getMtitle() {
+		return mtitle;
+	}
+	public void setMtitle(String mtitle) {
+		this.mtitle = mtitle;
+	}
 	private Date regdate;
 	private Integer heart;
 	private String heart_id;
@@ -17,12 +44,7 @@ public class BoardVO {
 	public void setBoard_seq(Integer board_seq) {
 		this.board_seq = board_seq;
 	}
-	public Integer getLine_seq() {
-		return line_seq;
-	}
-	public void setLine_seq(Integer line_seq) {
-		this.line_seq = line_seq;
-	}
+
 	public String getTitle() {
 		return title;
 	}
