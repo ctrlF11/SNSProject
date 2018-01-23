@@ -4,13 +4,13 @@
 <c:forEach var="user" items="${requestScope.user}">
 	<div class="panel panel-default">
 		<a href="#"> <img class="card-img-top img-fluid w-100"
-			src="${user.firstimage }" alt="">
+			src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" alt="">
 		</a>
 		<div class="card-body">
 			<h6 class="card-title mb-1">
-				<a href="#">${user.title }</a>
+				<a href="#">이미지</a>
 			</h6>
-			<p class="card-text small">${user.contentId}
+			<p class="card-text small">${user.content}
 				<a href="#">#workinghardorhardlyworking</a>
 			</p>
 		</div>
@@ -46,10 +46,10 @@
 				</tr>
 			</table>
 		</div>
-		<div class="card-footer small text-muted">Tell : ${user.tel}</div>
+		<div class="card-footer small text-muted">Tell : ${user.regdate}</div>
 	</div>
 </c:forEach>
 
-<c:forEach var="reply" items="${requestScope.reply }">
+<c:forEach var="reply" items="${requestScope.mtitle }">
 </c:forEach>
 

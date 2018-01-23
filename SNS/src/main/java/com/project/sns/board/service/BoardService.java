@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ReplyVO;
 
 @Service
 public interface BoardService {
 		// 湲� 由ъ뒪�듃(�씪�씤 踰덊샇)
-		public List<BoardVO> getBoardList(int line_seq) throws Exception;
+	    public List<BoardVO> getBoardList(int index);
 		public int getBoardCount(int line_seq) throws Exception;
 
 		// 湲� �긽�꽭(湲� 踰덊샇, �씪�씤 踰덊샇[BoardVO])

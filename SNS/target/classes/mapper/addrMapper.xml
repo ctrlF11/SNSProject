@@ -23,23 +23,11 @@
 			delete from TourMap <where>cat2=#{cat2}</where>
 		</delete>
 		
-		
-		 <select id="getTourBoard" parameterType="int" resultType="AddrVO" >
-			select * 
-			from TourMap
-			LIMIT #{index},10;
-		</select>
-		
-		
 		<select id="getBoardList" resultType="ReplyVO" parameterType="int">
 			select * from Reply
 			<where>
 				board_seq = #{board_seq}
 			</where>
 		</select>
-		
-	
-		
-		
 		
 </mapper>

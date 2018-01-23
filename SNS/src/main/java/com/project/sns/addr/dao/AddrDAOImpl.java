@@ -40,10 +40,7 @@ public class AddrDAOImpl implements AddrDAO{
 	}
 	
 
-	public List<AddrVO> getTourBoard(int index)
-	{
-		return sqlSession.selectList(namespace+".getTourBoard",index);
-	}
+
 	
 
 	

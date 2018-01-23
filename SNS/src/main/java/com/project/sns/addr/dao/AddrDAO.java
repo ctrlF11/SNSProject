@@ -13,6 +13,6 @@ public interface AddrDAO {
 	public void getAddr(int first, int last);
 	public int inputAddrCat(List<AddrVO> vo);
 	public int deleteAddr(List<AddrVO> vo);
-	public List<AddrVO> getTourBoard(@Param("index") int index);
+
 
 }

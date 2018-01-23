@@ -79,22 +79,19 @@ public class UserController {
        else return "login";
     }
     
-    @RequestMapping("/homeview.do")
-    public String home1(){
-    	return "home1";
-    }
+  
  // =-=======================게시글 추가   
-    @RequestMapping("/getUser1.do")
-    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
-        logger.info("getBoardList");
-        System.out.println("index : " + index);
-        List<UserVO> user = userService.getUser1(index);
-        req.setAttribute("user", user);
-        if(index == 0)
-          return "home1";
-        else 
-        	return "user";
-    }
+//    @RequestMapping("/getUser1.do")
+//    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+//        logger.info("getBoardList");
+//        System.out.println("index : " + index);
+//        List<UserVO> user = userService.getUser1(index);
+//        req.setAttribute("user", user);
+//        if(index == 0)
+//          return "home1";
+//        else 
+//        	return "user";
+//    }
     
     
 }

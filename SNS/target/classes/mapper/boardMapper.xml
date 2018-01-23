@@ -3,15 +3,10 @@
 
 
 <mapper namespace="com.project.sns.mapper.boardMapper">
-
-	
-		
-		
-		<select id="getBoardList" resultType="BoardVO" parameterType="int">
-			select * from board
-			<where>
-				line_seq = #{line_seq}
-			</where>
+		 <select id="getBoardList" parameterType="int" resultType="BoardVO" >
+			select * 
+			from Board
+			LIMIT #{index},1;
 		</select>
 		
 		<select id="getBoardCount" parameterType="int">
@@ -19,7 +14,8 @@
 			<where>
 				line_seq = #{line_seq}
 			</where>
-		</select>		
+		</select>	
+			
 		<select id="getBoardValue" resultType="BoardVO" parameterType="int">
 			select * from board
 			<where>

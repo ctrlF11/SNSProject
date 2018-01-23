@@ -133,20 +133,20 @@
 <script>
 
 $(function(){
-	var index = 0;
+	
 	$(document).on('click','[name = "comment"]',function(){
 		 $(".reply").toggle();
 	})
+	   var index = 0;
 	   $("#main").scroll(function(){
-		   var sh = $(window).scrollTop() + $("#main").height();
+		   var sh = $("#main").scrollTop() + $("#main").height();
 		   var dh = $("#main").height();
 		   
 		   if(sh == dh)
 		   {
-
-			    index += 10;
+			    index += 1;
 				$.ajax({
-					url : 'getTourBoard.do',
+					url : 'getBoardList.do',
 					data : 
 					{
 						index : index
@@ -158,46 +158,6 @@ $(function(){
 				})
 		   }
 	   })
-	   
-	   
-	   
-	    $("#rBtn").on('click',function(){
-        if($('#rContent').val()==""){
-           $('#cmsg').html("댓글을 입력하세요").css('color','red'); 
-        }else if($('#rWriter').val()==""){
-           $('#cmsg').html("");
-           $('#wmsg').html("작성자를 입력하세요").css('color','red');  
-        }else{
-           $('#cmsg').html("");
-           $('#wmsg').html("");
-        $.ajax(
-              { url:"insertReply.do",
-               data:{ writer:$('#rWriter').val(),
-                     content:$('#rContent').val(),
-                     boardSeq:${board.seq}
-                    },
-                success : function(data)
-                { 
-                   var replies = JSON.parse(data);
-                   var result = "<table><tr>";
-                       result += "<td class='header' width='370'>댓글</td>";
-                       result += "<td class='header' width='100'>작성자</td></tr>";
-                     
-                   $(replies).each(function(idx, repData){
-                       result +="<tr><td>"+repData.content+"</td>";
-                       result +="<td class='writer'>"+repData.writer+"</td></tr>" ;
-                   })
-                   result +="</tr></table>"; 
-                   $('#replyDiv').html(result);
-                   $('#rWriter').val("");
-                   $('#rContent').val("");
-                }
-              }
-        )
-         }
-       })
-	   
-	       
 });
 
 $(document).on(function(){

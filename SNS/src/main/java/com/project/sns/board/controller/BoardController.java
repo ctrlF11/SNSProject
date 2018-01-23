@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ReplyVO;
+import com.project.sns.user.service.UserService;
+import com.project.sns.user.vo.UserVO;
  
 /**
  * Handles requests for the application home page.
@@ -30,32 +33,45 @@ public class BoardController {
     
 	@Autowired
     private BoardService service;
-    
+    private UserService  userService;
     /**
      * Simply selects the home view to render by returning its name.
      */
-    @RequestMapping("/getBoardList.do")
-    public String getBoardList(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
- 
-        logger.info("getBoardList");
-        
-        List<BoardVO> boardList = service.getBoardList(line_seq);
-        
-        model.addAttribute("boardList", boardList);
- 
-        return "BoardList";
-    }
+//    @RequestMapping("/getBoardList.do")
+//    public String getBoardList(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
+// 
+//        logger.info("getBoardList");
+//        
+//        List<BoardVO> boardList = service.getBoardList(line_seq);
+//        
+//        model.addAttribute("boardList", boardList);
+// 
+//        return "BoardList";
+//    }
     
-    @RequestMapping("/getBoardList2.do")
-    public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
-    	
-    	logger.info("getBoardList2");
-    	
-    	List<BoardVO> boardList = service.getBoardList(line_seq);
-    	System.out.println(boardList.get(0).getLine_seq());
-    	model.addAttribute("boardList", boardList);
-    	
-    	return "BoardList2";
+//    @RequestMapping("/getBoardList2.do")
+//    public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
+//    	
+//    	logger.info("getBoardList2");
+//    	
+//    	List<BoardVO> boardList = service.getBoardList(line_seq);
+//    	System.out.println(boardList.get(0).getLine_seq());
+//    	model.addAttribute("boardList", boardList);
+//    	
+//    	return "BoardList2";
+//    }
+    
+    
+    @RequestMapping("/getBoardList.do")
+    public String getBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+        logger.info("getBoardList");
+        System.out.println("index : " + index);
+        List<BoardVO> user = service.getBoardList(index);
+        req.setAttribute("user", user);
+        if(index == 0)
+          return "home1";
+        else 
+        	return "table";
     }
     
     @RequestMapping("/getBoardValue.do")
@@ -91,5 +107,22 @@ public class BoardController {
        return "replylist";
     }
     
+    
+    @RequestMapping("/homeview.do")
+    public String home1(){
+    	return "home1";
+    }//°Ô½Ã±Û
+    
+    @RequestMapping("/getUser1.do")
+    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+        logger.info("getBoardList");
+        System.out.println("index : " + index);
+        List<UserVO> user = userService.getUser1(index);
+        req.setAttribute("user", user);
+        if(index == 0)
+          return "home1";
+        else 
+        	return "user";
+    }
     
 }

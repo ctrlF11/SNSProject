@@ -29,10 +29,7 @@ public class AddrServiceImpl implements AddrService{
 	public int deleteAddr(List<AddrVO> vo) {
 		return dao.deleteAddr(vo);
 	}
-	@Override
-	public List<AddrVO> getTourBoard(int index)
-	{
-		return dao.getTourBoard(index);
-	}
+
+
 
 }

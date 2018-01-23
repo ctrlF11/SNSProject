@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.dao.BoardDAO;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ReplyVO;
@@ -15,9 +16,9 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO dao;
 	
 
-	@Override
-	public List<BoardVO> getBoardList(int line_seq) throws Exception {
-		return dao.getBoardList(line_seq);
+	public List<BoardVO> getBoardList(int index)
+	{
+		return dao.getBoardList(index);
 	}
 
 	@Override

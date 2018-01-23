@@ -33,7 +33,7 @@ public class UserDAOImpl implements UserDAO{
 		return sqlSession.selectList(namespace+".getUser",vo);	
 	}
 	
-	@Override
+	@Override//비동기 게시글 추가
 	public List<UserVO> getUser1(int index){
 		// TODO Auto-generated method stub
 		return sqlSession.selectList(namespace+".getUser1",index);	
