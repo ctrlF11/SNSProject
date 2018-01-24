@@ -80,9 +80,6 @@ var positions = [
     {title : "카카오", latlng: new daum.maps.LatLng(33.450705, 126.570677)},
      {title : "제주공항", latlng : new daum.maps.LatLng(33.5066211, 126.492810)},
      {title : "테마파크", latlng : new daum.maps.LatLng(33.2906595, 126.322529)},
-     {title : "수목원", latlng : new daum.maps.LatLng(33.4696849, 126.493305)},
-     {title : "카카오", latlng : new daum.maps.LatLng(33.450705, 126.570677)},
-     {title : "제주공항", latlng : new daum.maps.LatLng(33.5066211, 126.492810)},
      {title : "수목원", latlng : new daum.maps.LatLng(33.4696849, 126.493305)}
 ];
 

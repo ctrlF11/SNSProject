@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.tour.vo.TourMapVO;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -117,7 +118,6 @@ public class AddrController {
 			}
 		}
 		
-//		int i = service.deleteAddr(list);
 		int i = service.inputAddr(list);
 		System.out.println(i);
 		return "test";
@@ -129,8 +129,7 @@ public class AddrController {
 		logger.info("callDetail");
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
-
-		
+	
 		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey=";
 		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
 		String parameter = "";
@@ -139,20 +138,19 @@ public class AddrController {
 
 		parameter = parameter + "&" + "contentId=" + contentId;
 		parameter = parameter + "&" + "contentTypeId=" + contentTypeId;
-
 		parameter = parameter + "&" + "MobileOS=ETC";
 		parameter = parameter + "&" + "MobileApp=aa";
 		parameter = parameter + "&" + "_type=json";
 
 		addr = addr + serviceKey + parameter;
-		URL url = new URL(addr);   //URL ��ü ����
+		URL url = new URL(addr);  
 
 		System.out.println(addr);
 
-		InputStream in = url.openStream();   //URL ��ü�� ��Ʈ�� ����
+		InputStream in = url.openStream();   
 
 		ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
-		IOUtils.copy(in, bos1);  //InputStream ��ü�� OutputStream�� ����
+		IOUtils.copy(in, bos1);  
 		in.close();
 		bos1.close();
 
@@ -175,8 +173,58 @@ public class AddrController {
 	
 	@RequestMapping("/marker.do")
 	public String marker(HttpServletRequest req) throws Exception{
-
 		return "marker";
 	}
 
+	
+	@RequestMapping("/line.do")
+	public void line(HttpServletRequest req, AddrVO vo) throws Exception{
+    List<AddrVO> list = service.getAddress();
+		for(int i =0; i < 10; i++)
+		{
+			System.out.println(list.get(i).getMapx());
+		}
+		
+		System.out.println("ML : " + list.size());
+//		double[][] distanceMeter = new double[mapx.length][mapy.length];
+//		for(int i=0; i<mapx.length; i++) {
+//			for(int j=0; j<mapy.length; j++) {
+//				distanceMeter[i][j] = distance(Double.parseDouble(mapx[i]), Double.parseDouble(mapy[i]), Double.parseDouble(mapx[j]), Double.parseDouble(mapy[j]), "kilometer");
+//				System.out.println(distanceMeter[i][j]);
+//			}
+//		}
+		
+		
+	}
+	
+	   private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+	         
+	        double theta = lon1 - lon2;
+	        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+	         
+	        dist = Math.acos(dist);
+	        dist = rad2deg(dist);
+	        dist = dist * 60 * 1.1515;
+	         
+	        if (unit == "kilometer") {
+	            dist = dist * 1.609344;
+	        } else if(unit == "meter"){
+	            dist = dist * 1609.344;
+	        }
+	 
+	        return (dist);
+	    }
+	     
+	 
+	    // This function converts decimal degrees to radians
+	    private static double deg2rad(double deg) {
+	        return (deg * Math.PI / 180.0);
+	    }
+	     
+	    // This function converts radians to decimal degrees
+	    private static double rad2deg(double rad) {
+	        return (rad * 180 / Math.PI);
+	    }
+	 
+	
 }

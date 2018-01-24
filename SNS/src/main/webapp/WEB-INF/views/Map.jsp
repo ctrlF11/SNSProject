@@ -13,6 +13,8 @@
    href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
+<link rel="stylesheet"
+   href="resources/css/map.css">
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
 <script type="text/javascript">
@@ -40,53 +42,7 @@
                               });
                });
 </script>
-
-<title>Insert title here</title>
-    <style>
-
-        #setDiv {           
-            text-align: center;               
-        }
-        #mask {
-            position:absolute;
-            left:0;
-            top:0;
-            z-index:9999;
-            background-color:#000;
-            display:none;           
-        }
-        #window {
-            display: none;
-            background-color: #ffffff;
-            height: 200px;
-            z-index:99999;
-            width:600px;
-            height:250px;
-            border:1px;
-            solid :#ccc;
-            position:fixed;           
-        }      
-        #sidemenu{
-           	width:450px;
-           	height:100vh;
-           	padding-top:70px;
-        	float:right;  
-        	background-color:#393939;      		
-        }
-		#map{
-		 	position: absolute;
-		 	/* padding-left: 100px; */
-			width: calc(100% - 450px);
-			height:100%;
-			float:left;
-		}        
-        
-        *{ margin: 0; padding: 0;}
-		.accodian {list-style: none }
-		.accodian--box { margin-bottom: 5px;}
-		.accodian--box h3 { background: #333; padding: 5px; color: #fff; cursor: pointer}
-		.accodian--box h4 { background: #ccc; padding: 5px; display: none; }
-    </style>	
+<title>TourSNS</title>
 </head>
 <body>	
 <div class="wrapper">
@@ -207,17 +163,22 @@
 		<div id="sidemenu">	        
 			<ul class="accodian">
 				<li class="accodian--box">
-					<h3>모바일 웹을 이용하려면</h3>
-					<h4>알아서 잘 이용하세요 ㅋㅋ</h4>
+					<h3>경로</h3>
+					<h4><button onclick="recommend()">추천</button></h4>
+					<h4>장소</h4>
+					<h4>장소</h4>
 				</li>
 				<li class="accodian--box">
-					<h3>질문 있어요~~</h3>
-					<h4>답변입니다요~~</h4>
+					<h3>경로</h3>
+					<h4>장소</h4>
+					<h4>장소</h4>
+					<h4>장소</h4>
 				</li>
 				<li class="accodian--box">
-					<h3>Lorem ipsum dolor sit.</h3>
-					<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-						Dignissimos, voluptatibus?</h4>
+					<h3>경로</h3>
+					<h4>장소</h4>
+					<h4>장소</h4>
+					<h4>장소</h4>
 				</li>
 			</ul>
 		</div>		
@@ -277,7 +238,9 @@ var positions =  [
 	{title : "<%=list.get(i).getTitle()%>",
 	 contenttypeid : "<%=list.get(i).getContentTypeId()%>",
 	 contentid : "<%=list.get(i).getContentId()%>",
-	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
+	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>),
+	 mapy : "<%=list.get(i).getMapy()%>",
+	 mapx : "<%=list.get(i).getMapx()%>"
 	}
 
 	<%
@@ -288,13 +251,13 @@ var positions =  [
 	%>
 	];
 
- 	
 	// 마커 이미지의 이미지 주소입니다
 	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 	    
 	for (var i = 0; i < positions.length; i ++) {
 
-	    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);    
+	    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);
+	    recommend(positions[i].mapx, positions[i].mapy);
 	} 
 
 	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
@@ -323,7 +286,7 @@ var positions =  [
 	
     
 	daum.maps.event.addListener(marker, 'click', function() {
-	
+		
 		wrapWindowByMask();
 		
 		$.ajax({        
@@ -366,6 +329,25 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
     $('#window').show();
 }
 	
+	
+function recommend(mapx, mapy){
+	
+	$.ajax({        
+	      url: 'line.do',
+	      type: 'get',
+	      data : {"mapx" : mapx, "mapy" : mapy},
+	      dataType: 'json',
+	      success: function(data){
+	    	  alert("성공?");
+	          
+	      },
+  	error: function(XMLHttpRequest, textStatus, errorThrown) { 
+      	/* alert("Status: " + textStatus); alert("Error: " + errorThrown);  */
+  	} 
+});
+	
+}
+
 <%-- var linePath =  [
 	<%
 	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
