@@ -257,7 +257,7 @@ var positions =  [
 	for (var i = 0; i < positions.length; i ++) {
 
 	    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);
-	    recommend(positions[i].mapx, positions[i].mapy);
+	    
 	} 
 
 	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
@@ -330,12 +330,11 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 }
 	
 	
-function recommend(mapx, mapy){
+ function recommend(mapx, mapy){
 	
 	$.ajax({        
 	      url: 'line.do',
 	      type: 'get',
-	      data : {"mapx" : mapx, "mapy" : mapy},
 	      dataType: 'json',
 	      success: function(data){
 	    	  alert("성공?");
@@ -346,7 +345,7 @@ function recommend(mapx, mapy){
   	} 
 });
 	
-}
+} 
 
 <%-- var linePath =  [
 	<%
