@@ -13,8 +13,7 @@
    href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
-<script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
-<script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
+<link rel="stylesheet" href="resources/css/map.css" >
 <script type="text/javascript">
    $(document)
          .ready(
@@ -42,51 +41,6 @@
 </script>
 
 <title>Insert title here</title>
-    <style>
-
-        #setDiv {           
-            text-align: center;               
-        }
-        #mask {
-            position:absolute;
-            left:0;
-            top:0;
-            z-index:9999;
-            background-color:#000;
-            display:none;           
-        }
-        #window {
-            display: none;
-            background-color: #ffffff;
-            height: 200px;
-            z-index:99999;
-            width:600px;
-            height:250px;
-            border:1px;
-            solid :#ccc;
-            position:fixed;           
-        }      
-        #sidemenu{
-           	width:450px;
-           	height:100vh;
-           	padding-top:70px;
-        	float:right;  
-        	background-color:#393939;      		
-        }
-		#map{
-		 	position: absolute;
-		 	/* padding-left: 100px; */
-			width: calc(100% - 450px);
-			height:100%;
-			float:left;
-		}        
-        
-        *{ margin: 0; padding: 0;}
-		.accodian {list-style: none }
-		.accodian--box { margin-bottom: 5px;}
-		.accodian--box h3 { background: #333; padding: 5px; color: #fff; cursor: pointer}
-		.accodian--box h4 { background: #ccc; padding: 5px; display: none; }
-    </style>	
 </head>
 <body>	
 <div class="wrapper">

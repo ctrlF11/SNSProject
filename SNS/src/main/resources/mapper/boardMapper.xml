@@ -6,7 +6,7 @@
 		 <select id="getBoardList" parameterType="int" resultType="BoardVO" >
 			select * 
 			from Board
-			LIMIT #{index},1;
+			LIMIT #{index},3;
 		</select>
 		
 		<select id="getBoardCount" parameterType="int">

@@ -6,9 +6,8 @@ import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.user.vo.UserVO;
 
 public interface UserService {
-
 	public int insertUser(UserVO vo);
-	public List<AddrVO> getAddress() throws Exception;
-	public List<UserVO> getUser(UserVO vo);
-	public List<UserVO> getUser1(int index);
+	public List<UserVO> getUserList(UserVO vo);
+	public UserVO getUser(String keyword);
+//	public List<UserVO> getUser1(int index);
 }
