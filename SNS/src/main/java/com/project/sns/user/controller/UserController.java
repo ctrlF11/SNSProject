@@ -21,8 +21,8 @@ import com.project.sns.user.vo.UserVO;
 import A.algorithm.AES;
 
 @Controller
-@SessionAttributes({"id", "name", "ip"})
-public class UserController {
+/*@SessionAttributes({"id", "name", "ip"})
+*/public class UserController {
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
@@ -83,34 +83,36 @@ public class UserController {
     @RequestMapping("/loginCheck.do")
     public String loginCheck(UserVO vo, HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
     	request.setCharacterEncoding("UTF-8");
-    	response.setContentType("text/html;charset=utf-8");
+    	response.setContentType("text/html;charset=UTF-8");
     	UserVO checkVO = service.getUser(vo.getId());
+    	System.out.println(vo.getId());
+    	System.out.println(vo.getPassword());
     	PrintWriter out = response.getWriter();
     	if(checkVO == null) {
     		out.println("<script>");
     		out.println("alert('없는 아이디입니다.');");
-    		out.println("history.back();");
     		out.println("</script>");
+    		return "redirect:login.do";
     	}
-    	if(!checkVO.getPassword().equals(vo.getPassword())) {
+    	if(vo.getPassword() == "" || checkVO.getPassword().equals(vo.getPassword())) {
     		out.println("<script>");
     		out.println("alert('비밀번호가 틀립니다.');");
-    		out.println("history.back();");
     		out.println("</script>");
+    		return "redirect:login.do";
     	} 
     	
     	String ip = getIP(request);
     	System.out.println("IP : " + ip);
-/*    	out.println("<script>");
-    	out.println("alert('"+ ip +"');");
+    	out.println("<script>");
+    	out.println("alert('뭐.');");
     	out.println("</script>");
-*/    	
     	
-    	/*AES aes = new AES();
-    	aes.encrypt(checkVO.getId());
+    	
+    	AES aes = new AES();
+    	aes.encrypt(checkVO.getId().trim());
     	System.out.println("original : " + checkVO.getId());
     	System.out.println("encrypted : " + aes.getEncryptedString());
-    	*/
+    	
     	model.addAttribute("id", checkVO.getId());
     	model.addAttribute("name", checkVO.getName());
     	model.addAttribute("ip", ip);

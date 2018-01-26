@@ -31,7 +31,7 @@ var positions =  [
       %>
       {title : "<%=list.get(i).getTitle()%>",
        contenttypeid : "<%=list.get(i).getContentTypeId()%>",
-       contentid : "<%=list.get(i).getContentID()%>",
+       contentid : "<%=list.get(i).getContentId()%>",
        latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
       }
 
