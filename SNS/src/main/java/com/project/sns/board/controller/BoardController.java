@@ -28,7 +28,10 @@ import com.project.sns.user.vo.UserVO;
 @Controller
 public class BoardController {
     
-    private final Logger logger = LoggerFactory.getLogger(BoardController.class);
+    private static final int INIT = 0;
+
+
+	private final Logger logger = LoggerFactory.getLogger(BoardController.class);
     
     
 	@Autowired
@@ -67,10 +70,9 @@ public class BoardController {
         logger.info("getBoardList");
         System.out.println("index : " + index);
         List<BoardVO> user = service.getBoardList(index);
+        String mapx = user.get(0).getMapx();
+        System.out.println("index : " + mapx);
         req.setAttribute("user", user);
-        if(index == 0)
-          return "home1";
-        else 
         	return "table";
     }
     
@@ -84,6 +86,7 @@ public class BoardController {
     
     @RequestMapping("/test")
     public String test() {
+    	
     	return "test";
     }
     
@@ -107,9 +110,13 @@ public class BoardController {
        return "replylist";
     }
     
-    
+   
     @RequestMapping("/homeview.do")
-    public String home1(){
+    public String home1(HttpServletRequest req){
+        List<BoardVO> user1 = service.getBoardList(0);
+        List<BoardVO> user2 = service.getBoardList(1);
+        req.setAttribute("user1", user1);
+        req.setAttribute("user2", user2);
     	return "home1";
     }//°Ô½Ã±Û
     

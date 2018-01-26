@@ -36,6 +36,13 @@ public class UserController {
 		return "register";
 	}
 	
+	@RequestMapping("/maker.do")
+	public String maker(){
+		
+		
+		return "maker";
+	}
+	
 	@RequestMapping("/Address.do")
 	public String Address(HttpServletRequest req) throws Exception{
 		List<AddrVO> list = userService.getAddress();
@@ -57,7 +64,7 @@ public class UserController {
 	
 	//login
 	
-    @RequestMapping("/writeForm.do")
+    @RequestMapping("/writeForm.do")  
     public String writeForm2(){
        return "login";
     }
@@ -79,7 +86,9 @@ public class UserController {
        else return "login";
     }
     
-  
+    
+    
+    
  // =-=======================게시글 추가   
 //    @RequestMapping("/getUser1.do")
 //    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{

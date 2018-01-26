@@ -5,8 +5,9 @@
 <mapper namespace="com.project.sns.mapper.boardMapper">
 		 <select id="getBoardList" parameterType="int" resultType="BoardVO" >
 			select * 
-			from Board
-			LIMIT #{index},1;
+			from Board b, TourMap t
+			where b.title = t.title 
+			LIMIT #{index},3; 
 		</select>
 		
 		<select id="getBoardCount" parameterType="int">
@@ -39,17 +40,16 @@
 		</insert>
 		
 		
-   <select id="getBoardReply" parameterType="int" resultType="ReplyVO">
-     select rcontent,rwriter   
-     from reply 
-     where BOARD_SEQ = #{board_seq}
-     order by reply_seq  
-   </select>	
+	   <select id="getBoardReply" parameterType="int" resultType="ReplyVO">
+	     select rcontent,rwriter   
+	     from Reply 
+	     where board_seq = #{board_seq}
+	     order by reply_seq  
+	   </select>	
 		
     <insert id="insertReply" parameterType="ReplyVO">
-      insert into Reply (BOARD_SEQ, SEQ, WRITER, CONTENT) values
-      ( #{contentId},(select * from (select max(Reply_seq)+1 from tbl_board),
-      #{writer},#{content}  )
+      insert into reply (Board_seq, Reply_seq,       rwriter, rcontent) values
+      ( #{Board_seq},Reply_seq.nextval,#{rwriter},#{rcontent}   )
    </insert>
 		
 </mapper>

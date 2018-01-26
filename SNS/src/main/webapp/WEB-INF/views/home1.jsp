@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="com.project.sns.board.vo.BoardVO"%>
+<%@ page import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link href="resources/vendor/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
 <style>
 .wrap {
 	position: absolute;
@@ -114,11 +114,9 @@
 .info .link {
 	color: #5085BB;
 }
-
-#map {
-	position: fixed;
-}
 </style>
+<link href="resources/vendor/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport"
@@ -131,39 +129,48 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script>
+	var mmm = function() {
+		$.ajax({
+			url : 'getBoardList.do',
+			data : {
+				index : index
+			},
+			success : function(data) {
+				$("#col-sm-6").html(data);
+			}
+		})
 
-$(function(){
-	
-	$(document).on('click','[name = "comment"]',function(){
-		 $(".reply").toggle();
-	})
-	   var index = 0;
-	   $("#main").scroll(function(){
-		   var sh = $("#main").scrollTop() + $("#main").height();
-		   var dh = $("#main").height();
-		   
-		   if(sh == dh)
-		   {
-			    index += 1;
+	}
+	var index = 0;
+	$(function() {
+		mmm();
+
+		$(document).on('click', '[name = "comment"]', function() {
+			$(".reply").toggle();
+		})
+
+		$("#main").scroll(function() {
+			var sh = $("#main").scrollTop() + $("#main").height();
+			var dh = $("#main").prop("scrollHeight");
+			if (sh == dh) {
+				index += 3;
 				$.ajax({
 					url : 'getBoardList.do',
-					data : 
-					{
+					data : {
 						index : index
 					},
-					success:function(data)
-					{
+					success : function(data) {
 						$("#col-sm-6").append(data);
 					}
 				})
-		   }
-	   })
-});
+			}
+		})
 
-$(document).on(function(){
-	 $(".reply").hide();
-})
+	});
 
+	$(document).on(function() {
+		$(".reply").hide();
+	})
 </script>
 </head>
 <body>
@@ -277,92 +284,23 @@ $(document).on(function(){
 							<div class="row">
 								<div class="col-sm-6" id="col-sm-6">
 
-									<div class="panel panel-default">
-										<div class="panel-thumbnail">
-											<img src="고기.jpg" class="img-responsive">
-										</div>
-										<div class="panel-body">
-											<p class="lead">배고프다</p>
-											<p>잉여 붕여</p>
-											<p>
-												<img
-													src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png"
-													height="28px" width="28px">
-											</p>
-										</div>
-									</div>
-									<div class="panel panel-default">
-										<a href="#"> <img class="card-img-top img-fluid w-100"
-											src="https://unsplash.it/700/450?image=180" alt="">
-										</a>
-										<div class="card-body">
-											<h6 class="card-title mb-1">
-												<a href="#">John Smith</a>
-											</h6>
-											<p class="card-text small">
-												Another day at the office... <a href="#">#workinghardorhardlyworking</a>
-											</p>
-										</div>
-										<hr class="my-0">
-										<div class="card-body py-2 small">
-											<a class="mr-3 d-inline-block" href="#"> <i
-												class="fa fa-fw fa-thumbs-up"></i>Like
-											</a> <a class="mr-3 d-inline-block" href="#" name="comment">
-												<i class="fa fa-fw fa-comment"></i>Comment
-											</a> <a class="d-inline-block" href="#"> <i
-												class="fa fa-fw fa-share"></i>Share
-											</a>
-										</div>
-										<hr class="my-0">
-
-										<div class="card-body small bg-faded"></div>
-										<div id="replyDiv" class="reply">
-											<table>
-												<tr>
-													<td class="header" width="370">댓글</td>
-													<td class="header" width="100">작성자</td>
-												</tr>
-												<c:forEach items="${reply}" var="r">
-													<tr>
-														<td>${r.content}</td>
-														<td class="writer">${r.writer}</td>
-													</tr>
-												</c:forEach>
-											</table>
-											<table>
-												<tr>
-													<td><textarea id="rContent" cols="50" rows="2"></textarea>
-														<div id="cmsg"></div></td>
-													<td><input type="text" id="rWriter" maxlength="20"
-														size="10" />
-														<div id="wmsg"></div></td>
-												</tr>
-												<tr>
-													<td class="bottom"></td>
-													<td align="right" class="bottom"><button id="rBtn">댓글등록</button></td>
-												</tr>
-											</table>
-										</div>
-										<div class="card-footer small text-muted">몇분 지난거 확인</div>
-									</div>
+									<div class="panel panel-default"></div>
 
 
 								</div>
 								<div class="col-sm-6">
-									<div class="panel panel-default"></div>
+
 									<div class="panel panel-default">
-										<div id="map" style="width: 40%; height: 100%;"></div>
+										<div id="map" style="width: 100%; height: 350px;"></div>
+										
 										<script type="text/javascript"
 											src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 										<script>
-										var mapContainer = document.getElementById('map'), // 지도의 중심좌표
-										    mapOption = { 
-										        center: new daum.maps.LatLng(33.451475, 126.570528), // 지도의 중심좌표
-										        level: 15 // 지도의 확대 레벨
-										    };
-										var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+											var map = new daum.maps.Map(
+													mapContainer, mapOption); // 지도를 생성합니다
 										</script>
 									</div>
+
 								</div>
 							</div>
 						</div>
@@ -373,3 +311,4 @@ $(document).on(function(){
 	</div>
 </body>
 </html>
+

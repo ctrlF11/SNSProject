@@ -11,6 +11,66 @@ public class BoardVO {
 	private String content;
 	private String contentID;
 	private String mtitle;
+	private String contentTypeId;
+	
+	public String getContentTypeId() {
+		return contentTypeId;
+	}
+	public void setContentTypeId(String contentTypeId) {
+		this.contentTypeId = contentTypeId;
+	}
+	public String getAddr1() {
+		return addr1;
+	}
+	public void setAddr1(String addr1) {
+		this.addr1 = addr1;
+	}
+	public String getFirstimage() {
+		return firstimage;
+	}
+	public void setFirstimage(String firstimage) {
+		this.firstimage = firstimage;
+	}
+	public String getFirstimage2() {
+		return firstimage2;
+	}
+	public void setFirstimage2(String firstimage2) {
+		this.firstimage2 = firstimage2;
+	}
+	public String getCat2() {
+		return cat2;
+	}
+	public void setCat2(String cat2) {
+		this.cat2 = cat2;
+	}
+	public String getCat3() {
+		return cat3;
+	}
+	public void setCat3(String cat3) {
+		this.cat3 = cat3;
+	}
+	public String getMapx() {
+		return mapx;
+	}
+	public void setMapx(String mapx) {
+		this.mapx = mapx;
+	}
+	public String getMapy() {
+		return mapy;
+	}
+	public void setMapy(String mapy) {
+		this.mapy = mapy;
+	}
+	private String contentId;
+	private String addr1;
+	private String firstimage;
+	private String firstimage2;
+	private String cat2;
+	private String cat3;
+	private String mapx;
+	private String mapy;
+
+	
 	public Integer getStory_seq() {
 		return story_seq;
 	}
