@@ -194,27 +194,30 @@ public class AddrController {
         HashMap<String, Double> tempMap = new HashMap<String, Double>();
 		
 		for(int i=0; i<10; i++) {
+			tempMap = new HashMap<>();
 			for(int j=0; j<10; j++) {
 				distanceMeter = distance(Double.parseDouble(list.get(i).getMapy()), Double.parseDouble(list.get(i).getMapx()), Double.parseDouble(list.get(j).getMapy()), Double.parseDouble(list.get(j).getMapx()), "meter");	
-//				System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );
-		        tempMap = new HashMap<>();
-				tempMap.put(list.get(j).getTitle(), distanceMeter);				
-			}
+//				System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );		        
+				tempMap.put(list.get(j).getTitle(), distanceMeter);					
+			}	
 			distanceMap.put(list.get(i).getTitle(), tempMap);
 		}
 		
-		String destination = "딸기가 좋아";
+	
+		String destination = "양천구 어린이교통공원";
 		
 		Result result = dijkstra(distanceMap, "중명전");    	//dijkstra(거리 맵, 출발지)
-        double distance = result.shortestPath.get(destination);	//
+        double distance = result.shortestPath.get(destination);	//destination의 거리 값
+        
         ArrayList<String> path = new ArrayList<>();
-        String curNode = destination;
-        path.add(destination);
-        while(!result.preNode.get(curNode).isEmpty()){
+        String curNode = destination;						//현재노드는 destination
+        path.add(destination);								
+        while(!result.preNode.get(curNode).isEmpty()){		
             curNode = result.preNode.get(curNode);
             path.add(curNode);
         }
-		
+        
+        
         System.out.println(destination + "까지의 최소 이동 거리: " + distance);
         System.out.println("=====이동 경로=====");
         for(int i = path.size()-1; i>=0; i--){
@@ -293,20 +296,20 @@ public class AddrController {
 	            String minNode = "";
 	            double minNodeDistance = INFINITY;
 	            for(String node: Q){
-	                if(shortestPath.get(node) < minNodeDistance){	//최소거리보다 작으면 최소거리를 꺼내온 노드로 교체
-	                    minNode = node;
-	                    minNodeDistance = shortestPath.get(node);
+	                if(shortestPath.get(node) < minNodeDistance){	//최소 노드간 거리보다 적은 거리를 선택해 minNode, minNodeDistance 업데이트
+	                    minNode = node;								
+	                    minNodeDistance = shortestPath.get(node);	//minNodeDistance로 지정된 값은 다시 다른 노드간 거리와 비교하며 가장 적은 노드. 즉 minNode로 지정됨
 	                }
 	            }
-	            Q.remove(minNode);			//최소 노드일 경우 Q에서 삭제
+	            Q.remove(minNode);			// 노드간 거리들 중 가장 낮은 거리는 Q에서 제외시킴
 	            
 	            //거리 최소 node의 이웃 노드까지 거리 Map 읽어 오기
 	            //최소 node 까지 거리 + 이웃 노드까지 거리 < 현재 이웃 노드의 최소 거리 이면 shortestPath, preNode 갱신
-	            HashMap<String, Double> minNodeMap = graph.get(minNode);
+	            HashMap<String, Double> minNodeMap = graph.get(minNode);	
 	            for(String key: minNodeMap.keySet()){
-	                double distance = minNodeDistance + minNodeMap.get(key);
-	                if(distance < shortestPath.get(key)){
-	                	shortestPath.put(key, distance);
+	                double distance = minNodeDistance + minNodeMap.get(key);	//최소거리 + 각 노드별 거리
+	                if(distance < shortestPath.get(key)){						//더한 값이 shortestPath에 있는 해당 노드보다 적으면 shortestPath와 preNode 업데이트
+	                	shortestPath.put(key, distance);						//처음엔 모든 값이 INF, 최소거리는 0이라서 원래의 값으로 shortestPath에 거리가 들어가게 됨
 	                    preNode.put(key, minNode);
 	                }
 	            }
