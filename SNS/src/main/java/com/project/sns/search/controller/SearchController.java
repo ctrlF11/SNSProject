@@ -28,8 +28,6 @@ public class SearchController{
 	
 	@RequestMapping("/searchAll.do")
 	public String SearchAll(@RequestParam("keyword") String keyword, @RequestParam("number") int number, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		List<UserVO> list = service.searchUser(keyword);
-		request.setAttribute("list", list);
 		HashMap<Integer, List> map = new HashMap<Integer, List>();
 		PrintWriter out = response.getWriter();
 		keyword = '%'+keyword+'%';
