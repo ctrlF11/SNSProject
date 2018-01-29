@@ -295,8 +295,7 @@ var positions =  [
 		      data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
 		      dataType: 'json',
 		      success: function(data){
-		    	  console.log(data);
-	 	          console.log(data.response.body.items.item);
+		    	  
  		          var myItem = data.response.body.items.item;
 		              var output = '';
 		              output += '<h4>'+myItem.treatmenu+'</h4>';
