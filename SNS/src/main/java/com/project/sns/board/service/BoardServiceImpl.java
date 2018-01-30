@@ -1,5 +1,6 @@
 package com.project.sns.board.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.project.sns.board.dao.BoardDAO;
 import com.project.sns.board.vo.BoardVO;
+import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
+import com.project.sns.board.vo.StoryVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -32,7 +35,11 @@ public class BoardServiceImpl implements BoardService {
 		return null;
 	}
 
-	
+	@Override
+	public List<ReplyVO> getBoardReply(int board_seq) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public void upBoardHeart(BoardVO vo) {
@@ -42,12 +49,6 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int inputBoardReply(ReplyVO vo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int inputBoard(BoardVO vo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -69,17 +70,118 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	
-	
+
+
 	@Override
-	public List<ReplyVO> getBoardReply(int board_seq) {
-		return dao.getBoardReply(board_seq);
+	public void regist(BoardVO board) throws Exception {
+		dao.inputBoard(board);
+	}
+	
+
+	@Override
+	public void registup(BoardVO board) throws Exception {
+		dao.updateBoard(board);
+	}
+
+	@Override
+	public List<String> getAttach(Integer bno) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<StoryVO> getStory(String id) {
+		// TODO Auto-generated method stub
+		
+		return dao.getStory(id);
+	}
+
+
+	@Override
+	public int inputStory(StoryVO vo) {
+		// TODO Auto-generated method stub
+		return dao.inputStory(vo);
+	}
+
+
+	@Override
+	public List<BoardVO> getBoardList(StoryVO vo) {
+		// TODO Auto-generated method stub
+		return dao.getBoardList(vo);
+	}
+
+
+	@Override
+	public int getBoardSeq(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return dao.getBoardSeq(vo);
+	}
+
+
+	@Override
+	public int inputBoard(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return dao.inputBoard(vo);
 	}
 	
 	@Override
-	public int insertReply(ReplyVO vo) {
-		return dao.insertReply(vo);
+	public int updateBoard(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return dao.updateBoard(vo);
+	}
+
+
+	@Override
+	public int deleteBoard(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return dao.deleteBoard(vo);
+	}
+
+
+	@Override
+	public int deleteBoardByStory(StoryVO vo) {
+		// TODO Auto-generated method stub
+		return dao.deleteBoardByStory(vo);
+	}
+
+
+	@Override
+	public int deleteStory(StoryVO vo) {
+		// TODO Auto-generated method stub
+		return dao.deleteStory(vo);
+	}
+
+
+	@Override
+	public int addImg(String fileName) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.addImg(fileName);
+	}
+
+
+	@Override
+	public List<ImageVO> getImg(int board_seq) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getImg(board_seq);
+	}
+
+
+	@Override
+	public int saveImage(ImageVO vo) throws SQLException {
+		// TODO Auto-generated method stub
+		return dao.saveImage(vo);
+		
+	}
+
+	@Override
+	public ImageVO getImage(int img_seq) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getImage(img_seq);
+	}
+
+	@Override
+	public void insertReply(ReplyVO vo) {
+		dao.insertReply(vo);
 	}
 
 

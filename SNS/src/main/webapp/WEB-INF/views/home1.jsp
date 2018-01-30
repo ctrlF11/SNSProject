@@ -5,6 +5,7 @@
 <html>
 <head>
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css"
+<<<<<<< HEAD
    rel="stylesheet" type="text/css">
 <style>
 .wrap {
@@ -20,7 +21,11 @@
    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
    line-height: 1.5;
 }
+=======
+	rel="stylesheet" type="text/css">
+>>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
 
+<<<<<<< HEAD
 .wrap * {
    padding: 0;
    margin: 0;
@@ -119,6 +124,8 @@
    position: fixed;
 }
 </style>
+=======
+>>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport"
@@ -126,7 +133,13 @@
 <link rel="stylesheet"
    href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
+<<<<<<< HEAD
    href="resources/facebook/assets/css/facebook2.css">
+=======
+	href="resources/facebook/assets/css/facebook2.css">
+<link rel="stylesheet"
+	href="resources/facebook/assets/css/original.css">
+>>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
 
 <script
    src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -233,6 +246,7 @@
                <!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
+<<<<<<< HEAD
                <div class="navbar navbar-blue navbar-static-top">
                   <!-- 
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
@@ -422,5 +436,46 @@
          </div>
       </div>
    </div>
+=======
+					<%@ include file="include/topbar.jsp" %>
+					<%@ include file="include/half_map.jsp" %>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('[data-toggle=offcanvas]').click(function() {
+				$(this).toggleClass('visible-xs text-center');
+				$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
+				$('.row-offcanvas').toggleClass('active');
+				$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
+				$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
+				$('#btnShow').toggle();
+			});
+        });
+		function checkgo() {
+			var check = document.getElementById("search_category").value;
+			var keyword = document.getElementById("srch-term").value;
+			alert(check);
+			alert(keyword);
+			if(keyword == "") {
+				alert("키워드를 입력해주세요.");
+				return false;
+			}			
+			if(check == "user") {
+				location.href = "searchAll.do?keyword=" + keyword + "&number=1";
+			}
+			if(check == "map") {
+				location.href = "searchAll.do?keyword=" + keyword + "&number=2";
+			}
+			if(check == "board") {
+				location.href = "searchAll.do?keyword=" + keyword + "&number=3";
+			}
+			return false;
+		}
+	</script>
+>>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
 </body>
 </html>

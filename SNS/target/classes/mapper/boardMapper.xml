@@ -33,11 +33,6 @@
 			</where>
 		</update>
 		
-		<insert id="inputBoard" parameterType="BoardVO">
-			insert into Board(board_seq, line_seq, title, writer, content, regdate, heart)
-			values(8, 1, #{title}, 'kimit93', #{content}, sysdate(), 0)	
-		</insert>
-		
 		
    <select id="getBoardReply" parameterType="int" resultType="ReplyVO">
      select rcontent,rwriter   
@@ -51,5 +46,77 @@
       ( #{contentId},(select * from (select max(Reply_seq)+1 from tbl_board),
       #{writer},#{content}  )
    </insert>
+		
+		
+	<insert id="inputBoard" parameterType="BoardVO">
+			insert into Board(story_seq, title, content, writer, mtitle, contentID, heart)
+			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentID}, 0)
+		</insert>
+		<update id="updateBoard" parameterType="BoardVO">
+			update Board set title = #{title}, content = #{content}, mtitle = #{mtitle}, contentID = #{contentID}
+			<where>
+				board_seq = ${board_seq}
+			</where> 
+		</update>
+		<select  id="getBoardSeq" parameterType="BoardVO" resultType="int">
+			select count(*) from Board
+			<where>
+				board_seq = #{board_seq}
+			</where>
+		</select>
+		<delete id="deleteBoard" parameterType="BoardVO">
+			delete from Board
+			<where>
+				board_seq = #{board_seq}
+			</where>
+		</delete>
+		<delete id="deleteBoardByStory" parameterType="com.project.sns.board.vo.StoryVO">
+			delete from Board
+			<where>
+				story_seq = ${story_seq}
+			</where>
+		</delete>
+		
+		
+<!-- IMAGE -->		
+		<insert id="addImg" parameterType="String">
+			insert into Table_img (fullName, board_seq) values (#{fullName}, LAST_INSERT_ID())
+		</insert>
+		
+		<select id="getImg" parameterType ="int" resultType="com.project.sns.board.vo.ImageVO" >
+			select * from Table_img 
+			<where> 
+				board_seq = #{board_seq} order by regdate
+			</where>
+		</select>
+		<insert id="saveImage" parameterType="com.project.sns.board.vo.ImageVO"  useGeneratedKeys="true" keyProperty="img_seq">
+			insert into Image_upload (board_seq, img_name, image) VALUES(#{board_seq}, #{img_name}, #{image})
+		</insert>
+		
+<!-- STORY -->
+		<select id="getStory" parameterType="String" resultType="com.project.sns.board.vo.StoryVO">
+			select story_seq, story_title from Story 
+			<where> 
+				id = #{value} order by story_regdate
+			</where>
+		</select>
+		
+		<insert id="inputStory" parameterType="com.project.sns.board.vo.StoryVO" useGeneratedKeys="true" keyProperty="story_seq">
+			insert into Story (story_title, id) values(#{story_title}, #{id})
+		</insert>
+		<delete id="deleteStory" parameterType="com.project.sns.board.vo.StoryVO">
+			delete from Story
+			<where>
+				story_seq = #{story_seq}
+			</where>
+		</delete>
+		
+		<select id="getImage" parameterType="int" resultType="com.project.sns.board.vo.ImageVO">
+			select * from Image_upload
+			<where>
+				img_seq = ${value}
+			</where>
+		</select>
+
 		
 </mapper>
