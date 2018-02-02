@@ -8,17 +8,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.cxf.helpers.IOUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
@@ -26,6 +29,14 @@ import com.project.sns.addr.vo.AddrVO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 @Controller
 public class AddrController {
 	private final Logger logger = LoggerFactory.getLogger(AddrController.class);
@@ -33,7 +44,7 @@ public class AddrController {
 	@Autowired
 	private AddrService service;
 
-	//
+	//DB 저장
 	@RequestMapping("/inputAddr.do")
 	public String inputAddr(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
@@ -50,7 +61,6 @@ public class AddrController {
 		// ServletOutputStream out = response.getOutputStream();
 		parameter = parameter + "&" + "areaCode=1";
 		parameter = parameter + "&" + "numOfRows=4000";
-		parameter = parameter + "&" + "cat2=A0102";
 		parameter = parameter + "&" + "MobileOS=ETC";
 		parameter = parameter + "&" + "MobileApp=aa";
 		parameter = parameter + "&" + "_type=json";
@@ -115,6 +125,88 @@ public class AddrController {
 		return "test";
 	}
 
+	//DB 저장(축제 update)
+	@RequestMapping("/updateFest.do")
+	public String updateFest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+
+		String addr = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey=";
+		String serviceKey = "429e9l%2BRPBvvMYSqI0TIu0JgvFl1vio2dcUfXj7d66%2F%2B2glco1EDs1HDHJBssw9U7HAt1A11Cy6N0Hbk2INDfQ%3D%3D";
+		String parameter = "";
+		// serviceKey = URLEncoder.encode(serviceKey,"utf-8");
+
+		PrintWriter out = response.getWriter();
+		// PrintWriter out = new PrintWriter(new OutputStream
+		// Writer(response.getOutputStream(),"KSC5601"));
+		// ServletOutputStream out = response.getOutputStream();
+		parameter = parameter + "&" + "areaCode=1";
+		parameter = parameter + "&" + "contentTypeId=15";
+		parameter = parameter + "&" + "numOfRows=4000";
+		parameter = parameter + "&" + "MobileOS=ETC";
+		parameter = parameter + "&" + "MobileApp=aa";
+		parameter = parameter + "&" + "_type=json";
+
+		addr = addr + serviceKey + parameter;
+		URL url = new URL(addr);
+
+		System.out.println(addr);
+
+		// BufferedReader in = new BufferedReader(new
+		// InputStreamReader(url.openStream(), "UTF-8"));
+
+		InputStream in = url.openStream();
+		// CachedOutputStream bos = new CachedOutputStream();
+		ByteArrayOutputStream bos1 = new ByteArrayOutputStream();
+		IOUtils.copy(in, bos1);
+		in.close();
+		bos1.close();
+
+		String mbos = bos1.toString("UTF-8");
+
+		byte[] b = mbos.getBytes("UTF-8");
+		String s = new String(b, "UTF-8");
+		out.println(s);
+
+		JSONObject json = new JSONObject();
+		json.put("data", s);
+		// json.put("data", data);
+
+		JSONObject jso = json.getJSONObject("data");
+		JSONObject js = jso.getJSONObject("response");
+		JSONObject jj = js.getJSONObject("body");
+		JSONObject items = jj.getJSONObject("items");
+		JSONArray jArray = items.getJSONArray("item");
+
+		List<AddrVO> list = new ArrayList<AddrVO>();
+		for (int i = 0; i < 377; i++) {
+			JSONObject a = jArray.getJSONObject(i);
+
+			AddrVO vo = new AddrVO();
+
+			// TourMap DB
+			if (a.has("contenttypeid") && a.has("contentid") && a.has("title") && a.has("tel") && a.has("addr1")
+					&& a.has("firstimage") && a.has("firstimage2") && a.has("cat2") && a.has("cat3") && a.has("mapx")
+					&& a.has("mapy")) {
+				vo.setContentTypeId(a.getString("contenttypeid"));
+				vo.setContentId(a.getString("contentid"));
+				vo.setTitle(a.getString("title"));
+				vo.setTel(a.getString("tel"));
+				vo.setAddr1(a.getString("addr1"));
+				vo.setFirstimage(a.getString("firstimage"));
+				vo.setFirstimage2(a.getString("firstimage2"));
+				vo.setCat2(a.getString("cat2"));
+				vo.setCat3(a.getString("cat3"));
+				vo.setMapx(a.getString("mapx"));
+				vo.setMapy(a.getString("mapy"));
+				list.add(vo);
+			}
+		}
+
+		int i = service.inputAddr(list);
+		return "test";
+	}
+	
 	@RequestMapping("/callDetail.do")
 	public void callDetail(HttpServletRequest request, HttpServletResponse response, @RequestParam String contentId,
 			@RequestParam String contentTypeId) throws Exception {
@@ -152,6 +244,9 @@ public class AddrController {
 
 		JSONObject json = new JSONObject();
 		json.put("data", s);
+		
+		System.out.println(s);
+		System.out.println(json);
 	}
 
 	@RequestMapping("/Address.do")
@@ -166,9 +261,74 @@ public class AddrController {
 		return "marker";
 	}
 
-	@RequestMapping("/line.do")
-	public void line(HttpServletRequest req, AddrVO vo) throws Exception {
-		List<AddrVO> list = service.getAddress();
+	@RequestMapping("/getPath.do")
+	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req) throws Exception {
+		   String[] temp = new String[3];
+	        String[] wfKor = new String[3];
+	        String[] hour1 = new String[3];
+	        int weather =0 ;
+	        try {
+	              DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+	              DocumentBuilder parser = f.newDocumentBuilder();
+	            
+	              Document xmlDoc = null;
+	              String url = "http://www.weather.go.kr/wid/queryDFSRSS.jsp?zone=1159068000";
+	              xmlDoc = parser.parse(url);
+	            
+	              Element root = xmlDoc.getDocumentElement();
+	              // System.out.println(root.getTagName());
+	               
+	              for (int i = 0; i < temp.length; i++) {
+	               Node xml = root.getElementsByTagName("pubDate").item(0);     
+	               Node xmlNode1 = root.getElementsByTagName("data").item(i);
+	               
+	               Node xmlNode21 = ((Element) xmlNode1).getElementsByTagName(
+	                 "pty").item(0);
+	               Node xmlNode22 = ((Element) xmlNode1).getElementsByTagName(
+	                 "wfKor").item(0);
+	               Node xmlNode23 = ((Element) xmlNode1).getElementsByTagName(
+	                 "hour").item(0);
+	                
+	               temp[i] = xmlNode21.getTextContent();
+	               wfKor[i] = xmlNode22.getTextContent();
+	               hour1[i] = "기준시각 : " + xmlNode23.getTextContent() + "시";
+	               
+	               System.out.println("기준 시간"+xml.getTextContent());
+	               System.out.println("기온 : 0 => 맑음  1,2,3 => 눈/비           현상태 =>"+temp[i] + "    날씨: " + wfKor[i] + "    시간: " +hour1[i]);
+	               if(temp[i].equals("0"))
+	                  weather = 1;
+	               else 
+	                  weather = 2;
+	               System.out.println("weather : "+weather);
+	              }
+	            
+	             } catch (Exception e) {
+	              System.out.println(e.getMessage());
+	              System.out.println(e.toString());
+	             }
+	        
+	  
+	       List<AddrVO> list = null;
+	       if(weather == 1)
+	       {
+	
+	          list = service.getAddress2("1");
+	          AddrVO vo = service.getAddress3();
+	          list.add(vo);
+	          System.out.println( "콘탠트 아이디 :"+vo.getContentId());
+	          System.out.println(list.get(1).getMapx());
+	          req.setAttribute("randomPath", list);
+
+	       }
+	       else 
+	       {
+	          list = service.getAddress2("2");
+	          AddrVO vo = service.getAddress3();
+	          list.add(vo);
+	          System.out.println( "주소 :"+vo.getAddr1());
+	          System.out.println(list.get(1).getMapx());
+	       }
+	      
 		double distanceMeter = 0;
 		//그래프 저장용 맵
         //HashMap<출발지, HashMap<도착지, 거리>>
@@ -184,23 +344,26 @@ public class AddrController {
 			tempMap = new HashMap<>();
 			for(int j=0; j<list.size(); j++) {
 				distanceMeter = distance(Double.parseDouble(list.get(i).getMapy()), Double.parseDouble(list.get(i).getMapx()), Double.parseDouble(list.get(j).getMapy()), Double.parseDouble(list.get(j).getMapx()), "meter");	
-				System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );	
+//				System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );	
 				ArrayList<Object> mapList = new ArrayList<>();
 				mapList.add(distanceMeter);
 				mapList.add(list.get(j).getGrade());
-				tempMap.put(list.get(j).getTitle(), mapList);			
+				tempMap.put(list.get(j).getContentId(), mapList);			
 			}	
-			distanceMap.put(list.get(i).getTitle(), tempMap);
+			distanceMap.put(list.get(i).getContentId(), tempMap);
 		}
 		
 	
-		String destination = "북촌 8경";
+		String destination = "2520648";
 		
-		Result result = dijkstra(distanceMap, "양천구 어린이교통공원");    	//dijkstra(거리 맵, 출발지)
+		Result result = dijkstra(distanceMap, "2383039");    	//dijkstra(거리 맵, 출발지)
         double distance = result.shortestPath.get(destination);	//destination의 거리 값
         
+        
+        
         ArrayList<String> path = new ArrayList<>();
-        String curNode = destination;						//현재노드는 destination       
+        String curNode = destination; 	//현재노드는 destination   
+        						
         path.add(destination);				        
         while(!result.preNode.get(curNode).isEmpty()){		
             curNode = result.preNode.get(curNode);
@@ -213,8 +376,12 @@ public class AddrController {
             System.out.println(path.get(i));
         }
         System.out.println("================");
-		
-
+        
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> jsonData = new HashMap<String, Object>();
+        jsonData.put("path",path);
+        System.out.println(jsonData);
+        return jsonData;
 	}
 
 	//좌표로 위치 계산
@@ -272,7 +439,6 @@ public class AddrController {
 	        
 	        shortestPath.put(start, 0.0);
 	        preNode.put(start, "");
-
 	        
 	        //그래프의 각 노드를 저장할 집합
 	        HashSet<String> Q = new HashSet<>();
@@ -330,5 +496,7 @@ public class AddrController {
 	        
 	        return result;
 	    }
+	    
+	    
 }
 

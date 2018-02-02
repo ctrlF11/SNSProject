@@ -37,4 +37,17 @@ public class AddrDAOImpl implements AddrDAO{
 	}
 	
 	
+	@Override
+	public List<AddrVO> getAddress2(String inside) throws Exception {
+	      // TODO Auto-generated method stub
+	      System.out.println("inside impl: " + inside);
+	      return sqlSession.selectList(namespace+".getAddress2",inside);   
+	 }
+	   
+	 @Override
+	 public AddrVO getAddress3() throws Exception {
+	      // TODO Auto-generated method stub
+	      return sqlSession.selectOne(namespace+".getAddress3");   
+	 }
+	
 }

@@ -45,6 +45,13 @@ xmlns="http://maven.apache.org/POM/4.0.0">
 			<version>2.6.4</version>
 		</dependency>
 		
+		<!-- Jackson JSON Mapper -->
+		<dependency>
+      		  <groupId>org.codehaus.jackson</groupId>
+      		  <artifactId>jackson-mapper-asl</artifactId>
+     		  <version>1.9.13</version>
+		</dependency>
+		
 		 <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-frontend-jaxws -->
 		<dependency>
 		    <groupId>org.apache.cxf</groupId>

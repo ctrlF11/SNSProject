@@ -15,7 +15,64 @@ public class AddrVO {
 	private String areacode;
 	private String sigungucode;
 	private String grade;
+	private String inside;
 	
+	/////////////////////
+	private String scope;
+	private String link1;
+	private String link2;
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+	public String getLink1() {
+		return link1;
+	}
+	public void setLink1(String link1) {
+		this.link1 = link1;
+	}
+	public String getLink2() {
+		return link2;
+	}
+	public void setLink2(String link2) {
+		this.link2 = link2;
+	}
+	public String getLink3() {
+		return link3;
+	}
+	public void setLink3(String link3) {
+		this.link3 = link3;
+	}
+	public String getImage1() {
+		return image1;
+	}
+	public void setImage1(String image1) {
+		this.image1 = image1;
+	}
+	public String getImage2() {
+		return image2;
+	}
+	public void setImage2(String image2) {
+		this.image2 = image2;
+	}
+	public String getImage3() {
+		return image3;
+	}
+	public void setImage3(String image3) {
+		this.image3 = image3;
+	}
+	private String link3;
+	private String image1;
+	private String image2;
+	private String image3;
+	public String getInside() {
+		return inside;
+	}
+	public void setInside(String inside) {
+		this.inside = inside;
+	}
 	public String getContentTypeId() {
 		return contentTypeId;
 	}
