@@ -528,26 +528,6 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 						addMarker(latlng, val.title, val.contentId, val.contentTypeId, val.mapY, val.mapX);
 						
 					})
-					
-					//var positions = [
-						//$.each(array, function(i, val){
-							   //{title : val.title,
-								//contenttypeid : val.contentTypeId,
-								//contentid : val.contentId,
-								//latlng : new daum.maps.LatLng(val.mapy,val.mapx),
-								//mapy : val.mapy,
-								//mapx : val.mapx
-						//		}
-   						//		if(i == array.length){return true;}
-   						//		,
-						//})
-					//];
-					  // for (var i = 0; i < positions.length; i ++) {
-
-					   //    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid, positions[i].mapy, positions[i].mapx);
-					       
-					  // } 
-
 					  
 					  
 					  
