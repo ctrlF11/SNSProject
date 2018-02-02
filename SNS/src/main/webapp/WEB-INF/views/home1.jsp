@@ -4,9 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link href="resources/vendor/font-awesome/css/font-awesome.min.css"
-<<<<<<< HEAD
-   rel="stylesheet" type="text/css">
+<link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <style>
 .wrap {
    position: absolute;
@@ -21,11 +19,7 @@
    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
    line-height: 1.5;
 }
-=======
-	rel="stylesheet" type="text/css">
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
 
-<<<<<<< HEAD
 .wrap * {
    padding: 0;
    margin: 0;
@@ -124,22 +118,16 @@
    position: fixed;
 }
 </style>
-=======
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport"
    content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/bootstrap2.css">
-<link rel="stylesheet"
-<<<<<<< HEAD
-   href="resources/facebook/assets/css/facebook2.css">
-=======
-	href="resources/facebook/assets/css/facebook2.css">
+
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/original.css">
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
 
 <script
    src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -246,7 +234,7 @@
                <!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
-<<<<<<< HEAD
+
                <div class="navbar navbar-blue navbar-static-top">
                   <!-- 
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
@@ -436,7 +424,7 @@
          </div>
       </div>
    </div>
-=======
+
 					<%@ include file="include/topbar.jsp" %>
 					<%@ include file="include/half_map.jsp" %>
 				</div>
@@ -476,6 +464,6 @@
 			return false;
 		}
 	</script>
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject.git
+
 </body>
 </html>

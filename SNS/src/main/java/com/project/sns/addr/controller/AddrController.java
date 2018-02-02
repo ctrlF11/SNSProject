@@ -4,10 +4,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
@@ -33,7 +41,17 @@ public class AddrController {
    @Autowired
    private AddrService service;
 
-   //
+   
+	public static int[][] W;
+	public static int[][] dp;
+	public static int N;
+	public static final int INF = 1000000000;
+	private static Deque<Integer> route = new ArrayDeque<>();
+	private static List<Integer> solution;
+	private static List<Integer> path;
+	static int re = INF;
+   
+	
    @RequestMapping("/inputAddr.do")
    public String inputAddr(HttpServletRequest request, HttpServletResponse response) throws Exception {
       request.setCharacterEncoding("utf-8");
@@ -160,63 +178,137 @@ public class AddrController {
       req.setAttribute("list", list);      
       return "Map";
    }
+   
+   
+   //추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   @RequestMapping("/Path.do")
+   public String Path(HttpServletRequest req) throws Exception{
+	   List<AddrVO> list = service.getAddress();
+	   req.setAttribute("list", list);   
+	   return "path";
+   }
 
    @RequestMapping("/marker.do")
    public String marker(HttpServletRequest req) throws Exception {
       return "marker";
    }
-
-   @RequestMapping("/line.do")
-   public void line(HttpServletRequest req, AddrVO vo) throws Exception {
-      List<AddrVO> list = service.getAddress();
-      double distanceMeter = 0;
-      //그래프 저장용 맵
-        //HashMap<출발지, HashMap<도착지, 거리>>
-        HashMap<String, HashMap<String, ArrayList>> distanceMap = 
-                new HashMap<String, HashMap<String, ArrayList>>();
-        
-        //도착지, 거리 저장용 임시 맵
-        //tempMap을 만든후 이를 다시 distanceMap에 put
-        HashMap<String, ArrayList> tempMap = new HashMap<String, ArrayList>();
-       
-      
-      for(int i=0; i<10; i++) {
-         tempMap = new HashMap<>();
-         for(int j=0; j<10; j++) {
-            distanceMeter = distance(Double.parseDouble(list.get(i).getMapy()), Double.parseDouble(list.get(i).getMapx()), Double.parseDouble(list.get(j).getMapy()), Double.parseDouble(list.get(j).getMapx()), "meter");   
-            System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );   
-            ArrayList<Object> mapList = new ArrayList<>();
-            mapList.add(distanceMeter);
-            mapList.add(list.get(j).getGrade());
-            tempMap.put(list.get(j).getTitle(), mapList);         
-         }   
-         distanceMap.put(list.get(i).getTitle(), tempMap);
-      }
-      
    
-      String destination = "중명전";
-      
-      Result result = dijkstra(distanceMap, "양천구 어린이교통공원");       //dijkstra(거리 맵, 출발지)
-        double distance = result.shortestPath.get(destination);   //destination의 거리 값
-        
-        ArrayList<String> path = new ArrayList<>();
-        String curNode = destination;                  //현재노드는 destination
-        path.add(destination);                        
-        while(!result.preNode.get(curNode).isEmpty()){      
-            curNode = result.preNode.get(curNode);
-            path.add(curNode);
-        }
-        
-        
-        System.out.println(destination + "까지의 최소 이동 거리: " + distance);
-        System.out.println("=====이동 경로=====");
-        for(int i = path.size()-1; i>=0; i--){
-            System.out.println(path.get(i));
-        }
-        System.out.println("================");
-      
+   
+   //추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   @ResponseBody
+   @RequestMapping(value = "/getpath", method= {RequestMethod.POST})
+   public List<AddrVO> path(HttpServletRequest req, @RequestBody List<AddrVO> paramData) throws Exception{
+	   
+	   	System.out.println("paramData의 길이" + paramData.size());
+	   //노드간 거리 구하기
+	      double distanceMeter = 0;
+	      //그래프 저장용 맵
+	        //HashMap<출발지, HashMap<도착지, 거리>>
+	        HashMap<String, HashMap<String, ArrayList>> distanceMap = 
+	                new HashMap<String, HashMap<String, ArrayList>>();
+	        //도착지, 거리 저장용 임시 맵
+	        //tempMap을 만든후 이를 다시 distanceMap에 put
+	        HashMap<String, ArrayList> tempMap = new HashMap<String, ArrayList>();
+	        
+	        //순서대로 저장
+	        List<String> name = new ArrayList<>();
+	        name.add("0");//시작 1에 맞추려고 그냥 넣음.
+	        for(AddrVO vo : paramData) {
+	        	name.add(vo.getTitle());
+	        }
+	        
+	        N = paramData.size();
+			W = new int[N + 1][N + 1];
+			dp = new int[N + 1][1 << N];
+	        
+	        for(int i = 0; i < N; i++) {
+	            tempMap = new HashMap<>();
+	            for(int j = 0; j < N; j++) {
+	            	if(i==j)continue;
+	               distanceMeter = distance(Double.parseDouble(paramData.get(i).getMapy()), Double.parseDouble(paramData.get(i).getMapx()), Double.parseDouble(paramData.get(j).getMapy()), Double.parseDouble(paramData.get(j).getMapx()), "meter");   
+	               W[i+1][j+1] = (int) Math.floor(distanceMeter);	               
+	               ArrayList<Object> mapList = new ArrayList<>();
+	               mapList.add(distanceMeter);
+	               mapList.add(paramData.get(j).getGrade());
+	               tempMap.put(paramData.get(j).getTitle(), mapList);         
+	            }   
+	            distanceMap.put(paramData.get(i).getTitle(), tempMap);
+	         }
+	        
+			// 2차원 배열의 모든 원소를 -1로
+			for (int i = 1; i <= N; i++) {
+				Arrays.fill(dp[i], -1);
+			}
+			
+			
+//			path.clear();
+			int start = 1;
+//			System.out.println(getShortestPath(start, 1));
+			
+			path = getPath(start,1);
+			
+//			getShortestPath(start,1);
+			
+			Collections.reverse(path);
+			
+			System.out.println("path의 길이 : " + path.size());
+			
+			
+			int longest = 0;
+			int star = 0;			
+			for(int i = 0; i < path.size(); i++) {
+				if(i == path.size()-1) {
+					if(W[path.get(i)][path.get(0)] > longest) {
+						longest = W[path.get(i)][path.get(0)];
+						star = path.get(0);
+					}
+				}else if(W[path.get(i)][path.get(i+1)] > longest) {
+					longest = W[path.get(i)][path.get(i+1)];
+					star = path.get(i+1);
+				}
+			}
+			System.out.println("longest : " + longest);
+			System.out.println("star : " + star);
+			
+			
+			
+			System.out.println("W : ");
+			for(int i = 0; i<W.length; i++) {
+				for(int j = 0; j <W[0].length; j++) {
+					System.out.print(W[i][j] + " ");
+				}
+				System.out.println();
+			}
+			
+			
+			int index = path.indexOf(star);
+			List<Integer> result = new ArrayList<>();
+			for(int i = index; i < path.size(); i++) {
+				result.add(path.get(i));
+			}
+			for(int i = 0; i < index; i++) {
+				result.add(path.get(i));
+			}
+			
+			System.out.println("result의 길이 : " + result.size());
 
+			
+			System.out.println("result : ");
+			for(int i : result) {
+				System.out.print(i + " ");
+				System.out.println(name.get(i));
+			}
+			
+			List<AddrVO> re = new ArrayList<>();
+			for(int i : result) {
+				re.add(paramData.get(i-1));
+			}
+
+			System.out.println("re의 길이 : " + re.size());
+			
+			return re;
    }
+   
 
    //좌표로 위치 계산
    private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
@@ -235,9 +327,9 @@ public class AddrController {
          dist = dist * 1609.344;
       }
       
-      int distPoint = (int) Math.floor(dist/1000);
+//      int distPoint = (int) Math.floor(dist/1000);
       
-      return (distPoint);
+      return (Math.floor(dist));
    }
 
    // This function converts decimal degrees to radians
@@ -344,4 +436,56 @@ public class AddrController {
            
            return result;
        }
+      
+    
+    public static List<Integer> getPath(int current, int visited){
+    	getShortestPath(current, visited);
+    	
+    	return path;
+    }
+       
+	public static int getShortestPath(int current, int visited) {
+		
+		// 모든 정점을 다 들른 경우
+		if (visited == (1 << N) - 1) {	
+			route.push(1);
+			//1까지 경로 리턴
+			return W[current][1];
+		}
+
+		int ret = INF;
+		
+		// 집합에서 다음에 올 원소를 고르자!
+		for (int i = 1; i <= N; i++) {
+			int next = i;
+			
+			// 이미 들렀던 곳일때 pass
+			if ((visited & (1 << (next - 1))) != 0) { 
+				continue;
+			}
+			
+			// 0은 경로가 없으므로 pass
+			if(W[current][next] == 0)
+				continue;
+			
+			route.push(i);
+
+			int temp = W[current][next] + getShortestPath(next, visited + (1 << (next - 1)));
+
+			if(route.size()==N) {
+						solution = new ArrayList<>(route);
+				route.pop();
+			}
+			if(route.size()==2) {
+				if(re > temp + W[i][1]) {
+					path = new ArrayList<>(solution);
+					re = temp;
+				}
+			}
+			route.pop();
+			ret = Math.min(ret, temp);		
+		}	
+		return dp[current][visited] = ret;
+		
+	}
 }
