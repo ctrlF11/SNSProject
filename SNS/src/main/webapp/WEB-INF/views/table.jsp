@@ -140,6 +140,9 @@ function makeOutListener(infowindow) {
 	   }
    }
 }
+	$(".rBtn").click(function(){
+	alert("click 작동");
+   })
 </script>
 <c:forEach var="user" items="${requestScope.user}">
 	<div class="panel panel-default">
@@ -162,7 +165,7 @@ function makeOutListener(infowindow) {
 			<a class="mr-3 d-inline-block" href="#">
 				<i class="fa fa-fw fa-thumbs-up"></i>Like
 			</a>
-			<a class="mr-3 d-inline-block" href="#" name="comment">
+			<a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment">
 				<i class="fa fa-fw fa-comment"></i>Comment
 			</a>
 			<a class="d-inline-block" href="#">
@@ -171,28 +174,24 @@ function makeOutListener(infowindow) {
 		</div>
 		<hr class="my-0">
 		<div class="card-body small bg-faded"></div>
-		<form action="inputReply.do" onsubmit="return reply_check();">
-			<div id="replyDiv${user.board_seq }" class="reply">
+			<div id="replyDiv${user.board_seq }" class="reply" style="display: block;">
 				<table>
 					<tr>
 						<td class="header" width="370">댓글</td>
 					</tr>
 					<tr>
 						<td>
-							<textarea id="rContent${user.board_seq }" cols="50" rows="2">
+							<textarea id="rContent" cols="50" rows="2">
 							</textarea>
 							<div id="cmsg">
 							</div>
 						</td>
 						<td align="right" class="bottom">
-							<input type="submit" class="rBtn"
-							onclick="reply_check(<%= session.getAttribute("id") %>, ${user.board_seq });"
-							value="댓글등록">
+							<button class="rBtn">댓글등록</button>
 						</td>
 					</tr>
 				</table>
 			</div>
-		</form>
 		<div class="card-footer small text-muted">Tell : ${user.regdate}</div>
 	</div>
 </c:forEach>

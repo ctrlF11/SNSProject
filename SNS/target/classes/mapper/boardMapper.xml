@@ -49,11 +49,11 @@
 		
 		
 	<insert id="inputBoard" parameterType="BoardVO">
-			insert into Board(story_seq, title, content, writer, mtitle, contentID, heart)
-			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentID}, 0)
+			insert into Board(story_seq, title, content, writer, mtitle, contentId, heart)
+			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentId}, 0)
 		</insert>
 		<update id="updateBoard" parameterType="BoardVO">
-			update Board set title = #{title}, content = #{content}, mtitle = #{mtitle}, contentID = #{contentID}
+			update Board set title = #{title}, content = #{content}, mtitle = #{mtitle}, contentId = #{contentId}
 			<where>
 				board_seq = ${board_seq}
 			</where> 

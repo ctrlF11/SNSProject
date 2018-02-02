@@ -6,7 +6,10 @@ import java.util.Locale;
  
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,4 +176,14 @@ public class BoardController {
     public String getTest() {
     	return "getTest";
     }*/
+    
+    @RequestMapping("/inputReply.do")
+    public String inputReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	request.setCharacterEncoding("UTF-8");
+    	response.setContentType("text/html;charset=UTF-8");
+    	
+    	
+    	
+    	return "home1";
+    }
 }
