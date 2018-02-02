@@ -130,7 +130,7 @@ import A.algorithm.AES;
     	session.setAttribute("ip", ip);
     	
     	
-    	return "redirect:homeview.do";
+    	return "redirect:mainHomeView.do";
     }
     
     @RequestMapping("/logout.do")

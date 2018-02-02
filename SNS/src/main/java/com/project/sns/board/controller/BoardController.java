@@ -46,12 +46,13 @@ public class BoardController {
      */
     
     @RequestMapping("/getBoardList.do")
-    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req) throws Exception{
+    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int story_seq, HttpServletRequest req) throws Exception{
         logger.info("getBoardList");
-        System.out.println("index : " + index +" story-seq : " + stroy_seq);
+        System.out.println("index : " + index +" story-seq : " + story_seq);
         HashMap map = new HashMap();
         map.put("index", index);
-        map.put("story_seq", stroy_seq);
+        map.put("story_seq", story_seq);
+        
         List<BoardVO> user = service.getBoardList(map);
         req.setAttribute("user", user);
         /*if(index == 0)
