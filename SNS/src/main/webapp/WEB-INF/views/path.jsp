@@ -66,9 +66,11 @@
 	
 #searchBox{
 	position: fixed;
-	background-color: white;
+	float: right;
+	background-color: #4CAF50;
 	height : 50px;
-	top: 50px;
+	top: 70px;
+	right: 35%;
 	
 	}
 	
@@ -193,10 +195,10 @@
       <div id="mask"></div>
       <div id="window"></div>
       <div id="mapBox">
-      	<div id="searchBox">
-	      <input type="text" id="searchMap"/><input id = "searchMap" type="button" value="검색"/>
+      	<div id="searchBox" style="z-index: 2;">
+	      <input type="text" id="searchMap" /><input id = "searchMapBtn" type="button" value="검색"/>
 		</div>
-      	<div id="map"></div> 
+      	<div id="map" style="z-index: 1;" ></div> 
       </div>
       
       <!-- 오른쪽 사이드 -->  
@@ -303,12 +305,12 @@ var positions =  [
 
    // 마커 이미지의 이미지 주소입니다
    var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-       
-   for (var i = 0; i < positions.length; i ++) {
+   
+   //for (var i = 0; i < positions.length; i ++) {
 
-       addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid, positions[i].mapy, positions[i].mapx);
+   //    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid, positions[i].mapy, positions[i].mapx);
        
-   } 
+   //} 
 
     // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
     $('#mask').click(function () {
@@ -502,6 +504,62 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
      } 
 });
 } 
+
+ 
+ $(function(){
+
+		$('#searchMapBtn').click(function(){
+			var keyword = $('#searchMap').val();
+			$.ajax({
+				url:'search.do',
+				type: 'POST',
+				data: {keyword:keyword},
+				success: function(data){
+					console.log(data);
+					var array = new Array();
+					array = data;
+					
+					
+					$.each(array, function(i, val){
+						console.log(val);
+						var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
+						console.log(val.mapy);
+						console.log(title);
+						addMarker(latlng, val.title, val.contentId, val.contentTypeId, val.mapY, val.mapX);
+						
+					})
+					
+					//var positions = [
+						//$.each(array, function(i, val){
+							   //{title : val.title,
+								//contenttypeid : val.contentTypeId,
+								//contentid : val.contentId,
+								//latlng : new daum.maps.LatLng(val.mapy,val.mapx),
+								//mapy : val.mapy,
+								//mapx : val.mapx
+						//		}
+   						//		if(i == array.length){return true;}
+   						//		,
+						//})
+					//];
+					  // for (var i = 0; i < positions.length; i ++) {
+
+					   //    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid, positions[i].mapy, positions[i].mapx);
+					       
+					  // } 
+
+					  
+					  
+					  
+				}
+			})
+		})
+		
+		
+		
+		
+	})
+
  
 
 

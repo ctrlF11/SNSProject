@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.search.service.SearchService;
 import com.project.sns.tour.vo.TourMapVO;
@@ -61,4 +63,15 @@ public class SearchController{
 		
 		return "searchTest";
 	}
+	
+	@ResponseBody
+    @RequestMapping("/search")
+    public List<TourMapVO> search (@RequestParam String keyword) throws Exception {
+    	System.out.println("keyword : " + keyword);
+    	List<TourMapVO> list = (List<TourMapVO>)service.searchMap(keyword);
+    
+    	System.out.println("list.size : " + list.size());
+    	
+    	return list;
+    }
 }
