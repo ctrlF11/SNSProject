@@ -519,12 +519,8 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 					var array = new Array();
 					array = data;
 					
-					
 					$.each(array, function(i, val){
-						console.log(val);
 						var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
-						console.log(val.mapy);
-						console.log(title);
 						addMarker(latlng, val.title, val.contentId, val.contentTypeId, val.mapY, val.mapX);
 						
 					})
