@@ -2,11 +2,15 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<style>
+
+</style>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
+<<<<<<< HEAD
 	<script type="text/javascript">
 		// 다익스트라.
 		Graph.prototype.shortest = function(startKey) {
@@ -71,6 +75,9 @@
 		// F까지의 최단 거리는 9입니다.
 	</script>
 	<input type="text">
+=======
+	
+>>>>>>> refs/remotes/origin/mwbear
 
 </body>
 </html>

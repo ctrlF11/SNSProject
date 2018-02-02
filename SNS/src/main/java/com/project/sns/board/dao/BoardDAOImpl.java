@@ -2,6 +2,7 @@ package com.project.sns.board.dao;
 
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,11 +25,14 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	private static final String namespace = "com.project.sns.mapper.boardMapper";
 	
-
-	
-	public List<BoardVO> getBoardList(int index)
+	public List<BoardVO> getBoardList(HashMap map)
 	{
-		return sqlSession.selectList(namespace+".getBoardList",index);
+		return sqlSession.selectList(namespace+".getBoardList",map);
+	}
+	
+	public List<BoardVO> getMainBoardList(int index)
+	{
+		return sqlSession.selectList(namespace+".getMainBoardList",index);
 	}
 
 	@Override

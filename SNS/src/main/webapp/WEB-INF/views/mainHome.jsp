@@ -15,12 +15,14 @@
 	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
-<link rel="stylesheet" href="resources/facebook/assets/css/original.css">
+<link rel="stylesheet"
+	href="resources/facebook/assets/css/original.css">
 <script src="resources/facebook/assets/js/check.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(
+	<script type="text/javascript">
+	$(document)
+			.ready(
 					function() {
 						$('[data-toggle=offcanvas]')
 								.click(
@@ -45,43 +47,34 @@
 
 	var mmm = function() {
          $.ajax({
-            url : 'getBoardList.do',
+            url : 'getMainBoardList.do',
             data : {
-               index : index,
-               story_seq : <%=request.getAttribute("story_seq")%>
+               index : index
+        
             },
             success : function(data) {
-               $("#col-sm-6").html(data);
+               $("#col-sm-6").append(data);
             }
          })
       
    }
-	
-	var index = 0;
-	
-	function togglethis(num) {
-		var replyDiv = document.getElementById("replyDiv"+num);
-		if(replyDiv.style.display == "none") {
-			replyDiv.style.display = "block";
-		} else {
-			replyDiv.style.display = "none";
-		}
-	}
-	
-	$(function() {
-		mmm();
-
+   var index = 0;
+   $(function() {
+      mmm();
+      $(document).on('click', '[name = "comment"]', function() {
+         $(".reply").toggle();
+      })
+   
       $("#main").scroll(function() {
          var sh = $("#main").scrollTop() + $("#main").height();
          var dh = $("#main").prop("scrollHeight");
 
          if (sh == dh) {
-            index += 4;
+            index += 5;
             $.ajax({
-               url : 'getBoardList.do',
+               url : 'getMainBoardList.do',
                data : {
-                  index : index,
-                  story_seq : <%=request.getAttribute("story_seq")%>
+                  index : index
                },
                success : function(data) {
                   $("#col-sm-6").append(data);
@@ -90,13 +83,27 @@
          }
       })
 
-	});
+   });
 
-	$(document).on(function() {
-		$("#reply").hide();
-	})
-
-
+   $(document).on(function() {
+      $("#reply").hide();
+   })
+   
+   function reply_check(sessionID, num) {
+	   	alert(sessionID);
+	   	alert(num);
+		if(sessionID == null) {
+			alert("로그인해주세요.");
+			location.href="login.do";
+			return false;
+		}
+		var content = document.getElementById("rContent"+num);
+		if(content == "") {
+			alert("뭐더라?");
+			return false;
+		}
+		return true;
+	}
 </script>
 </head>
 <body>
@@ -152,61 +159,54 @@
                   맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
                   백그라운드의 회색 화면이 나타남.                  
                 -->
-				<div id="main" class="column col-sm-10 col-xs-11"
-					style="overflow-y: auto;">
+				<div id="main" class="column col-sm-10 col-xs-11" style="overflow-y: auto; ">
 					<!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
-					<%@ include file="include/topbar.jsp"%>
-					<%@ include file="include/half_map.jsp"%>
+					<%@ include file="include/topbar.jsp" %>
+					<div class="padding">
+						<div class="full col-sm-9" id="full1">
+							<div class="row">
+								<div class="col-sm-12" id="col-sm-6">
+									<div>
+											인기 여행기					
+									</div>
+									<!-- 글 영역 -->
+								</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
+	
 	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							$('[data-toggle=offcanvas]')
-									.click(
-											function() {
-												$(this)
-														.toggleClass(
-																'visible-xs text-center');
-												$(this)
-														.find('i')
-														.toggleClass(
-																'glyphicon-chevron-right glyphicon-chevron-left');
-												$('.row-offcanvas')
-														.toggleClass('active');
-												$('#lg-menu').toggleClass(
-														'hidden-xs')
-														.toggleClass(
-																'visible-xs');
-												$('#xs-menu').toggleClass(
-														'visible-xs')
-														.toggleClass(
-																'hidden-xs');
-												$('#btnShow').toggle();
-											});
-						});
+		$(document).ready(function() {
+			$('[data-toggle=offcanvas]').click(function() {
+				$(this).toggleClass('visible-xs text-center');
+				$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
+				$('.row-offcanvas').toggleClass('active');
+				$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
+				$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
+				$('#btnShow').toggle();
+			});
+        });
 		function checkgo() {
 			var check = document.getElementById("search_category").value;
 			var keyword = document.getElementById("srch-term").value;
 			alert(check);
 			alert(keyword);
-			if (keyword == "") {
+			if(keyword == "") {
 				alert("키워드를 입력해주세요.");
 				return false;
-			}
-			if (check == "user") {
+			}			
+			if(check == "user") {
 				location.href = "searchAll.do?keyword=" + keyword + "&number=1";
 			}
-			if (check == "map") {
+			if(check == "map") {
 				location.href = "searchAll.do?keyword=" + keyword + "&number=2";
 			}
-			if (check == "board") {
+			if(check == "board") {
 				location.href = "searchAll.do?keyword=" + keyword + "&number=3";
 			}
 			return false;

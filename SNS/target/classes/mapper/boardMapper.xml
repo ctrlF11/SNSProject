@@ -3,10 +3,25 @@
 
 
 <mapper namespace="com.project.sns.mapper.boardMapper">
-		 <select id="getBoardList" parameterType="int" resultType="BoardVO" >
+		 <select id="getBoardList" parameterType="map" resultType="BoardVO" >
 			select * 
 			from Board
-			LIMIT #{index},3;
+			where story_seq = #{story_seq}
+			LIMIT #{index},4;
+			
+		</select>
+		
+		<select id="getMainBoardList" parameterType="int" resultType="BoardVO" >
+			    select p.* 
+			    from
+			    (
+					select *
+					from Board 
+					order by heart desc
+			    ) p
+			    group by story_seq
+			    order by heart desc
+			 	LIMIT #{index},5;
 		</select>
 		
 		<select id="getBoardCount" parameterType="int">

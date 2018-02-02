@@ -1,6 +1,7 @@
 package com.project.sns.board.controller;
  
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
  
@@ -45,15 +46,28 @@ public class BoardController {
      */
     
     @RequestMapping("/getBoardList.do")
-    public String getBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req) throws Exception{
         logger.info("getBoardList");
-        System.out.println("index : " + index);
-        List<BoardVO> user = service.getBoardList(index);
+        System.out.println("index : " + index +" story-seq : " + stroy_seq);
+        HashMap map = new HashMap();
+        map.put("index", index);
+        map.put("story_seq", stroy_seq);
+        List<BoardVO> user = service.getBoardList(map);
         req.setAttribute("user", user);
         /*if(index == 0)
           return "home1";
         else*/ 
         	return "table";
+    }
+    
+    @RequestMapping("/getMainBoardList.do")  // ����ȭ�� �񵿱� �۾�
+    public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+        logger.info("getMainBoardList");
+        System.out.println("index : " + index);
+        List<BoardVO> mainTable = service.getMainBoardList(index);
+        req.setAttribute("mainTable", mainTable);
+        
+        return "mainTable";
     }
        
     @RequestMapping("insertReply.do")
@@ -64,9 +78,10 @@ public class BoardController {
     }
     
     @RequestMapping("/homeview.do")
-    public String home1(){
-    	return "home1";
-    }//�Խñ�
+    public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req){
+       req.setAttribute("story_seq", story_seq);
+       return "home1";
+    }//占쌉시깍옙
     
     @RequestMapping("/modifyBoard")
     public String writeForm(Model model) {
@@ -98,6 +113,12 @@ public class BoardController {
     		service.regist(vo);
     	}else
     		service.registup(vo);
+    }
+    
+     @RequestMapping("/mainHomeView.do")
+    public String mainHome(ImageVO vo) throws SQLException{
+    	
+    	return "mainHome";
     }
     
     @RequestMapping("/deleteBoard")

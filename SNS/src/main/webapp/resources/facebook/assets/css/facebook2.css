@@ -303,6 +303,10 @@ small.text-muted {
 	justify-content: flex-start;
 	height: 70px;
 	box-sizing: border-box;
+<<<<<<< HEAD
+=======
+	width: 275px;
+>>>>>>> refs/remotes/origin/mwbear
 	display: inline-block;
 	float: right;
 	

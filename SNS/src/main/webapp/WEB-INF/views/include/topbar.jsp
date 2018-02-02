@@ -55,6 +55,7 @@
 								<ul class="nav navbar-nav navbar-right">
 									<li>
 									<%
+<<<<<<< HEAD
 										if(session.getAttribute("id") == null) {
 											%>
 												<a href="login.do">로그인</a>
@@ -66,6 +67,12 @@
 											<%
 										}
 									%>
+=======
+										System.out.println("id : " + session.getAttribute("id"));
+
+									%>
+										<a href="login.do">로그인</a>
+>>>>>>> refs/remotes/origin/mwbear
 									</li>
 									<li>
 										<a href="#postModal" role="button" data-toggle="modal">

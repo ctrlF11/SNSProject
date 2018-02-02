@@ -1,6 +1,7 @@
 package com.project.sns.board.service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,8 +13,9 @@ import com.project.sns.board.vo.StoryVO;
 
 @Service
 public interface BoardService {
-		// 湲� 由ъ뒪�듃(�씪�씤 踰덊샇)
-	    public List<BoardVO> getBoardList(int index);
+		// 疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌뵬占쎌뵥 甕곕뜇�깈)
+	    public List<BoardVO> getBoardList(HashMap map);
+	    public List<BoardVO> getMainBoardList(int index);
 	    public int getBoardCount(int line_seq) throws Exception;
 
 		// �� ��(�� ��ȣ, ���� ��ȣ[BoardVO])

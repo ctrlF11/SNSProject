@@ -1,6 +1,7 @@
 package com.project.sns.board.dao;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -12,8 +13,9 @@ import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
 
 public interface BoardDAO {
-	public List<BoardVO> getBoardList(@Param("index") int index);
-	// 湲� 媛쒖닔(�씪�씤 踰덊샇)
+	public List<BoardVO> getBoardList(HashMap map);
+	// 疫뀐옙 揶쏆뮇�땾(占쎌뵬占쎌뵥 甕곕뜇�깈)
+	public List<BoardVO> getMainBoardList(@Param("index") int index);
 	public int getBoardCount(int line_seq) throws Exception;
 
 	// 湲� �긽�꽭(湲� 踰덊샇, �씪�씤 踰덊샇[BoardVO])

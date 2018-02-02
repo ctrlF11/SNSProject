@@ -1,6 +1,7 @@
 package com.project.sns.board.service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,14 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO dao;
 	
 
-	public List<BoardVO> getBoardList(int index)
+	public List<BoardVO> getBoardList(HashMap map)
 	{
-		return dao.getBoardList(index);
+		return dao.getBoardList(map);
+	}
+	
+	public List<BoardVO> getMainBoardList(int index)
+	{
+		return dao.getMainBoardList(index);
 	}
 
 	@Override
