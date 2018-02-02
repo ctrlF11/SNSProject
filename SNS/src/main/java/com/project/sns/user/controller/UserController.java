@@ -133,15 +133,11 @@ import A.algorithm.AES;
     	return "redirect:homeview.do";
     }
     
-<<<<<<< HEAD
     @RequestMapping("/logout.do")
     public String logout(HttpSession session) {
     	session.invalidate();
     	return "home1";
     }
-=======
-    
->>>>>>> refs/remotes/origin/mwbear
     
     
     

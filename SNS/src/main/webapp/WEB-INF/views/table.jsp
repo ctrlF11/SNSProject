@@ -140,7 +140,6 @@ function makeOutListener(infowindow) {
 	   }
    }
 }
-<<<<<<< HEAD
 	$(".rBtn").click(function(){
 	alert("click 작동");
    })
@@ -193,63 +192,6 @@ function makeOutListener(infowindow) {
 					</tr>
 				</table>
 			</div>
-=======
-</script>
-<c:forEach var="user" items="${requestScope.user}">
-	<div class="panel panel-default">
-		<a href="#"> <img class="card-img-top img-fluid w-100"
-			src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png"
-			alt="">
-		</a>
-		<div class="card-body">
-			<h6 class="card-title mb-1">
-				<a
-					href="getBoardValue.do?story_seq=${user.story_seq }&writer=${user.writer}"><img
-					src="${user.firstimage }"></a>
-			</h6>
-			<p class="card-text small">${user.content}
-				<a href="#">#workinghardorhardlyworking</a>
-			</p>
-		</div>
-		<hr class="my-0">
-		<div class="card-body py-2 small">
-			<a class="mr-3 d-inline-block" href="#">
-				<i class="fa fa-fw fa-thumbs-up"></i>Like
-			</a>
-			<a class="mr-3 d-inline-block" href="#" name="comment">
-				<i class="fa fa-fw fa-comment"></i>Comment
-			</a>
-			<a class="d-inline-block" href="#">
-				<i class="fa fa-fw fa-share"></i>Share
-			</a>
-		</div>
-		<hr class="my-0">
-		<div class="card-body small bg-faded"></div>
-		<form action="inputReply.do" onsubmit="return reply_check();">
-			<div id="replyDiv${user.board_seq }" class="reply">
-				<table>
-					<tr>
-						<td class="header" width="370">댓글</td>
-					</tr>
-					<tr>
-						<td>
-							<textarea id="rContent${user.board_seq }" cols="50" rows="2">
-							</textarea>
-							<div id="cmsg">
-							</div>
-						</td>
-						<td align="right" class="bottom">
-							<input type="submit" class="rBtn"
-							onclick="reply_check(<%= session.getAttribute("id") %>, ${user.board_seq });"
-							value="댓글등록">
-						</td>
-					</tr>
-				</table>
-			</div>
-		</form>
->>>>>>> refs/remotes/origin/mwbear
-		<div class="card-footer small text-muted">Tell : ${user.regdate}</div>
-	</div>
 </c:forEach>
 
 
