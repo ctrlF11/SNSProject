@@ -76,8 +76,7 @@ public class AES {
 		return null;
 	}
 	
-	public static void main(String[] args) {
-		final String strToEncrypt = "asdf@asdf.com";
+	public static String setCrypting(String strToEncrypt) {
 		final String strPassword = "World Taekwondo Federation";
 		AES.setKey(strPassword);
 		
@@ -91,5 +90,7 @@ public class AES {
 		
 		System.out.println("String to Decrypt : " + strToDecrypt);
 		System.out.println("Decrypted : " + AES.getDecryptedString());
+		
+		return encryptedString;
 	}
 }

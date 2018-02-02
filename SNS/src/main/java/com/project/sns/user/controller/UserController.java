@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,26 +76,37 @@ import A.algorithm.AES;
 //        	return "user";
 //    }
     
+    @RequestMapping("/replyLogin.do")
+    public String replyLogin() {
+    	System.out.println("replyLogin");
+    	return "redirect:login.do";
+    }
+    
     @RequestMapping("/login.do")
     public String login(){
+    	System.out.println("login");
     	return "login";
     }
     
     @RequestMapping("/loginCheck.do")
-    public String loginCheck(UserVO vo, HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
+    public String loginCheck(UserVO vo, HttpServletRequest request, HttpServletResponse response) throws Exception{
     	request.setCharacterEncoding("UTF-8");
     	response.setContentType("text/html;charset=UTF-8");
     	UserVO checkVO = service.getUser(vo.getId());
     	System.out.println(vo.getId());
     	System.out.println(vo.getPassword());
     	PrintWriter out = response.getWriter();
+    	HttpSession session = request.getSession();
     	if(checkVO == null) {
+    		System.out.println("checkVO = null");
     		out.println("<script>");
     		out.println("alert('없는 아이디입니다.');");
     		out.println("</script>");
     		return "redirect:login.do";
     	}
-    	if(vo.getPassword() == "" || checkVO.getPassword().equals(vo.getPassword())) {
+    	if(vo.getPassword() == "" || !checkVO.getPassword().equals(vo.getPassword())) {
+    		System.out.println(checkVO.getPassword().equals(vo.getPassword()));
+    		System.out.println("vo.getPassword = '' | checkVO.getPassword().equals(vo.getPassword())");
     		out.println("<script>");
     		out.println("alert('비밀번호가 틀립니다.');");
     		out.println("</script>");
@@ -109,16 +121,16 @@ import A.algorithm.AES;
     	
     	
     	AES aes = new AES();
-    	aes.encrypt(checkVO.getId().trim());
     	System.out.println("original : " + checkVO.getId());
-    	System.out.println("encrypted : " + aes.getEncryptedString());
+    	checkVO.setId(aes.setCrypting(checkVO.getId()));
+    	System.out.println("encrypted : " + checkVO.getId());
     	
-    	model.addAttribute("id", checkVO.getId());
-    	model.addAttribute("name", checkVO.getName());
-    	model.addAttribute("ip", ip);
+    	session.setAttribute("id", checkVO.getId());
+    	session.setAttribute("name", checkVO.getName());
+    	session.setAttribute("ip", ip);
     	
     	
-    	return "main";
+    	return "redirect:homeview.do";
     }
     
     

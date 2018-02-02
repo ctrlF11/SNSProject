@@ -7,37 +7,13 @@
 <title>Insert title here</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet"
+<!-- <link rel="stylesheet"
 	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
 <script type="text/javascript" src="assets/js/jquery.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.js"></script>
-<script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						$('[data-toggle=offcanvas]')
-								.click(
-										function() {
-											$(this).toggleClass(
-													'visible-xs text-center');
-											$(this)
-													.find('i')
-													.toggleClass(
-															'glyphicon-chevron-right glyphicon-chevron-left');
-											$('.row-offcanvas').toggleClass(
-													'active');
-											$('#lg-menu').toggleClass(
-													'hidden-xs').toggleClass(
-													'visible-xs');
-											$('#xs-menu').toggleClass(
-													'visible-xs').toggleClass(
-													'hidden-xs');
-											$('#btnShow').toggle();
-										});
-					});
-</script>
+<script type="text/javascript" src="assets/js/bootstrap.js"></script> -->
+
 </head>
 <body>
 					<div class="navbar navbar-blue navbar-static-top">
@@ -78,6 +54,10 @@
 							<div class="icon_wrap">
 								<ul class="nav navbar-nav navbar-right">
 									<li>
+									<%
+										System.out.println("id : " + session.getAttribute("id"));
+
+									%>
 										<a href="login.do">로그인</a>
 									</li>
 									<li>

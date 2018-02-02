@@ -14,7 +14,14 @@ public class AddrVO {
 	private String mapy;
 	private String areacode;
 	private String sigungucode;
+	private String grade;
 	
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
 	public String getContentTypeId() {
 		return contentTypeId;
 	}

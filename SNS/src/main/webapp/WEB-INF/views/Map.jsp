@@ -13,7 +13,10 @@
    href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
-<link rel="stylesheet" href="resources/css/map.css" >
+<link rel="stylesheet"
+   href="resources/css/map.css">
+<script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
+<script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
 <script type="text/javascript">
    $(document)
          .ready(
@@ -39,10 +42,9 @@
                               });
                });
 </script>
-
-<title>Insert title here</title>
+<title>TourSNS</title>
 </head>
-<body>	
+<body>   
 <div class="wrapper">
       <div class="box">
          <div class="row row-offcanvas row-offcanvas-left">
@@ -107,75 +109,80 @@
                   
                   <!-- 아이콘을 제외한 오른쪽 영역. -->
                   <nav class="navbar-collapse" role="navigation">
-							<!-- 검색 폼. -->
-							<div class="search_wrap">
-								<form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
-									<div class="input-group input-group-sm">
-										<select id="search_category" style="width: 55.2px; height: 30px;" >
-											<option value="user">사람</option>
-											<option value="map">가게</option>
-											<option value="board">글</option>
-										</select>
-										<input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-										<div class="input-group-btn">
-											<button class="btn btn-default" type="submit">
-												<i class="glyphicon glyphicon-search"></i>
-											</button>
-										</div>
-									</div>
-								</form>
-							</div>
-							<!-- 오른쪽 아이콘 모음집. 가로 957.333px에 찌그러짐-->
-							<div class="icon_wrap">
-								<ul class="nav navbar-nav navbar-right">
-									<li>
-										<a href="#">로그인</a>
-									</li>
-									<li>
-										<a href="#postModal" role="button" data-toggle="modal">
-										추천 경로+</a>
-									</li>
-									<li>
-										<a href="#">스토리</a>
-									</li>
-									<!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
-									 <li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<i class="glyphicon glyphicon-user"></i></a>
-									<ul class="dropdown-menu">
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
-									</ul>
-								  </li>
-								</ul>
-							</div>
-						</nav>
+                     <!-- 검색 폼. -->
+                     <div class="search_wrap">
+                        <form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
+                           <div class="input-group input-group-sm">
+                              <select id="search_category" style="width: 55.2px; height: 30px;" >
+                                 <option value="user">사람</option>
+                                 <option value="map">가게</option>
+                                 <option value="board">글</option>
+                              </select>
+                              <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
+                              <div class="input-group-btn">
+                                 <button class="btn btn-default" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                 </button>
+                              </div>
+                           </div>
+                        </form>
+                     </div>
+                     <!-- 오른쪽 아이콘 모음집. 가로 957.333px에 찌그러짐-->
+                     <div class="icon_wrap">
+                        <ul class="nav navbar-nav navbar-right">
+                           <li>
+                              <a href="#">로그인</a>
+                           </li>
+                           <li>
+                              <a href="#postModal" role="button" data-toggle="modal">
+                              추천 경로+</a>
+                           </li>
+                           <li>
+                              <a href="#">스토리</a>
+                           </li>
+                           <!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
+                            <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                           <i class="glyphicon glyphicon-user"></i></a>
+                           <ul class="dropdown-menu">
+                             <li><a href="">More</a></li>
+                             <li><a href="">More</a></li>
+                             <li><a href="">More</a></li>
+                             <li><a href="">More</a></li>
+                             <li><a href="">More</a></li>
+                           </ul>
+                          </li>
+                        </ul>
+                     </div>
+                  </nav>
                </div>
-	<div id="setDiv">
-		<div id="mask"></div>
-		<div id="window"></div>
-		<div id="map"></div>	
-		<div id="sidemenu">	        
-			<ul class="accodian">
-				<li class="accodian--box">
-					<h3>모바일 웹을 이용하려면</h3>
-					<h4>알아서 잘 이용하세요 ㅋㅋ</h4>
-				</li>
-				<li class="accodian--box">
-					<h3>질문 있어요~~</h3>
-					<h4>답변입니다요~~</h4>
-				</li>
-				<li class="accodian--box">
-					<h3>Lorem ipsum dolor sit.</h3>
-					<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-						Dignissimos, voluptatibus?</h4>
-				</li>
-			</ul>
-		</div>		
-	</div>
+   <div id="setDiv">
+      <div id="mask"></div>
+      <div id="window"></div>
+      <div id="map"></div>   
+      <div id="sidemenu">           
+         <ul class="accodian">
+            <li class="accodian--box">
+               <h3>경로</h3>
+               <h4><button onclick="recommend()">추천</button></h4>
+               <h4>장소</h4>
+               <h4>장소</h4>
+            </li>
+            <li class="accodian--box">
+               <h3>경로</h3>
+               <h4>장소</h4>
+               <h4>장소</h4>
+               <h4>장소</h4>
+            </li>
+            <li class="accodian--box">
+               <h3>경로</h3>
+               <h4>장소</h4>
+               <h4>장소</h4>
+               <h4>장소</h4>
+            </li>
+         </ul>
+      </div>      
+   </div>
             </div>         
          </div>
       </div>
@@ -184,35 +191,35 @@
 <script>
 var accModule = function() {
 
-	  // private member (비공개 멤버, 고유멤버)
-	  var acc_wrap = $('.accodian'),
-	    question = acc_wrap.find('h3'),
-	    answer = question.next('h4');
+     // private member (비공개 멤버, 고유멤버)
+     var acc_wrap = $('.accodian'),
+       question = acc_wrap.find('h3'),
+       answer = question.next('h4');
 
-	  // privilieged member(공용 인터페이스)
-	  return {
-	    runInit: function() {
-	      this.accHandler();
-	    },
-	    accHandler: function() {
-	      var accodian = {
-	        targetClick: function(e) {
-	          var eTarget = $(e.currentTarget);
-	          if (eTarget.next().is(':visible')) {
-	            eTarget.next().slideUp();
-	            return;
-	          }
-	          answer.slideUp();
-	          eTarget.next().slideDown();
-	        }
-	      };
-	      question.on('click', accodian.targetClick);
-	    }
-	  }
-	}();
+     // privilieged member(공용 인터페이스)
+     return {
+       runInit: function() {
+         this.accHandler();
+       },
+       accHandler: function() {
+         var accodian = {
+           targetClick: function(e) {
+             var eTarget = $(e.currentTarget);
+             if (eTarget.next().is(':visible')) {
+               eTarget.next().slideUp();
+               return;
+             }
+             answer.slideUp();
+             eTarget.next().slideDown();
+           }
+         };
+         question.on('click', accodian.targetClick);
+       }
+     }
+   }();
 
-	// 실행
-	accModule.runInit();
+   // 실행
+   accModule.runInit();
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
@@ -224,41 +231,43 @@ var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니�
 
 // 마커를 표시할 위치와 title 객체 배열입니다 
 var positions =  [
-	<%
-	   List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
-	   for (int i = 0; i < 10; i++) {
-	%>
-	{title : "<%=list.get(i).getTitle()%>",
-	 contenttypeid : "<%=list.get(i).getContentTypeId()%>",
-	 contentid : "<%=list.get(i).getContentId()%>",
-	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
-	}
+   <%
+      List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
+      for (int i = 0; i < 10; i++) {
+   %>
+   {title : "<%=list.get(i).getTitle()%>",
+    contenttypeid : "<%=list.get(i).getContentTypeId()%>",
+    contentid : "<%=list.get(i).getContentId()%>",
+    latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>),
+    mapy : "<%=list.get(i).getMapy()%>",
+    mapx : "<%=list.get(i).getMapx()%>"
+   }
 
-	<%
-	   if (list.size() - 1 > i) {
-	         out.append(",");
-	      }
-	   }
-	%>
-	];
+   <%
+      if (list.size() - 1 > i) {
+            out.append(",");
+         }
+      }
+   %>
+   ];
 
- 	
-	// 마커 이미지의 이미지 주소입니다
-	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-	    
-	for (var i = 0; i < positions.length; i ++) {
+   // 마커 이미지의 이미지 주소입니다
+   var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+       
+   for (var i = 0; i < positions.length; i ++) {
 
-	    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);    
-	} 
+       addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);
+       
+   } 
 
-	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+    // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
     $('#mask').click(function () {
         $(this).hide();
         $('#window').hide();
-    });	
-	 
-	 
- function addMarker(position, title, contentid, contenttypeid) {	
+    });   
+    
+    
+ function addMarker(position, title, contentid, contenttypeid) {   
 
     // 마커 이미지의 이미지 크기 입니다
     var imageSize = new daum.maps.Size(24, 35); 
@@ -273,68 +282,84 @@ var positions =  [
         title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
         image : markerImage // 마커 이미지 
     });
-	
-	
+   
+   
     
-	daum.maps.event.addListener(marker, 'click', function() {
-	
-		wrapWindowByMask();
-		
-		$.ajax({        
-		      url: 'callDetail.do',
-		      type: 'get',
-		      data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
-		      dataType: 'json',
-		      success: function(data){
-		    	  console.log(data);
-	 	          console.log(data.response.body.items.item);
- 		          var myItem = data.response.body.items.item;
-		              var output = '';
-		              output += '<h4>'+myItem.treatmenu+'</h4>';
-		              output += '<h4>'+myItem.opentimefood+'</h4>';
-		              output += '<h4>'+myItem.reservationfood+'</h4>'; 
-		              
-			          $('#window').html(output);
-		      },
-	    	error: function(XMLHttpRequest, textStatus, errorThrown) { 
-	        	alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-	    	} 
-	});
-	});
-	} 
+   daum.maps.event.addListener(marker, 'click', function() {
+      
+      wrapWindowByMask();
+      
+      $.ajax({        
+            url: 'callDetail.do',
+            type: 'get',
+            data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+            dataType: 'json',
+            success: function(data){
+               
+                 var myItem = data.response.body.items.item;
+                    var output = '';
+                    output += '<h4>'+myItem.treatmenu+'</h4>';
+                    output += '<h4>'+myItem.opentimefood+'</h4>';
+                    output += '<h4>'+myItem.reservationfood+'</h4>'; 
+                    
+                   $('#window').html(output);
+            },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+          } 
+   });
+   });
+   } 
   
 
 function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
-	 
-	var maskHeight = $(document).height();
-	var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
-	
-	$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
-	$('#mask').fadeTo("slow",0.8);
+    
+   var maskHeight = $(document).height();
+   var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+   
+   $('#mask').css({'width':maskWidth,'height':maskHeight});   //마스크의 투명도 처리 
+   $('#mask').fadeTo("slow",0.8);
 
- 	var left = ( $('#map').scrollLeft() + ( $('#map').width() - $('#window').width()) / 2 );
+    var left = ( $('#map').scrollLeft() + ( $('#map').width() - $('#window').width()) / 2 );
     var top = ( $('#map').scrollTop() + ( $('#map').height() - $('#window').height()) / 2 ); 
     
     $('#window').css({'left':left,'top':top, 'position':'absolute'});
     
     $('#window').show();
 }
-	
-<%-- var linePath =  [
-	<%
-	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
-	   for (int i = 0; i < list.size(); i++) {
-	%>
-	 new daum.maps.LatLng(<%=list2.get(i).getMapY()%>,<%=list2.get(i).getMapX()%>)
-	
+   
+   
+ function recommend(mapx, mapy){
+   
+   $.ajax({        
+         url: 'line.do',
+         type: 'get',
+         dataType: 'json',
+         success: function(data){
+             
+         },
+     error: function(XMLHttpRequest, textStatus, errorThrown) { 
+         /* alert("Status: " + textStatus); alert("Error: " + errorThrown);  */
+     } 
+});
+   
+} 
 
-	<%
-	   if (list2.size() - 1 > i) {
-	         out.append(",");
-	      }
-	   }
-	%>
-	];
+<%-- var linePath =  [
+   <%
+      List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
+      for (int i = 0; i < list.size(); i++) {
+   %>
+    new daum.maps.LatLng(<%=list2.get(i).getMapY()%>,<%=list2.get(i).getMapX()%>)
+   
+
+   <%
+      if (list2.size() - 1 > i) {
+            out.append(",");
+         }
+      }
+   %>
+   ];
  var polyline = new daum.maps.Polyline({
     path: linePath, // 선을 구성하는 좌표배열 입니다
     strokeWeight: 5, // 선의 두께 입니다
