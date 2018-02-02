@@ -536,12 +536,6 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 		
 	})
 
- 
-
-
-
-// 지도에 선을 표시합니다 
-//polyline.setMap(map);    
 
 
 </script>      
