@@ -1,5 +1,7 @@
 package com.project.sns.board.controller;
  
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
  
@@ -14,11 +16,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Map;
 import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
+import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
+import com.project.sns.board.vo.StoryVO;
 import com.project.sns.user.service.UserService;
 import com.project.sns.user.vo.UserVO;
  
@@ -28,11 +34,7 @@ import com.project.sns.user.vo.UserVO;
 @Controller
 public class BoardController {
     
-    private static final int INIT = 0;
-
-
-	private final Logger logger = LoggerFactory.getLogger(BoardController.class);
-    
+    private final Logger logger = LoggerFactory.getLogger(BoardController.class);
     
 	@Autowired
     private BoardService service;
@@ -40,69 +42,32 @@ public class BoardController {
     /**
      * Simply selects the home view to render by returning its name.
      */
-//    @RequestMapping("/getBoardList.do")
-//    public String getBoardList(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
-// 
-//        logger.info("getBoardList");
-//        
-//        List<BoardVO> boardList = service.getBoardList(line_seq);
-//        
-//        model.addAttribute("boardList", boardList);
-// 
-//        return "BoardList";
-//    }
-    
-//    @RequestMapping("/getBoardList2.do")
-//    public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
-//    	
-//    	logger.info("getBoardList2");
-//    	
-//    	List<BoardVO> boardList = service.getBoardList(line_seq);
-//    	System.out.println(boardList.get(0).getLine_seq());
-//    	model.addAttribute("boardList", boardList);
-//    	
-//    	return "BoardList2";
-//    }
-    
     
     @RequestMapping("/getBoardList.do")
-    public String getBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req) throws Exception{
         logger.info("getBoardList");
-        System.out.println("index : " + index);
-        List<BoardVO> user = service.getBoardList(index);
-        String mapx = user.get(0).getMapx();
-        System.out.println("index : " + mapx);
+        System.out.println("index : " + index +" story-seq : " + stroy_seq);
+        HashMap map = new HashMap();
+        map.put("index", index);
+        map.put("story_seq", stroy_seq);
+        List<BoardVO> user = service.getBoardList(map);
         req.setAttribute("user", user);
+        /*if(index == 0)
+          return "home1";
+        else*/ 
         	return "table";
     }
     
-    @RequestMapping("/getBoardValue.do")
-    public String getBoardValue(@RequestParam("board_seq") int board_seq, @RequestParam("line_seq") int line_seq) {
-    	logger.info("getBoardValue");
-    	BoardVO vo = service.getBoardValue(line_seq, board_seq);
-    	
-    	return "BoardValue";
+    @RequestMapping("/getMainBoardList.do")  // ¸ÞÀÎÈ­¸é ºñµ¿±â ÀÛ¾÷
+    public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+        logger.info("getMainBoardList");
+        System.out.println("index : " + index);
+        List<BoardVO> mainTable = service.getMainBoardList(index);
+        req.setAttribute("mainTable", mainTable);
+        
+        return "mainTable";
     }
-    
-    @RequestMapping("/test")
-    public String test() {
-    	
-    	return "test";
-    }
-    
-    @RequestMapping("/testGet")
-    public String testGet(BoardVO vo) {
-    	logger.info("testGet");
-    	service.inputBoard(vo);
-    	return "redirect:do.do";
-    }
-    
-    @RequestMapping("/getTest")
-    public String getTest() {
-    	return "getTest";
-    }
-    
-    
+       
     @RequestMapping("insertReply.do")
     String insertReply(ReplyVO vo,Model model){ 
     	service.insertReply(vo);
@@ -110,17 +75,69 @@ public class BoardController {
        return "replylist";
     }
     
-   
     @RequestMapping("/homeview.do")
-    public String home1(HttpServletRequest req){
-        List<BoardVO> user1 = service.getBoardList(0);
-        List<BoardVO> user2 = service.getBoardList(1);
-        req.setAttribute("user1", user1);
-        req.setAttribute("user2", user2);
+    public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req){
+    	req.setAttribute("story_seq", story_seq);
     	return "home1";
-    }//°Ô½Ã±Û
+    }//ï¿½Ô½Ã±ï¿½
     
-    @RequestMapping("/getUser1.do")
+    @RequestMapping("/modifyBoard")
+    public String writeForm(Model model) {
+    	String id = "123asdf";
+    	List<StoryVO> story = service.getStory(id);
+    	
+    	model.addAttribute("story",story);
+    	return "modifyBoard";
+    }
+    
+    @ResponseBody
+    @RequestMapping("/inputStory")
+    public int inputStory(StoryVO vo) {    	
+    	service.inputStory(vo);
+    	int nr = vo.getStory_seq();
+
+    	return nr;
+    }
+    
+    @ResponseBody
+    @RequestMapping("/inputBoard")
+    public void inputBoard(BoardVO vo) throws Exception {
+    	System.out.println("BoardVO.getFiles() : " + vo.getFiles());
+    	System.out.println("BoardVO.getTitle() : " + vo.getTitle());
+    	//ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½
+    	int i = service.getBoardSeq(vo);
+    	int k = 100;
+    	if(i == 0) {
+    		service.regist(vo);
+    	}else
+    		service.registup(vo);
+    }
+    
+    @RequestMapping("/deleteBoard")
+    public void deleteBoard(BoardVO vo){
+    	service.deleteBoard(vo);
+    }
+    
+    @RequestMapping("/deleteStory")
+    public void deleteStory(StoryVO vo){
+    	service.deleteStory(vo);
+    	service.deleteBoardByStory(vo);
+    }
+    
+    @RequestMapping("/saveImage")
+    public void saveImage(ImageVO vo) throws SQLException{
+    	service.saveImage(vo);
+    }
+    
+    
+    @RequestMapping("/mainHomeView.do")
+    public String mainHome(ImageVO vo) throws SQLException{
+    	
+    	return "mainHome";
+    }
+    
+    
+   /* @RequestMapping("/getUser1.do")
     public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
         logger.info("getBoardList");
         System.out.println("index : " + index);
@@ -130,6 +147,54 @@ public class BoardController {
           return "home1";
         else 
         	return "user";
+    }*/
+    
+//  @RequestMapping("/getBoardList.do")
+//  public String getBoardList(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
+//
+//      logger.info("getBoardList");
+//      
+//      List<BoardVO> boardList = service.getBoardList(line_seq);
+//      
+//      model.addAttribute("boardList", boardList);
+//
+//      return "BoardList";
+//  }
+  
+//  @RequestMapping("/getBoardList2.do")
+//  public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
+//  	
+//  	logger.info("getBoardList2");
+//  	
+//  	List<BoardVO> boardList = service.getBoardList(line_seq);
+//  	System.out.println(boardList.get(0).getLine_seq());
+//  	model.addAttribute("boardList", boardList);
+//  	
+//  	return "BoardList2";
+//  }
+    
+    /* @RequestMapping("/getBoardValue.do")
+    public String getBoardValue(@RequestParam("board_seq") int board_seq, @RequestParam("line_seq") int line_seq) {
+    	logger.info("getBoardValue");
+    	BoardVO vo = service.getBoardValue(line_seq, board_seq);
+    	
+    	return "BoardValue";
+    }*/
+    
+    /*@RequestMapping("/test")
+    public String test() {
+    	return "test";
+    }*/
+    
+  /*  @RequestMapping("/testGet")
+    public String testGet(BoardVO vo) {
+    	logger.info("testGet");
+    	service.inputBoard(vo);
+    	return "redirect:do.do";
     }
     
+    @RequestMapping("/getTest")
+    public String getTest() {
+    	return "getTest";
+    }*/
 }

@@ -2,14 +2,11 @@ package com.project.sns.addr.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.sns.addr.vo.AddrVO;
-import com.project.sns.board.vo.ReplyVO;
-import com.project.sns.user.vo.UserVO;
 
 @Repository
 public class AddrDAOImpl implements AddrDAO{
@@ -34,16 +31,10 @@ public class AddrDAOImpl implements AddrDAO{
 	}
 
 	@Override
-	public void getAddr(int first, int last) {
+	public List<AddrVO> getAddress() throws Exception {
 		// TODO Auto-generated method stub
-		
+		return sqlSession.selectList(namespace+".getAddress");			
 	}
-	
-
-
-	
-
-	
 	
 	
 }

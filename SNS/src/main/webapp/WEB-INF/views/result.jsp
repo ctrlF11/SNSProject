@@ -35,7 +35,7 @@
             position:fixed;
             
         }
-    </style>	
+    </style>   
 </head>
 <body>
 <div id="setDiv">
@@ -65,44 +65,87 @@ var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
 // 마커를 표시할 위치와 title 객체 배열입니다 
 var positions =  [
-	<%
-	   List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
-	   for (int i = 0; i < list.size(); i++) {
-	%>
-	{title : "<%=list.get(i).getTitle()%>",
-	 contenttypeid : "<%=list.get(i).getContentTypeId()%>",
-	 contentid : "<%=list.get(i).getContentId()%>",
-	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
-	}
+   <%
+      List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
+      for (int i = 0; i < list.size(); i++) {
+   %>
+   {title : "<%=list.get(i).getTitle()%>",
+    contenttypeid : "<%=list.get(i).getContentTypeId()%>",
+    contentid : "<%=list.get(i).getContentId()%>",
+    latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
+   }
 
-	<%
-	   if (list.size() - 1 > i) {
-	         out.append(",");
-	      }
-	   }
-	%>
-	];
+   <%
+      if (list.size() - 1 > i) {
+            out.append(",");
+         }
+      }
+   %>
+   ];
 
-	
-	// 마커 이미지의 이미지 주소입니다
-	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-	    
-	for (var i = 0; i < positions.length; i ++) {
-	    
+   
+   // 마커 이미지의 이미지 주소입니다
+   var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+       
+   for (var i = 0; i < positions.length; i ++) {
+       
 
-	    addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);    
-	   	
+       addMarker(positions[i].latlng, positions[i].title, positions[i].contentid, positions[i].contenttypeid);    
+         
+       
+       //function(positions[i].contentId); 해서 calldetail로 값을 넘겨주고 ajax로 받아와서 출력해보자
+   }
 
-	}
-
-	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+    // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
     $('#mask').click(function () {
         $(this).hide();
         $('#window').hide();
-    });	
-	 
-	 
-function addMarker(position, title, contentid, contenttypeid) {	
+    });   
+    
+ 
+function callDetail(contentid,contenttypeid){
+      
+      
+   
+/*     method = method || "post";
+   
+     var form = document.createElement("form");
+
+     form.setAttribute("method", method);
+
+     form.setAttribute("action", url);
+
+         var hiddenField = document.createElement("input");
+
+         hiddenField.setAttribute("type", "hidden");
+
+         hiddenField.setAttribute("name", "contentId");
+
+         hiddenField.setAttribute("value", contentid);
+
+         form.appendChild(hiddenField);
+         
+         var hiddenField2 = document.createElement("input");
+
+         hiddenField2.setAttribute("type", "hidden");
+
+         hiddenField2.setAttribute("name", "contentTypeId");
+
+         hiddenField2.setAttribute("value", contenttypeid);
+
+         form.appendChild(hiddenField2);
+
+     
+
+   form.submit(); */
+   
+   
+   location.href ="callDetail.do?contentId="+contentid+"&contentTypeId="+contenttypeid;
+   
+}   
+    
+    
+function addMarker(position, title, contentid, contenttypeid) {   
 
     // 마커 이미지의 이미지 크기 입니다
     var imageSize = new daum.maps.Size(24, 35); 
@@ -117,50 +160,53 @@ function addMarker(position, title, contentid, contenttypeid) {
         title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
         image : markerImage // 마커 이미지 
     });
-	
-	
+   
+   
     
-	daum.maps.event.addListener(marker, 'click', function() {
+   daum.maps.event.addListener(marker, 'click', function() {
+      callDetail(contentid, contenttypeid);
+      
+      wrapWindowByMask();
+      
+      $.ajax({        
+            url: 'callDetail.do',
+            type: 'get',
+            dataType: 'json',
+            success: function(data){
+               console.log(data);
+//                 console.log(data.response.body.items.item);
+                var myItem = data.response.body.items.item;
+                 
+                for(var i=0; myItem.length; i++){
+                    var output = '';
+                    console.log(myItem.length);
 
-		
-		wrapWindowByMask();
-		
-		$.ajax({        
-		      url: 'callDetail.do',
-		      type: 'get',
-		      data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
-		      dataType: 'json',
-		      success: function(data){
-		    	  console.log(data);
-	 	          console.log(data.response.body.items.item);
- 		          var myItem = data.response.body.items.item;
-		              var output = '';
-		              output += '<h4>'+myItem.treatmenu+'</h4>';
-		              output += '<h4>'+myItem.opentimefood+'</h4>';
-		              output += '<h4>'+myItem.reservationfood+'</h4>'; 
-		              
-			          $('#window').html(output);
-		      },
-	    	error: function(XMLHttpRequest, textStatus, errorThrown) { 
-	        	alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-	    	} 
-	});
-	});
+                    output += '<h4>'+myItem[i].treatmenu+'</h4>';
+                    output += '<h4>'+myItem[i].opentimefood+'</h4>';
+                    output += '<h4>'+myItem[i].reservationfood+'</h4>'; 
+                    document.getElementById("window").innerHTML += output;
+                }
+            },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+          } 
+   });
+   });
 
    
     
-	}
+   }
   
 
 function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
-	 
-	var maskHeight = $(document).height();
-	var maskWidth = $(window).width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
-	
-	$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
-	$('#mask').fadeTo("slow",0.8);
+    
+   var maskHeight = $(document).height();
+   var maskWidth = $(window).width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+   
+   $('#mask').css({'width':maskWidth,'height':maskHeight});   //마스크의 투명도 처리 
+   $('#mask').fadeTo("slow",0.8);
 
-	var left = ( $(window).scrollLeft() + ( $(window).width() - $('#window').width()) / 2 );
+   var left = ( $(window).scrollLeft() + ( $(window).width() - $('#window').width()) / 2 );
     var top = ( $(window).scrollTop() + ( $(window).height() - $('#window').height()) / 2 );
     
     $('#window').css({'left':left,'top':top, 'position':'absolute'});
@@ -170,22 +216,22 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
    
 
 }
-	
+   
 <%-- var linePath =  [
-	<%
-	   List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
-	   for (int i = 0; i < list.size(); i++) {
-	%>
-	 new daum.maps.LatLng(<%=list2.get(i).getMapY()%>,<%=list2.get(i).getMapX()%>)
-	
+   <%
+      List<AddrVO> list2 = (List<AddrVO>) request.getAttribute("list");
+      for (int i = 0; i < list.size(); i++) {
+   %>
+    new daum.maps.LatLng(<%=list2.get(i).getMapY()%>,<%=list2.get(i).getMapX()%>)
+   
 
-	<%
-	   if (list2.size() - 1 > i) {
-	         out.append(",");
-	      }
-	   }
-	%>
-	];
+   <%
+      if (list2.size() - 1 > i) {
+            out.append(",");
+         }
+      }
+   %>
+   ];
  var polyline = new daum.maps.Polyline({
     path: linePath, // 선을 구성하는 좌표배열 입니다
     strokeWeight: 5, // 선의 두께 입니다
@@ -198,7 +244,7 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 polyline.setMap(map);    --%>
 
 
-	
+   
 </script>
 
 

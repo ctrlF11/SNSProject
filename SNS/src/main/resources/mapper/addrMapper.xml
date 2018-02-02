@@ -7,7 +7,11 @@
 			insert into TourMap(contentTypeId, contentId, title, tel, addr1, firstimage, firstimage2, cat2, cat3, mapx, mapy)
 			values
 			<foreach collection="list" item="item" separator=",">
-				(#{item.contentTypeId}, #{item.contentId}, #{item.title, jdbcType=VARCHAR}, #{item.tel, jdbcType=VARCHAR}, #{item.addr1, jdbcType=VARCHAR}, #{item.firstimage, jdbcType=VARCHAR}, #{item.firstimage2, jdbcType=VARCHAR}, #{item.cat2, jdbcType=VARCHAR}, #{item.cat3, jdbcType=VARCHAR}, #{item.mapx, jdbcType=VARCHAR}, #{item.mapy, jdbcType=VARCHAR})
+				(#{item.contentTypeId}, #{item.contentId}, #{item.title, jdbcType=VARCHAR},
+				#{item.tel, jdbcType=VARCHAR}, #{item.addr1, jdbcType=VARCHAR},
+				#{item.firstimage, jdbcType=VARCHAR}, #{item.firstimage2, jdbcType=VARCHAR},
+				#{item.cat2, jdbcType=VARCHAR}, #{item.cat3, jdbcType=VARCHAR},
+				#{item.mapx, jdbcType=VARCHAR}, #{item.mapy, jdbcType=VARCHAR})
 			</foreach> 
 		</insert>
 		
@@ -23,11 +27,8 @@
 			delete from TourMap <where>cat2=#{cat2}</where>
 		</delete>
 		
-		<select id="getBoardList" resultType="ReplyVO" parameterType="int">
-			select * from Reply
-			<where>
-				board_seq = #{board_seq}
-			</where>
+		<select id="getAddress" parameterType="int" resultType="AddrVO">
+			select * from TourMap
 		</select>
 		
 </mapper>

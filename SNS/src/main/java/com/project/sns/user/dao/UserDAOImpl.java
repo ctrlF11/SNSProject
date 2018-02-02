@@ -16,26 +16,26 @@ public class UserDAOImpl implements UserDAO{
 	
 	private static final String namespace = "com.project.sns.mapper.userMapper";
 	
-	@Override
+	@Override // insert new user
 	public int insertUser(UserVO vo) {
 		return sqlSession.insert(namespace+".insertUser",vo);
 	}
-
-	@Override
-	public List<AddrVO> getAddress() throws Exception {
+	
+	@Override // get user list
+	public List<UserVO> getUserList(UserVO vo){
 		// TODO Auto-generated method stub
-		return sqlSession.selectList(namespace+".getAddress");	
+		return sqlSession.selectList(namespace+".getUserList",vo);	
 	}
 	
-	@Override
-	public List<UserVO> getUser(UserVO vo){
-		// TODO Auto-generated method stub
-		return sqlSession.selectList(namespace+".getUser",vo);	
-	}
-	
-	@Override//비동기 게시글 추가
+/*	@Override // ?
 	public List<UserVO> getUser1(int index){
 		// TODO Auto-generated method stub
 		return sqlSession.selectList(namespace+".getUser1",index);	
+	}
+*/
+	@Override // get one user data
+	public UserVO getUser(String keyword) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getUser", keyword);
 	}
 }

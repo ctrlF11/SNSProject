@@ -33,8 +33,6 @@
                     <td>${board.heart}</td>
                 </tr>
             </c:forEach>
-            
-            
         </tbody>
         </tbody>
     </table>

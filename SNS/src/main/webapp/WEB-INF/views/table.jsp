@@ -12,7 +12,8 @@
 	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도의 중심좌표
     mapOption = { 
@@ -31,7 +32,7 @@ var positions =  [
       %>
       {title : "<%=list.get(i).getTitle()%>",
        contenttypeid : "<%=list.get(i).getContentTypeId()%>",
-       contentid : "<%=list.get(i).getContentID()%>",
+       contentid : "<%=list.get(i).getContentId()%>",
        latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
       }
 
@@ -63,7 +64,7 @@ var contents =  [
                   '                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
                   '           </div>' + 
                   '            <div class="desc">' + 
-                  '                <div class="ellipsis"><%=list.get(i).getAddr1()%></div>' + 
+                  '                <div class="ellipsis">' + <%=list.get(i).getAddr1()%> + '</div>' + 
                   '                <div class="예제.. 아무정보 다들어감jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
                   '                <div><a href="http://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
                   '            </div>' + 
@@ -134,19 +135,23 @@ function makeOverListener(map, marker, infowindow) {
 
    //인포윈도우를 닫는 클로저를 만드는 함수입니다 
 function makeOutListener(infowindow) {
-   return function() {
-     infowindow.close();
+	   return function() {
+	     infowindow.close();
+	   }
    }
 }
 </script>
 <c:forEach var="user" items="${requestScope.user}">
 	<div class="panel panel-default">
 		<a href="#"> <img class="card-img-top img-fluid w-100"
-			src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" alt="">
+			src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png"
+			alt="">
 		</a>
 		<div class="card-body">
 			<h6 class="card-title mb-1">
-				<a href="#">이미지</a>
+				<a
+					href="getBoardValue.do?story_seq=${user.story_seq }&writer=${user.writer}"><img
+					src="${user.firstimage }"></a>
 			</h6>
 			<p class="card-text small">${user.content}
 				<a href="#">#workinghardorhardlyworking</a>
@@ -154,40 +159,43 @@ function makeOutListener(infowindow) {
 		</div>
 		<hr class="my-0">
 		<div class="card-body py-2 small">
-			<a class="mr-3 d-inline-block" href="#"> <i
-				class="fa fa-fw fa-thumbs-up"></i>Like
-			</a> <a class="mr-3 d-inline-block" href="#" name="comment"> <i
-				class="fa fa-fw fa-comment"></i>Comment
-			</a> <a class="d-inline-block" href="#"> <i class="fa fa-fw fa-share"></i>Share
+			<a class="mr-3 d-inline-block" href="#">
+				<i class="fa fa-fw fa-thumbs-up"></i>Like
+			</a>
+			<a class="mr-3 d-inline-block" href="#" name="comment">
+				<i class="fa fa-fw fa-comment"></i>Comment
+			</a>
+			<a class="d-inline-block" href="#">
+				<i class="fa fa-fw fa-share"></i>Share
 			</a>
 		</div>
 		<hr class="my-0">
 		<div class="card-body small bg-faded"></div>
-		<div id="replyDiv" class="reply">
-			<table>
-				<tr>
-					<td class="header" width="370">댓글</td>
-					<td class="header" width="100">작성자</td>
-				</tr>
-
-			</table>
-			<table>
-				<tr>
-					<td><textarea id="rContent" cols="50" rows="2"></textarea>
-						<div id="cmsg"></div></td>
-					<td><input type="text" id="rWriter" maxlength="20" size="10" />
-						<div id="wmsg"></div></td>
-				</tr>
-				<tr>
-					<td class="bottom"></td>
-					<td align="right" class="bottom"><button  class = "rBtn">댓글등록</button></td>
-				</tr>
-			</table>
-		</div>
+		<form action="inputReply.do" onsubmit="return reply_check();">
+			<div id="replyDiv${user.board_seq }" class="reply">
+				<table>
+					<tr>
+						<td class="header" width="370">댓글</td>
+					</tr>
+					<tr>
+						<td>
+							<textarea id="rContent${user.board_seq }" cols="50" rows="2">
+							</textarea>
+							<div id="cmsg">
+							</div>
+						</td>
+						<td align="right" class="bottom">
+							<input type="submit" class="rBtn"
+							onclick="reply_check(<%= session.getAttribute("id") %>, ${user.board_seq });"
+							value="댓글등록">
+						</td>
+					</tr>
+				</table>
+			</div>
+		</form>
 		<div class="card-footer small text-muted">Tell : ${user.regdate}</div>
 	</div>
 </c:forEach>
-
 
 
 

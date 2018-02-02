@@ -5,12 +5,12 @@
 <mapper namespace="com.project.mapper.chatMapper">
 
 	<insert id = "submit" parameterType="ChatVO">
-		insert into CHAT (fromID, toID, chatContent, chatTime, chatRead)
+		insert into Chat (fromID, toID, chatContent, chatTime, chatRead)
 		values (#{fromID}, #{toID}, #{chatContent}, NOW(), 0)
 	</insert>
 	
 	<select id = "listByID" parameterType="ChatVO" resultType="ChatVO">
-	SELECT * FROM CHAT 
+	SELECT * FROM Chat 
 	WHERE ((fromID =#{fromID} AND toID =#{toID}) 
 	OR (fromID =#{toID} AND toID =#{fromID})) 
 	AND chatID > #{chatID}
@@ -19,22 +19,22 @@
 	</select>
 	
 	<select id = "listByRecent" parameterType="ChatVO" resultType="ChatVO">
-	SELECT * FROM CHAT 
+	SELECT * FROM Chat 
 	WHERE ((fromID = #{fromID} and toID = #{toID}) 
 	OR (fromID = #{toID} AND toID = #{fromID})) 
-	AND chatID > (SELECT MAX(chatID) - 100 FROM CHAT) 
+	AND chatID > (SELECT MAX(chatID) - 100 FROM Chat) 
 	ORDER BY chatTime
 	</select>
 	
 	<update id = "readChat" parameterType="ChatVO">
-	UPDATE CHAT 
+	UPDATE Chat 
 	SET chatRead = 1
 	WHERE (fromID =#{fromID} AND toID =#{toID}) 
 	AND chatID &lt; ${chatID}
 	</update>
 	
 	<select id = "newChat" parameterType="ChatVO" resultType="int">
-	SELECT * FROM CHAT
+	SELECT * FROM Chat
 	WHERE (fromID = #{userID}) 
 	AND chatRead = 0
 	</select>

@@ -2,7 +2,6 @@ package com.project.sns.addr.service;
 
 import com.project.sns.addr.dao.AddrDAO;
 import com.project.sns.addr.vo.AddrVO;
-import com.project.sns.board.vo.ReplyVO;
 
 import java.util.List;
 
@@ -29,7 +28,9 @@ public class AddrServiceImpl implements AddrService{
 	public int deleteAddr(List<AddrVO> vo) {
 		return dao.deleteAddr(vo);
 	}
-
-
-
+	
+	@Override
+	public List<AddrVO> getAddress() throws Exception {
+		return dao.getAddress();
+	}
 }

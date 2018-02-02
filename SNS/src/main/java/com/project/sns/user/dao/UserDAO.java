@@ -9,9 +9,8 @@ import com.project.sns.user.vo.UserVO;
 
 public interface UserDAO {
 	public int insertUser(UserVO vo);
-	public List<AddrVO> getAddress() throws Exception;
-	public List<UserVO> getUser(UserVO vo);
-	
-	public List<UserVO> getUser1(@Param("index") int index);//비동기 추가
+	public List<UserVO> getUserList(UserVO vo);
+	public UserVO getUser(String keyword);
+//	public List<UserVO> getUser1(@Param("index") int index); // ?
 	
 }

@@ -9,7 +9,12 @@
 			from SnsUser
 			LIMIT #{index},2;
 		</select>
-		
+		<select id="getUser" parameterType="string" resultType="UserVO">
+			select * from SnsUser
+			<where>
+				#{id} = id
+			</where>
+		</select>
 		<insert id="insertUser" parameterType="UserVO">
 			insert into snsUser(id, name, password, birthday, sex, email)
 			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
