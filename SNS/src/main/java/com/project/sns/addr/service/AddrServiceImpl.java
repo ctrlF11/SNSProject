@@ -33,4 +33,14 @@ public class AddrServiceImpl implements AddrService{
 	public List<AddrVO> getAddress() throws Exception {
 		return dao.getAddress();
 	}
+	
+	@Override
+	   public List<AddrVO> getAddress2(String inside) throws Exception {
+	      System.out.println("inside : " + inside);
+	      return dao.getAddress2(inside);
+	   }
+	@Override
+	 public AddrVO getAddress3() throws Exception {
+	      return dao.getAddress3();
+	   }
 }

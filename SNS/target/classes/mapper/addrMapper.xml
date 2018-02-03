@@ -12,7 +12,7 @@
 				#{item.firstimage, jdbcType=VARCHAR}, #{item.firstimage2, jdbcType=VARCHAR},
 				#{item.cat2, jdbcType=VARCHAR}, #{item.cat3, jdbcType=VARCHAR},
 				#{item.mapx, jdbcType=VARCHAR}, #{item.mapy, jdbcType=VARCHAR})
-			</foreach> 
+			</foreach>
 		</insert>
 		
 		<insert id="inputAddrCat" parameterType="java.util.List">
@@ -30,5 +30,34 @@
 		<select id="getAddress" parameterType="int" resultType="AddrVO">
 			select * from TourMap
 		</select>
+
+		<select id="getAddress2" parameterType="String" resultType="AddrVO">
+             select * 
+             from TourMap
+             <where>
+             contentTypeId not in('39','32')
+             and addr1 like '%강남%'
+                 <if test="value != null">
+                      and inside = #{value}
+                   </if>
+                </where>
+             ORDER BY rand()
+            limit 9
+      </select>
+      
+      <select id="getAddress3"  resultType="AddrVO">
+	    select * 
+	    from TourMap t, TourReview r
+	    <where>
+	   	 t.contentId = r.contentId
+	   	 and addr1 like '%강남%'
+	  	 and cat3 = 'A05020100'
+	   	 and scope is not null
+	   	 and scope > 4.0
+	    </where>
+	    ORDER BY rand()
+	    limit 1;
+      </select>
+
 		
 </mapper>

@@ -80,9 +80,6 @@ var positions = [
     {title : "카카오", latlng: new daum.maps.LatLng(33.450705, 126.570677)},
      {title : "제주공항", latlng : new daum.maps.LatLng(33.5066211, 126.492810)},
      {title : "테마파크", latlng : new daum.maps.LatLng(33.2906595, 126.322529)},
-     {title : "수목원", latlng : new daum.maps.LatLng(33.4696849, 126.493305)},
-     {title : "카카오", latlng : new daum.maps.LatLng(33.450705, 126.570677)},
-     {title : "제주공항", latlng : new daum.maps.LatLng(33.5066211, 126.492810)},
      {title : "수목원", latlng : new daum.maps.LatLng(33.4696849, 126.493305)}
 ];
 
@@ -111,9 +108,6 @@ var linePath;
 var lineLine = new daum.maps.Polyline();
 var distance;
 	
-
-	
-
 	for (var i = 0; i < positions.length; i++) {
 		if (i != 0) {
 			linePath = [ positions[i - 1].latlng, positions[i].latlng ]
@@ -133,7 +127,7 @@ var distance;
 		distance = Math.round(lineLine.getLength());
 		displayCircleDot(positions[i].latlng, distance);
 		if(i!=0){
-		alert(positions[i-1].title + ":" + positions[i].title + ":" + distance);
+//		alert(positions[i-1].title + ":" + positions[i].title + ":" + distance);
 		}
 		//경로 추천 클릭하면 childappend로 hidden 추가해서 java파일에 post전
 		//AJAX JSON으로 {"title":"경로순서"} 받기  -- JS파일 생성

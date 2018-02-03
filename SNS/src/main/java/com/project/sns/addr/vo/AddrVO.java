@@ -15,13 +15,11 @@ public class AddrVO {
 	private String areacode;
 	private String sigungucode;
 	private String grade;
-	
-	public String getGrade() {
-		return grade;
-	}
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
+	private String inside;
+	private String link3;
+	private String image1;
+	private String image2;
+	private String image3;
 	public String getContentTypeId() {
 		return contentTypeId;
 	}
@@ -100,7 +98,43 @@ public class AddrVO {
 	public void setSigungucode(String sigungucode) {
 		this.sigungucode = sigungucode;
 	}
-
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+	public String getInside() {
+		return inside;
+	}
+	public void setInside(String inside) {
+		this.inside = inside;
+	}
+	public String getLink3() {
+		return link3;
+	}
+	public void setLink3(String link3) {
+		this.link3 = link3;
+	}
+	public String getImage1() {
+		return image1;
+	}
+	public void setImage1(String image1) {
+		this.image1 = image1;
+	}
+	public String getImage2() {
+		return image2;
+	}
+	public void setImage2(String image2) {
+		this.image2 = image2;
+	}
+	public String getImage3() {
+		return image3;
+	}
+	public void setImage3(String image3) {
+		this.image3 = image3;
+	}
+	
 	
 	
 }

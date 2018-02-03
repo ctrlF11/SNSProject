@@ -1,16 +1,17 @@
 <%@page import="com.project.sns.addr.vo.AddrVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <meta name="viewport"
-   content="width=device-width, initial-scale=1, maximum-scale=1">
+	content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet"
-   href="resources/facebook/assets/css/bootstrap2.css">
+	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet"
@@ -44,6 +45,12 @@
 </script>
 <title>TourSNS</title>
 </head>
+<body>
+	<div class="wrapper">
+		<div class="box">
+			<div class="row row-offcanvas row-offcanvas-left">
+<title>TourSNS</title>
+</head>
 <body>   
 <div class="wrapper">
       <div class="box">
@@ -54,47 +61,56 @@
                      다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
                      글씨가 겹쳐 보이는 문제가 발생함.
                   -->
-                   <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-                 
-                  <ul class="nav">
-                     <li><a href="#" data-toggle="offcanvas" class="visible-xs text-center"><i class="glyphicon glyphicon-chevron-right"></i></a></li>
-                  </ul>
-                  
-                  <ul class="nav hidden-xs" id="lg-menu">
-                     <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> </a></li>
-                     <li><a href="#stories"><i class="glyphicon glyphicon-list"></i> </a></li>
-                     <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> </a></li>
-                     <li><a href="#"><i class="glyphicon glyphicon-refresh"></i> </a></li>
-                  </ul>
-                  <ul class="list-unstyled hidden-xs" id="sidebar-footer">
-                     <li>
-                       <a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3> <i class="glyphicon glyphicon-heart-empty"></i> Bootply</a>
-                     </li>
-                  </ul>
-                 
-                  <!-- tiny only nav -->
-                  <ul class="nav visible-xs" id="xs-menu">
-                     <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
-                     <li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
-                     <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
-                     <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
-                  </ul>
-                 
-               </div> 
-               <!--
+				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
+
+					<ul class="nav">
+						<li><a href="#" data-toggle="offcanvas"
+							class="visible-xs text-center"><i
+								class="glyphicon glyphicon-chevron-right"></i></a></li>
+					</ul>
+
+					<ul class="nav hidden-xs" id="lg-menu">
+						<li class="active"><a href="#featured"><i
+								class="glyphicon glyphicon-list-alt"></i> </a></li>
+						<li><a href="#stories"><i
+								class="glyphicon glyphicon-list"></i> </a></li>
+						<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i>
+						</a></li>
+						<li><a href="#"><i class="glyphicon glyphicon-refresh"></i>
+						</a></li>
+					</ul>
+					<ul class="list-unstyled hidden-xs" id="sidebar-footer">
+						<li><a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3>
+								<i class="glyphicon glyphicon-heart-empty"></i> Bootply</a></li>
+					</ul>
+
+					<!-- tiny only nav -->
+					<ul class="nav visible-xs" id="xs-menu">
+						<li><a href="#featured" class="text-center"><i
+								class="glyphicon glyphicon-list-alt"></i></a></li>
+						<li><a href="#stories" class="text-center"><i
+								class="glyphicon glyphicon-list"></i></a></li>
+						<li><a href="#" class="text-center"><i
+								class="glyphicon glyphicon-paperclip"></i></a></li>
+						<li><a href="#" class="text-center"><i
+								class="glyphicon glyphicon-refresh"></i></a></li>
+					</ul>
+
+				</div>
+				<!--
                   col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
                   col-xs-12는 disable된 상태
                   
                   맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
                   백그라운드의 회색 화면이 나타남.                  
                 -->
-            <div id="main" class="column col-sm-10 col-xs-11">
-               
-               <!-- 
+				<div id="main" class="column col-sm-10 col-xs-11">
+
+					<!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
-               <div class="navbar navbar-blue navbar-static-top">
-                  <!-- 
+					<div class="navbar navbar-blue navbar-static-top">
+						<!-- 
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
                    -->
                   <div class="navbar-header">
@@ -183,13 +199,10 @@
          </ul>
       </div>      
    </div>
-            </div>         
-         </div>
-      </div>
-   </div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
-<script>
-var accModule = function() {
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
+	<script>
+	var accModule = function() {
 
      // private member (비공개 멤버, 고유멤버)
      var acc_wrap = $('.accodian'),
@@ -221,16 +234,16 @@ var accModule = function() {
    // 실행
    accModule.runInit();
 
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-    mapOption = { 
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+ 	    mapOption = { 
         center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
         level: 3 // 지도의 확대 레벨
     };
 
-var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-// 마커를 표시할 위치와 title 객체 배열입니다 
-var positions =  [
+	// 마커를 표시할 위치와 title 객체 배열입니다 
+	var positions =  [
    <%
       List<AddrVO> list = (List<AddrVO>) request.getAttribute("list");
       for (int i = 0; i < 10; i++) {
@@ -269,18 +282,29 @@ var positions =  [
     
  function addMarker(position, title, contentid, contenttypeid) {   
 
-    // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new daum.maps.Size(24, 35); 
+    	 // 마커 이미지의 이미지 크기 입니다
+   		 var imageSize = new daum.maps.Size(24, 35); 
     
-    // 마커 이미지를 생성합니다    
-    var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
+   		 // 마커 이미지를 생성합니다    
+    	 var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
     
-    // 마커를 생성합니다
-    var marker = new daum.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: position, // 마커를 표시할 위치
-        title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image : markerImage // 마커 이미지 
+   		 // 마커를 생성합니다
+   		 var marker = new daum.maps.Marker({
+   		     map: map, // 마커를 표시할 지도
+   		     position: position, // 마커를 표시할 위치
+   		     title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+   		     image : markerImage // 마커 이미지 
+  		  });
+
+    recPath.push(position);    
+    console.log(recPath);
+    
+    var polyline = new daum.maps.Polyline({
+        path: recPath, // 선을 구성하는 좌표배열 입니다
+        strokeWeight: 3, // 선의 두께 입니다
+        strokeColor: '#db4040', // 선의 색깔입니다
+        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+        strokeStyle: 'solid' // 선의 스타일입니다
     });
    
    
@@ -312,7 +336,7 @@ var positions =  [
    } 
   
 
-function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
+	function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
     
    var maskHeight = $(document).height();
    var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
@@ -326,7 +350,33 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
     $('#window').css({'left':left,'top':top, 'position':'absolute'});
     
     $('#window').show();
-}
+	}
+	
+	
+
+ 	function recommend(){
+	
+	$.ajax({        
+	      url: 'getPath.do',
+	      type: 'get',
+	      dataType: 'json',
+	      success: function(jsonData){
+	    	  
+	    	  var path = jsonData.path;
+	    	  
+	    	   	for(var i=path.length-1; i>=0; i--){
+					for (var j = 0; j < positions.length; j ++) {
+	    			   	if(path[i] == (positions[j].contentid)){
+	    	   			addMarker(positions[j].latlng, positions[j].title, positions[j].contentid, positions[j].contenttypeid);
+
+	    	   	} 
+					}
+	    	   	}	
+	      },
+  	error: function(XMLHttpRequest, textStatus, errorThrown) { 
+//      	 alert("Status: " + textStatus); alert("Error: " + errorThrown);  
+  	} 
+	});
    
    
  function recommend(mapx, mapy){
@@ -344,6 +394,8 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 });
    
 } 
+
+	} 
 
 <%-- var linePath =  [
    <%
@@ -372,6 +424,6 @@ function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
 polyline.setMap(map);    --%>
 
 
-</script>      
+</script>
 </body>
 </html>
