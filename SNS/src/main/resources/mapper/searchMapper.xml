@@ -20,14 +20,15 @@
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from TourMap
 				<where>
-				title like #{keyword}
+				title like concat('%',#{keyword},'%')
 				</where>
 			) a,
 		(select @rnum := 0) b
 		<where>
 			@rnum &lt; 100;
 		</where>
-	</select>		
+	</select>	
+		
 	<select id="searchBoard" parameterType="string" resultType="BoardVO">
 		select @rnum := @rnum +1 as rnum, a.* from
 			(select * from Board
@@ -65,6 +66,8 @@
 			@rnum > #{startrow}
 			@rnum &lt;= #{endrow}
 		</where>
-	</select>		
+	</select>
+	
+			
 </mapper>
 		

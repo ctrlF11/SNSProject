@@ -15,11 +15,21 @@ public class AddrVO {
 	private String areacode;
 	private String sigungucode;
 	private String grade;
+<<<<<<< HEAD
 	private String inside;
 	private String link3;
 	private String image1;
 	private String image2;
 	private String image3;
+=======
+	
+	public String getGrade() {
+		return grade;
+	}
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+>>>>>>> refs/remotes/origin/b5
 	public String getContentTypeId() {
 		return contentTypeId;
 	}
