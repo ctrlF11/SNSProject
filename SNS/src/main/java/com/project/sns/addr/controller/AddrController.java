@@ -222,6 +222,7 @@ public class AddrController {
 		return "test";
 	}
 
+	//자세한 정보 표시
 	@RequestMapping("/callDetail.do")
 	public void callDetail(HttpServletRequest request, HttpServletResponse response, @RequestParam String contentId,
 			@RequestParam String contentTypeId) throws Exception {
@@ -284,11 +285,12 @@ public class AddrController {
 		   return "path";
 	   }
 	
+	//Dijkstra - 코스추천 길찾기
 	@RequestMapping("/getPath.do")
 	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req) throws Exception {
-		   String[] temp = new String[3];
-	        String[] wfKor = new String[3];
-	        String[] hour1 = new String[3];
+/*		   String[] temp = new String[3];
+	       String[] wfKor = new String[3];
+	       String[] hour1 = new String[3];
 	        int weather =0 ;
 	        try {
 	              DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
@@ -350,7 +352,11 @@ public class AddrController {
 	          list.add(vo);
 	          System.out.println( "주소 :"+vo.getAddr1());
 	          System.out.println(list.get(1).getMapx());
-	       }
+	       }*/
+		
+		
+		List<AddrVO> list = service.getAddress();
+//		List<AddrVO> getScope = service.getScope();
 	      
 		double distanceMeter = 0;
 		//그래프 저장용 맵
@@ -370,16 +376,16 @@ public class AddrController {
 //				System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );	
 				ArrayList<Object> mapList = new ArrayList<>();
 				mapList.add(distanceMeter);
-				mapList.add(list.get(j).getGrade());
+				mapList.add(list.get(j).getScope());
 				tempMap.put(list.get(j).getContentId(), mapList);			
 			}	
 			distanceMap.put(list.get(i).getContentId(), tempMap);
 		}
 		
 	
-		String destination = "2520648";
+		String destination = "132815";
 		
-		Result result = dijkstra(distanceMap, "2383039");    	//dijkstra(거리 맵, 출발지)
+		Result result = dijkstra(distanceMap, "101885");    	//dijkstra(거리 맵, 출발지)
         double distance = result.shortestPath.get(destination);	//destination의 거리 값
         
         
@@ -407,7 +413,7 @@ public class AddrController {
         return jsonData;
 	}
 
-	// BNR Ver.
+	// TSP - 장바구니식 길찾기
 		@ResponseBody
 	   @RequestMapping(value = "/getpath", method= {RequestMethod.POST})
 	   public List<AddrVO> path(HttpServletRequest req, @RequestBody List<AddrVO> paramData) throws Exception{
@@ -442,7 +448,7 @@ public class AddrController {
 		               W[i+1][j+1] = (int) Math.floor(distanceMeter);	               
 		               ArrayList<Object> mapList = new ArrayList<>();
 		               mapList.add(distanceMeter);
-		               mapList.add(paramData.get(j).getGrade());
+		               mapList.add(paramData.get(j).getScope());
 		               tempMap.put(paramData.get(j).getTitle(), mapList);         
 		            }   
 		            distanceMap.put(paramData.get(i).getTitle(), tempMap);
@@ -593,7 +599,7 @@ public class AddrController {
 	            //현재 Q안에서 최소 distance인 node 찾은 후 꺼내기
 	            String minNode = "";
 	            double minNodeDistance = INFINITY;
-	            int grade = 0;
+	            int Scope = 0;
 	            
 	            for(String node: Q){
 

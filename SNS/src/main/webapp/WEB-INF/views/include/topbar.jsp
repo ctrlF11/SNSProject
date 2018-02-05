@@ -16,6 +16,7 @@
 
 </head>
 <body>
+
 					<div class="navbar navbar-blue navbar-static-top">
 						<!-- 
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
@@ -27,7 +28,7 @@
 								<span class="sr-only">Toggle</span>
 							</button>
 							<!-- 아이콘. margin-top을 늘림. -->
-							<a href="https://www.naver.com" class="navbar-brand logo">N</a>
+							<a href="http://www.naver.com" class="navbar-brand logo">b</a>
 						</div>
 
 						<!-- 아이콘을 제외한 오른쪽 영역. -->
@@ -68,7 +69,7 @@
 									%>
 									</li>
 									<li>
-										<a href="#postModal" role="button" data-toggle="modal">
+										<a href="Address.do" role="button" data-toggle="modal">
 										추천 경로+</a>
 									</li>
 									<li>

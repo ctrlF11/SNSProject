@@ -12,4 +12,6 @@ public interface AddrDAO {
 	
 	   public List<AddrVO> getAddress2(String inside) throws Exception;
 	   public AddrVO getAddress3() throws Exception;
+	   
+	public List<AddrVO> getScope() throws Exception;
 }
