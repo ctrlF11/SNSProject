@@ -13,6 +13,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,13 +55,13 @@ public class AddrController {
 	@Autowired
 	private AddrService service;
 
-	public static int[][] W;
+//	public static int[][] W;
 	public static int[][] dp;
 	public static int N;
 	public static final int INF = 1000000000;
 	private static Deque<Integer> route = new ArrayDeque<>();
 	private static List<Integer> solution;
-	private static List<Integer> path;
+//	private static List<Integer> path;
 	static int re = INF;
 	
 	//DB 저장
@@ -276,14 +282,15 @@ public class AddrController {
 		return "marker";
 	}
 
-	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	   @RequestMapping("/Path.do")
-	   public String Path(HttpServletRequest req) throws Exception{
-		   List<AddrVO> list = service.getAddress();
-		   req.setAttribute("list", list);   
-		   return "path";
-	   }
-	
+   @RequestMapping("/Path.do")
+   public String Path(HttpServletRequest req) throws Exception{
+	   List<AddrVO> list = service.getAddress();
+	   req.setAttribute("list", list);   
+	   return "path";
+   }
+	   
+	   
+	//다익스트라
 	@RequestMapping("/getPath.do")
 	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req) throws Exception {
 		   String[] temp = new String[3];
@@ -407,61 +414,65 @@ public class AddrController {
         return jsonData;
 	}
 
-	// BNR Ver.
-		@ResponseBody
+	
+	
+	// PTS
+	   @ResponseBody
 	   @RequestMapping(value = "/getpath", method= {RequestMethod.POST})
 	   public List<AddrVO> path(HttpServletRequest req, @RequestBody List<AddrVO> paramData) throws Exception{
-		   
+
 		   	System.out.println("paramData의 길이" + paramData.size());
 		   //노드간 거리 구하기
-		      double distanceMeter = 0;
-		      //그래프 저장용 맵
-		        //HashMap<출발지, HashMap<도착지, 거리>>
-		        HashMap<String, HashMap<String, ArrayList>> distanceMap = 
-		                new HashMap<String, HashMap<String, ArrayList>>();
-		        //도착지, 거리 저장용 임시 맵
-		        //tempMap을 만든후 이를 다시 distanceMap에 put
-		        HashMap<String, ArrayList> tempMap = new HashMap<String, ArrayList>();
+		      //double distanceMeter = 0;
 		        
 		        //순서대로 저장
-		        List<String> name = new ArrayList<>();
-		        name.add("0");//시작 1에 맞추려고 그냥 넣음.
-		        for(AddrVO vo : paramData) {
-		        	name.add(vo.getTitle());
-		        }
+//		        List<String> name = new ArrayList<>();
+//		        name.add("0");//시작 1에 맞추려고 그냥 넣음.
+//		        for(AddrVO vo : paramData) {
+//		        	name.add(vo.getTitle());
+//		        }
 		        
-		        N = paramData.size();
-				W = new int[N + 1][N + 1];
-				dp = new int[N + 1][1 << N];
-		        
-		        for(int i = 0; i < N; i++) {
-		            tempMap = new HashMap<>();
-		            for(int j = 0; j < N; j++) {
-		            	if(i==j)continue;
-		               distanceMeter = distance(Double.parseDouble(paramData.get(i).getMapy()), Double.parseDouble(paramData.get(i).getMapx()), Double.parseDouble(paramData.get(j).getMapy()), Double.parseDouble(paramData.get(j).getMapx()), "meter");   
-		               W[i+1][j+1] = (int) Math.floor(distanceMeter);	               
-		               ArrayList<Object> mapList = new ArrayList<>();
-		               mapList.add(distanceMeter);
-		               mapList.add(paramData.get(j).getGrade());
-		               tempMap.put(paramData.get(j).getTitle(), mapList);         
-		            }   
-		            distanceMap.put(paramData.get(i).getTitle(), tempMap);
-		         }
+//		        N = paramData.size();
+//				W = new int[N + 1][N + 1];
+//				dp = new int[N + 1][1 << N];
+//		        
+//		        for(int i = 0; i < N; i++) {
+//		            for(int j = 0; j < N; j++) {
+//		            	if(i==j)continue;
+//		            	
+//		            	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//		            	//음식점과 음식점 사이에 거리 무한대로 설정하기.
+//		            	if(paramData.get(i).getContentTypeId()=="39" && paramData.get(i).getContentTypeId()==paramData.get(j).getContentTypeId()) {
+//		            		distanceMeter = INF;
+//		            	}else {
+//		               distanceMeter = distance(Double.parseDouble(paramData.get(i).getMapy()), Double.parseDouble(paramData.get(i).getMapx()), Double.parseDouble(paramData.get(j).getMapy()), Double.parseDouble(paramData.get(j).getMapx()), "meter");   
+//		            	}
+//		               W[i+1][j+1] = (int) Math.floor(distanceMeter);	                    
+//		            }   
+//		         }
+		        int[][] W = getW(paramData);
 		        
 				// 2차원 배열의 모든 원소를 -1로
 				for (int i = 1; i <= N; i++) {
 					Arrays.fill(dp[i], -1);
 				}
 				
-				
 //				path.clear();
+				List<Integer> path = new ArrayList<Integer>();
+//				synchronized(path) {
+//					path.wait();
+//					System.out.println("wait중인 path : " + path.toString());
+//				}
 				int start = 1;
 //				System.out.println(getShortestPath(start, 1));
 				
-				path = getPath(start,1);
+//				path = getPath(start,1,W);
+				path = getPath(start,1,W, path);
+//				synchronized() {
+//				}
+//				List<Integer> path = getPath(start,1, W);
 				
-//				getShortestPath(start,1);
-				
+
 				Collections.reverse(path);
 				
 				System.out.println("path의 길이 : " + path.size());
@@ -509,7 +520,7 @@ public class AddrController {
 				System.out.println("result : ");
 				for(int i : result) {
 					System.out.print(i + " ");
-					System.out.println(name.get(i));
+					//System.out.println(name.get(i));
 				}
 				
 				List<AddrVO> re = new ArrayList<>();
@@ -544,6 +555,30 @@ public class AddrController {
 		// * 10은 가중치 값 계산할 때 범위 적용가능하게 범위 늘리기용
 		
 		return (distPoint);
+	}
+	
+	//좌표로 위치 계산
+	private static double distance2(double lat1, double lon1, double lat2, double lon2, String unit) {
+
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+				+ Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+
+		if (unit == "kilometer") {
+			dist = dist * 1.609344;
+		} else if (unit == "meter") {
+			dist = dist * 1609.344;
+		}
+		
+//		int distPoint = (int) Math.floor(dist/2000) * 10;
+		//Meter로 계산할 때 2000으로 나눠서 소수점 이하 버림
+		// * 10은 가중치 값 계산할 때 범위 적용가능하게 범위 늘리기용
+		
+		return dist;
 	}
 
 	// This function converts decimal degrees to radians
@@ -634,14 +669,95 @@ public class AddrController {
 	        
 	        return result;
 	    }
+
 	    
-	    public static List<Integer> getPath(int current, int visited){
-	    	getShortestPath(current, visited);
+
+		
+	    public static List<Integer> getPath(int current, int visited, int[][] W, List<Integer> path) throws InterruptedException{
+//			List<Integer> path = new ArrayList<Integer>();
+
+//	    	//최종(후) 처리용
+//			ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+//			CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(executorService); 
+//			// CompletionService 객체 생성.
+//	    	
+//			System.out.println("작업 처리 요청");
+//			
+//			//선처리용 Task
+//			
+//			
+//			completionService.submit(new Callable<Integer>) {
+//				
+//				@Override
+//				public Integer call() throws Exception {
+//					//getShortestPath(current, visited,W,path);
+//					
+//					return null;
+//				}
+//			}
+//			System.out.println("스레드풀에 작업 처리 요청");
+//			
+//			executorService.submit(new Runnable() {
+//				//스레드풀의 스레드에서 실행하도록 한다.
+//				@Override
+//				public void run() {
+//					while(true) {
+//						try {
+//							Future<Integer> future = completionService.take();
+//							//완료된 작업이 있을 때까지 블로킹, 있으면 Future 리턴 따라서 완료된 작업을 가져오는 역할
+//							int value = future.get();
+//							//get()은 블로킹되지 않고 작업 결과를 바로 리턴
+//							System.out.println("처리 결과 : " + value);
+//							
+//						}catch(Exception e) {
+//							break;
+//						}
+//					}
+//				}
+//			});
+//			
+//			try {Thread.sleep(3000);}
+//			catch (InterruptedException e) {}
+//			executorService.shutdownNow();
+//			
 	    	
-	    	return path;
+	    	
+	    	synchronized(path) {
+	    		try {
+	    			getShortestPath(current, visited, W, path);
+	    			System.out.println("완료될 때 까지 기다립니다.");
+	    			path.wait();
+	    		}catch(InterruptedException e) {
+	    			e.printStackTrace();
+	    		}
+	    		
+	    		System.out.println("기다린 path : " + path.toString());
+	    		return path;
+	    	}
+
+
+			
+	    	
+	    	
+	    	
+//	    	if(getShortestPath(current, visited,W,path)>-1) {
+//				synchronized(path) {
+//					while(getShortestPath(current, visited,W,path)>0) {
+//					path.wait();
+//					}
+//					System.out.println("notify한 path : " + path.toString());
+//					path.notify();
+//					return path;
+//				}				
+//	    	}return path;
 	    }
+	    
+//	    ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+//	    CompletionService<V> completionService = new ExecutorCompletionService<V>(executorService);
+	    
+
 	       
-		public static int getShortestPath(int current, int visited) {
+		public static int getShortestPath(int current, int visited,int[][] W, List<Integer> path) {
 			
 			// 모든 정점을 다 들른 경우
 			if (visited == (1 << N) - 1) {	
@@ -667,15 +783,16 @@ public class AddrController {
 				
 				route.push(i);
 
-				int temp = W[current][next] + getShortestPath(next, visited + (1 << (next - 1)));
+				int temp = W[current][next] + getShortestPath(next, visited + (1 << (next - 1)),W, path);
 
 				if(route.size()==N) {
-							solution = new ArrayList<>(route);
+					solution = new ArrayList<>(route);
 					route.pop();
 				}
 				if(route.size()==2) {
 					if(re > temp + W[i][1]) {
 						path = new ArrayList<>(solution);
+						System.out.println("path : " + path.toString());
 						re = temp;
 					}
 				}
@@ -685,6 +802,31 @@ public class AddrController {
 			return dp[current][visited] = ret;
 			
 		}
-	    
+		
+		
+	    public static int[][] getW(List<AddrVO> paramData){
+			double distanceMeter = 0;
+	    	int[][] W = null;
+			N = paramData.size();
+	    	W = new int[N + 1][N + 1];
+			dp = new int[N + 1][1 << N];
+	        
+	        for(int i = 0; i < N; i++) {
+	            for(int j = 0; j < N; j++) {
+	            	if(i==j)continue;
+	            	
+	            	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	            	if(paramData.get(i).getContentTypeId().equals("39") && paramData.get(j).getContentTypeId().equals("39")) {
+	            		//distanceMeter = 0;
+	            		distanceMeter = distance2(Double.parseDouble(paramData.get(i).getMapy()), Double.parseDouble(paramData.get(i).getMapx()), Double.parseDouble(paramData.get(j).getMapy()), Double.parseDouble(paramData.get(j).getMapx()), "meter");
+	            		distanceMeter += 5000;
+	            	}else {
+	               distanceMeter = distance2(Double.parseDouble(paramData.get(i).getMapy()), Double.parseDouble(paramData.get(i).getMapx()), Double.parseDouble(paramData.get(j).getMapy()), Double.parseDouble(paramData.get(j).getMapx()), "meter");   
+	            	}
+	               W[i+1][j+1] = (int) Math.floor(distanceMeter);	                    
+	            }   
+	         }
+	    	return W;
+	    }
 }
 

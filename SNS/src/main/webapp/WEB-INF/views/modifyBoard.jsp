@@ -18,116 +18,10 @@
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <style>
-.wrap {
-   position: absolute;
-   left: 0;
-   bottom: 40px;
-   width: 288px;
-   height: 132px;
-   margin-left: -144px;
-   text-align: left;
-   overflow: hidden;
-   font-size: 12px;
-   font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
-   line-height: 1.5;
-}
-
-.wrap * {
-   padding: 0;
-   margin: 0;
-}
-
-.wrap .info {
-   width: 286px;
-   height: 120px;
-   border-radius: 5px;
-   border-bottom: 2px solid #ccc;
-   border-right: 1px solid #ccc;
-   overflow: hidden;
-   background: #fff;
-}
-
-.wrap .info:nth-child(1) {
-   border: 0;
-   box-shadow: 0px 1px 2px #888;
-}
-
-.info .title {
-   padding: 5px 0 0 10px;
-   height: 30px;
-   background: #eee;
-   border-bottom: 1px solid #ddd;
-   font-size: 18px;
-   font-weight: bold;
-}
-
-.info .close {
-   position: absolute;
-   top: 10px;
-   right: 10px;
-   color: #888;
-   width: 17px;
-   height: 17px;
-   background:
-      url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
-}
-
-.info .close:hover {
-   cursor: pointer;
-}
-
-.info .body {
-   position: relative;
-   overflow: hidden;
-}
-
-.info .desc {
-   position: relative;
-   margin: 13px 0 0 90px;
-   height: 75px;
-}
-
-.desc .ellipsis {
-   overflow: hidden;
-   text-overflow: ellipsis;
-   white-space: nowrap;
-}
-
-.desc .jibun {
-   font-size: 11px;
-   color: #888;
-   margin-top: -2px;
-}
-
-.info .img {
-   position: absolute;
-   top: 6px;
-   left: 5px;
-   width: 73px;
-   height: 71px;
-   border: 1px solid #ddd;
-   color: #888;
-   overflow: hidden;
-}
-
-.info:after {
-   content: '';
-   position: absolute;
-   margin-left: -12px;
-   left: 50%;
-   bottom: 0;
-   width: 22px;
-   height: 12px;
-   background:
-      url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
-}
-
-.info .link {
-   color: #5085BB;
-}
 
 #map {
    position: fixed;
@@ -148,9 +42,72 @@
 	overflow:hidden;
 	height:auto;
 	}
+	
+#content{
+	width: 100%;
+	height: 300px;
+	background: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	overflow: auto;
+	padding: 10px;
+	}
+	
+#searchBox{
+	position: fixed;
+	float: right;
+	background-color: #4CAF50;
+	height : 50px;
+	top: 115px;
+	right: 1%;
+	}
+	
+#searchResult{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background-color: #4CAF50;
+	height : 250px;
+	width : 41%;
+	}
+
+#searchContent{
+	background: white;
+	padding: 14px 40px;
+	font-size: 16px;
+	border-radius: 12px;
+	width: auto;
+	margin: 10px;
+	overflow: auto;
+	}
+	
+#file{
+	display:none;
+	}
+	
+.toolBox{
+	height : 50px;
+	}
+
+#glyphicon span {
+    font-size: 50px;
+    margin-left : 0;
+    margin-right : 0;
+
+}
+
+#modifyForm{
+	margin-top : 80px;
+	}
+
+.story {
+	margin-top : 20px;
+	
+	}
 
 </style>
 <title>Insert title here</title>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script type="text/javascript">
 
 <%
@@ -162,12 +119,226 @@ var id = '<%=id%>';
 var files = [];
 var blob;
 
+var contentId;
+var mtitle;
+
 //보드 받아올 때 빼오기. 
 var board_seq =3; 
+//선택한 마커
+var selectedMarker = null;
+//검색결과.
+var array = new Array();
+
 
 
 
 $(function(){
+	
+	$('#searchResult').hide();
+	$('#searchContent').hide();
+	
+	
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+	mapOption = { 
+	    center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+	    level: 3 // 지도의 확대 레벨
+	};
+
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+	
+	//지도 검색 시
+	$('#searchMapBtn').click(function(){
+		var keyword = $('#searchMap').val();
+		if(keyword == null){
+			alert("검색어를 입력하세요.");
+			return false;
+		}
+		if(array!=null){
+		setMarkers(null);
+		setMarkersArr(map);
+		}
+		$.ajax({
+			url:'search.do',
+			type: 'POST',
+			data: {keyword:keyword},
+			success: function(data){
+				console.log(data);
+				array = data;
+				if(array.length==0){
+					alert("검색 결과가 없습니다.");
+					
+				}
+				var bounds = new daum.maps.LatLngBounds();
+				
+				$.each(array, function(i, val){
+					var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
+					bounds.extend(latlng);
+					addMarker(latlng, val.title, val.contentId, val.contentTypeId, val.mapY, val.mapX);
+				})
+				map.setBounds(bounds);
+			}
+		})
+	})	
+
+	var marker_width = 24,
+		marker_height = 35,
+		over_marker_width = 30,
+		over_marker_height = 40,
+		sprite_marker_url = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+		click_marker_url = "markerStarRed.png";
+		
+	var markerSize = new daum.maps.Size(marker_width, marker_height), 
+		overMarkerSize = new daum.maps.Size(over_marker_width, over_marker_height),
+		spriteImageSize = new daum.maps.Size(marker_width, marker_height);
+
+	//마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
+	function createMarkerImage(src, size){
+		var markerImage = new daum.maps.MarkerImage(src, size);
+		return markerImage;
+	}
+
+	//좌표와 마커이미지를 받아 마커를 생성하여 리턴하는 함수입니다
+	function createMarker(position, image){
+		var marker = new daum.maps.Marker({
+			position: position,
+			image: image
+		});
+		return marker;
+	}
+	
+	var markersArr = []; 
+	var markers = [];
+	//마커 추가.
+	function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {     		 
+	 
+    var normalImage = createMarkerImage(sprite_marker_url, markerSize),
+        overImage = createMarkerImage(sprite_marker_url, overMarkerSize),
+        clickImage = createMarkerImage(click_marker_url, markerSize);
+
+    // 마커를 생성합니다
+    var marker = new daum.maps.Marker({
+    	contentId: contentid,
+        map: map, // 마커를 표시할 지도
+        position: position, // 마커를 표시할 위치
+        title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : normalImage // 마커 이미지
+    });
+    
+    markers.push(marker);
+    
+	// 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
+    marker.normalImage = normalImage;
+    
+    //마커에 mouseover 이벤트 등록    
+    daum.maps.event.addListener(marker, 'mouseover', function(){
+    	//클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면 마커의 이미지를 오버 이미지로 변경
+    	if(!selectedMarker || selectedMarker != marker){
+    		marker.setImage(overImage);
+    	}
+    });
+    
+	// 마커에 mouseout 이벤트를 등록합니다
+    daum.maps.event.addListener(marker, 'mouseout', function() {
+
+        // 클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면 마커의 이미지를 기본 이미지로 변경합니다
+        if (!selectedMarker || selectedMarker !== marker) {
+            marker.setImage(normalImage);
+        }
+    });
+	
+  //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
+    function createArrMarkers(){
+    		marker.setImage(clickImage);
+    		markersArr.pop();
+    		markersArr.push(marker);
+    		marker.setMap(map);
+    }
+   
+    //마커 클릭시! 
+   daum.maps.event.addListener(marker, 'click', function() {
+       // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면 마커의 이미지를 클릭 이미지로 변경합니다
+       if (!selectedMarker || selectedMarker !== marker) {
+
+           // 클릭된 마커 객체가 null이 아니면 클릭된 마커의 이미지를 기본 이미지로 변경하고
+           !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+
+           // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+           marker.setImage(clickImage);
+       }
+
+       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+       selectedMarker = marker;
+       contentId = contentid;
+       mtitle = title;
+       
+      createArrMarkers();
+      
+      $.ajax({        
+          url: 'callDetail.do',
+          type: 'get',
+          data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+          dataType: 'json',
+          success: function(data){
+               var myItem = data.response.body.items.item;
+                  var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
+                  	output += '<h4 id="title">' + title + '</h4>';
+                  if(contenttypeid == 12){
+ 	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }else if(contenttypeid == 14){
+ 	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                  }else if(contenttypeid == 15){
+ 	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+ 	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+ 	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+ 	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                  }else if(contenttypeid == 28){
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                  }else if(contenttypeid == 32){
+ 	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+ 	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                  }else if(contenttypeid == 38){
+ 	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }else if(contenttypeid == 39){
+ 	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                  }
+                  output += '</div>';
+                  $('#searchResult').show();
+                  $('#searchContent').show();
+                  $('#searchContent').html(output);
+          },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        } 
+ 	});
+   });
+   } 
+	
+	
+	function setMarkers(map){
+		 $.each(markers,function(i, val){
+			 val.setMap(map);
+		 })
+	 }
+	
+	function setMarkersArr(map){
+		$.each(markersArr,function(i,val){
+			val.setMap(map);
+		})
+	}
 	
 
 	
@@ -199,16 +370,12 @@ $(function(){
 		var story_seq = $('#storyBox').val();
 		var title = $('#title').val();
 		var content = $('#content').html();
-
-		//임시
-		var mtitle = '강남역';
-		var contentID = '1231345345';
 		
 		
 		$.ajax({
 			url:'inputBoard.do',
 			type:'POST',
-			data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentID:contentID}
+			data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentId:contentId}
 				
 				//성공시 글 전체 조회.
 		})
@@ -313,18 +480,11 @@ $(function(){
 			
 
 		function checkImageType(fileName){
-			
 			var pattern = /jpg|gif|png|jpeg/i;
-			
 			return fileName.match(pattern);
-			
 		}
 	
 })
-
-   $(document).on(function() {
-      $(".reply").hide();
-   })
 
 </script>
 </head>
@@ -373,7 +533,6 @@ $(function(){
                   백그라운드의 회색 화면이 나타남.                  
                 -->
             <div id="main" class="column col-sm-10 col-xs-11">
-               
                <!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
@@ -440,12 +599,10 @@ $(function(){
                      </div>
                   </nav>
                </div>
-               
-               <div class="padding">
-                  <div class="full col-sm-9" id="full1">
-                     <div class="row">                        
+
+>                        
                         
-             <!--  수정 폼 -->           
+            <!--  수정 폼 -->           
 			<div class="col-sm-6" id="modifyForm">
 					<button id='save' class="btn btn-warning pull-right" >저장</button>
 					
@@ -472,96 +629,41 @@ $(function(){
 						<div class='uploadedList' id="content" contentEditable="true"></div>
 						<div class='toolBox'>
 							<form id="imageUpload" method='POST' enctype='multipart/form-data'>
-								<input type="file" name="image" hidden/>
+								<input type="file" name="image" id="file"/>
 							</form>
-							<img src='landscape (1).png' id="imageUp"/>
-							<img src='rubbish-bin.png' id='delete'/>
-							<img src='placeholder.png' id='relocate'/>
-							<div class='fileDrop'></div>
-				
+							<div id="glyphicon">
+								<span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
+								<span class="glyphicon glyphicon-trash" id="delete" aria-hidden="true"></span>
+								<span class="glyphicon glyphicon-screenshot" id="reloacate" aria-hidden="true"></span>
+							</div>
+							<!-- <div class='fileDrop'></div>  -->
 						</div>
 					</div>
-					
 					<hr>
 				</div>
-                           
-                        
-                        
-                        <div class="col-sm-6">
-                           <div class="panel panel-default"></div>
-                           <div class="panel panel-default">
-                              <div id="map" style="width: 40%; height: 100%;"></div>
-                              <script type="text/javascript"
-                                 src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
-                              <script>
-                                 var mapContainer = document
-                                       .getElementById('map'), // 지도의 중심좌표
-                                 mapOption = {
-                                    center : new daum.maps.LatLng(
-                                          33.451475, 126.570528), // 지도의 중심좌표
-                                    level : 15
-                                 // 지도의 확대 레벨
-                                 };
-                                 var map = new daum.maps.Map(
-                                       mapContainer, mapOption); // 지도를 생성합니다
-                              </script>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  
-                  
-                  
-                  
-                  
-                  
-               </div>
+ 
+               <div class="col-sm-6">
+                   <div class="panel panel-default">
+                        <div id="mapBox">
+	                   		<div id="searchBox" style="z-index: 2;">
+	                  			<input type="text" id="searchMap" /><input id = "searchMapBtn" type="button" value="검색"/>
+	                   		</div>
+	                   		<div id="map" style="width: 40%; height: 100%;" style="z-index: 1;"></div>
+	                   		<div id="searchResult" style="z-index: 3;">
+	                   			<div id="searchContent" style="z-index: 4;"></div>
+	                   		</div>
+                    	</div>
+                   </div>
+                </div>
             </div>
          </div>
       </div>
    </div>
-
-					<%@ include file="include/topbar.jsp" %>
-					<%@ include file="include/half_map.jsp" %>
+					
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	<script type="text/javascript">
-	
-		$(document).ready(function() {
-			$('[data-toggle=offcanvas]').click(function() {
-				$(this).toggleClass('visible-xs text-center');
-				$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
-				$('.row-offcanvas').toggleClass('active');
-				$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
-				$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
-				$('#btnShow').toggle();
-			});
-        });
-		
-		function checkgo() {
-			var check = document.getElementById("search_category").value;
-			var keyword = document.getElementById("srch-term").value;
-			alert(check);
-			alert(keyword);
-			if(keyword == "") {
-				alert("키워드를 입력해주세요.");
-				return false;
-			}			
-			if(check == "user") {
-				location.href = "searchAll.do?keyword=" + keyword + "&number=1";
-			}
-			if(check == "map") {
-				location.href = "searchAll.do?keyword=" + keyword + "&number=2";
-			}
-			if(check == "board") {
-				location.href = "searchAll.do?keyword=" + keyword + "&number=3";
-			}
-			return false;
-		}
-	</script>
 
 </body>
 </html>
