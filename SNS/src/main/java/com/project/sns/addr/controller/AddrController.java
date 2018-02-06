@@ -382,14 +382,13 @@ public class AddrController {
 			distanceMap.put(list.get(i).getContentId(), tempMap);
 		}
 		
-	
-		String destination = "132815";
+		Collections.shuffle(list);			//무작위 값 추려내기 위해서 list 한번 섞음 ('구'별로 선택 후 '구'안에서 돌도록 수정할 생각)
 		
-		Result result = dijkstra(distanceMap, "101885");    	//dijkstra(거리 맵, 출발지)
+		String destination = list.get(1).getContentId();	//도착지 무작위 값
+		
+		Result result = dijkstra(distanceMap, list.get(0).getContentId());    	//dijkstra(거리 맵, 출발지)			//출발지 무작위 값
         double distance = result.shortestPath.get(destination);	//destination의 거리 값
-        
-        
-        
+               
         ArrayList<String> path = new ArrayList<>();
         String curNode = destination; 	//현재노드는 destination   
         						
@@ -398,13 +397,6 @@ public class AddrController {
             curNode = result.preNode.get(curNode);
             path.add(curNode);
         }
-        
-        System.out.println(destination + "까지의 최소 이동 거리: " + distance);
-        System.out.println("=====이동 경로=====");
-        for(int i = path.size()-1; i>=0; i--){
-            System.out.println(path.get(i));
-        }
-        System.out.println("================");
         
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonData = new HashMap<String, Object>();

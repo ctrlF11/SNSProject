@@ -51,47 +51,7 @@
 		<div class="box">
 			<div class="row row-offcanvas row-offcanvas-left">
 
-				<!--
-                     원본 왼쪽에 있던 사이드바.
-                     다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
-                     글씨가 겹쳐 보이는 문제가 발생함.
-                  -->
-				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
 
-					<ul class="nav">
-						<li><a href="#" data-toggle="offcanvas"
-							class="visible-xs text-center"><i
-								class="glyphicon glyphicon-chevron-right"></i></a></li>
-					</ul>
-
-					<ul class="nav hidden-xs" id="lg-menu">
-						<li class="active"><a href="#featured"><i
-								class="glyphicon glyphicon-list-alt"></i> </a></li>
-						<li><a href="#stories"><i
-								class="glyphicon glyphicon-list"></i> </a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i>
-						</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-refresh"></i>
-						</a></li>
-					</ul>
-					<ul class="list-unstyled hidden-xs" id="sidebar-footer">
-						<li><a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3>
-								<i class="glyphicon glyphicon-heart-empty"></i> Bootply</a></li>
-					</ul>
-
-					<!-- tiny only nav -->
-					<ul class="nav visible-xs" id="xs-menu">
-						<li><a href="#featured" class="text-center"><i
-								class="glyphicon glyphicon-list-alt"></i></a></li>
-						<li><a href="#stories" class="text-center"><i
-								class="glyphicon glyphicon-list"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-paperclip"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-refresh"></i></a></li>
-					</ul>
-
-				</div>
 				<!--
                   col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
                   col-xs-12는 disable된 상태
@@ -99,7 +59,7 @@
                   맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
                   백그라운드의 회색 화면이 나타남.                  
                 -->
-				<div id="main" class="column col-sm-10 col-xs-11">
+				<div id="main" class="column col-sm-12 col-xs-12">
 
 					<!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
@@ -231,7 +191,7 @@
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
  	    mapOption = { 
         center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: 4 // 지도의 확대 레벨
     };
 
 	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -245,7 +205,9 @@
 	{title : "<%=list.get(i).getTitle()%>",
 	 contenttypeid : "<%=list.get(i).getContentTypeId()%>",
 	 contentid : "<%=list.get(i).getContentId()%>",
-	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
+	 latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>),
+	 mapx : "<%=list.get(i).getMapx()%>",
+	 mapy : "<%=list.get(i).getMapy()%>"
 	}
 
 	<%
@@ -255,36 +217,38 @@
 	   }
 	%>
 	];
+	
 
 	
-	// 마커 이미지의 이미지 주소입니다
-	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+    var recPath = [];		//라인 이을 추천 경로들의 배열
+    var markers = [];		//마커 담을 배열
+    var polylines = [];		//라인 담을 배열
 
-	 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
-    $('#mask').click(function () {
-        $(this).hide();
-        $('#window').hide();
-    });	
-	
-    var recPath = [];
-	function addMarker(position, title, contentid, contenttypeid) {	
+	function addMarker(position, title, contentid, contenttypeid, count) {	
 
+		if(count==1){					//처음 돌 때(추천 경로 버튼을 눌렀을 때)
+			removeMarker();				//지도에 남아있는 마커들 제거
+			deletePolyLine();			//지도에 남아있는 라인 제거
+		}	
+
+		// 마커 이미지의 이미지 주소입니다
+		var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
     	 // 마커 이미지의 이미지 크기 입니다
    		 var imageSize = new daum.maps.Size(24, 35); 
     
    		 // 마커 이미지를 생성합니다    
     	 var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
-    
+    	
    		 // 마커를 생성합니다
-   		 var marker = new daum.maps.Marker({
+   		  marker = new daum.maps.Marker({
    		     map: map, // 마커를 표시할 지도
    		     position: position, // 마커를 표시할 위치
    		     title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
    		     image : markerImage // 마커 이미지 
   		  });
-
-    recPath.push(position);    
-    console.log(recPath);
+   		 
+   		markers.push(marker);		//배열에 생성된 마커 추가
+ 		recPath.push(position); 		//추천 경로 배열에 좌표 추가
     
     var polyline = new daum.maps.Polyline({
         path: recPath, // 선을 구성하는 좌표배열 입니다
@@ -292,16 +256,21 @@
         strokeColor: '#db4040', // 선의 색깔입니다
         strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
         strokeStyle: 'solid' // 선의 스타일입니다
-    });
-    
+    }); 
+
+    polyline.setMap(map); 			//지도에 라인 추가
+	polylines.push(polyline);		//배열에 라인 담기 
+	
+	//마커 클릭하면 디테일한 정보 표시
 	daum.maps.event.addListener(marker, 'click', function() {
 		
-		wrapWindowByMask();
+		wrapWindowByMask();			//팝업 레이어 검정 배경
 		
+		//마커 클릭하면 자세한 정보
 		$.ajax({        
 		      url: 'callDetail.do',
 		      type: 'get',
-		      data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		      data : {'contentId' : contentid, 'contentTypeId' : contenttypeid},
 		      dataType: 'json',
 		      success: function(data){
 		    	  
@@ -316,64 +285,105 @@
 	    	error: function(XMLHttpRequest, textStatus, errorThrown) { 
 	        	alert("Status: " + textStatus); alert("Error: " + errorThrown); 
 	    	} 
+		});
 	});
-	});
-	polyline.setMap(map);
-	} 
-  
-
-	function wrapWindowByMask(){ //화면의 높이와 너비를 구한다.
-	 
-	var maskHeight = $(document).height();
-	var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
 	
-	$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
-	$('#mask').fadeTo("slow",0.8);
+	} 
 
- 	var left = ( $('#map').scrollLeft() + ( $('#map').width() - $('#window').width()) / 2 );
-    var top = ( $('#map').scrollTop() + ( $('#map').height() - $('#window').height()) / 2 ); 
+
+    //지도 위 표시되고 있는 마커 제거
+	function removeMarker() {		
+		for ( var i = 0; i < markers.length; i++ ) {
+		markers[i].setMap(null);
+		} 		
+		markers = [];
+		}
+	
+    //지도 위 표시되고 있는 라인 제거
+    function deletePolyLine(){
+    	for ( var i = 0; i < polylines.length; i++){
+    		polylines[i].setMap(null);
+    		} 
+    	polylines=[];
+    	recPath=[];			//라인 이어줄 좌표들 있는 배열 초기화
+    }
     
-    $('#window').css({'left':left,'top':top, 'position':'absolute'});
+    //팝업 레이어
+	function wrapWindowByMask(){ 
+		
+		 // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+	    $('#mask').click(function () {
+	        $(this).hide();
+	        $('#window').hide();
+	    });	
+
+		var maskHeight = $('#map').height(); 	
+		var maskWidth = $('#map').width(); 	//마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	
+		$('#mask').css({'width':maskWidth,'height':maskHeight});	//마스크의 투명도 처리 
+		$('#mask').fadeTo("slow",0.8);
+
+ 		var left = ( $('#map').scrollLeft() + ( $('#map').width() - $('#window').width()) / 2 );
+    	var top = ( $('#map').scrollTop() + ( $('#map').height() - $('#window').height()) / 2); 
     
-    $('#window').show();
+    	$('#window').css({'left':left,'top':top, 'position':'absolute'});
+    
+    	$('#window').show();
 	}
 	
 	
 
- 	function recommend(){
+	//경로 추천
+  	function recommend(){
 	
-	$.ajax({        
-	      url: 'getPath.do',
-	      type: 'get',
-	      dataType: 'json',
-	      success: function(jsonData){
+  		var marker = new daum.maps.Marker();
+		marker.setMap(null);
+		
+		$.ajax({        
+		      url: 'getPath.do',
+		      type: 'get',
+		      dataType: 'json',
+		      success: function(jsonData){
 	    	  
-	    	  var path = jsonData.path;
-	    	  var addList = '';
-	    	   	for(var i=path.length-1; i>=0; i--){
-					for (var j = 0; j < positions.length; j ++) {
-	    			   	if(path[i] == (positions[j].contentid)){
-	    	   			addMarker(positions[j].latlng, positions[j].title, positions[j].contentid, positions[j].contenttypeid);
+	    		  var path = jsonData.path;
+	    		  var sidePath = "";
+	    		  var count = 0;						//몇 번째인지 알기 위해서 사용
+	    	  
+	    		   	for(var i=path.length-1; i>=0; i--){
+						for (var j = 0; j < positions.length; j ++) {
+	    				   	if(path[i] == (positions[j].contentid)){
+	    						count++;
+    	 		 	 			addMarker(positions[j].latlng, positions[j].title, positions[j].contentid, positions[j].contenttypeid, count);
 					
-					addList += "<a>" + positions[j].title + "</a>" + "</br>";
+								sidePath += "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + ")'>" + positions[j].title + "</a>" + "</br>";
 
+								console.log(positions[j].latlng);
 
-					
-
-	    	   	} 
-					}
-					
-	    	   	}
-	    	   	$('#pathlist').html(addList);
-	      },
-  	error: function(XMLHttpRequest, textStatus, errorThrown) { 
+	    			   			} 
+							}					
+	    	   			}
+	    	   	$('#pathlist').html(sidePath);		//경로 목록 찍어줌
+	    	   	
+	      	},
+  			error: function(XMLHttpRequest, textStatus, errorThrown) { 
 //      	 alert("Status: " + textStatus); alert("Error: " + errorThrown);  
-  	} 
-	});
+  			} 
+		}); 
 	
 	} 
 
 
+	//클릭하면 해당 위치로 이동 (인포윈도우)
+  	function panTo(mapy, mapx) {
+
+  		
+  	    // 이동할 위도 경도 위치를 생성합니다 
+  	    var moveLatLon = new daum.maps.LatLng(mapy, mapx);
+  	    
+  	    // 지도 중심을 부드럽게 이동시킵니다
+  	    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+  	    map.panTo(moveLatLon);            
+  	}        
 
 </script>
 </body>
