@@ -9,6 +9,8 @@
 		<typeAlias type="com.project.sns.board.vo.BoardVO" alias="BoardVO"/>
 		<!-- 댓글 VO -->
 		<typeAlias type="com.project.sns.board.vo.ReplyVO" alias="ReplyVO"/>
+		<!-- 스토리 VO -->
+		<typeAlias type="com.project.sns.board.vo.StoryVO" alias="StoryVO"/>
 		<!-- 주소 VO -->
 		<typeAlias type="com.project.sns.addr.vo.AddrVO" alias="AddrVO"/>
 		<!-- 사용자 VO -->

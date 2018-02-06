@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -29,6 +30,8 @@ import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
 import com.project.sns.user.service.UserService;
 import com.project.sns.user.vo.UserVO;
+
+import A.algorithm.AES;
  
 /**
  * Handles requests for the application home page.
@@ -208,4 +211,25 @@ public class BoardController {
     	
     	return "home1";
     }
+    
+    // 2018/02/05 in : story.do, getStoryList.do
+    @RequestMapping("/story.do") 
+    public String story() {
+    	return "story";
+    }
+    
+    @RequestMapping("/getStoryList.do")
+    public String getStoryList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	logger.info("getStoryList.do");
+    	
+    	HttpSession session = request.getSession();
+    	String id = (String)session.getAttribute("id");
+    	System.out.println("아이디 : " + id);
+    	id = AES.setDecrypting(id);
+    	System.out.println("복호화한 아이디 : " + id);
+    	List<StoryVO> list = service.getStoryAll(id);
+    
+    	return "table2";
+    }
+    
 }

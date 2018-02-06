@@ -190,5 +190,11 @@ public class BoardServiceImpl implements BoardService {
 		dao.insertReply(vo);
 	}
 
+	@Override
+	public List<StoryVO> getStoryAll(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getStoryAll(id);
+	}
+
 
 }

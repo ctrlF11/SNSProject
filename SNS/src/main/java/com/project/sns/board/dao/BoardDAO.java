@@ -50,4 +50,7 @@ public interface BoardDAO {
 	public ImageVO getImage(int img_seq) throws Exception;
 	public void insertReply(ReplyVO vo);
 	
+	// 2018/02/05 in
+	public List<StoryVO> getStoryAll(String id) throws Exception;
+	
 }

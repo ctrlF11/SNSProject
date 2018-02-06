@@ -3503,7 +3503,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 
 .input-group {
 	position: relative;
-	display: table;
+	display: inline-table;
 	border-collapse: separate
 }
 

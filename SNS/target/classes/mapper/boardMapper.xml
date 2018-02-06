@@ -115,6 +115,13 @@
 				id = #{value} order by story_regdate
 			</where>
 		</select>
+		<!-- 2018/02/05 in -->
+		<select id="getStoryAll" parameterType="string" resultType="StoryVO">
+			select * from Story
+			<where>
+				id = #{id}
+			</where>
+		</select>
 		
 		<insert id="inputStory" parameterType="com.project.sns.board.vo.StoryVO" useGeneratedKeys="true" keyProperty="story_seq">
 			insert into Story (story_title, id) values(#{story_title}, #{id})

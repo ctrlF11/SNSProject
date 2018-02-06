@@ -15,6 +15,7 @@ public class AES {
 	
 	private static String decryptedString;
 	private static String encryptedString;
+	private final static String strPassword = "World Taekwondo Federation";
 	
 	public static void setKey(String myKey) {
 		MessageDigest sha = null;
@@ -77,7 +78,6 @@ public class AES {
 	}
 	
 	public static String setCrypting(String strToEncrypt) {
-		final String strPassword = "World Taekwondo Federation";
 		AES.setKey(strPassword);
 		
 		AES.encrypt(strToEncrypt.trim());
@@ -85,12 +85,19 @@ public class AES {
 		System.out.println("String to Encrypt : " + strToEncrypt);
 		System.out.println("Encrypted : " + AES.getEncryptedString());
 		
-		final String strToDecrypt = AES.getEncryptedString();
-		AES.decrpyt(strToDecrypt.trim());
 		
+		
+		
+		return encryptedString;
+	}
+	
+	public static String setDecrypting(String strToDecrypt) {
+		AES.setKey(strPassword);
+		
+		AES.decrpyt(strToDecrypt.trim());
 		System.out.println("String to Decrypt : " + strToDecrypt);
 		System.out.println("Decrypted : " + AES.getDecryptedString());
 		
-		return encryptedString;
+		return decryptedString;
 	}
 }
