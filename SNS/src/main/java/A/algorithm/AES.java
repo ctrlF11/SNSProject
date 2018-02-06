@@ -79,14 +79,10 @@ public class AES {
 	
 	public static String setCrypting(String strToEncrypt) {
 		AES.setKey(strPassword);
-		
 		AES.encrypt(strToEncrypt.trim());
 		
 		System.out.println("String to Encrypt : " + strToEncrypt);
 		System.out.println("Encrypted : " + AES.getEncryptedString());
-		
-		
-		
 		
 		return encryptedString;
 	}
