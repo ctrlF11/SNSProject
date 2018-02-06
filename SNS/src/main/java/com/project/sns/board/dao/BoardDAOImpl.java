@@ -178,5 +178,11 @@ public class BoardDAOImpl implements BoardDAO {
 		// TODO Auto-generated method stub
 		sqlSession.insert(namespace+".insertReply", vo);
 	}
+
+	// 2018-02-05 in
+	@Override
+	public List<StoryVO> getStoryAll(String id) throws Exception {
+		return sqlSession.selectList(namespace+".getStoryAll", id);
+	}
 	
 }

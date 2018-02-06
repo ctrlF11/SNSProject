@@ -136,7 +136,7 @@ import A.algorithm.AES;
     @RequestMapping("/logout.do")
     public String logout(HttpSession session) {
     	session.invalidate();
-    	return "home1";
+    	return "redirect:mainHomeView.do";
     }
     
     

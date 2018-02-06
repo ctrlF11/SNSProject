@@ -45,11 +45,7 @@
 
 	var mmm = function() {
          $.ajax({
-            url : 'getBoardList.do',
-            data : {
-               index : index,
-               story_seq : <%=request.getAttribute("story_seq")%>
-            },
+            url : 'getStoryList.do',
             success : function(data) {
                $("#col-sm-6").html(data);
             }
@@ -70,26 +66,6 @@
 	
 	$(function() {
 		mmm();
-
-      $("#main").scroll(function() {
-         var sh = $("#main").scrollTop() + $("#main").height();
-         var dh = $("#main").prop("scrollHeight");
-
-         if (sh == dh) {
-            index += 4;
-            $.ajax({
-               url : 'getBoardList.do',
-               data : {
-                  index : index,
-                  story_seq : <%=request.getAttribute("story_seq")%>
-               },
-               success : function(data) {
-                  $("#col-sm-6").append(data);
-               }
-            })
-         }
-      })
-
 	});
 
 	$(document).on(function() {
@@ -110,55 +86,7 @@
                      다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
                      글씨가 겹쳐 보이는 문제가 발생함.
                   -->
-				<!-- <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-
-					<ul class="nav">
-						<li><a href="#" data-toggle="offcanvas"
-							class="visible-xs text-center"><i
-								class="glyphicon glyphicon-chevron-right"></i></a></li>
-					</ul>
-
-					<ul class="nav hidden-xs" id="lg-menu">
-						<li class="active"><a href="#featured"><i
-								class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
-						<li><a href="#stories"><i
-								class="glyphicon glyphicon-list"></i> Stories</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i>
-								Saved</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-refresh"></i>
-								Refresh</a></li>
-					</ul>
-					<ul class="list-unstyled hidden-xs" id="sidebar-footer">
-						<li><a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3>
-								<i class="glyphicon glyphicon-heart-empty"></i> Bootply</a></li>
-					</ul>
-
-					<ul class="nav visible-xs" id="xs-menu">
-						<li><a href="#featured" class="text-center"><i
-								class="glyphicon glyphicon-list-alt"></i></a></li>
-						<li><a href="#stories" class="text-center"><i
-								class="glyphicon glyphicon-list"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-paperclip"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-refresh"></i></a></li>
-					</ul>
-
-				</div> -->
-				<!--
-                  col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
-                  col-xs-12는 disable된 상태
-                  
-                  맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
-                  백그라운드의 회색 화면이 나타남.                  
-                -->
-				<div id="main" class="column col-sm-12 col-xs-12"
-					style="overflow-y: auto;">
-					<!-- 
-                  Topbar. 기존 부트스트랩보다 height를 늘림.
-                -->
-					<%@ include file="WEB-INF/views/include/topbar.jsp"%>
-					<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
+				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
 
 					<ul class="nav">
 						<li><a href="#" data-toggle="offcanvas"
@@ -193,7 +121,20 @@
 					</ul>
 
 				</div>
-					<%@ include file="WEB-INF/views/include/half_map.jsp"%>
+				<!--
+                  col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
+                  col-xs-12는 disable된 상태
+                  
+                  맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
+                  백그라운드의 회색 화면이 나타남.                  
+                -->
+				<div id="main" class="column col-sm-10 col-xs-11"
+					style="overflow-y: auto;">
+					<!-- 
+                  Topbar. 기존 부트스트랩보다 height를 늘림.
+                -->
+					<%@ include file="include/topbar.jsp"%>
+					<%@ include file="include/half_map.jsp"%>
 				</div>
 			</div>
 		</div>
