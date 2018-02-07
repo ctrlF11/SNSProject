@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
   <title>SB Admin - Start Bootstrap Template</title>
   <!-- Bootstrap core CSS-->
   <link href="resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -40,7 +35,7 @@
 			<input type="submit" class="btn btn-primary btn-block" value="Login">
         </form>
         <div class="text-center">
-          <a class="d-block small mt-3" href="register.do">회원 가입</a>
+          <a class="d-block small mt-3" href="registerForm.do">회원 가입</a>
           <a class="d-block small" href="forgot-password.do">비밀번호 찾기</a>
         </div>
       </div>
