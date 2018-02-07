@@ -45,7 +45,6 @@ div.desc {
 		width: 100%;
 	}
 }
-
 .clearfix:after {
 	content: "";
 	clear: both;
