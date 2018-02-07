@@ -185,10 +185,31 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getImage(img_seq);
 	}
 
-	@Override
-	public void insertReply(ReplyVO vo) {
-		dao.insertReply(vo);
-	}
+	
 
+    
+    // ´ñ±Û °³¼ö
+    public int replyCount() throws Exception{
+    	return dao.replyCount();
+    };
+    // ´ñ±Û ¸ñ·Ï
+    public List<ReplyVO> replyList(ReplyVO reply) throws Exception{
+    	return dao.replyList(reply);
+    };
+ 
+    // ´ñ±Û ÀÛ¼º
+    public int replyInsert(ReplyVO reply) throws Exception{
+    	return dao.replyInsert(reply);
+    };
+    
+    // ´ñ±Û ¼öÁ¤
+    public int replyUpdate(ReplyVO reply) throws Exception{
+    	return dao.replyUpdate(reply);
+    };
+ 
+    // ´ñ±Û »èÁ¦
+    public int replyDelete(Integer board_seq) throws Exception{
+    	return dao.replyDelete(board_seq);
+    };
 
 }

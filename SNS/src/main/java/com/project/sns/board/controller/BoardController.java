@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -16,10 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
@@ -60,7 +64,7 @@ public class BoardController {
         	return "table";
     }
     
-    @RequestMapping("/getMainBoardList.do")  // ����ȭ�� �񵿱� �۾�
+    @RequestMapping("/getMainBoardList.do")  // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
     public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
         logger.info("getMainBoardList");
         System.out.println("index : " + index);
@@ -70,18 +74,18 @@ public class BoardController {
         return "mainTable";
     }
        
-    @RequestMapping("insertReply.do")
-    String insertReply(ReplyVO vo,Model model){ 
-    	service.insertReply(vo);
-    	model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
-       return "replylist";
-    }
+//    @RequestMapping("insertReply.do")
+//    String insertReply(ReplyVO vo,Model model){ 
+//    	service.insertReply(vo);
+//    	model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
+//       return "replylist";
+//    }
     
     @RequestMapping("/homeview.do")
     public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req){
        req.setAttribute("story_seq", story_seq);
        return "home1";
-    }//占쌉시깍옙
+    }//�뜝�뙃�떆源띿삕
     
     @RequestMapping("/modifyBoard")
     public String writeForm(Model model) {
@@ -106,7 +110,7 @@ public class BoardController {
     public void inputBoard(BoardVO vo) throws Exception {
     	System.out.println("BoardVO.getFiles() : " + vo.getFiles());
     	System.out.println("BoardVO.getTitle() : " + vo.getTitle());
-    	//�Խñ� ����Ȯ��
+    	//占쌉시깍옙 占쏙옙占쏙옙확占쏙옙
     	int i = service.getBoardSeq(vo);
     	int k = 100;
     	if(i == 0) {
@@ -204,7 +208,52 @@ public class BoardController {
     	response.setContentType("text/html;charset=UTF-8");
     	
     	
-    	
     	return "home1";
     }
+    
+    
+    
+    @RequestMapping("/list.do") //댓글 리스트
+    @ResponseBody
+    private List<ReplyVO> replyList(Model model,ReplyVO vo) throws Exception{
+    
+ 
+        return service.replyList(vo);
+        
+    }
+    
+    @RequestMapping("/insert.do") //댓글 작성 
+    @ResponseBody
+    private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent) throws Exception{
+        
+    	
+        ReplyVO reply = new ReplyVO();
+        reply.setBoard_seq(board_seq);
+        reply.setRcontent(rcontent);
+        reply.setStory_seq(story_seq);;
+        System.out.println("insert.do : " + rcontent + " : " + board_seq);
+        //로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
+        reply.setRwriter("test");  
+        return service.replyInsert(reply);
+    }
+    
+    @RequestMapping("/update.do") //댓글 수정  
+    @ResponseBody
+    private int mCommentServiceUpdateProc(@RequestParam int reply_seq, @RequestParam String rcontent) throws Exception{
+        
+    	ReplyVO reply = new ReplyVO();
+    	reply.setReply_seq(reply_seq);
+    	reply.setRcontent(rcontent);;
+        
+        return service.replyUpdate(reply);
+    }
+    
+    @RequestMapping("/delete.do/{reply_seq}") //댓글 삭제  
+    @ResponseBody
+    private int mCommentServiceDelete(@PathVariable int reply_seq) throws Exception{
+        
+        return service.replyDelete(reply_seq);
+    }
+
+
 }

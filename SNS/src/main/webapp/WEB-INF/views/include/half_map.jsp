@@ -17,15 +17,6 @@
 									<div class="panel panel-default"></div>
 									<div class="panel panel-default">
 										<div id="map" style="width: 40%; height: 100%;"></div>
-										<script type="text/javascript"
-											src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
-										<script>
-										var mapContainer = document.getElementById('map'), // 지도의 중심좌표
-										    mapOption = { 
-										        center: new daum.maps.LatLng(33.451475, 126.570528), // 지도의 중심좌표
-										        level: 15 // 지도의 확대 레벨
-										    };
-										var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 										</script>
 									</div>
 								</div>

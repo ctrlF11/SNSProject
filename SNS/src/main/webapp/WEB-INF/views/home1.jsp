@@ -21,7 +21,7 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(
-					function() {
+					function(){
 						$('[data-toggle=offcanvas]')
 								.click(
 										function() {
@@ -51,7 +51,7 @@
                story_seq : <%=request.getAttribute("story_seq")%>
             },
             success : function(data) {
-               $("#col-sm-6").html(data);
+               $("#col-sm-6").append(data);
             }
          })
       
@@ -68,7 +68,7 @@
 		}
 	}
 	
-	$(function() {
+	$(function(){
 		mmm();
 
       $("#main").scroll(function() {
@@ -92,19 +92,81 @@
 
 	});
 
-	$(document).on(function() {
+$(document).on(function() {
 		$("#reply").hide();
-	})
+		
+		 function commentDelete(reply_seq)
+		 {	
+			alert("삭제 버튼 눌림");
 
-
+			 $.ajax({
+	  	 	  	alert("삭제 비동기 진입");
+	   		    url : 'delete.do/'+reply_seq,
+	   		    type : 'post',
+	   		    success : function(data)
+	     	   {
+	          	  if(data == 1) commentList(board_seq); //댓글 삭제후 목록 출력 
+	     	   }
+			})
+		}
+})	
+		
+	
+	
+	
+function r_button(){ //댓글 등록 버튼 클릭시 
+		    var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴
+		    var board_seq = $('[name=board_seq]').val();
+		    var rcontent = $('[name=content]').val();
+		    var story_seq = $('[name=story_seq]').val();
+		    $.ajax({
+		        url : 'insert.do',
+		        type : 'get',
+		        data : {
+		        	board_seq : $('[name=board_seq]').val(),
+		        	rcontent : $('[name=content]').val(),
+		        	story_seq : $('[name=story_seq]').val()
+		        },
+		        success : function(data){
+		            if(data == 1) {
+		            	alert("성공");
+		            	alert($('[name=board_seq]').val());
+		            	 $.ajax({
+			     		        url : 'list.do',
+			     		        type : 'get',
+			     		        data : {
+			     		        	'board_seq': $('[name=board_seq]').val(),
+			     		        	'story_seq' : $('[name=story_seq]').val()	
+			     		        },
+			     		        success : function(data){
+			     		        	alert("안쪽");
+			     		            var a =''; 
+			     		            $.each(data, function(key, value){ 
+			     		                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+			     		                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
+			     		                a += '<button onclick="commentUpdate('+value.reply_seq+',\''+value.rcontent+'\');">수정</button>';
+			     		                a += '<button onclick="commentDelete('+value.reply_seq+');">삭제 <button></div>';
+			     		                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
+			     		                a += '</div></div>';
+			     		            });
+			     		            
+			     		            $("[name=commentList]").html(a);
+			     		        }
+			     		    });
+		                $('[name=content]').val('');
+		            }
+		        } //Insert 함수호출(아래)
+		    });
+		    
+		    alert("성공" + board_seq);
+}
+	
 </script>
 </head>
 <body>
 	<div class="wrapper">
 		<div class="box">
 			<div class="row row-offcanvas row-offcanvas-left">
-
-
 				<!--
                      원본 왼쪽에 있던 사이드바.
                      다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
@@ -214,3 +276,4 @@
 	</script>
 </body>
 </html>
+

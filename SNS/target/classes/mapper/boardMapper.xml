@@ -3,10 +3,40 @@
 
 
 <mapper namespace="com.project.sns.mapper.boardMapper">
+<!--댓글  -->
+	<select id="replyCount" resultType="int">
+		select TABLE_ROWS from information_schema.tables where table_name = 'Reply';
+	</select>
+    <select id="replyList" parameterType="ReplyVO" resultType="ReplyVO">
+        SELECT
+            *
+        FROM Reply
+        <where>
+        	board_seq = #{board_seq} and story_seq = #{story_seq}
+        </where>
+    </select>
+    
+    <insert id="insertReply" parameterType="ReplyVO">
+        INSERT INTO
+        Reply (story_seq, board_seq, rcontent, rwriter)
+        VALUES(#{story_seq},#{board_seq},#{rcontent},#{rwriter}) 
+    </insert>
+    <update id="delteUpdate" parameterType="ReplyVO">
+        UPDATE Reply
+            SET
+            rcontent = #{rcontent}
+        WHERE board_seq = #{board_seq}
+    </update>
+    
+    <delete id="replyDelete" parameterType="int">
+        DELETE FROM Reply WHERE board_seq = #{board_seq}
+    </delete>
+<!--댓글  -->
 		 <select id="getBoardList" parameterType="map" resultType="BoardVO" >
 			select * 
-			from Board
-			where story_seq = #{story_seq}
+			from Board b, TourMap t
+			where b.story_seq = #{story_seq}
+			and   b.contentId = t.contentId
 			LIMIT #{index},4;
 			
 		</select>
@@ -56,11 +86,11 @@
      order by reply_seq  
    </select>	
 		
-    <insert id="insertReply" parameterType="ReplyVO">
+<!--     <insert id="insertReply" parameterType="ReplyVO">
       insert into Reply (board_seq, seq, writer, content) values
       ( #{contentId},(select * from (select max(Reply_seq)+1 from tbl_board),
       #{writer},#{content}  )
-   </insert>
+   </insert> -->
 		
 		
 	<insert id="inputBoard" parameterType="BoardVO">

@@ -81,7 +81,8 @@ public class BoardDAOImpl implements BoardDAO {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+ 
 	@Override
 	public List<String> getAttach(Integer bno) throws Exception {
 
@@ -173,10 +174,29 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.selectOne(namespace+".getImage",img_seq);
 	}
 
-	@Override
-	public void insertReply(ReplyVO vo) {
-		// TODO Auto-generated method stub
-		sqlSession.insert(namespace+".insertReply", vo);
-	}
 	
+	    // ´ñ±Û °³¼ö
+	    public int replyCount() throws Exception{
+	    	return sqlSession.selectOne(namespace+".replyCount");
+	    };
+	    // ´ñ±Û ¸ñ·Ï
+	    public List<ReplyVO> replyList(ReplyVO reply) throws Exception{
+	    	return sqlSession.selectList(namespace+".replyList",reply);
+	    };
+	 
+	    // ´ñ±Û ÀÛ¼º
+	    public int replyInsert(ReplyVO reply) throws Exception{
+	    	return sqlSession.insert(namespace+".insertReply", reply);
+	    };
+	    
+	    // ´ñ±Û ¼öÁ¤
+	    public int replyUpdate(ReplyVO reply) throws Exception{
+	    	return sqlSession.update(namespace+".replyUpdate", reply);
+	    };
+	 
+	    // ´ñ±Û »èÁ¦
+	    public int replyDelete(Integer board_seq) throws Exception{
+	    	return sqlSession.delete(namespace+".replyDelete", board_seq);
+	    };
+
 }
