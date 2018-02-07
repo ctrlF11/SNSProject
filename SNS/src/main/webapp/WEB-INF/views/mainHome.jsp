@@ -18,11 +18,9 @@
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/original.css">
 <script src="resources/facebook/assets/js/check.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-	<script type="text/javascript">
-	$(document)
-			.ready(
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(
 					function() {
 						$('[data-toggle=offcanvas]')
 								.click(
@@ -45,7 +43,7 @@
 										});
 					});
 
-	var mmm = function() {
+var scollB = function() {
          $.ajax({
             url : 'getMainBoardList.do',
             data : {
@@ -57,10 +55,10 @@
             }
          })
       
-   }
-   var index = 0;
-   $(function() {
-      mmm();
+}
+var index = 0;
+$(function() {
+	  scollB();
       $(document).on('click', '[name = "comment"]', function() {
          $(".reply").toggle();
       })
@@ -82,14 +80,12 @@
             })
          }
       })
+});
 
-   });
-
-   $(document).on(function() {
+$(document).on(function() {
       $("#reply").hide();
-   })
-   
-   function reply_check(sessionID, num) {
+})
+function reply_check(sessionID, num) {
 	   	alert(sessionID);
 	   	alert(num);
 		if(sessionID == null) {

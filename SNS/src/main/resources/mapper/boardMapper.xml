@@ -21,18 +21,31 @@
         Reply (story_seq, board_seq, rcontent, rwriter)
         VALUES(#{story_seq},#{board_seq},#{rcontent},#{rwriter}) 
     </insert>
-    <update id="delteUpdate" parameterType="ReplyVO">
+    <update id="replyUpdate" parameterType="ReplyVO">
         UPDATE Reply
             SET
             rcontent = #{rcontent}
         WHERE board_seq = #{board_seq}
+        AND   story_seq = #{story_seq}
+        AND   reply_seq = #{reply_seq}
     </update>
     
-    <delete id="replyDelete" parameterType="int">
-        DELETE FROM Reply WHERE board_seq = #{board_seq}
+    <delete id="replyDelete" parameterType="ReplyVO">
+        DELETE FROM Reply 
+        WHERE board_seq = #{board_seq}
+        AND   story_seq = #{story_seq}
+        AND   reply_seq = #{reply_seq}
     </delete>
 <!--댓글  -->
-		 <select id="getBoardList" parameterType="map" resultType="BoardVO" >
+<!-- 		 <select id="getBoardList" parameterType="map" resultType="BoardVO" >
+			select * 
+			from Board b, TourMap t
+			where b.story_seq = #{story_seq}
+			and   b.contentId = t.contentId
+			LIMIT #{index},4;
+			
+		</select> -->
+		<select id="getBoardList" parameterType="map" resultType="BoardVO" >
 			select * 
 			from Board b, TourMap t
 			where b.story_seq = #{story_seq}
@@ -40,7 +53,6 @@
 			LIMIT #{index},4;
 			
 		</select>
-		
 		<select id="getMainBoardList" parameterType="int" resultType="BoardVO" >
 			    select p.* 
 			    from

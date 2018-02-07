@@ -70,7 +70,6 @@ public class BoardController {
         System.out.println("index : " + index);
         List<BoardVO> mainTable = service.getMainBoardList(index);
         req.setAttribute("mainTable", mainTable);
-        
         return "mainTable";
     }
        
@@ -239,20 +238,16 @@ public class BoardController {
     
     @RequestMapping("/update.do") //댓글 수정  
     @ResponseBody
-    private int mCommentServiceUpdateProc(@RequestParam int reply_seq, @RequestParam String rcontent) throws Exception{
-        
-    	ReplyVO reply = new ReplyVO();
-    	reply.setReply_seq(reply_seq);
-    	reply.setRcontent(rcontent);;
+    private int mCommentServiceUpdateProc(ReplyVO reply) throws Exception{
         
         return service.replyUpdate(reply);
     }
     
-    @RequestMapping("/delete.do/{reply_seq}") //댓글 삭제  
+    @RequestMapping("/delete.do") //댓글 삭제  
     @ResponseBody
-    private int mCommentServiceDelete(@PathVariable int reply_seq) throws Exception{
+    private int mCommentServiceDelete(ReplyVO reply) throws Exception{
         
-        return service.replyDelete(reply_seq);
+        return service.replyDelete(reply);
     }
 
 

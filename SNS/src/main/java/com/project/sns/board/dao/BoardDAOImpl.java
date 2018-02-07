@@ -195,8 +195,8 @@ public class BoardDAOImpl implements BoardDAO {
 	    };
 	 
 	    // ¥Ò±€ ªË¡¶
-	    public int replyDelete(Integer board_seq) throws Exception{
-	    	return sqlSession.delete(namespace+".replyDelete", board_seq);
+	    public int replyDelete(ReplyVO reply) throws Exception{
+	    	return sqlSession.delete(namespace+".replyDelete", reply);
 	    };
 
 }

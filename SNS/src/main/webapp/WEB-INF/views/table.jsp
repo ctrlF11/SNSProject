@@ -203,30 +203,31 @@ function makeOutListener(infowindow) {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-  	 $.ajax({
-	        url : 'list.do',
-	        type : 'get',
-	        data : {
-		        	'board_seq': $('[name=board_seq]').val(),
- 		        	'story_seq' : $('[name=story_seq]').val()	
-	        },
-	        success : function(data){
-	        	alert("성공123");
-	            var a =''; 
-	            $.each(data, function(key, value){ 
-	                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-	                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
-	                a += '<button onclick="commentUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>';
-	                a += '<button onclick="commentDelete('+value.reply_seq+');"> 삭제 </button> </div>';
-	                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
-	                a += '</div></div>';
-	            });
-	            
-	            $("[name=commentList]").html(a);
-	        }
-	    });
-  	//댓글 삭제 
+ $(document).ready(function(){
+	replyList();
 })
-
+function replyList(){
+	  	 $.ajax({
+		        url : 'list.do',
+		        type : 'get',
+		        data : {
+			        	'board_seq': $('[name=board_seq]').val(),
+	 		        	'story_seq' : $('[name=story_seq]').val()	
+		        },
+		        success : function(data){
+		            var a =''; 
+		            $.each(data, function(key, value){ 
+		                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+		                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
+		                a += '<button onclick="replyUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>';
+		                a += '<button onclick="replyDelete('+value.reply_seq+');"> 삭제 </button> </div>';
+		                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
+		                a += '</div></div>';
+		            });
+		            
+		            $("[name=commentList]").html(a);
+		        }
+		    });
+	  	//댓글 삭제 
+} 
 </script>

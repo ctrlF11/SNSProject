@@ -62,7 +62,7 @@ public interface BoardDAO {
     public int replyUpdate(ReplyVO reply) throws Exception;
  
     // 댓글 삭제
-    public int replyDelete(Integer board_seq) throws Exception;
+    public int replyDelete(ReplyVO reply) throws Exception;
 
 
 }

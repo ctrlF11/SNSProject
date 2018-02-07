@@ -208,8 +208,8 @@ public class BoardServiceImpl implements BoardService {
     };
  
     // ¥Ò±€ ªË¡¶
-    public int replyDelete(Integer board_seq) throws Exception{
-    	return dao.replyDelete(board_seq);
+    public int replyDelete(ReplyVO reply) throws Exception{
+    	return dao.replyDelete(reply);
     };
 
 }

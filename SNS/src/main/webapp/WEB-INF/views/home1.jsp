@@ -20,8 +20,7 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(
-					function(){
+$(document).ready(function(){
 						$('[data-toggle=offcanvas]')
 								.click(
 										function() {
@@ -41,126 +40,153 @@
 													'hidden-xs');
 											$('#btnShow').toggle();
 										});
-					});
+						
+})
 
-	var mmm = function() {
-         $.ajax({
-            url : 'getBoardList.do',
-            data : {
-               index : index,
-               story_seq : <%=request.getAttribute("story_seq")%>
-            },
-            success : function(data) {
-               $("#col-sm-6").append(data);
-            }
-         })
-      
-   }
-	
-	var index = 0;
-	
-	function togglethis(num) {
-		var replyDiv = document.getElementById("replyDiv"+num);
-		if(replyDiv.style.display == "none") {
+var scollB = function(){
+		$.ajax({
+			url : 'getBoardList.do',
+			data : {
+				index : index,
+				story_seq :
+<%=request.getAttribute("story_seq")%>
+	},
+			success : function(data) {
+				$("#col-sm-6").append(data);
+			}
+		})
+
+}
+
+var index = 0;
+function togglethis(num) {
+		var replyDiv = document.getElementById("replyDiv" + num);
+		if (replyDiv.style.display == "none") {
 			replyDiv.style.display = "block";
 		} else {
 			replyDiv.style.display = "none";
 		}
-	}
-	
-	$(function(){
-		mmm();
+}
 
-      $("#main").scroll(function() {
-         var sh = $("#main").scrollTop() + $("#main").height();
-         var dh = $("#main").prop("scrollHeight");
+$(function(){
+	 	scollB();
+		$("#main").scroll(function() {
+			var sh = $("#main").scrollTop() + $("#main").height();
+			var dh = $("#main").prop("scrollHeight");
 
-         if (sh == dh) {
-            index += 4;
-            $.ajax({
-               url : 'getBoardList.do',
-               data : {
-                  index : index,
-                  story_seq : <%=request.getAttribute("story_seq")%>
-               },
-               success : function(data) {
-                  $("#col-sm-6").append(data);
-               }
-            })
-         }
-      })
+			if (sh == dh) {
+				index += 4;
+				$.ajax({
+					url : 'getBoardList.do',
+					data : {
+						index : index,
+						story_seq :
+<%=request.getAttribute("story_seq")%>
+	},
+					success : function(data) {
+						$("#col-sm-6").append(data);
+					}
+				})
+			}
+		})
 
-	});
+}); //게시판 스크롤 비동기
 
-$(document).on(function() {
-		$("#reply").hide();
-		
-		 function commentDelete(reply_seq)
-		 {	
-			alert("삭제 버튼 눌림");
-
-			 $.ajax({
-	  	 	  	alert("삭제 비동기 진입");
-	   		    url : 'delete.do/'+reply_seq,
-	   		    type : 'post',
-	   		    success : function(data)
-	     	   {
-	          	  if(data == 1) commentList(board_seq); //댓글 삭제후 목록 출력 
-	     	   }
-			})
-		}
-})	
-		
-	
-	
 	
 function r_button(){ //댓글 등록 버튼 클릭시 
-		    var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴
-		    var board_seq = $('[name=board_seq]').val();
-		    var rcontent = $('[name=content]').val();
-		    var story_seq = $('[name=story_seq]').val();
-		    $.ajax({
-		        url : 'insert.do',
-		        type : 'get',
-		        data : {
-		        	board_seq : $('[name=board_seq]').val(),
-		        	rcontent : $('[name=content]').val(),
-		        	story_seq : $('[name=story_seq]').val()
-		        },
-		        success : function(data){
-		            if(data == 1) {
-		            	alert("성공");
-		            	alert($('[name=board_seq]').val());
-		            	 $.ajax({
-			     		        url : 'list.do',
-			     		        type : 'get',
-			     		        data : {
-			     		        	'board_seq': $('[name=board_seq]').val(),
-			     		        	'story_seq' : $('[name=story_seq]').val()	
-			     		        },
-			     		        success : function(data){
-			     		        	alert("안쪽");
-			     		            var a =''; 
-			     		            $.each(data, function(key, value){ 
-			     		                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-			     		                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
-			     		                a += '<button onclick="commentUpdate('+value.reply_seq+',\''+value.rcontent+'\');">수정</button>';
-			     		                a += '<button onclick="commentDelete('+value.reply_seq+');">삭제 <button></div>';
-			     		                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
-			     		                a += '</div></div>';
-			     		            });
-			     		            
-			     		            $("[name=commentList]").html(a);
-			     		        }
-			     		    });
-		                $('[name=content]').val('');
-		            }
-		        } //Insert 함수호출(아래)
-		    });
-		    
-		    alert("성공" + board_seq);
+var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴
+		$.ajax({
+					url : 'insert.do',
+					type : 'get',
+					data : {
+						board_seq : $('[name=board_seq]').val(),
+						rcontent : $('[name=content]').val(),
+						story_seq : $('[name=story_seq]').val()
+					},
+					success : function(data) {
+						if (data == 1) {
+							replyList();
+							$('[name=content]').val('');
+						}
+					} //Insert 함수호출(아래)
+				});
+
 }
+function replyList(){//댓글 비동기 불러올 때 
+ 	 $.ajax({
+	        url : 'list.do',
+	        type : 'get',
+	        data : {
+		        	'board_seq': $('[name=board_seq]').val(),
+		        	'story_seq' : $('[name=story_seq]').val()	
+	        },
+	        success : function(data){
+	            var a =''; 
+	            $.each(data, function(key, value){ 
+	                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+	                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
+	                a += '<button onclick="replyUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>';
+	                a += '<button onclick="replyDelete('+value.reply_seq+');"> 삭제 </button> </div>';
+	                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
+	                a += '</div></div>';
+	            });
+	            
+	            $("[name=commentList]").html(a);
+	        }
+	    });
+}
+
+//댓글 수정 - 댓글 내용 출력을 input 폼으로 변경 
+function replyUpdate(reply_seq, rcontent) {
+	var a = '';
+
+	a += '<div class="input-group">';
+	a += '<input type="text" class="form-control" name="content_'+reply_seq+'" value="'+rcontent+'"/>';
+	a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="replyUpdateProc('
+			+ reply_seq + ');">수정</button> </span>';
+	a += '</div>';
+
+	$('.commentContent' + reply_seq).html(a);
+
+}
+
+//댓글 수정
+function replyUpdateProc(reply_seq) {
+	var updateContent = $('[name=content_' + reply_seq + ']').val();
 	
+	$.ajax({
+		url : 'update.do',
+		type : 'post',
+		data : {
+			'rcontent' : $('[name=content_' + reply_seq + ']').val(),
+			'reply_seq' : reply_seq,
+			'board_seq' : $('[name=board_seq]').val(),
+			'story_seq' : $('[name=story_seq]').val()
+		},
+		success : function(data) {
+			
+			if (data == 1){
+				alert("수정완료");
+				replyList();//댓글 수정후 목록 출력 
+			}	
+		}
+	});
+}
+//댓글 삭제 
+function replyDelete(reply_seq){
+    $.ajax({
+        url : 'delete.do',
+        type : 'post',
+		data : {
+			'reply_seq' : reply_seq,
+			'board_seq' : $('[name=board_seq]').val(),
+			'story_seq' : $('[name=story_seq]').val()
+		}, 
+        success : function(data){
+            if(data == 1) replyList(); //댓글 삭제후 목록 출력 
+        }
+    });
+}
 </script>
 </head>
 <body>
