@@ -1,38 +1,30 @@
 package com.project.sns.board.controller;
  
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
- 
-import javax.inject.Inject;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
+import com.project.sns.board.vo.TIME_MAXIMUM;
 import com.project.sns.user.service.UserService;
-import com.project.sns.user.vo.UserVO;
  
 /**
  * Handles requests for the application home page.
@@ -48,9 +40,10 @@ public class BoardController {
     /**
      * Simply selects the home view to render by returning its name.
      */
+  
     
     @RequestMapping("/getBoardList.do")
-    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req) throws Exception{
+    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req,HttpSession se) throws Exception{
         logger.info("getBoardList");
         System.out.println("index : " + index +" story-seq : " + stroy_seq);
         HashMap map = new HashMap();
@@ -61,14 +54,22 @@ public class BoardController {
         /*if(index == 0)
           return "home1";
         else*/ 
+        se.setAttribute("user1", user);
         	return "table";
     }
     
     @RequestMapping("/getMainBoardList.do")  // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
     public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+    	TIME_MAXIMUM time = new  TIME_MAXIMUM();
         logger.info("getMainBoardList");
         System.out.println("index : " + index);
         List<BoardVO> mainTable = service.getMainBoardList(index);
+        ArrayList<String> mainTime = new <String>ArrayList();
+        for(int i = 0; i < mainTable.size(); i++)
+        {
+        	mainTime.add(time.calculateTime(mainTable.get(i).getRegdate()));
+        }
+        req.setAttribute("mainTime", mainTime);
         req.setAttribute("mainTable", mainTable);
         return "mainTable";
     }

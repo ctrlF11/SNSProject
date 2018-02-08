@@ -63,7 +63,7 @@
 			    ) p
 			    group by story_seq
 			    order by heart desc
-			 	LIMIT #{index},5;
+			 	LIMIT #{index},8;
 		</select>
 		
 		<select id="getBoardCount" parameterType="int">

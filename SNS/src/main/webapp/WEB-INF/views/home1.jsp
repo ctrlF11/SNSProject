@@ -1,12 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+   pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="com.project.sns.board.vo.BoardVO"%>
+<%@ page import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
-
+<style>
+*{ margin: 0; padding: 0;}
+body { width: 500px; margin: 30px auto;}
+.tit { padding: 10px; font-weight: bold;}
+.accodian {list-style: none }
+.accodian--box { margin-bottom: 5px;}
+.accodian--box h3 { background: #333; padding: 5px; color: #fff;cursor: pointer}
+.accodian--box div { background: #ccc; padding: 5px; display: none; }
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta name="viewport"
@@ -17,8 +27,8 @@
 	href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
 <script src="resources/facebook/assets/js/check.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="js/home1.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 						$('[data-toggle=offcanvas]')
@@ -42,7 +52,6 @@ $(document).ready(function(){
 										});
 						
 })
-
 var scollB = function(){
 		$.ajax({
 			url : 'getBoardList.do',
@@ -91,8 +100,6 @@ $(function(){
 		})
 
 }); //게시판 스크롤 비동기
-
-	
 function r_button(){ //댓글 등록 버튼 클릭시 
 var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴
 		$.ajax({
@@ -135,7 +142,6 @@ function replyList(){//댓글 비동기 불러올 때
 	        }
 	    });
 }
-
 //댓글 수정 - 댓글 내용 출력을 input 폼으로 변경 
 function replyUpdate(reply_seq, rcontent) {
 	var a = '';
@@ -147,9 +153,7 @@ function replyUpdate(reply_seq, rcontent) {
 	a += '</div>';
 
 	$('.commentContent' + reply_seq).html(a);
-
 }
-
 //댓글 수정
 function replyUpdateProc(reply_seq) {
 	var updateContent = $('[name=content_' + reply_seq + ']').val();
@@ -188,6 +192,7 @@ function replyDelete(reply_seq){
     });
 }
 </script>
+
 </head>
 <body>
 	<div class="wrapper">
@@ -198,41 +203,22 @@ function replyDelete(reply_seq){
                      다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
                      글씨가 겹쳐 보이는 문제가 발생함.
                   -->
+           
 				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
+		
+			
+		    <%
+ 		    List<BoardVO> list = (List<BoardVO>)session.getAttribute("user1");
+			for (int i = 0; i < list.size(); i++) { 
+            %>
 
-					<ul class="nav">
-						<li><a href="#" data-toggle="offcanvas"
-							class="visible-xs text-center"><i
-								class="glyphicon glyphicon-chevron-right"></i></a></li>
-					</ul>
+						
 
-					<ul class="nav hidden-xs" id="lg-menu">
-						<li class="active"><a href="#featured"><i
-								class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
-						<li><a href="#stories"><i
-								class="glyphicon glyphicon-list"></i> Stories</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i>
-								Saved</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-refresh"></i>
-								Refresh</a></li>
-					</ul>
-					<ul class="list-unstyled hidden-xs" id="sidebar-footer">
-						<li><a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3>
-								<i class="glyphicon glyphicon-heart-empty"></i> Bootply</a></li>
-					</ul>
-
-					<ul class="nav visible-xs" id="xs-menu">
-						<li><a href="#featured" class="text-center"><i
-								class="glyphicon glyphicon-list-alt"></i></a></li>
-						<li><a href="#stories" class="text-center"><i
-								class="glyphicon glyphicon-list"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-paperclip"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-refresh"></i></a></li>
-					</ul>
-
-				</div>
+							 <%=list.get(i).getMtitle()%><br/>
+ 						
+			<%}%>			
+					 
+				</div> 
 				<!--
                   col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
                   col-xs-12는 disable된 상태
@@ -299,7 +285,40 @@ function replyDelete(reply_seq){
 			}
 			return false;
 		}
+		
+
+		var accModule = function(){
+			  // private member (비공개 멤버, 고유멤버)
+			  var acc_wrap = $('.accodian'),
+			    question = acc_wrap.find('h3'),
+			    answer = question.next('div');
+
+			  // privilieged member(공용 인터페이스)
+			  return {
+			    runInit: function() {
+			      this.accHandler();
+			    },
+			    accHandler: function() {
+			      var accodian = {
+			        targetClick: function(e) {
+			          var eTarget = $(e.currentTarget);
+			          if (eTarget.next().is(':visible')) {
+			            eTarget.next().slideUp();
+			            return;
+			          }
+			          answer.slideUp();
+			          eTarget.next().slideDown();
+			        }
+			      };
+			      question.on('click', accodian.targetClick);
+			    }
+			  }
+			}();
+
+			// 실행
+			accModule.runInit();
 	</script>
 </body>
 </html>
+
 
