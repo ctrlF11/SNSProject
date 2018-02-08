@@ -13,5 +13,5 @@ public interface AddrService {
 	public List<AddrVO> getAddress2(String inside) throws Exception;
     public AddrVO getAddress3() throws Exception;
     
-	public List<AddrVO> getScope() throws Exception;    
+	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;    
 }

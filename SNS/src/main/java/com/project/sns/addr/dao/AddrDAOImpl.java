@@ -51,9 +51,9 @@ public class AddrDAOImpl implements AddrDAO{
 	 }
 	 
 	 @Override
-	 public List<AddrVO> getScope() throws Exception {
+	 public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
 	      // TODO Auto-generated method stub
-	      return sqlSession.selectList(namespace+".getScope");   
+	      return sqlSession.selectList(namespace+".getAddrWithCode", sigungucode);   
 	 }
 	
 }

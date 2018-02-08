@@ -287,7 +287,7 @@ public class AddrController {
 	
 	//Dijkstra - 코스추천 길찾기
 	@RequestMapping("/getPath.do")
-	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req) throws Exception {
+	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req, @RequestParam String sigungucode) throws Exception {
 /*		   String[] temp = new String[3];
 	       String[] wfKor = new String[3];
 	       String[] hour1 = new String[3];
@@ -355,7 +355,7 @@ public class AddrController {
 	       }*/
 		
 		
-		List<AddrVO> list = service.getAddress();
+		List<AddrVO> list = service.getAddrWithCode(sigungucode);
 //		List<AddrVO> getScope = service.getScope();
 	      
 		double distanceMeter = 0;

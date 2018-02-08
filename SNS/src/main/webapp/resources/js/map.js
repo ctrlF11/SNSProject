@@ -20,37 +20,42 @@
                                        'hidden-xs');
                                  $('#btnShow').toggle();
                               });
-               });
-
-
+               			});
 
 
 //행정구역 구분
-
 $.getJSON("resources/json/seoul_gson.geojson", function(geojson) {
-	var html = "";
 
 	var data = geojson.features;
-
-	var coordinates = [];
-	var name = '';
+	var coordinates = [];	//좌표 저장할 배열
+	var name = '';			//지역 구 이름
+	var gucode ='';			//행정구역 코드번호
 	$.each(data, function(index, val) {
 
 		coordinates = val.geometry.coordinates;
 		name = val.properties.SIG_KOR_NM;
-		displayArea(coordinates, name);
-
+		gucode = val.properties.orig_ogc_fid;
+		
+		displayArea(coordinates, name, gucode);
+//		console.log(coordinates);
 	})
 })
-
+var sigungucode ='';			//function recommend()의 AJAX로 지역구 코드를 보내기 위한 변수
+var polygons=[];				//function 안 쪽에 지역변수로 넣으니깐 폴리곤 하나 생성할 때마다 배열이 비어서 클릭했을 때 전체를 못 없애줌.  그래서 전역변수로 만듦.
 	//행정구역 폴리곤
-function displayArea(coordinates, name) {
+function displayArea(coordinates, name, gucode) {
 
-	var path = [];
-	$.each(coordinates[0], function(index, coordinate) {
-		path.push(new daum.maps.LatLng(coordinate[1], coordinate[0]));
+	var path = [];			//폴리곤 그려줄 path
+	var points = [];		//중심좌표 구하기 위한 지역구 좌표들
+	
+	$.each(coordinates[0], function(index, coordinate) {		//console 보면 [0]번째에 배열이 주로 저장이 됨.  그래서 [0]번째 배열에서 꺼내줌.
+		var point = new Object(); 
+		point.x = coordinate[1];
+		point.y = coordinate[0];
+		points.push(point);
+		path.push(new daum.maps.LatLng(coordinate[1], coordinate[0]));			//new daum.maps.LatLng가 없으면 인식을 못해서 path 배열에 추가
 	})
-
+	
 	// 다각형을 생성합니다 
 	var polygon = new daum.maps.Polygon({
 		map : map, // 다각형을 표시할 지도 객체
@@ -61,6 +66,8 @@ function displayArea(coordinates, name) {
 		fillColor : '#fff',
 		fillOpacity : 0.7
 	});
+	
+	polygons.push(polygon);			//폴리곤 제거하기 위한 배열
 
 	// 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다 
 	// 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
@@ -91,23 +98,55 @@ function displayArea(coordinates, name) {
 	});
 
 	// 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 해당 지역 확대, 시군구코드 넘겨줌
-	daum.maps.event.addListener(polygon, 'click', function(mouseEvent) {
+	daum.maps.event.addListener(polygon, 'click', function() {
 		
+        // 현재 지도 레벨에서 2레벨 확대한 레벨
+		var level = map.getLevel()-2;
+		
+        // 지도를 클릭된 폴리곤의 중앙 위치를 기준으로 확대합니다
+        map.setLevel(level, {anchor: centroid(points), animate: {
+            duration: 350
+        }});			
+        
+        sigungucode = gucode;						
+
+        deletePolygon(polygons);					//폴리곤 제거      
 	});
 
 }
 
+//centroid 알고리즘 (폴리곤 중심좌표 구하기 위함)
+function centroid (points) {
+    var i, j, len, p1, p2, f, area, x, y;
+
+    area = x = y = 0;
+
+    for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+            p1 = points[i];
+            p2 = points[j];
+
+            f = p1.y * p2.x - p2.y * p1.x;
+            x += (p1.x + p2.x) * f;
+            y += (p1.y + p2.y) * f;
+            area += f * 3;
+    }
+
+    return new daum.maps.LatLng(x / area, y / area);
+}
+
+
+
 var recPath = []; //라인 이을 추천 경로들의 배열
 var markers = []; //마커 담을 배열
-var polylines = []; //라인 담을 배열
-
+var polylines = []; //라인 담을 배열	
 
 function addMarker(position, title, contentid, contenttypeid, count) {
 
 	if (count == 1) { //처음 돌 때(추천 경로 버튼을 눌렀을 때)
-		removeMarker(); //지도에 남아있는 마커들 제거
+		deleteMarker(); //지도에 남아있는 마커들 제거
 		deletePolyLine(); //지도에 남아있는 라인 제거
 	}
+
 
 	// 마커 이미지의 이미지 주소입니다
 	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
@@ -125,7 +164,9 @@ function addMarker(position, title, contentid, contenttypeid, count) {
 		image : markerImage
 	// 마커 이미지 
 	});
+	
 
+	
 	markers.push(marker); //배열에 생성된 마커 추가
 	recPath.push(position); //추천 경로 배열에 좌표 추가
 
@@ -174,7 +215,7 @@ function addMarker(position, title, contentid, contenttypeid, count) {
 }
 
 //지도 위 표시되고 있는 마커 제거
-function removeMarker() {
+function deleteMarker() {
 	for (var i = 0; i < markers.length; i++) {
 		markers[i].setMap(null);
 	}
@@ -188,6 +229,14 @@ function deletePolyLine() {
 	}
 	polylines = [];
 	recPath = []; //라인 이어줄 좌표들 있는 배열 초기화
+}
+
+//지도 위 표시되고 있는 폴리곤 제거
+function deletePolygon(polygons) {
+	for (var i = 0; i < polygons.length; i++) {
+		polygons[i].setMap(null);
+	}
+	polygons = [];
 }
 
 //팝업 레이어
@@ -224,15 +273,13 @@ function wrapWindowByMask() {
 
 //경로 추천
 function recommend() {
-
-	var marker = new daum.maps.Marker();
-	marker.setMap(null);
-
-	$
-			.ajax({
+    console.log(sigungucode);
+   
+	$.ajax({
 				url : 'getPath.do',
 				type : 'get',
 				dataType : 'json',
+				data : {'sigungucode' : sigungucode},
 				success : function(jsonData) {
 
 					var path = jsonData.path;

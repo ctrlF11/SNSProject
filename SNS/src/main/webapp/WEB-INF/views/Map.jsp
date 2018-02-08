@@ -103,26 +103,8 @@
 						<div id="sidemenu">
 							<ul class="accordian">
 								<li class="accordian--box">
-									<h3 id="recommend" onclick="recommend()">경로</h3>
-									
-									<h4 id="pathlist">
-										
-									</h4>
-									<h4>장소</h4>
-									<h4>장소</h4>
-			
-								</li>
-								<li class="accordian--box">
-									<h3>경로</h3>
-									<h4>장소</h4>
-									<h4>장소</h4>
-									<h4>장소</h4>
-								</li>
-								<li class="accordian--box">
-									<h3>경로</h3>
-									<h4>장소</h4>
-									<h4>장소</h4>
-									<h4>장소</h4>
+									<h3 id="recommend" onclick="recommend()">추천코스</h3>									
+									<h4 id="pathlist"></h4>
 								</li>
 							</ul>
 						</div>
@@ -151,7 +133,7 @@
 					targetClick : function(e) {
 						var eTarget = $(e.currentTarget);
 						if (eTarget.next().is(':visible')) {
-							eTarget.next().slideUp();
+//							eTarget.next().slideUp();
 							return;
 						}
 						answer.slideUp();
