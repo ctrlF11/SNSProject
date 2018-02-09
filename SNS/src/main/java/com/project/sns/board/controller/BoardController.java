@@ -228,8 +228,11 @@ public class BoardController {
     	id = AES.setDecrypting(id);
     	System.out.println("복호화한 아이디 : " + id);
     	List<StoryVO> list = service.getStoryAll(id);
-    
     	return "table2";
     }
-    
+ 
+    @RequestMapping("/myPage.do")
+    public String myPage() {
+    	return "myPage";
+    }
 }

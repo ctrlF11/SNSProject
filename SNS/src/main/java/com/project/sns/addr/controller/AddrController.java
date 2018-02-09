@@ -407,7 +407,7 @@ public class AddrController {
         return jsonData;
 	}
 
-	// BNR Ver.
+	/*// BNR Ver.
 		@ResponseBody
 	   @RequestMapping(value = "/getpath", method= {RequestMethod.POST})
 	   public List<AddrVO> path(HttpServletRequest req, @RequestBody List<AddrVO> paramData) throws Exception{
@@ -520,7 +520,7 @@ public class AddrController {
 				System.out.println("re의 길이 : " + re.size());
 				
 				return re;
-	   }
+	   }*/
 	
 	//좌표로 위치 계산
 	private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
