@@ -215,6 +215,7 @@ function replyDelete(reply_seq){
 						
 
 							 <%=list.get(i).getMtitle()%><br/>
+							 
  						
 			<%}%>			
 					 
