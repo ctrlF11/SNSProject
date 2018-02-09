@@ -273,8 +273,7 @@ function wrapWindowByMask() {
 
 //경로 추천
 function recommend() {
-    console.log(sigungucode);
-   
+ 
 	$.ajax({
 				url : 'getPath.do',
 				type : 'get',
@@ -284,23 +283,21 @@ function recommend() {
 
 					var path = jsonData.path;
 					var sidePath = "";
-					var count = 0; //몇 번째인지 알기 위해서 사용
+					var count = 0; //몇 번째인지 알기 위해서 사용(첫번째 돌 때만 마커,라인 지우기 위해서)
 
 					for (var i = path.length - 1; i >= 0; i--) {
 						for (var j = 0; j < positions.length; j++) {
 							if (path[i] == (positions[j].contentid)) {
 								count++;
-								addMarker(positions[j].latlng,
+								addMarker(positions[j].latlng,							//마커 추가 
 										positions[j].title,
 										positions[j].contentid,
 										positions[j].contenttypeid, count);
 
-								sidePath += "<a href='javascript:panTo("
+								sidePath += "<a href='javascript:panTo("				//경로 목록 클릭시 화면이동
 										+ positions[j].mapy + ","
 										+ positions[j].mapx + ")'>"
 										+ positions[j].title + "</a>" + "</br>";
-
-								console.log(positions[j].latlng);
 
 							}
 						}
@@ -315,7 +312,7 @@ function recommend() {
 
 }
 
-//클릭하면 해당 위치로 이동 (인포윈도우)
+//클릭하면 해당 위치로 이동
 function panTo(mapy, mapx) {
 
 	// 이동할 위도 경도 위치를 생성합니다 
