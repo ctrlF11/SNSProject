@@ -25,6 +25,8 @@ import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
 import com.project.sns.board.vo.TIME_MAXIMUM;
 import com.project.sns.user.service.UserService;
+
+import A.algorithm.AES;
  
 /**
  * Handles requests for the application home page.
@@ -33,6 +35,7 @@ import com.project.sns.user.service.UserService;
 public class BoardController {
     
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
+    AES aes = new AES();
     
 	@Autowired
     private BoardService service;
@@ -40,13 +43,18 @@ public class BoardController {
     /**
      * Simply selects the home view to render by returning its name.
      */
-  
-    
     @RequestMapping("/getBoardList.do")
     public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req,HttpSession se) throws Exception{
-        logger.info("getBoardList");
+	 	 String id = (String)se.getAttribute("id");
+	     System.out.println("아이디 : " + id);
+	     id = aes.setDecrypting(id);
+	     System.out.println("복호화한 아이디 : " + id);
+	     
+    	logger.info("getBoardList");
         System.out.println("index : " + index +" story-seq : " + stroy_seq);
+ 
         HashMap map = new HashMap();
+        map.put("id", id);
         map.put("index", index);
         map.put("story_seq", stroy_seq);
         List<BoardVO> user = service.getBoardList(map);
@@ -54,10 +62,24 @@ public class BoardController {
         /*if(index == 0)
           return "home1";
         else*/ 
-        se.setAttribute("user1", user);
+        se.setAttribute("userH", user);
         	return "table";
     }
     
+ @ResponseBody
+ @RequestMapping("/getBoardStoryList.do")
+    public List<BoardVO> getBoardStoryList(HttpServletRequest req,HttpSession se) throws Exception{
+	 	
+	 	 String id = (String)se.getAttribute("id");
+	     System.out.println("아이디 : " + id);
+	     id = aes.setDecrypting(id);
+	     System.out.println("복호화한 아이디 : " + id);
+	     BoardVO vo = new BoardVO();
+	     vo.setWriter(id);
+	     System.out.println("스토리 값 : "+ vo.getWriter());
+	     return service.getBoardStoryList(vo);
+    }
+ 	
     @RequestMapping("/getMainBoardList.do")  // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
     public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
     	TIME_MAXIMUM time = new  TIME_MAXIMUM();
@@ -216,12 +238,8 @@ public class BoardController {
     @RequestMapping("/list.do") //댓글 리스트
     @ResponseBody
     private List<ReplyVO> replyList(Model model,ReplyVO vo) throws Exception{
-    
- 
         return service.replyList(vo);
-        
     }
-    
     @RequestMapping("/insert.do") //댓글 작성 
     @ResponseBody
     private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent) throws Exception{

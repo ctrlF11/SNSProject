@@ -25,7 +25,7 @@ var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니�
 
 var positions =  [
       <%
-      List<BoardVO> list = (List<BoardVO>) session.getAttribute("user1");
+      List<BoardVO> list = (List<BoardVO>) request.getAttribute("user");
          for (int i = 0; i < list.size(); i++) {
       %>
       {title : "<%=list.get(i).getTitle()%>",

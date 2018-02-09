@@ -24,6 +24,12 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getBoardList(map);
 	}
 	
+	public List<BoardVO> getBoardStoryList(BoardVO vo)
+	{
+		return dao.getBoardStoryList(vo);
+	}
+	
+	
 	public List<BoardVO> getMainBoardList(int index)
 	{
 		return dao.getMainBoardList(index);

@@ -30,6 +30,11 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.selectList(namespace+".getBoardList",map);
 	}
 	
+	public List<BoardVO> getBoardStoryList(BoardVO vo)
+	{
+		return sqlSession.selectList(namespace+".getBoardStoryList",vo);
+	}
+	
 	public List<BoardVO> getMainBoardList(int index)
 	{
 		return sqlSession.selectList(namespace+".getMainBoardList",index);

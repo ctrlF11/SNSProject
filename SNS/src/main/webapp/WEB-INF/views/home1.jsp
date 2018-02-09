@@ -30,44 +30,28 @@ body { width: 500px; margin: 30px auto;}
 <script src="js/home1.js" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-						$('[data-toggle=offcanvas]')
-								.click(
-										function() {
-											$(this).toggleClass(
-													'visible-xs text-center');
-											$(this)
-													.find('i')
-													.toggleClass(
-															'glyphicon-chevron-right glyphicon-chevron-left');
-											$('.row-offcanvas').toggleClass(
-													'active');
-											$('#lg-menu').toggleClass(
-													'hidden-xs').toggleClass(
-													'visible-xs');
-											$('#xs-menu').toggleClass(
-													'visible-xs').toggleClass(
-													'hidden-xs');
-											$('#btnShow').toggle();
-										});
-						
-})
-var scollB = function(){
-		$.ajax({
-			url : 'getBoardList.do',
-			data : {
-				index : index,
-				story_seq :
-<%=request.getAttribute("story_seq")%>
-	},
-			success : function(data) {
-				$("#col-sm-6").append(data);
-			}
-		})
-
-}
-
 var index = 0;
+$(function(){
+	getBoard();
+	$("#main").scroll(function() {
+		var sh = $("#main").scrollTop() + $("#main").height();
+		var dh = $("#main").prop("scrollHeight");
+
+		if (sh == dh) {	
+			getBoardScroll();
+		}
+     })
+     
+ $('[data-toggle=offcanvas]').click(function() {
+					$(this).toggleClass('visible-xs text-center');
+					$(this).find('i').toggleClass('glyphicon-chevron-right glyphicon-chevron-left');
+					$('.row-offcanvas').toggleClass('active');
+					$('#lg-menu').toggleClass('hidden-xs').toggleClass('visible-xs');
+					$('#xs-menu').toggleClass('visible-xs').toggleClass('hidden-xs');
+					$('#btnShow').toggle();
+  });	
+	
+}); //게시판 스크롤 비동기 클릭 토글
 function togglethis(num) {
 		var replyDiv = document.getElementById("replyDiv" + num);
 		if (replyDiv.style.display == "none") {
@@ -76,30 +60,108 @@ function togglethis(num) {
 			replyDiv.style.display = "none";
 		}
 }
+function getBoardScroll()
+{
+	index += 4;
+	$.ajax({
+		url : 'getBoardList.do',
+		data : {
+				 index : index,
+				 story_seq : <%=request.getAttribute("story_seq")%>
+               },
+		success : function(data1) {
+			alter("비동기 성공1");
+			$("#col-sm-6").append(data);
+		}
+	})
+}
 
-$(function(){
-	 	scollB();
-		$("#main").scroll(function() {
-			var sh = $("#main").scrollTop() + $("#main").height();
-			var dh = $("#main").prop("scrollHeight");
+function getBoard(){
+	$.ajax({
+		url : 'getBoardList.do',
+		data : {
+					index : index,
+					story_seq : <%=request.getAttribute("story_seq")%>
+               },
+		success : function(data) {
+			$("#col-sm-6").append(data);
+			alert("비동기 진입전");
+		    getStory();
+		}
+	})
 
-			if (sh == dh) {
-				index += 4;
-				$.ajax({
-					url : 'getBoardList.do',
-					data : {
+}
+
+function getStory()
+{
+$.ajax({
+	url : 'getBoardStoryList.do',
+   success : function(data){
+	   var b ='';
+	   var title = '';
+	   alert("비동기 진입");
+            $.each(data, function(key, value){
+
+            	
+            	if(key==0){
+        			title = value.story_title;
+    	            b += '<ul class="accodian">';
+    	            b += '<ul class="accodian">';
+    	            b += '<input type ="hidden" value ="'+value.story_seq+'" name = "storyHidden">';
+    	            b += '<h3 onclick = "story_button('+value.story_seq+')"><a href = "#">#'+title+'</a></h3>';
+    	            b += '</ul>';
+    	            b += '</ul>';
+            	}
+            	
+ 	           	if(key >= 1){
+ 	           	
+
+            		if(title == value.story_title){
+            			return true;
+            		}else{
+            			title = value.story_title;
+        	            b += '<ul class="accodian">';
+        	            b += '<ul class="accodian">';
+        	            b += '<input type ="hidden" value ="'+value.story_seq+'" name = "storyHidden">';
+        	            b += '<h3 onclick = "story_button('+value.story_seq+')"><a href = "#">#'+title+'</a></h3>';
+        	            b += '</ul>';
+        	            b += '</ul>';
+            		}
+
+            	}
+            	
+
+
+	            
+// 	            '<button onclick="replyUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>'
+            });
+         
+       		 $("[name=story]").html(b); 
+    }
+})
+}
+function story_button(story_seq)
+{
+	
+	     alert(story_seq);
+ 	     index = 0;
+		 $.ajax({
+			url : 'getBoardList.do',
+			data : {
 						index : index,
-						story_seq :
-<%=request.getAttribute("story_seq")%>
-	},
-					success : function(data) {
-						$("#col-sm-6").append(data);
-					}
-				})
+						story_seq : story_seq
+	               },
+			success : function(data) {
+				alert("ddd");
+				$("#col-sm-6").html(data);
+				alert("비동기 진입전");
+			    getStory();
 			}
 		})
+        getBoardScroll();
+		
+}
 
-}); //게시판 스크롤 비동기
 function r_button(){ //댓글 등록 버튼 클릭시 
 var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴
 		$.ajax({
@@ -129,7 +191,7 @@ function replyList(){//댓글 비동기 불러올 때
 	        },
 	        success : function(data){
 	            var a =''; 
-	            $.each(data, function(key, value){ 
+	            $.each(data, function(key, value){					
 	                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
 	                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
 	                a += '<button onclick="replyUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>';
@@ -203,23 +265,8 @@ function replyDelete(reply_seq){
                      다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
                      글씨가 겹쳐 보이는 문제가 발생함.
                   -->
-           
-				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-		
-			
-		    <%
- 		    List<BoardVO> list = (List<BoardVO>)session.getAttribute("user1");
-			for (int i = 0; i < list.size(); i++) { 
-            %>
-
-						
-
-							 <%=list.get(i).getMtitle()%><br/>
-							 
- 						
-			<%}%>			
-					 
-				</div> 
+           	
+				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar" name ="story"> 
 				<!--
                   col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
                   col-xs-12는 disable된 상태
@@ -227,6 +274,7 @@ function replyDelete(reply_seq){
                   맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
                   백그라운드의 회색 화면이 나타남.                  
                 -->
+                </div>
 				<div id="main" class="column col-sm-10 col-xs-11"
 					style="overflow-y: auto;">
 					<!-- 

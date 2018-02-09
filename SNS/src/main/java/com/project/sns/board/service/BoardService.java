@@ -15,6 +15,7 @@ import com.project.sns.board.vo.StoryVO;
 public interface BoardService {
 		// 疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌뵬占쎌뵥 甕곕뜇�깈)
 	    public List<BoardVO> getBoardList(HashMap map);
+	    public List<BoardVO> getBoardStoryList(BoardVO vo);
 	    public List<BoardVO> getMainBoardList(int index);
 	    public int getBoardCount(int line_seq) throws Exception;
 

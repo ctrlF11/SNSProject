@@ -46,13 +46,24 @@
 			
 		</select> -->
 		<select id="getBoardList" parameterType="map" resultType="BoardVO" >
-			select * 
-			from Board b, TourMap t
+			Select * From 
+			Board b left JOIN TourMap t  
+			ON b.contentId = t.contentId
+			left JOIN Story s
+			ON b.story_seq = s.story_seq 
 			where b.story_seq = #{story_seq}
-			and   b.contentId = t.contentId
-			LIMIT #{index},4;
+			and s.id = #{id}
+			limit #{index},4;
 			
 		</select>
+		<select id="getBoardStoryList" parameterType="BoardVO" resultType="BoardVO" >
+				select * 
+				from Story s, Board b
+	            where s.story_seq = b.story_seq
+		        and b.writer = #{writer}
+		        order by s.story_title;
+		</select>
+		
 		<select id="getMainBoardList" parameterType="int" resultType="BoardVO" >
 			    select p.* 
 			    from
