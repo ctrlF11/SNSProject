@@ -49,5 +49,11 @@ public class AddrDAOImpl implements AddrDAO{
 	      // TODO Auto-generated method stub
 	      return sqlSession.selectOne(namespace+".getAddress3");   
 	 }
+	 
+    @Override
+    public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
+         // TODO Auto-generated method stub
+         return sqlSession.selectList(namespace+".getAddrWithCode", sigungucode);   
+    }
 	
 }

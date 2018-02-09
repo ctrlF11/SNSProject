@@ -58,6 +58,10 @@
 	    ORDER BY rand()
 	    limit 1;
       </select>
+      
+     <select id ="getAddrWithCode" resultType="AddrVO">
+      select * from TourMap m, TourMapCat c <where>m.contentId = c.contentId and sigungucode = #{sigungucode}</where>
+   	 </select> 
 
 		
 </mapper>

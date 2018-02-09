@@ -38,6 +38,13 @@ public class BoardController {
     
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
     
+    
+	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	@RequestMapping("/message")
+	public String message() {
+		return "chat";
+	}
+	
 	@Autowired
     private BoardService service;
     private UserService  userService;

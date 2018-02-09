@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 @charset "UTF-8";
 
 #setDiv {
@@ -9,7 +8,7 @@
 	position: absolute;
 	left: 0;
 	top: 0;
-	z-index: 9999;
+	z-index: 888;
 	background-color: #000;
 	display: none;
 }
@@ -18,7 +17,7 @@
 	display: none;
 	background-color: #ffffff;
 	height: 200px;
-	z-index: 99999;
+	z-index: 999;
 	width: 600px;
 	height: 250px;
 	border: 1px;
@@ -38,8 +37,19 @@
 	position: absolute;
 	/* padding-left: 100px; */
 	width: calc(100% - 450px);
-	height: 100%;
+	height: 100vh;
 	float: left;
+}
+
+.area {
+	position: absolute;
+	background: #fff;
+	border: 1px solid #888;
+	border-radius: 3px;
+	font-size: 12px;
+	top: -5px;
+	left: 15px;
+	padding: 2px;
 }
 
 * {
@@ -47,69 +57,61 @@
 	padding: 0;
 }
 
-.accodian {
+.accordian {
 	list-style: none
 }
 
-.accodian--box {
+.accordian--box {
 	margin-bottom: 5px;
 }
 
-.accodian--box h3 {
+.accordian--box h3 {
 	background: #333;
 	padding: 5px;
 	color: #fff;
 	cursor: pointer
 }
 
-.accodian--box h4 {
+.accordian--box h4 {
 	background: #ccc;
 	padding: 5px;
 	display: none;
 }
-=======
-@charset "UTF-8";
 
-#setDiv {           
-            text-align: center;               
-        }
-        #mask {
-            position:absolute;
-            left:0;
-            top:0;
-            z-index:9999;
-            background-color:#000;
-            display:none;           
-        }
-        #window {
-            display: none;
-            background-color: #ffffff;
-            height: 200px;
-            z-index:99999;
-            width:600px;
-            height:250px;
-            border:1px;
-            solid :#ccc;
-            position:fixed;           
-        }      
-        #sidemenu{
-           	width:450px;
-           	height:100vh;
-           	padding-top:70px;
-        	float:right;  
-        	background-color:#393939;      		
-        }
-		#map{
-		 	position: absolute;
-		 	/* padding-left: 100px; */
-			width: calc(100% - 450px);
-			height:100%;
-			float:left;
-		}        
-        
-        *{ margin: 0; padding: 0;}
-		.accodian {list-style: none }
-		.accodian--box { margin-bottom: 5px;}
-		.accodian--box h3 { background: #333; padding: 5px; color: #fff; cursor: pointer}
-		.accodian--box h4 { background: #ccc; padding: 5px; display: none; }
->>>>>>> refs/remotes/origin/Leejh
+.pin{
+	background:white;
+	overflow:hidden;
+	height: auto;
+	border: 1px solid black;
+	clear: left;
+	border-radius: 12px;
+	}
+	
+.p{
+	 text-align:left;
+	}
+	
+.sideBtn{
+	background-color: #4CAF50;
+	color: white;
+	padding: 12px 30px;
+	font-size: 16px;
+	border-radius: 12px;
+	width: auto;
+	}
+	
+#searchBox{
+	position: absolute;
+	float: right;
+	background-color: #4CAF50;
+	height : 50px;
+	top: 70px;
+	right: 25%;
+	
+	}
+
+.glyphicon-remove{
+	float: right;
+	font-size: 20px;
+	right: 3%;
+	}
