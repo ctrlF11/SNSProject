@@ -92,10 +92,10 @@
          if (sh == dh) {
             index += 4;
             $.ajax({
-               url : 'getBoardList.do',
+               url : 'getStoryList.do',
                data : {
-                  index : index,
-                  story_seq : <%=request.getAttribute("story_seq")%>
+            	   index : index,
+                   id : <%=request.getAttribute("id")%>
                },
                success : function(data) {
                   $("#col-sm-6").append(data);
