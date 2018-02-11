@@ -24,6 +24,12 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getBoardList(map);
 	}
 	
+	public List<BoardVO> getBoardStoryList(BoardVO vo)
+	{
+		return dao.getBoardStoryList(vo);
+	}
+	
+	
 	public List<BoardVO> getMainBoardList(int index)
 	{
 		return dao.getMainBoardList(index);
@@ -185,10 +191,7 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getImage(img_seq);
 	}
 
-	@Override
-	public void insertReply(ReplyVO vo) {
-		dao.insertReply(vo);
-	}
+	
 
 	@Override
 	public List<StoryVO> getStoryAll(String id) throws Exception {
@@ -201,5 +204,29 @@ public class BoardServiceImpl implements BoardService {
 		return dao.getStoryAll(map);
 	}
 */
+    
+    // ��� ����
+    public int replyCount() throws Exception{
+    	return dao.replyCount();
+    };
+    // ��� ���
+    public List<ReplyVO> replyList(ReplyVO reply) throws Exception{
+    	return dao.replyList(reply);
+    };
+ 
+    // ��� �ۼ�
+    public int replyInsert(ReplyVO reply) throws Exception{
+    	return dao.replyInsert(reply);
+    };
+    
+    // ��� ����
+    public int replyUpdate(ReplyVO reply) throws Exception{
+    	return dao.replyUpdate(reply);
+    };
+ 
+    // ��� ����
+    public int replyDelete(ReplyVO reply) throws Exception{
+    	return dao.replyDelete(reply);
+    };
 
 }

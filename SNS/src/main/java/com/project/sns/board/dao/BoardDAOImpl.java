@@ -30,6 +30,11 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.selectList(namespace+".getBoardList",map);
 	}
 	
+	public List<BoardVO> getBoardStoryList(BoardVO vo)
+	{
+		return sqlSession.selectList(namespace+".getBoardStoryList",vo);
+	}
+	
 	public List<BoardVO> getMainBoardList(int index)
 	{
 		return sqlSession.selectList(namespace+".getMainBoardList",index);
@@ -81,7 +86,8 @@ public class BoardDAOImpl implements BoardDAO {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+ 
 	@Override
 	public List<String> getAttach(Integer bno) throws Exception {
 
@@ -189,4 +195,28 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.selectList(namespace+".getStoryAll", map);
 	}
 */	
+	    // ��� ����
+	    public int replyCount() throws Exception{
+	    	return sqlSession.selectOne(namespace+".replyCount");
+	    };
+	    // ��� ���
+	    public List<ReplyVO> replyList(ReplyVO reply) throws Exception{
+	    	return sqlSession.selectList(namespace+".replyList",reply);
+	    };
+	 
+	    // ��� �ۼ�
+	    public int replyInsert(ReplyVO reply) throws Exception{
+	    	return sqlSession.insert(namespace+".insertReply", reply);
+	    };
+	    
+	    // ��� ����
+	    public int replyUpdate(ReplyVO reply) throws Exception{
+	    	return sqlSession.update(namespace+".replyUpdate", reply);
+	    };
+	 
+	    // ��� ����
+	    public int replyDelete(ReplyVO reply) throws Exception{
+	    	return sqlSession.delete(namespace+".replyDelete", reply);
+	    };
+
 }

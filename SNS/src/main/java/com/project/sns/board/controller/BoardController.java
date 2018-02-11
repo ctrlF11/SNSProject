@@ -1,35 +1,30 @@
 package com.project.sns.board.controller;
  
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
- 
-import javax.inject.Inject;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
+import com.project.sns.board.vo.TIME_MAXIMUM;
 import com.project.sns.user.service.UserService;
-import com.project.sns.user.vo.UserVO;
 
 import A.algorithm.AES;
  
@@ -40,6 +35,7 @@ import A.algorithm.AES;
 public class BoardController {
     
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
+    AES aes = new AES();
     
     
 	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -61,38 +57,58 @@ public class BoardController {
         System.out.println("index : " + index +" story-seq : " + story_seq);
         HashMap map = new HashMap();
         map.put("index", index);
-        map.put("story_seq", story_seq);
-        
+        map.put("story_seq", stroy_seq);
         List<BoardVO> user = service.getBoardList(map);
         req.setAttribute("user", user);
         /*if(index == 0)
           return "home1";
         else*/ 
+        se.setAttribute("userH", user);
         	return "table";
     }
     
-    @RequestMapping("/getMainBoardList.do")  // ����ȭ�� �񵿱� �۾�
+ @ResponseBody
+ @RequestMapping("/getBoardStoryList.do")
+    public List<BoardVO> getBoardStoryList(HttpServletRequest req,HttpSession se) throws Exception{
+	 	
+	 	 String id = (String)se.getAttribute("id");
+	     System.out.println("아이디 : " + id);
+	     id = aes.setDecrypting(id);
+	     System.out.println("복호화한 아이디 : " + id);
+	     BoardVO vo = new BoardVO();
+	     vo.setWriter(id);
+	     System.out.println("스토리 값 : "+ vo.getWriter());
+	     return service.getBoardStoryList(vo);
+    }
+ 	
+    @RequestMapping("/getMainBoardList.do")  // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
     public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
+    	TIME_MAXIMUM time = new  TIME_MAXIMUM();
         logger.info("getMainBoardList");
         System.out.println("index : " + index);
         List<BoardVO> mainTable = service.getMainBoardList(index);
+        ArrayList<String> mainTime = new <String>ArrayList();
+        for(int i = 0; i < mainTable.size(); i++)
+        {
+        	mainTime.add(time.calculateTime(mainTable.get(i).getRegdate()));
+        }
+        req.setAttribute("mainTime", mainTime);
         req.setAttribute("mainTable", mainTable);
-        
         return "mainTable";
     }
        
-    @RequestMapping("insertReply.do")
-    String insertReply(ReplyVO vo,Model model){ 
-    	service.insertReply(vo);
-    	model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
-       return "replylist";
-    }
+//    @RequestMapping("insertReply.do")
+//    String insertReply(ReplyVO vo,Model model){ 
+//    	service.insertReply(vo);
+//    	model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
+//       return "replylist";
+//    }
     
     @RequestMapping("/homeview.do")
     public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req){
        req.setAttribute("story_seq", story_seq);
        return "home1";
-    }//占쌉시깍옙
+    }//�뜝�뙃�떆源띿삕
     
     @RequestMapping("/modifyBoard")
     public String writeForm(Model model) {
@@ -117,7 +133,7 @@ public class BoardController {
     public void inputBoard(BoardVO vo) throws Exception {
     	System.out.println("BoardVO.getFiles() : " + vo.getFiles());
     	System.out.println("BoardVO.getTitle() : " + vo.getTitle());
-    	//�Խñ� ����Ȯ��
+    	//占쌉시깍옙 占쏙옙占쏙옙확占쏙옙
     	int i = service.getBoardSeq(vo);
     	int k = 100;
     	if(i == 0) {
@@ -215,8 +231,43 @@ public class BoardController {
     	response.setContentType("text/html;charset=UTF-8");
     	
     	
-    	
     	return "home1";
+    }
+    
+    
+    
+    @RequestMapping("/list.do") //댓글 리스트
+    @ResponseBody
+    private List<ReplyVO> replyList(Model model,ReplyVO vo) throws Exception{
+        return service.replyList(vo);
+    }
+    @RequestMapping("/insert.do") //댓글 작성 
+    @ResponseBody
+    private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent) throws Exception{
+        
+    	
+        ReplyVO reply = new ReplyVO();
+        reply.setBoard_seq(board_seq);
+        reply.setRcontent(rcontent);
+        reply.setStory_seq(story_seq);;
+        System.out.println("insert.do : " + rcontent + " : " + board_seq);
+        //로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
+        reply.setRwriter("test");  
+        return service.replyInsert(reply);
+    }
+    
+    @RequestMapping("/update.do") //댓글 수정  
+    @ResponseBody
+    private int mCommentServiceUpdateProc(ReplyVO reply) throws Exception{
+        
+        return service.replyUpdate(reply);
+    }
+    
+    @RequestMapping("/delete.do") //댓글 삭제  
+    @ResponseBody
+    private int mCommentServiceDelete(ReplyVO reply) throws Exception{
+        
+        return service.replyDelete(reply);
     }
     
     // 2018/02/05 in : story.do, getStoryList.do

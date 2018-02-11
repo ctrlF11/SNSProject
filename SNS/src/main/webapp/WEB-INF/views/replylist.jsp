@@ -1,12 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<c:set var="index" value="0"  /> 
-[
-<c:forEach items="${reply}" var="r" >
-   <c:if test="${index!=0}">,</c:if>
-   <c:set var="index" value="${index+1}"  /> 
-   {"content":"${r.content}","writer":"${r.writer}"}
-</c:forEach>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <table style="width:700px">
+        <c:forEach var="row" items="${list}">
+        <tr>    
+            <td>
+                ${row.rwriter}(<fmt:formatDate value="${row.rregdate}" pattern="yyyy-MM-dd HH:mm:ss"/>)
+                <br>
+                ${row.rcontent}
+            </td>
+        </tr>
+        </c:forEach>
+    </table>
+</body>
+</html>
 ]
