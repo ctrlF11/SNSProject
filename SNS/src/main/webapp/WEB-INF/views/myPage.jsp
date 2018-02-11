@@ -155,8 +155,28 @@
 					<%@ include file="include/topbar.jsp"%>
 					<div class="padding">
 						<div class="full col-sm-9">
+							<div>
+								현재까지 작성한 스토리 목록
+							</div>
 							<div class="col-sm-8" id="col-sm-8">
 		
+							</div>
+							<div class="col-sm-4"  style="width: 474.333px; position: fixed; right: 83px">
+								<div class="row">
+									<div class="panel panel-default">
+										<div class="card-body" >
+											<p class="lead-myBar">
+												<a href="myPage.do">스토리 목록</a>
+											</p>
+										</div>
+										<hr>
+										<div class="card-body">
+											<p class="lead-myBar">
+												<a href="myPage.do">더미</a>
+											</p>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

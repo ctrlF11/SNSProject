@@ -225,6 +225,20 @@ public class BoardController {
     	System.out.println("아이디 : " + id);
     	id = AES.setDecrypting(id);
     	System.out.println("복호화한 아이디 : " + id);
+    	
+    	List<StoryVO> list = service.getStoryAll(id);
+    	request.setAttribute("list", list);
+    	return "table2";
+    }
+/*   
+	수정으로 인해서 일시 동결.
+ 	@RequestMapping("/getStoryList.do")
+    public String getStoryList(@RequestParam("index") int index, @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	logger.info("getStoryList.do");
+    	request.setCharacterEncoding("UTF-8");
+    	System.out.println("아이디 : " + id);
+    	id = AES.setDecrypting(id);
+    	System.out.println("복호화한 아이디 : " + id);
     	HashMap<String, Object> map = new HashMap<String, Object>();
     	map.put("index", index);
     	map.put("id", id);
@@ -233,5 +247,5 @@ public class BoardController {
     	request.setAttribute("list", list);
     	return "table2";
     }
- 
+*/ 
 }

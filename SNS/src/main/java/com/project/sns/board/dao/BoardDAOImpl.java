@@ -181,8 +181,12 @@ public class BoardDAOImpl implements BoardDAO {
 
 	// 2018-02-05 in
 	@Override
+	public List<StoryVO> getStoryAll(String id) throws Exception {
+		return sqlSession.selectList(namespace+".getStoryAll", id);
+	}
+/*	@Override
 	public List<StoryVO> getStoryAll(HashMap map) throws Exception {
 		return sqlSession.selectList(namespace+".getStoryAll", map);
 	}
-	
+*/	
 }
