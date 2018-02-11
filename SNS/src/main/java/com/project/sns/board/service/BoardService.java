@@ -52,5 +52,6 @@ public interface BoardService {
 		
 		// 2018/02/05 in
 		public List<StoryVO> getStoryAll(String id) throws Exception;
+//		public List<StoryVO> getStoryAll(HashMap map) throws Exception;
 		
 }

@@ -195,6 +195,11 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return dao.getStoryAll(id);
 	}
-
+/*	@Override
+	public List<StoryVO> getStoryAll(HashMap map) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getStoryAll(map);
+	}
+*/
 
 }

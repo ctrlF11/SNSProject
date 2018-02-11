@@ -8,7 +8,7 @@
 	rel="stylesheet" type="text/css">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>가즈아 - 메인 화면</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet"
@@ -18,6 +18,8 @@
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/original.css">
 <script src="resources/facebook/assets/js/check.js"></script>
+<script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
+<script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script type="text/javascript">

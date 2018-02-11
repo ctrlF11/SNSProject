@@ -122,7 +122,7 @@ import A.algorithm.AES;
     	
     	AES aes = new AES();
     	System.out.println("original : " + checkVO.getId());
-    	checkVO.setId(aes.setCrypting(checkVO.getId()));
+    	checkVO.setId(aes.setCrypting(checkVO.getId()).trim());
     	System.out.println("encrypted : " + checkVO.getId());
     	
     	session.setAttribute("id", checkVO.getId());
@@ -139,7 +139,10 @@ import A.algorithm.AES;
     	return "redirect:mainHomeView.do";
     }
     
-    
+    @RequestMapping("/myPage.do")
+    public String myPage() {
+    	return "myPage";
+    }
     
     public static String getIP(HttpServletRequest request) {
     	String ip = request.getHeader("X-FORWARDED-FOR");

@@ -92,13 +92,13 @@
          if (sh == dh) {
             index += 4;
             $.ajax({
-               url : 'getBoardList.do',
+               url : 'getStoryList.do',
                data : {
-                  index : index,
-                  story_seq : <%=request.getAttribute("story_seq")%>
+            	   index : index,
+                   id : <%=request.getAttribute("id")%>
                },
                success : function(data) {
-                  $("#col-sm-6").append(data);
+                  $("#col-sm-8").append(data);
                }
             })
          }
@@ -172,6 +172,9 @@
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
 					<%@ include file="WEB-INF/views/include/topbar.jsp"%>
+					<div class="col-sm-8" id="col-sm-8">
+					
+					</div>
 				</div>
 			</div>
 		</div>
