@@ -76,6 +76,7 @@ public class ChatController {
 		return entity;
 	}
 
+
 	@RequestMapping("/public")
 	public String publicData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");

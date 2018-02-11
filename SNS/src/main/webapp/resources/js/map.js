@@ -134,83 +134,214 @@ function centroid (points) {
     return new daum.maps.LatLng(x / area, y / area);
 }
 
-
-
 var recPath = []; //라인 이을 추천 경로들의 배열
-var markers = []; //마커 담을 배열
-var polylines = []; //라인 담을 배열   
+var polylines = []; //라인 담을 배열 
 
-function addMarker(position, title, contentid, contenttypeid, count) {
+var arr = new Array(); //선택한 객체들 모음 ->getpath돌림
+var markersArr = [];  //클릭해서 선택한 배열(빨간색)
+var markers = []; //검색 결과 마커들 모음 (노란색)
+var afterpath = []; //검색 후 결과 배열
+var array = new Array(); //
 
-   if (count == 1) { //처음 돌 때(추천 경로 버튼을 눌렀을 때)
-      deleteMarker(); //지도에 남아있는 마커들 제거
-      deletePolyLine(); //지도에 남아있는 라인 제거
-   }
+var selectedMarker = null;
 
+//마커 이미지와 크기지정
+var marker_width = 24,
+marker_height = 35,
+over_marker_width = 30,
+over_marker_height = 40,
+sprite_marker_url = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+click_marker_url = "markerStarRed.png";
 
-   // 마커 이미지의 이미지 주소입니다
-   var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-   // 마커 이미지의 이미지 크기 입니다
-   var imageSize = new daum.maps.Size(24, 35);
+var markerSize = new daum.maps.Size(marker_width, marker_height), 
+overMarkerSize = new daum.maps.Size(over_marker_width, over_marker_height),
+spriteImageSize = new daum.maps.Size(marker_width, marker_height);
 
-   // 마커 이미지를 생성합니다    
-   var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize);
+function createMarkerImage(src, size){
+	var markerImage = new daum.maps.MarkerImage(src, size);
+	return markerImage;
+}
+
+var normalImage = createMarkerImage(sprite_marker_url, markerSize),
+overImage = createMarkerImage(sprite_marker_url, overMarkerSize),
+clickImage = createMarkerImage(click_marker_url, markerSize);
+
+function addMarker(position, title, contentid, contenttypeid) {
+
+//   if (count == 1) { //처음 돌 때(추천 경로 버튼을 눌렀을 때)
+//      //deleteMarker(); //지도에 남아있는 마커들 제거
+//      deletePolyLine(); //지도에 남아있는 라인 제거
+//   }
 
    // 마커를 생성합니다
    marker = new daum.maps.Marker({
+	  contentId: contentid,
       map : map, // 마커를 표시할 지도
       position : position, // 마커를 표시할 위치
       title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-      image : markerImage
+      image : normalImage
    // 마커 이미지 
    });
    
-
+   //만약 arr에 존재하는 marker라면 빨간색 마커로 생성하겠다. 그리고 markerArr에 추가하겠다.
+   if(arr.findIndex(function(item){return item.contentId === contentid})>-1){
+   	marker.setImage(clickImage);
+   	markersArr.push(marker);
+   }
+   
+   // 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
+   marker.normalImage = normalImage;
    
    markers.push(marker); //배열에 생성된 마커 추가
-   recPath.push(position); //추천 경로 배열에 좌표 추가
+   //recPath.push(position); //추천 경로 배열에 좌표 추가
 
-   var polyline = new daum.maps.Polyline({
-      path : recPath, // 선을 구성하는 좌표배열 입니다
-      strokeWeight : 3, // 선의 두께 입니다
-      strokeColor : '#db4040', // 선의 색깔입니다
-      strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      strokeStyle : 'solid' // 선의 스타일입니다
+   //마커에 mouseover 이벤트 등록    
+   daum.maps.event.addListener(marker, 'mouseover', function(){
+   	//클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면 마커의 이미지를 오버 이미지로 변경
+   	if(!selectedMarker || selectedMarker != marker){
+   		if(arr.findIndex(function(item){return item.contentId === contentid})>-1){return false;}
+   		if($.inArray(marker, markersArr) != -1 ){return false;}
+   		marker.setImage(overImage);
+   	}
    });
-
-   polyline.setMap(map); //지도에 라인 추가
-   polylines.push(polyline); //배열에 라인 담기 
-
-   //마커 클릭하면 디테일한 정보 표시
+   
+	// 마커에 mouseout 이벤트를 등록합니다
+   daum.maps.event.addListener(marker, 'mouseout', function() {
+       // 클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면 마커의 이미지를 기본 이미지로 변경합니다
+       if (!selectedMarker || selectedMarker !== marker) {
+   		if($.inArray(marker, markersArr) != -1 ){return false;}
+   		if(arr.findIndex(function(item){return item.contentId === contentid})>-1){return false;}
+           marker.setImage(normalImage);
+       }
+   });
+   
+   //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
+   function createArrMarkers(marker){
+   		marker.setImage(clickImage);
+   		markersArr.push(marker);
+   		marker.setMap(map);
+   }
+   
+   
+ //마커 클릭시! 
    daum.maps.event.addListener(marker, 'click', function() {
+	   
+	   //wrapWindowByMask();//팝업 레이어 검정 배경
+  	   
+       // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면 마커의 이미지를 클릭 이미지로 변경합니다
+       if (!selectedMarker || selectedMarker !== marker) {
 
-      wrapWindowByMask(); //팝업 레이어 검정 배경
+           // 클릭된 마커 객체가 null이 아니면 클릭된 마커의 이미지를 기본 이미지로 변경하고
+           //!!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
 
-      //마커 클릭하면 자세한 정보
-      $.ajax({
-         url : 'callDetail.do',
-         type : 'get',
-         data : {
-            'contentId' : contentid,
-            'contentTypeId' : contenttypeid
-         },
-         dataType : 'json',
-         success : function(data) {
+           // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+           marker.setImage(clickImage);
+           
+           //선택한 목록에 이미 존재한다면 삭제.
+       }
+       var i = arr.findIndex(function(item){return item.contentId === contentid});
+       if(i > -1){
+    	   
+       	//이미지 노말로 변경
+    	   marker.setImage(normalImage);
+    	   
+    	   //arr에서 삭제.
+    	   arr.splice(i, 1);
+    	   markersArr.splice(i, 1);
+    	   
+    	   //if(afterpath.findIndex(function(item){return item.contentId === contentid})>-1){
+    		   //console.log("이미지 삭제");
+    		   //marker.setMap(null);
+    		   //}
+    	   
+    	   //div 지우기
+    	   var garbage = document.getElementById(contentid);
+    	   document.getElementById('path').removeChild(garbage);
+    	   
+    	   return false;
+       }
 
-            var myItem = data.response.body.items.item;
-            var output = '';
-            output += '<h4>' + myItem.treatmenu + '</h4>';
-            output += '<h4>' + myItem.opentimefood + '</h4>';
-            output += '<h4>' + myItem.reservationfood + '</h4>';
-
-            $('#window').html(output);
-         },
-         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Status: " + textStatus);
-            alert("Error: " + errorThrown);
-         }
-      });
+      // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+      selectedMarker = marker;
+      console.log(marker);
+      var obj = new Object();
+      obj.contentId = contentid;
+      obj.contentTypeId = contenttypeid;
+      //obj.mapy = mapy;
+      //obj.mapx = mapx;
+      obj.mapy = position[0];
+      obj.mapx = position[1];
+    	  
+      obj.title = title;
+      arr.push(obj);
+      createArrMarkers(marker);
+      
+      $.ajax({        
+          url: 'callDetail.do',
+          type: 'get',
+          data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+          dataType: 'json',
+          success: function(data){
+               var myItem = data.response.body.items.item;
+                  var output = '<div class="pin" value="'+ contentid + '" id="' + contentid + '" text-align:left>';
+                  	output += '<h4 id="title">' + title + '</h4>';
+                  var outputTitle = '<div class="pin" value="'+ contentid + '" id="' + contentid + '" text-align:left>';
+                  	outputTitle += '<h4 id="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' + title + '</h4></div>';
+                  if(contenttypeid == 12){
+  	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }else if(contenttypeid == 14){
+  	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                  }else if(contenttypeid == 15){
+  	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+  	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+  	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+  	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                  }else if(contenttypeid == 28){
+  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                  }else if(contenttypeid == 32){
+  	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+  	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                  }else if(contenttypeid == 38){
+  	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }else if(contenttypeid == 39){
+  	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                  }
+                  output += '</div>';
+                  $('#path').append(outputTitle);
+                  $('#window').html(output);
+          },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        } 
+  	});
    });
+
+
+   
+//   //마커 생성과 동시에 선그림
+//   var polyline = new daum.maps.Polyline({
+//      path : recPath, // 선을 구성하는 좌표배열 입니다
+//      strokeWeight : 3, // 선의 두께 입니다
+//      strokeColor : '#db4040', // 선의 색깔입니다
+//      strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+//      strokeStyle : 'solid' // 선의 스타일입니다
+//   });
+//
+//   polyline.setMap(map); //지도에 라인 추가
+//   polylines.push(polyline); //배열에 라인 담기 
 
 }
 
@@ -273,7 +404,6 @@ function wrapWindowByMask() {
 
 //경로 추천
 function recommend() {
-    console.log(sigungucode);
    
    $.ajax({
             url : 'getPath.do',
@@ -281,32 +411,33 @@ function recommend() {
             dataType : 'json',
             data : {'sigungucode' : sigungucode},
             success : function(jsonData) {
-
+            	deleteMarker();
                var path = jsonData.path;
                var sidePath = "";
-               var count = 0; //몇 번째인지 알기 위해서 사용
+               recPath = [];
 
                for (var i = path.length - 1; i >= 0; i--) {
                   for (var j = 0; j < positions.length; j++) {
                      if (path[i] == (positions[j].contentid)) {
-                        count++;
                         addMarker(positions[j].latlng,
                               positions[j].title,
                               positions[j].contentid,
-                              positions[j].contenttypeid, count);
+                              positions[j].contenttypeid);
 
                         sidePath += "<a href='javascript:panTo("
                               + positions[j].mapy + ","
                               + positions[j].mapx + ")'>"
                               + positions[j].title + "</a>" + "</br>";
 
-                        console.log(positions[j].latlng);
-
+                        arr.push(positions[j]);
+                        console.log(positions[j]);
+                        recPath.push(new daum.maps.LatLng(positions[j].mapy,positions[j].mapx));
                      }
                   }
                }
                $('#pathlist').html(sidePath); //경로 목록 찍어줌
-
+               
+               drawLine(recPath);
             },
             error : function(XMLHttpRequest, textStatus, errorThrown) {
                //          alert("Status: " + textStatus); alert("Error: " + errorThrown);  
@@ -314,6 +445,64 @@ function recommend() {
          });
 
 }
+
+//추천경로 구하기
+function getpath(){
+		if(arr.length < 3){
+			alert("3개 이상의 장소를 입력하시오.");
+			return false;
+		}
+	   //마커 재배치
+	   if(array!=null){
+			setMarkers(null);
+			setMarkersArr(map);
+			}
+	   $.ajaxSettings.traditional = true;
+	   $.ajax({
+		   url: 'getpath.do',
+		   type: 'POST',
+		   data: JSON.stringify(arr),
+		   dataType: 'json',
+		   contentType: 'application/json',
+		   success: function(data){
+			   console.log(data);
+			   $('#path').empty();
+			   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!afterpath
+			   //var arra = new Array();
+			   //arra = data;
+			   deletePolyLine();
+			   recPath = [];
+			   afterpath = data;
+			   var sidePath = '';
+			   var bounds = new daum.maps.LatLngBounds();
+				   $.each(afterpath, function(i, val){
+					   recPath.push(new daum.maps.LatLng(val.mapy, val.mapx));
+					   console.log(val);
+					   plusPath(val);
+					   
+					   var latlng = new daum.maps.LatLng(val.mapy,val.mapx);
+					   bounds.extend(latlng);
+					   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
+					   
+					   sidePath = "<a href='javascript:panTo(" + val.mapy + "," + val.mapx + ")'>" + val.title + "</a>" + "</br>";
+				   });
+				   console.log(linePath);
+
+				   var polyline = new daum.maps.Polyline({
+					   path: recPath, // 선을 구성하는 좌표배열 입니다
+					   strokeWeight: 3, // 선의 두께 입니다
+					   strokeColor: '#db4040', // 선의 색깔입니다
+					   strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+					   strokeStyle: 'solid' // 선의 스타일입니다
+					   });
+				   polyline.setMap(map);
+				   polylines.push(polyline);
+				   map.setBounds(bounds);
+				   $('#pathlist').html(sidePath);
+				   }
+	   });
+}
+
 
 //클릭하면 해당 위치로 이동 (인포윈도우)
 function panTo(mapy, mapx) {
@@ -324,4 +513,165 @@ function panTo(mapy, mapx) {
    // 지도 중심을 부드럽게 이동시킵니다
    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
    map.panTo(moveLatLon);
+}
+
+//추천경로순으로 뿌리기
+function plusPath(a){
+	var contentid = a.contentId;
+	var contenttypeid = a.contentTypeId;
+	 $.ajax({        
+        url: 'callDetail.do',
+        type: 'get',
+        data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+        dataType: 'json',
+        success: function(data){
+             var myItem = data.response.body.items.item;
+                var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
+                output += '<h4 id="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' + a.title + '</h4>';
+                output += '</div>';
+                
+                $('#path').append(output);
+        },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+          alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+      } 
+	});
+}
+
+//지도 검색
+function searchMap(){
+	if(polygons!=null){
+		deletePolygon(polygons); 
+	}
+	var keyword = $('#searchMap').val();
+	if(keyword == null){
+		alert("검색어를 입력하세요.");
+		return false;
+	}
+	if(array!=null){
+	setMarkers(null);
+	setMarkersArr(map);
+	}
+	$.ajax({
+		url:'search.do',
+		type: 'POST',
+		data: {keyword:keyword},
+		success: function(data){
+			console.log(data);
+			array = data;
+			if(array.length==0){
+				alert("검색 결과가 없습니다.");
+				return false;
+			}
+			var bounds = new daum.maps.LatLngBounds();
+			
+			$.each(array, function(i, val){
+				var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
+				bounds.extend(latlng);
+				addMarker(latlng, val.title, val.contentId, val.contentTypeId);
+			})
+			map.setBounds(bounds);
+			
+			//keyword값 ''로
+			$('#searchMap').val('');
+		}
+	})
+}
+
+function setMarkers(map){
+	 $.each(markers,function(i, val){
+		 val.setMap(map);
+	 })
+}
+	
+function setMarkersArr(map){
+	$.each(markersArr,function(i,val){
+		val.setMap(map);
+	})
+}
+
+//엔터로 검색
+function enterkey(){
+	if(window.event.keyCode == 13){
+		searchMap();
+	}
+}
+
+function drawLine(recPath){
+	deletePolyLine();
+	
+	var polyline = new daum.maps.Polyline({
+	path : recPath, // 선을 구성하는 좌표배열 입니다
+	strokeWeight : 3, // 선의 두께 입니다
+	strokeColor : '#db4040', // 선의 색깔입니다
+	strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+	strokeStyle : 'solid' // 선의 스타일입니다
+	});
+	
+	polyline.setMap(map); //지도에 라인 추가
+	polylines.push(polyline); //배열에 라인 담기 
+}
+
+//엑스표 누르면 arr와 div 삭제
+function deletePin(event){
+	console.log("event : " + event);
+	console.log(event);
+	var cid = (event.id).replace('d','');
+	
+	//arr에서 지우기
+	var i = arr.findIndex(function(item){return item.contentId === cid});
+	//이미지 노말로 바꾸기
+	markersArr[i].setImage(normalImage);
+	console.log("arr에서의 index");
+	console.log(i);
+	if(i > -1){//엑스표 누른게 arr배열에 있다면
+		
+		//arr에서 삭제
+		arr.splice(i, 1);
+		console.log("markersArr[i] : ");
+		console.log(markersArr[i]);
+		//마커 삭제
+		//markersArr[i].setMap(null);
+
+		//markersArr에서 삭제
+		markersArr.splice(i, 1);
+		
+		
+		//console.log("getpath의 결과?");
+		//console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
+		//if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){//getpath의 결과 일 경우. 마커를 삭제한다 
+			//markersArr[i].setMap(null);
+		//}else{//아닐 경우, 마커의 이미지를 normalImage로 바꾼다.
+			//markersArr[i].setImage(normalImage);
+		//}
+		
+		
+		
+		
+	}
+	console.log("markersArr : ");
+	console.log(markersArr);
+	
+	//div 지우기
+	var top = document.getElementById('path');
+	var garbage = document.getElementById(cid);
+	document.getElementById('path').removeChild(garbage);
+}
+
+//경로 새로고침
+function newpath(){
+	//마커지우기
+	setMarkers(null);
+	setMarkersArr(null);
+	
+	//선 지우기
+	polyline.setMap(null);
+	
+	//배열 다 비우기
+	arr.clear();
+	markersArr.clear();
+	markers.clear();
+	
+	//div 지우기
+	$('#path').empty();
 }

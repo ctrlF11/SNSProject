@@ -43,10 +43,9 @@ public class AddrServiceImpl implements AddrService{
 	 public AddrVO getAddress3() throws Exception {
 	      return dao.getAddress3();
 	   }
-
+	   	
 	@Override
-	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
-		// TODO Auto-generated method stub
-		return dao.getAddrWithCode(sigungucode);
-	}
+    public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
+         return dao.getAddrWithCode(sigungucode);
+      }
 }
