@@ -57,7 +57,7 @@ public class BoardController {
         System.out.println("index : " + index +" story-seq : " + story_seq);
         HashMap map = new HashMap();
         map.put("index", index);
-        map.put("story_seq", stroy_seq);
+        map.put("story_seq", story_seq);
         List<BoardVO> user = service.getBoardList(map);
         req.setAttribute("user", user);
         /*if(index == 0)

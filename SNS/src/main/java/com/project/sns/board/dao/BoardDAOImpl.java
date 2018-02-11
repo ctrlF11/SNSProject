@@ -179,12 +179,6 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.selectOne(namespace+".getImage",img_seq);
 	}
 
-	@Override
-	public void insertReply(ReplyVO vo) {
-		// TODO Auto-generated method stub
-		sqlSession.insert(namespace+".insertReply", vo);
-	}
-
 	// 2018-02-05 in
 	@Override
 	public List<StoryVO> getStoryAll(String id) throws Exception {
