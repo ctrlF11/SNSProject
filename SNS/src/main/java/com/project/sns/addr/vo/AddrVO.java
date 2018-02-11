@@ -21,12 +21,6 @@ public class AddrVO {
 	private String image3;
 	private String scope;
 	
-	public String getScope() {
-		return scope;
-	}
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
 	public String getContentTypeId() {
 		return contentTypeId;
 	}
@@ -134,6 +128,12 @@ public class AddrVO {
 	}
 	public void setImage3(String image3) {
 		this.image3 = image3;
+	}
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 
 	

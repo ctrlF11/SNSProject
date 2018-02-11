@@ -52,8 +52,6 @@
 	   	 t.contentId = r.contentId
 	   	 and addr1 like '%강남%'
 	  	 and cat3 = 'A05020100'
-	   	 and scope is not null
-	   	 and scope > 4.0
 	    </where>
 	    ORDER BY rand()
 	    limit 1;
@@ -62,6 +60,11 @@
      <select id ="getAddrWithCode" resultType="AddrVO">
       select * from TourMap m, TourMapCat c <where>m.contentId = c.contentId and sigungucode = #{sigungucode}</where>
    	 </select> 
+
+	<select id ="getAddrWithCode" resultType="AddrVO">
+		select * from TourMap m, TourMapCat c <where>m.contentId = c.contentId and sigungucode = #{sigungucode}</where>
+	</select> 
+
 
 		
 </mapper>

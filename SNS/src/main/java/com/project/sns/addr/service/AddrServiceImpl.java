@@ -36,16 +36,15 @@ public class AddrServiceImpl implements AddrService{
 	
 	@Override
 	   public List<AddrVO> getAddress2(String inside) throws Exception {
-	      System.out.println("inside : " + inside);
 	      return dao.getAddress2(inside);
 	   }
 	@Override
 	 public AddrVO getAddress3() throws Exception {
 	      return dao.getAddress3();
 	   }
-	   	
+	
 	@Override
-    public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
-         return dao.getAddrWithCode(sigungucode);
-      }
+	 public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
+	      return dao.getAddrWithCode(sigungucode);
+	   }
 }
