@@ -8,13 +8,9 @@
 	rel="stylesheet" type="text/css">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet"
-	href="resources/facebook/assets/css/bootstrap2.css">
-<link rel="stylesheet"
-	href="resources/facebook/assets/css/facebook2.css">
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
-<script>
+<%-- <script>
 var mapContainer = document.getElementById('map'), // 지도의 중심좌표
     mapOption = { 
         center: new daum.maps.LatLng(33.451475, 126.570528), // 지도의 중심좌표
@@ -142,9 +138,9 @@ function makeOutListener(infowindow) {
 }
 	$(".rBtn").click(function(){
 	alert("click 작동");
-   })
-</script>
-<c:forEach var="user" items="${requestScope.user}">
+   }) 
+</script>--%>
+<c:forEach var="list" items="${requestScope.list}">
 	<div class="panel panel-default">
 		<a href="#"> <img class="card-img-top img-fluid w-100"
 			src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png"
@@ -153,10 +149,9 @@ function makeOutListener(infowindow) {
 		<div class="card-body">
 			<h6 class="card-title mb-1">
 				<a
-					href="getBoardValue.do?story_seq=${user.story_seq }&writer=${user.writer}"><img
-					src="${user.firstimage }"></a>
+					href="getBoardValue.do?story_seq=${list.story_seq }&writer=<%= session.getAttribute("id") %>"></a>
 			</h6>
-			<p class="card-text small">${user.content}
+			<p class="card-text small">유저컨텐츠
 				<a href="#">#workinghardorhardlyworking</a>
 			</p>
 		</div>
@@ -165,7 +160,7 @@ function makeOutListener(infowindow) {
 			<a class="mr-3 d-inline-block" href="#">
 				<i class="fa fa-fw fa-thumbs-up"></i>Like
 			</a>
-			<a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment">
+			<a class="mr-3 d-inline-block" name="comment">
 				<i class="fa fa-fw fa-comment"></i>Comment
 			</a>
 			<a class="d-inline-block" href="#">
@@ -173,25 +168,7 @@ function makeOutListener(infowindow) {
 			</a>
 		</div>
 		<hr class="my-0">
-		<div class="card-body small bg-faded"></div>
-			<div id="replyDiv${user.board_seq }" class="reply" style="display: block;">
-				<table>
-					<tr>
-						<td class="header" width="370">댓글</td>
-					</tr>
-					<tr>
-						<td>
-							<textarea id="rContent" cols="50" rows="2">
-							</textarea>
-							<div id="cmsg">
-							</div>
-						</td>
-						<td align="right" class="bottom">
-							<button class="rBtn">댓글등록</button>
-						</td>
-					</tr>
-				</table>
-			</div>
+	</div>
 </c:forEach>
 
 

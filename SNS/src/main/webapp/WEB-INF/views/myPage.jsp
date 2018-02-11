@@ -8,7 +8,7 @@
 	rel="stylesheet" type="text/css">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>가즈아 - 회원 화면</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet"
@@ -17,8 +17,7 @@
 	href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
 <script src="resources/facebook/assets/js/check.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(
 					function() {
@@ -42,31 +41,32 @@
 											$('#btnShow').toggle();
 										});
 					});
-
+	var id = (String)("<%=session.getAttribute("id")%>");
+	
 	var mmm = function() {
-         $.ajax({
-            url : 'getBoardList.do',
-            data : {
-               index : index,
-               story_seq : <%=request.getAttribute("story_seq")%>
-            },
-            success : function(data) {
-               $("#col-sm-6").html(data);
-            }
-         })
-      
-   }
+		$.ajax({
+			url : 'getStoryList.do',
+			data : {
+				index : index,
+				id : id
+			},
+			success : function(data) {
+				$("#col-sm-8").html(data);
+			}
+		})
+	}
+  
 	
 	var index = 0;
 	
-	function togglethis(num) {
+	/* function togglethis(num) {
 		var replyDiv = document.getElementById("replyDiv"+num);
 		if(replyDiv.style.display == "none") {
 			replyDiv.style.display = "block";
 		} else {
 			replyDiv.style.display = "none";
 		}
-	}
+	} */
 	
 	$(function() {
 		mmm();
@@ -78,24 +78,19 @@
          if (sh == dh) {
             index += 4;
             $.ajax({
-               url : 'getBoardList.do',
+               url : 'getStoryList.do',
                data : {
-                  index : index,
-                  story_seq : <%=request.getAttribute("story_seq")%>
-               },
+            	   index : index,
+                   id : id
+				},
                success : function(data) {
-                  $("#col-sm-6").append(data);
+                  $("#col-sm-8").append(data);
                }
             })
          }
       })
 
 	});
-
-	$(document).on(function() {
-		$("#reply").hide();
-	})
-
 
 </script>
 </head>
@@ -158,39 +153,20 @@
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
 					<%@ include file="include/topbar.jsp"%>
-					<%@ include file="include/half_map.jsp"%>
+					<div class="padding">
+						<div class="full col-sm-9">
+							<div class="col-sm-8" id="col-sm-8">
+		
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							$('[data-toggle=offcanvas]')
-									.click(
-											function() {
-												$(this)
-														.toggleClass(
-																'visible-xs text-center');
-												$(this)
-														.find('i')
-														.toggleClass(
-																'glyphicon-chevron-right glyphicon-chevron-left');
-												$('.row-offcanvas')
-														.toggleClass('active');
-												$('#lg-menu').toggleClass(
-														'hidden-xs')
-														.toggleClass(
-																'visible-xs');
-												$('#xs-menu').toggleClass(
-														'visible-xs')
-														.toggleClass(
-																'hidden-xs');
-												$('#btnShow').toggle();
-											});
-						});
+		
 		function checkgo() {
 			var check = document.getElementById("search_category").value;
 			var keyword = document.getElementById("srch-term").value;

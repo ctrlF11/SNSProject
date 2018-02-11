@@ -222,22 +222,16 @@ public class BoardController {
     public String getStoryList(@RequestParam("index") int index, @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
     	logger.info("getStoryList.do");
     	request.setCharacterEncoding("UTF-8");
-    	
-    	
-    	HttpSession session = request.getSession();
     	System.out.println("아이디 : " + id);
     	id = AES.setDecrypting(id);
     	System.out.println("복호화한 아이디 : " + id);
-    	HashMap map = new HashMap();
+    	HashMap<String, Object> map = new HashMap<String, Object>();
     	map.put("index", index);
     	map.put("id", id);
     	
     	List<StoryVO> list = service.getStoryAll(map);
+    	request.setAttribute("list", list);
     	return "table2";
     }
  
-    @RequestMapping("/myPage.do")
-    public String myPage() {
-    	return "myPage";
-    }
 }
