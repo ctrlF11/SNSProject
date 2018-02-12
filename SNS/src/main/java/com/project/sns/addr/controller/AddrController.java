@@ -366,6 +366,7 @@ public class AddrController {
 		// 출력 형태를 지정
 		SimpleDateFormat dataFormat = new SimpleDateFormat("YYYYMMddHHmm");
 		String curDate = dataFormat.format(cal.getTime());
+		int time = Integer.parseInt(curDate.substring(8));
      		
 		for(int i=0; i<list.size(); i++) {
 			tempMap = new HashMap<>();
@@ -384,29 +385,42 @@ public class AddrController {
 		
 		Collections.shuffle(list);			//무작위 값 추려내기 위해서 list 한번 섞음
 		
-		String destination = list.get(1).getContentId();	//도착지 무작위 값
 		
-		Result result = dijkstra(distanceMap, list.get(0).getContentId(), list.get(0).getContentTypeId(), curDate);    	//dijkstra(거리 맵, 출발지)			//출발지 무작위 값
+		
+		
+		if(1130 <= time && time <= 1330 || 1730 <= time && time <= 1930) {
+			while(!list.get(0).getContentTypeId().equals("39")) {
+				Collections.shuffle(list);
+			}
+		} else { 
+			while(list.get(0).getContentTypeId().equals("39")) {
+				Collections.shuffle(list);
+			}
+		};
+		
+		String destination = list.get(1).getContentId();	//도착지 무작위 값
+		String start = list.get(0).getContentId();
+		
+		Result result = dijkstra(distanceMap, start, list.get(0).getContentTypeId(), time);    	//dijkstra(거리 맵, 출발지, 콘텐츠타입ID, 현재날짜시간)			//출발지 무작위 값
         double distance = result.shortestPath.get(destination);	//destination의 거리 값
                
-        ArrayList<String> path = new ArrayList<>();
+        ArrayList<String> path = new ArrayList<>();			//경로 담아두는 LIST
         String curNode = destination; 	//현재노드는 destination   
-        
-
-      	String timeNode = "22";
+       
+      	String timeNode = "";
         
         path.add(destination);			
+        	
+        while(!result.preNode.get(curNode).isEmpty()){					
+           curNode  = (String) result.preNode.get(curNode).get(0);						
+           											
+//           timeNode =  (String) result.preNode.get(curNode).get(1);	 		
+           path.add(curNode);
+        }																
         
-        while(!result.preNode.get(timeNode).isEmpty()){					//이전꺼는 (key, value)가 일치해서 이전 노드들의 추격이 가능함
-            curNode = result.preNode.get(timeNode);						//지금은 key는 시간 "22", value는 contentid가 들어가서 추격이 안됨
-            path.add(curNode);											//key = hashmap<time, cid>, value = hashmap<time, cid>
-            															//value.time = key.get(time) 일치시켜주면서 추격
-        }																//path.add(value.time)
         
         
-        
-        System.out.println(dataFormat);
-        System.out.println(curDate);
+
         
         Map<String, Object> jsonData = new HashMap<String, Object>();
         jsonData.put("path",path);
@@ -623,23 +637,20 @@ public class AddrController {
 	        //노드 까지 최단 거리
 	        HashMap<String, Double> shortestPath = new HashMap<>();
 	        //자기 이전의 노드 -> 루트 추적용
-	        HashMap<String, String> preNode = new HashMap<>(); 
+	        HashMap<String, ArrayList> preNode = new HashMap<>(); 
 	    }
 	    
 	    //input: Map<출발지, Map<도착지, 거리>>, 최초 출발지
 	    //output: Result object
 	    //do: dijkstra 알고리즘을 이용하여 출발지부터 각 노드까지 최단 거리, 루트 계산
-	    private static Result dijkstra(HashMap<String, HashMap<String, ArrayList>> graph, String start, String typeid, String timeData){
-	        HashMap<String, Double> shortestPath= new HashMap<>();
-	        HashMap<String, String> preNode = new HashMap<>();			//<시간, 이전노드이름>
+	    private static Result dijkstra(HashMap<String, HashMap<String, ArrayList>> graph, String start, String typeid, Integer time){
+	    	HashMap<String, Double> shortestPath= new HashMap<>();
+	        HashMap<String, ArrayList> preNode = new HashMap<>();			//<시간, 이전노드이름>
 	        HashMap<String, String> typeId = new HashMap<>();			//이전 노드와 같은 콘텐츠 타입의 장소 추천해주지 않기 위해서
-	        HashMap<String, String> timeMap = new HashMap<>();
-
-	        
-           	String time = timeData.substring(8);
-	        
+	        HashMap<String, Integer> timeMap = new HashMap<>();
+	                  	
 	        shortestPath.put(start, 0.0);
-	        preNode.put(time, "");
+	        preNode.put(start, new ArrayList());
 	        typeId.put(start, typeid);
 	        timeMap.put(start, time);
 	        
@@ -650,7 +661,9 @@ public class AddrController {
 	            Q.add(key);
 	            if(!key.equals(start)){			   //출발지가 아니면 경로, 이전 노드 초기화	            	
 	            	shortestPath.put(key, INFINITY);	            	
-	                preNode.put(key, "");
+	                preNode.put(key, new ArrayList());
+	                typeId.put(key, "");
+	                timeMap.put(key, 0);
 	            }
 	        }
 	        
@@ -659,7 +672,6 @@ public class AddrController {
 	            String minNode = "";
 	            String minTypeId = "";
 	            double minNodeDistance = INFINITY;
-	            int Scope = 0;
 	            int minTime = 0;
 	            
 	            for(String node: Q){
@@ -668,7 +680,7 @@ public class AddrController {
 	            		minNode = node;								
 	                    minNodeDistance = shortestPath.get(node);	
 	                    minTypeId = typeId.get(node);
-	                    minTime = Integer.parseInt(timeMap.get(node));
+	                    minTime = timeMap.get(node);
 	            		}	           		
 	            }
 	            Q.remove(minNode);	// 노드간 거리들 중 가장 낮은 거리는 Q에서 제외시킴
@@ -679,41 +691,54 @@ public class AddrController {
 	            HashMap<String, ArrayList> minNodeMap = graph.get(minNode);		//가장 적은 거리를 통해 이동했으니깐 거기서 출발(minNode=출발)	
 	            
 	            for(String key: minNodeMap.keySet()) {	
-	            		            	
-		               	String scope = minNodeMap.get(key).get(1).toString();
+	            		 
+	            		String sco = minNodeMap.get(key).get(1).toString().replaceAll("\n", "");
+	            		Double scop = Double.parseDouble(sco);
+	            		int scope = (int)Math.round(scop);
+
 		               	String contentId = minNodeMap.get(key).get(2).toString();
 		               	String contentTypeId = minNodeMap.get(key).get(3).toString();
 		               	int reMinTime = minTime + 200;
 	            	
-	            		double distance = minNodeDistance + Double.parseDouble(minNodeMap.get(key).get(0).toString());
-		                				//이동한 거리 + 출발지에서 다음 노드까지 거리
+	            		double distance = minNodeDistance + Double.parseDouble(minNodeMap.get(key).get(0).toString());		                				//이동한 거리 + 출발지에서 다음 노드까지 거리
 
-           	
-		                	
-		                if(1730<=minTime && minTime<=1930) {
+	            		distance = distance + 10;
+           			    
+	            		
+		                if(1130<=minTime && minTime<=1330 || 1730<=minTime && minTime<=1930) {
 		                	if(contentTypeId.equals("39")) {
+			                	distance = distance - 10;
 				                switch (scope){
-				                case "1": distance = distance + 5; break;
-				                case "2": distance = distance + 4; break;
-				                case "3": distance = distance + 3; break;
-				                case "4": distance = distance + 2; break;
-				                case "5": distance = distance + 1; break;
+				                case 1: distance = distance + 5; break;
+				                case 2: distance = distance + 4; break;
+				                case 3: distance = distance + 3; break;
+				                case 4: distance = distance + 2; break;
+				                case 5: distance = distance + 1; break;
 				                default : distance = distance + 10; break;
 				                }
 		                	} else {
 		                		distance = distance + 1000;
+		                	} 		                	
+		                } else {
+		                	if(contentTypeId.equals("39")) {
+		                		distance = distance + 1000;
 		                	}
-		                	
 		                }
 		                	
+		                if(typeId.get(minNode).equals("39")) {
+		                	distance = distance + 1000;
+		                }
+		                
 		                if(distance < shortestPath.get(key)){						//key까지 최소거리보다 distance가 적으면 그거로 바꿈		                	
-
+		                	ArrayList<Object> nodeMap = new ArrayList<>();
 		                	shortestPath.put(key, distance);						//minNode(출발) -> key(도착) 거리 update		                    
-		                	preNode.put(Integer.toString(reMinTime).substring(0,2), minNode);								//minNode -> key 이전 노드(=minNode) 
+		                	nodeMap.add(minNode);
+		                	nodeMap.add(reMinTime);		                	
+		                									//minNode -> key 이전 노드(=minNode) 
 		                    typeId.put(key, contentTypeId);							//이전 노드의 콘텐츠 타입 저장
-		                    timeMap.put(key, Integer.toString(reMinTime));
+		                    timeMap.put(key, reMinTime);
+		                    preNode.put(key, nodeMap);
 		                }
-
 	            	}            
 	            }
 	        	        
