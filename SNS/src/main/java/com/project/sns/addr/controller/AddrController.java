@@ -417,6 +417,12 @@ public class AddrController {
 	   public List<AddrVO> path(HttpServletRequest req, @RequestBody List<AddrVO> paramData) throws Exception{
 
 		   	System.out.println("paramData의 길이" + paramData.size());
+		   	System.out.println(paramData.toString());
+		   	for(int i = 0; i < paramData.size(); i++) {
+		   		System.out.println(paramData.get(i).getContentId());
+		   		System.out.println(paramData.get(i).getTitle());
+
+		   	}
 
 		   		int[][] W = getP.getW(paramData);
 		   		
