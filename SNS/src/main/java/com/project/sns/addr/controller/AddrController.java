@@ -383,31 +383,53 @@ public class AddrController {
 			distanceMap.put(list.get(i).getContentId(), tempMap);
 		}
 		
-		Collections.shuffle(list);			//무작위 값 추려내기 위해서 list 한번 섞음
+		Collections.shuffle(list);			//무작위 출발점 추려내기 위해서 list 한번 섞음		
 		
-		
-		
-		
-		if(1130 <= time && time <= 1330 || 1730 <= time && time <= 1930) {
-			while(!list.get(0).getContentTypeId().equals("39")) {
+		if(1130 <= time && time <= 1330 || 1730 <= time && time <= 1930) {			//점심, 저녁시간일 경우 음식점으로
+			while(!list.get(0).getContentTypeId().equals("39")) {					
 				Collections.shuffle(list);
 			}
 		} else { 
-			while(list.get(0).getContentTypeId().equals("39")) {
+			while(list.get(0).getContentTypeId().equals("39")) {					//그 외 시간은 다른 장소로 출발지 지정
 				Collections.shuffle(list);
 			}
 		};
 		
-		String destination = list.get(1).getContentId();	//도착지 무작위 값
+//		String destination = list.get(1).getContentId();	//도착지 무작위 값
+		
+
 		String start = list.get(0).getContentId();
 		
+		ArrayList destinationArry = new ArrayList<>();
+		
+		Integer timeNode = 0;
 		Result result = dijkstra(distanceMap, start, list.get(0).getContentTypeId(), time);    	//dijkstra(거리 맵, 출발지, 콘텐츠타입ID, 현재날짜시간)			//출발지 무작위 값
-        double distance = result.shortestPath.get(destination);	//destination의 거리 값
+		
+
+		for(String key : result.preNode.keySet()) {	
+			if(!result.preNode.get(key).isEmpty()) {
+				if((int) result.preNode.get(key).get(1) > timeNode) 
+					timeNode = (int) result.preNode.get(key).get(1);	
+			}
+		};
+		
+		for(String key : result.preNode.keySet()) {	
+			if(!result.preNode.get(key).isEmpty()) {
+				int resultTime = (Integer) result.preNode.get(key).get(1);
+				if(resultTime==timeNode) {
+					destinationArry.add(key);
+				}
+
+			}
+		};
+	
+		Collections.shuffle(destinationArry);
+		String destination = destinationArry.get(0).toString();
                
         ArrayList<String> path = new ArrayList<>();			//경로 담아두는 LIST
         String curNode = destination; 	//현재노드는 destination   
        
-      	String timeNode = "";
+      	
         
         path.add(destination);			
         	
@@ -648,8 +670,8 @@ public class AddrController {
 	        HashMap<String, ArrayList> preNode = new HashMap<>();			//<시간, 이전노드이름>
 	        HashMap<String, String> typeId = new HashMap<>();			//이전 노드와 같은 콘텐츠 타입의 장소 추천해주지 않기 위해서
 	        HashMap<String, Integer> timeMap = new HashMap<>();
-	                  	
-	        shortestPath.put(start, 0.0);
+
+	        shortestPath.put(start,0.0);
 	        preNode.put(start, new ArrayList());
 	        typeId.put(start, typeid);
 	        timeMap.put(start, time);
@@ -672,7 +694,7 @@ public class AddrController {
 	            String minNode = "";
 	            String minTypeId = "";
 	            double minNodeDistance = INFINITY;
-	            int minTime = 0;
+	            int curTime = 0;
 	            
 	            for(String node: Q){
 
@@ -680,7 +702,7 @@ public class AddrController {
 	            		minNode = node;								
 	                    minNodeDistance = shortestPath.get(node);	
 	                    minTypeId = typeId.get(node);
-	                    minTime = timeMap.get(node);
+	                    curTime = timeMap.get(node);
 	            		}	           		
 	            }
 	            Q.remove(minNode);	// 노드간 거리들 중 가장 낮은 거리는 Q에서 제외시킴
@@ -698,45 +720,44 @@ public class AddrController {
 
 		               	String contentId = minNodeMap.get(key).get(2).toString();
 		               	String contentTypeId = minNodeMap.get(key).get(3).toString();
-		               	int reMinTime = minTime + 200;
+		               	int nextTime = curTime + 200;
 	            	
-	            		double distance = minNodeDistance + Double.parseDouble(minNodeMap.get(key).get(0).toString());		                				//이동한 거리 + 출발지에서 다음 노드까지 거리
+	            		double distance = minNodeDistance + Double.parseDouble(minNodeMap.get(key).get(0).toString());		//처음 = 0 + 거리, 첫바퀴는 거리세팅      		//이동한 거리 + 출발지에서 다음 노드까지 거리
 
 	            		distance = distance + 10;
-           			    
-	            		
-		                if(1130<=minTime && minTime<=1330 || 1730<=minTime && minTime<=1930) {
-		                	if(contentTypeId.equals("39")) {
-			                	distance = distance - 10;
-				                switch (scope){
-				                case 1: distance = distance + 5; break;
-				                case 2: distance = distance + 4; break;
-				                case 3: distance = distance + 3; break;
-				                case 4: distance = distance + 2; break;
-				                case 5: distance = distance + 1; break;
-				                default : distance = distance + 10; break;
-				                }
-		                	} else {
-		                		distance = distance + 1000;
-		                	} 		                	
-		                } else {
-		                	if(contentTypeId.equals("39")) {
-		                		distance = distance + 1000;
-		                	}
-		                }
-		                	
-		                if(typeId.get(minNode).equals("39")) {
+           			    	            		
+	            		if(minNodeDistance!=0.0) {			//처음 거리 판별할 때
+	            			if(1130<=nextTime && nextTime<=1330 || 1730<=nextTime && nextTime<=1930) {
+	            				if(contentTypeId.equals("39")) {					//밥 시간에 음식점 코드면 평점에 따라 가중치 차등 부여
+
+	            					switch (scope){
+	            					case 1: distance = distance - 5; break;
+	            					case 2: distance = distance - 4; break;
+	            					case 3: distance = distance - 3; break;
+	            					case 4: distance = distance - 2; break;
+	            					case 5: distance = distance - 1; break;
+					                default : distance = distance - 5; break;
+					                }
+			                	} else {
+			                		distance = distance + 1000;						//음식점이 아닌 곳은 가중치 더해서 못가도록
+			                	} 		                	
+			                } else {
+			                	if(contentTypeId.equals("39"))		            //밥 시간이 아닐 때 음식점들에 대해서 가중치 부여
+			                		distance = distance + 10000;
+			                }		                				                				                
+		            	}
+/*		                if(typeId.get(minNode).equals("39")) {
 		                	distance = distance + 1000;
-		                }
+		                }*/
 		                
 		                if(distance < shortestPath.get(key)){						//key까지 최소거리보다 distance가 적으면 그거로 바꿈		                	
 		                	ArrayList<Object> nodeMap = new ArrayList<>();
 		                	shortestPath.put(key, distance);						//minNode(출발) -> key(도착) 거리 update		                    
 		                	nodeMap.add(minNode);
-		                	nodeMap.add(reMinTime);		                	
+		                	nodeMap.add(nextTime);		                	
 		                									//minNode -> key 이전 노드(=minNode) 
 		                    typeId.put(key, contentTypeId);							//이전 노드의 콘텐츠 타입 저장
-		                    timeMap.put(key, reMinTime);
+		                    timeMap.put(key, nextTime);
 		                    preNode.put(key, nodeMap);
 		                }
 	            	}            
