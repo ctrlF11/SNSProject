@@ -44,4 +44,16 @@ public class UserDAOImpl implements UserDAO{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".getUserImage", id);
 	}
+
+	@Override
+	public int getFollowingCount(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getFollowingCount", id);
+	}
+	
+	@Override
+	public int getFollowerCount(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getFollowerCount", id);
+	}
 }

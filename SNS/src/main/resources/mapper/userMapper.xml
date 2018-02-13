@@ -29,6 +29,18 @@
 		<select id="getAddress" parameterType="int" resultType="AddrVO">
 			select * from TourMap
 		</select>
+		<select id="getFollowingCount" parameterType="string" resultType="int">
+			select count(*) from Follow
+			<where>
+				follower = #{id}
+			</where>
+		</select>
+		<select id="getFollowerCount" parameterType="string" resultType="int">
+			select count(*) from Follow
+			<where>
+				following = #{id}
+			</where>
+		</select>
 		
 		
 		

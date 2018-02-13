@@ -55,28 +55,33 @@
 			}
 		})
 	}
-  	var aaa = function() {
+	var aaa = function() {
+		
+	}
+	
+  	var bbb = function() {
   		$.ajax({
 			url : 'getFollowingCount.do',
 			data : {
 				id : id
 			},
 			success : function(data) {
-				$("#counts").appendTo("<a>"+data+"</a> | ");
+				$("#counts").append("<a>"+data+"</a> | ");
+				ccc();
 			},
 			error : function(error) {
 				alert("error : " + error);
 			}
 		})
   	}
-  	var bbb = function() {
+  	var ccc = function() {
   		$.ajax({
 			url : 'getFollowerCount.do',
 			data : {
 				id : id
 			},
 			success : function(data) {
-				$("#counts").appendTo("<a>"+data+"</a> | ");
+				$("#counts").append("<a>"+data+"</a>");
 			},
 			error : function(error) {
 				alert("error : " + error);
@@ -104,6 +109,7 @@
 			},
 			success : function(data) {
 				$("#counts").append("<a>"+data+"</a> | ");
+				bbb();
 			},
 			error : function(error) {
 				alert("error : " + error);

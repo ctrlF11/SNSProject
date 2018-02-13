@@ -35,6 +35,18 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userDao.getUserImage(id);
 	}
+
+	@Override
+	public int getFollowingCount(String id) {
+		// TODO Auto-generated method stub
+		return userDao.getFollowingCount(id);
+	}
+
+	@Override
+	public int getFollowerCount(String id) {
+		// TODO Auto-generated method stub
+		return userDao.getFollowerCount(id);
+	}
 	
 	/*@Override
 	public List<UserVO> getUser1(int index){

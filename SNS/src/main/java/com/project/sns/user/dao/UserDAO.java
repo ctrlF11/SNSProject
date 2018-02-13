@@ -13,4 +13,6 @@ public interface UserDAO {
 	public UserVO getUser(String keyword);
 //	public List<UserVO> getUser1(@Param("index") int index); // ?
 	public String getUserImage(String id);
+	public int getFollowingCount(String id);
+	public int getFollowerCount(String id);
 }

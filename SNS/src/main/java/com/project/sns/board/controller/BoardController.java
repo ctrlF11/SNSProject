@@ -125,18 +125,6 @@ public class BoardController {
 		return count;
 	}
 	
-	@ResponseBody
-	@RequestMapping("/getFollowingCount.do")
-	public int getFollowingCount(@RequestParam("id") S                   tring id, HttpServletRequest request, HttpServletResponse response)
-		throws Exception{
-		id = AES.setDecrypting(id);
-		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html;chatset=UTF-8");
-		int count = service.getStoryCount(id);
-		System.out.println("count : " + count);
-		return count;
-	}
-
 	@RequestMapping("/homeview.do")
 	public String home1(@RequestParam("story_seq") int story_seq, HttpServletRequest req) {
 		req.setAttribute("story_seq", story_seq);
