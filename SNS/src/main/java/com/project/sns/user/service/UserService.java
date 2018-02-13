@@ -10,4 +10,5 @@ public interface UserService {
 	public List<UserVO> getUserList(UserVO vo);
 	public UserVO getUser(String keyword);
 //	public List<UserVO> getUser1(int index);
+	public String getUserImage(String id);
 }

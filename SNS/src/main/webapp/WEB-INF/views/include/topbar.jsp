@@ -7,12 +7,12 @@
 <title>Insert title here</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<!-- <link rel="stylesheet"
+<link rel="stylesheet"
 	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
-<script type="text/javascript" src="assets/js/jquery.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.js"></script> -->
+<script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
+<script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
 
 </head>
 <body>
@@ -21,23 +21,13 @@
 						<!-- 
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
                    -->
-						<div class="navbar-header">
-							<!-- 토글용 버튼인데.... collapse되어있어 비활성화된 듯 함. -->
-							<button class="navbar-toggle" type="button"
-								data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle</span>
-							</button>
-							<!-- 아이콘. margin-top을 늘림. -->
-							<a href="http://www.naver.com" class="navbar-brand logo">b</a>
-						</div>
-
-						<!-- 아이콘을 제외한 오른쪽 영역. -->
 						<nav class="navbar-collapse" role="navigation">
+							<a href="mainHomeView.do" class="navbar-brand logo">?</a>
 							<!-- 검색 폼. -->
-							<div class="search_wrap">
+							<div class="search_wrap" id="search_wrap">
 								<form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
 									<div class="input-group input-group-sm">
-										<select id="search_category" style="height: 30px;" >
+										<select id="search_category" style="height: 32px;" >
 											<option value="user">사람</option>
 											<option value="map">가게</option>
 											<option value="board">글</option>
@@ -80,7 +70,7 @@
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									<i class="glyphicon glyphicon-user"></i></a>
 									<ul class="dropdown-menu">
-									  <li><a href="">More</a></li>
+									  <li><a href="myPage.do">마이페이지</a></li>
 									  <li><a href="">More</a></li>
 									  <li><a href="">More</a></li>
 									  <li><a href="">More</a></li>

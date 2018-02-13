@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.project.sns.board.service.BoardService;
 import com.project.sns.user.service.UserService;
 import com.project.sns.user.vo.UserVO;
 
@@ -28,6 +30,7 @@ import A.algorithm.AES;
 	
 	@Autowired
 	private UserService service;
+	private BoardService boardService;
 	
 	@RequestMapping("/register.do")
 	public String write(UserVO vo){
@@ -140,9 +143,25 @@ import A.algorithm.AES;
     }
     
     @RequestMapping("/myPage.do")
-    public String myPage() {
+    public String myPage(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    	HttpSession session = req.getSession();
+    	String id = (String)session.getAttribute("id");
+    	System.out.println("아이디 : " + id);
+	     id = AES.setDecrypting(id);
+	     System.out.println("복호화한 아이디 : " + id);
+    	String img = service.getUserImage(id);
+    	
+    	req.setAttribute("img", img);
     	return "myPage";
     }
+    
+    @RequestMapping("/following.do")
+    public String following(@RequestParam("follower_id") String flw_id, @RequestParam("following_id") String flg_id) {
+    	
+    	return "";
+    }
+    
+    
     
     public static String getIP(HttpServletRequest request) {
     	String ip = request.getHeader("X-FORWARDED-FOR");

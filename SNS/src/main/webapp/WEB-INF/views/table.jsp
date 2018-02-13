@@ -177,6 +177,7 @@ function makeOutListener(infowindow) {
 </script>
 
 <c:forEach var="user" items="${requestScope.user}">
+<br/>
    <div class="panel panel-default">
       <a href="#"> <img class="card-img-top img-fluid w-100"
          src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png"
@@ -215,48 +216,53 @@ function makeOutListener(infowindow) {
         <label for="content">comment</label>
         <form name="commentInsertForm">
             <div class="input-group">
-               <input type="hidden" name="board_seq" value="${user.board_seq}"/>
-               <input type="hidden" name="story_seq" value="${user.story_seq}"/>
-               <input type="text" class="form-control" id="content" name="content" placeholder="내용을 입력하세요.">
+               <input type="hidden" name="board_seq${user.board_seq}" value="${user.board_seq}" id="board_seq${user.board_seq}" />
+               <input type="hidden" name="story_seq${user.story_seq}" value="${user.story_seq}" id="board_seq${user.story_seq}"/>
+               <input type="text" class="form-control" id="content" name="content${user.board_seq}" placeholder="내용을 입력하세요.">
                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" name="rbtn" onclick="r_button()">등록</button>
+                    <button class="btn btn-default" type="button" name="rbtn" onclick="r_button(${user.board_seq},${user.story_seq})">등록</button>
                </span>
               </div>
         </form>
     </div>
     <div class="container" >
-        <div class="commentList" name="commentList"></div>
+        <div class="commentList" name="commentList${user.board_seq}"></div>
     </div>
 </div>
 <!--                     추가                         -->
 </c:forEach>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
- $(document).ready(function(){
-	replyList();
+$(document).ready(function(){
+      <%
+       for (int i = 0; i < list.size(); i++) {
+       %>
+       replyList( <%=list.get(i).getBoard_seq()%>,<%=list.get(i).getStory_seq()%>);
+      <%}%>
+      
 })
-function replyList(){
-	  	 $.ajax({
-		        url : 'list.do',
-		        type : 'get',
-		        data : {
-			        	'board_seq': $('[name=board_seq]').val(),
-	 		        	'story_seq' : $('[name=story_seq]').val()	
-		        },
-		        success : function(data){
-		            var a =''; 
-		            $.each(data, function(key, value){ 
-		                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-		                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
-		                a += '<button onclick="replyUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>';
-		                a += '<button onclick="replyDelete('+value.reply_seq+');"> 삭제 </button> </div>';
-		                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
-		                a += '</div></div>';
-		            });
-		            
-		            $("[name=commentList]").html(a);
-		        }
-		    });
-	  	//댓글 삭제 
+function replyList(board_seq,story_seq){
+     $.ajax({
+           url : 'list.do',
+           type : 'get',
+           data : {
+                 'board_seq':board_seq,
+                 'story_seq' :story_seq   
+           },
+           success : function(data){
+               var a =''; 
+               $.each(data, function(key, value){ 
+                   a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+                   a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
+                   a += '<button onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+');"> 수정 </button>';
+                   a += '<button onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
+                   a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
+                   a += '</div></div>';
+                   $('[name=commentList'+board_seq+']').html(a);
+               });
+               
+               
+           }
+       });
 } 
 </script>

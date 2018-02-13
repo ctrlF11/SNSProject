@@ -54,7 +54,16 @@
 			where b.story_seq = #{story_seq}
 			and s.id = #{id}
 			limit #{index},4;
-			
+		</select>
+		<select id="seeBoardList" parameterType="map" resultType="BoardVO" >
+			Select * From 
+			Board b left JOIN TourMap t  
+			ON b.contentId = t.contentId
+			left JOIN Story s
+			ON b.story_seq = s.story_seq 
+			where b.story_seq = #{story_seq}
+			and s.writer = #{writer}
+			limit #{index},4;
 		</select>
 		<select id="getBoardStoryList" parameterType="BoardVO" resultType="BoardVO" >
 				select * 
@@ -171,6 +180,12 @@
 		<!-- 2018/02/05 in -->
 		<select id="getStoryAll" parameterType="string" resultType="StoryVO">
 			select * from Story
+			<where>
+				id = #{id}
+			</where>
+		</select>
+		<select id="getStoryCount" parameterType="string" resultType="int">
+			select count(*) from Story
 			<where>
 				id = #{id}
 			</where>

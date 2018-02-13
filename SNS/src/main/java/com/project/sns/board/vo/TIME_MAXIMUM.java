@@ -1,7 +1,7 @@
 package com.project.sns.board.vo;
-//°Ô½Ã±Û ¾²°í ³­ÈÄ ½Ã°£ Ã¼Å©
+//ê²Œì‹œê¸€ ì“°ê³  ë‚œí›„ ì‹œê°„ ì²´í¬
 import java.util.Date;
-//~½Ã°£ Àü Ã¼Å©ÇØÁÖ´Â ¸ğµâ
+//~ì‹œê°„ ì „ ì²´í¬í•´ì£¼ëŠ” ëª¨ë“ˆ
 public class TIME_MAXIMUM {
  public static final int SEC = 60;
  public static final int MIN = 60;
@@ -19,23 +19,23 @@ public class TIME_MAXIMUM {
 
     if (diffTime < TIME_MAXIMUM.SEC) {
        // sec
-       msg = diffTime + "ÃÊÀü";
+       msg = diffTime + "ì´ˆì „";
     } else if ((diffTime /= TIME_MAXIMUM.SEC) < TIME_MAXIMUM.MIN) {
        // min
        System.out.println(diffTime);
 
-       msg = diffTime + "ºĞÀü";
+       msg = diffTime + "ë¶„ì „";
     } else if ((diffTime /= TIME_MAXIMUM.MIN) < TIME_MAXIMUM.HOUR) {
        // hour
-       msg = (diffTime) + "½Ã°£Àü";
+       msg = (diffTime) + "ì‹œê°„ì „";
     } else if ((diffTime /= TIME_MAXIMUM.HOUR) < TIME_MAXIMUM.DAY) {
        // day
-       msg = (diffTime) + "ÀÏÀü";
+       msg = (diffTime) + "ì¼ì „";
     } else if ((diffTime /= TIME_MAXIMUM.DAY) < TIME_MAXIMUM.MONTH) {
        // day
-       msg = (diffTime) + "´ŞÀü";
+       msg = (diffTime) + "ë‹¬ì „";
     } else {
-       msg = (diffTime) + "³âÀü";
+       msg = (diffTime) + "ë…„ì „";
     }
 
     return msg;

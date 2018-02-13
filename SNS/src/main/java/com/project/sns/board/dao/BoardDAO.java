@@ -54,6 +54,8 @@ public interface BoardDAO {
 	public List<StoryVO> getStoryAll(String id) throws Exception;
 //	public List<StoryVO> getStoryAll(HashMap map) throws Exception;
 	
+	public int getStoryCount(String id) throws Exception;
+	
 
     // 댓글 개수
     public int replyCount() throws Exception;
@@ -69,5 +71,5 @@ public interface BoardDAO {
     // 댓글 삭제
     public int replyDelete(ReplyVO reply) throws Exception;
 
-
+   
 }

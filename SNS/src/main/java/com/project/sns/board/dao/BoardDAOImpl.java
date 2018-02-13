@@ -211,6 +211,12 @@ public class BoardDAOImpl implements BoardDAO {
 	    // ��� ����
 	    public int replyDelete(ReplyVO reply) throws Exception{
 	    	return sqlSession.delete(namespace+".replyDelete", reply);
-	    };
+	    }
+
+		@Override
+		public int getStoryCount(String id) throws Exception {
+			// TODO Auto-generated method stub
+			return sqlSession.selectOne(namespace+".getStoryCount", id);
+		};
 
 }

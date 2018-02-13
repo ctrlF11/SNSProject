@@ -227,6 +227,12 @@ public class BoardServiceImpl implements BoardService {
     // ��� ����
     public int replyDelete(ReplyVO reply) throws Exception{
     	return dao.replyDelete(reply);
-    };
+    }
+
+	@Override
+	public int getStoryCount(String id) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getStoryCount(id);
+	};
 
 }
