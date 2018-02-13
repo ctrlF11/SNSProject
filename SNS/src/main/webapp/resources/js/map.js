@@ -20,98 +20,98 @@
                                        'hidden-xs');
                                  $('#btnShow').toggle();
                               });
-                        });
+               			});
 
 
 //행정구역 구분
 $.getJSON("resources/json/seoul_gson.geojson", function(geojson) {
 
-   var data = geojson.features;
-   var coordinates = [];   //좌표 저장할 배열
-   var name = '';         //지역 구 이름
-   var gucode ='';         //행정구역 코드번호
-   $.each(data, function(index, val) {
+	var data = geojson.features;
+	var coordinates = [];	//좌표 저장할 배열
+	var name = '';			//지역 구 이름
+	var gucode ='';			//행정구역 코드번호
+	$.each(data, function(index, val) {
 
-      coordinates = val.geometry.coordinates;
-      name = val.properties.SIG_KOR_NM;
-      gucode = val.properties.orig_ogc_fid;
-      
-      displayArea(coordinates, name, gucode);
-//      console.log(coordinates);
-   })
+		coordinates = val.geometry.coordinates;
+		name = val.properties.SIG_KOR_NM;
+		gucode = val.properties.orig_ogc_fid;
+		
+		displayArea(coordinates, name, gucode);
+//		console.log(coordinates);
+	})
 })
-var sigungucode ='';         //function recommend()의 AJAX로 지역구 코드를 보내기 위한 변수
-var polygons=[];            //function 안 쪽에 지역변수로 넣으니깐 폴리곤 하나 생성할 때마다 배열이 비어서 클릭했을 때 전체를 못 없애줌.  그래서 전역변수로 만듦.
-   //행정구역 폴리곤
+var sigungucode ='';			//function recommend()의 AJAX로 지역구 코드를 보내기 위한 변수
+var polygons=[];				//function 안 쪽에 지역변수로 넣으니깐 폴리곤 하나 생성할 때마다 배열이 비어서 클릭했을 때 전체를 못 없애줌.  그래서 전역변수로 만듦.
+	//행정구역 폴리곤
 function displayArea(coordinates, name, gucode) {
 
-   var path = [];         //폴리곤 그려줄 path
-   var points = [];      //중심좌표 구하기 위한 지역구 좌표들
-   
-   $.each(coordinates[0], function(index, coordinate) {      //console 보면 [0]번째에 배열이 주로 저장이 됨.  그래서 [0]번째 배열에서 꺼내줌.
-      var point = new Object(); 
-      point.x = coordinate[1];
-      point.y = coordinate[0];
-      points.push(point);
-      path.push(new daum.maps.LatLng(coordinate[1], coordinate[0]));         //new daum.maps.LatLng가 없으면 인식을 못해서 path 배열에 추가
-   })
-   
-   // 다각형을 생성합니다 
-   var polygon = new daum.maps.Polygon({
-      map : map, // 다각형을 표시할 지도 객체
-      path : path,
-      strokeWeight : 2,
-      strokeColor : '#004c80',
-      strokeOpacity : 0.8,
-      fillColor : '#fff',
-      fillOpacity : 0.7
-   });
-   
-   polygons.push(polygon);         //폴리곤 제거하기 위한 배열
+	var path = [];			//폴리곤 그려줄 path
+	var points = [];		//중심좌표 구하기 위한 지역구 좌표들
+	
+	$.each(coordinates[0], function(index, coordinate) {		//console 보면 [0]번째에 배열이 주로 저장이 됨.  그래서 [0]번째 배열에서 꺼내줌.
+		var point = new Object(); 
+		point.x = coordinate[1];
+		point.y = coordinate[0];
+		points.push(point);
+		path.push(new daum.maps.LatLng(coordinate[1], coordinate[0]));			//new daum.maps.LatLng가 없으면 인식을 못해서 path 배열에 추가
+	})
+	
+	// 다각형을 생성합니다 
+	var polygon = new daum.maps.Polygon({
+		map : map, // 다각형을 표시할 지도 객체
+		path : path,
+		strokeWeight : 2,
+		strokeColor : '#004c80',
+		strokeOpacity : 0.8,
+		fillColor : '#fff',
+		fillOpacity : 0.7
+	});
+	
+	polygons.push(polygon);			//폴리곤 제거하기 위한 배열
 
-   // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다 
-   // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
-   daum.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
-      polygon.setOptions({
-         fillColor : '#09f'
-      });
+	// 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다 
+	// 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+	daum.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
+		polygon.setOptions({
+			fillColor : '#09f'
+		});
 
-      customOverlay.setContent('<div class="area">' + name + '</div>');
+		customOverlay.setContent('<div class="area">' + name + '</div>');
 
-      customOverlay.setPosition(mouseEvent.latLng);
-      customOverlay.setMap(map);
-   });
+		customOverlay.setPosition(mouseEvent.latLng);
+		customOverlay.setMap(map);
+	});
 
-   // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다 
-   daum.maps.event.addListener(polygon, 'mousemove', function(mouseEvent) {
+	// 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다 
+	daum.maps.event.addListener(polygon, 'mousemove', function(mouseEvent) {
 
-      customOverlay.setPosition(mouseEvent.latLng);
-   });
+		customOverlay.setPosition(mouseEvent.latLng);
+	});
 
-   // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
-   // 커스텀 오버레이를 지도에서 제거합니다 
-   daum.maps.event.addListener(polygon, 'mouseout', function() {
-      polygon.setOptions({
-         fillColor : '#fff'
-      });
-      customOverlay.setMap(null);
-   });
+	// 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+	// 커스텀 오버레이를 지도에서 제거합니다 
+	daum.maps.event.addListener(polygon, 'mouseout', function() {
+		polygon.setOptions({
+			fillColor : '#fff'
+		});
+		customOverlay.setMap(null);
+	});
 
-   // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 해당 지역 확대, 시군구코드 넘겨줌
-   daum.maps.event.addListener(polygon, 'click', function() {
-      
+	// 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 해당 지역 확대, 시군구코드 넘겨줌
+	daum.maps.event.addListener(polygon, 'click', function() {
+		
         // 현재 지도 레벨에서 2레벨 확대한 레벨
-      var level = map.getLevel()-2;
-      
+		var level = map.getLevel()-2;
+		
         // 지도를 클릭된 폴리곤의 중앙 위치를 기준으로 확대합니다
         map.setLevel(level, {anchor: centroid(points), animate: {
             duration: 350
-        }});         
+        }});			
         
-        sigungucode = gucode;                  
+        sigungucode = gucode;						
 
-        deletePolygon(polygons);               //폴리곤 제거      
-   });
+        deletePolygon(polygons);					//폴리곤 제거      
+	});
 
 }
 
@@ -138,190 +138,187 @@ function centroid (points) {
 
 var recPath = []; //라인 이을 추천 경로들의 배열
 var markers = []; //마커 담을 배열
-var polylines = []; //라인 담을 배열   
+var polylines = []; //라인 담을 배열	
 
 function addMarker(position, title, contentid, contenttypeid, count) {
 
-   if (count == 1) { //처음 돌 때(추천 경로 버튼을 눌렀을 때)
-      deleteMarker(); //지도에 남아있는 마커들 제거
-      deletePolyLine(); //지도에 남아있는 라인 제거
-   }
+	if (count == 1) { //처음 돌 때(추천 경로 버튼을 눌렀을 때)
+		deleteMarker(); //지도에 남아있는 마커들 제거
+		deletePolyLine(); //지도에 남아있는 라인 제거
+	}
 
 
-   // 마커 이미지의 이미지 주소입니다
-   var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-   // 마커 이미지의 이미지 크기 입니다
-   var imageSize = new daum.maps.Size(24, 35);
+	// 마커 이미지의 이미지 주소입니다
+	var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+	// 마커 이미지의 이미지 크기 입니다
+	var imageSize = new daum.maps.Size(24, 35);
 
-   // 마커 이미지를 생성합니다    
-   var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize);
+	// 마커 이미지를 생성합니다    
+	var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize);
 
-   // 마커를 생성합니다
-   marker = new daum.maps.Marker({
-      map : map, // 마커를 표시할 지도
-      position : position, // 마커를 표시할 위치
-      title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-      image : markerImage
-   // 마커 이미지 
-   });
-   
+	// 마커를 생성합니다
+	marker = new daum.maps.Marker({
+		map : map, // 마커를 표시할 지도
+		position : position, // 마커를 표시할 위치
+		title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+		image : markerImage
+	// 마커 이미지 
+	});
+	
 
-   
-   markers.push(marker); //배열에 생성된 마커 추가
-   recPath.push(position); //추천 경로 배열에 좌표 추가
+	
+	markers.push(marker); //배열에 생성된 마커 추가
+	recPath.push(position); //추천 경로 배열에 좌표 추가
 
-   var polyline = new daum.maps.Polyline({
-      path : recPath, // 선을 구성하는 좌표배열 입니다
-      strokeWeight : 3, // 선의 두께 입니다
-      strokeColor : '#db4040', // 선의 색깔입니다
-      strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      strokeStyle : 'solid' // 선의 스타일입니다
-   });
+	var polyline = new daum.maps.Polyline({
+		path : recPath, // 선을 구성하는 좌표배열 입니다
+		strokeWeight : 3, // 선의 두께 입니다
+		strokeColor : '#db4040', // 선의 색깔입니다
+		strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		strokeStyle : 'solid' // 선의 스타일입니다
+	});
 
-   polyline.setMap(map); //지도에 라인 추가
-   polylines.push(polyline); //배열에 라인 담기 
+	polyline.setMap(map); //지도에 라인 추가
+	polylines.push(polyline); //배열에 라인 담기 
 
-   //마커 클릭하면 디테일한 정보 표시
-   daum.maps.event.addListener(marker, 'click', function() {
+	//마커 클릭하면 디테일한 정보 표시
+	daum.maps.event.addListener(marker, 'click', function() {
 
-      wrapWindowByMask(); //팝업 레이어 검정 배경
+		wrapWindowByMask(); //팝업 레이어 검정 배경
 
-      //마커 클릭하면 자세한 정보
-      $.ajax({
-         url : 'callDetail.do',
-         type : 'get',
-         data : {
-            'contentId' : contentid,
-            'contentTypeId' : contenttypeid
-         },
-         dataType : 'json',
-         success : function(data) {
+		//마커 클릭하면 자세한 정보
+		$.ajax({
+			url : 'callDetail.do',
+			type : 'get',
+			data : {
+				'contentId' : contentid,
+				'contentTypeId' : contenttypeid
+			},
+			dataType : 'json',
+			success : function(data) {
 
-            var myItem = data.response.body.items.item;
-            var output = '';
-            output += '<h4>' + myItem.treatmenu + '</h4>';
-            output += '<h4>' + myItem.opentimefood + '</h4>';
-            output += '<h4>' + myItem.reservationfood + '</h4>';
+				var myItem = data.response.body.items.item;
+				var output = '';
+				output += '<h4>' + myItem.treatmenu + '</h4>';
+				output += '<h4>' + myItem.opentimefood + '</h4>';
+				output += '<h4>' + myItem.reservationfood + '</h4>';
 
-            $('#window').html(output);
-         },
-         error : function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Status: " + textStatus);
-            alert("Error: " + errorThrown);
-         }
-      });
-   });
+				$('#window').html(output);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("Status: " + textStatus);
+				alert("Error: " + errorThrown);
+			}
+		});
+	});
 
 }
 
 //지도 위 표시되고 있는 마커 제거
 function deleteMarker() {
-   for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-   }
-   markers = [];
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
 }
 
 //지도 위 표시되고 있는 라인 제거
 function deletePolyLine() {
-   for (var i = 0; i < polylines.length; i++) {
-      polylines[i].setMap(null);
-   }
-   polylines = [];
-   recPath = []; //라인 이어줄 좌표들 있는 배열 초기화
+	for (var i = 0; i < polylines.length; i++) {
+		polylines[i].setMap(null);
+	}
+	polylines = [];
+	recPath = []; //라인 이어줄 좌표들 있는 배열 초기화
 }
 
 //지도 위 표시되고 있는 폴리곤 제거
 function deletePolygon(polygons) {
-   for (var i = 0; i < polygons.length; i++) {
-      polygons[i].setMap(null);
-   }
-   polygons = [];
+	for (var i = 0; i < polygons.length; i++) {
+		polygons[i].setMap(null);
+	}
+	polygons = [];
 }
 
 //팝업 레이어
 function wrapWindowByMask() {
 
-   // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
-   $('#mask').click(function() {
-      $(this).hide();
-      $('#window').hide();
-   });
+	// 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
+	$('#mask').click(function() {
+		$(this).hide();
+		$('#window').hide();
+	});
 
-   var maskHeight = $('#map').height();
-   var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+	var maskHeight = $('#map').height();
+	var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
 
-   $('#mask').css({
-      'width' : maskWidth,
-      'height' : maskHeight
-   }); //마스크의 투명도 처리 
-   $('#mask').fadeTo("slow", 0.8);
+	$('#mask').css({
+		'width' : maskWidth,
+		'height' : maskHeight
+	}); //마스크의 투명도 처리 
+	$('#mask').fadeTo("slow", 0.8);
 
-   var left = ($('#map').scrollLeft() + ($('#map').width() - $('#window')
-         .width()) / 2);
-   var top = ($('#map').scrollTop() + ($('#map').height() - $('#window')
-         .height()) / 2);
+	var left = ($('#map').scrollLeft() + ($('#map').width() - $('#window')
+			.width()) / 2);
+	var top = ($('#map').scrollTop() + ($('#map').height() - $('#window')
+			.height()) / 2);
 
-   $('#window').css({
-      'left' : left,
-      'top' : top,
-      'position' : 'absolute'
-   });
+	$('#window').css({
+		'left' : left,
+		'top' : top,
+		'position' : 'absolute'
+	});
 
-   $('#window').show();
+	$('#window').show();
 }
 
 //경로 추천
 function recommend() {
-    console.log(sigungucode);
-   
-   $.ajax({
-            url : 'getPath.do',
-            type : 'get',
-            dataType : 'json',
-            data : {'sigungucode' : sigungucode},
-            success : function(jsonData) {
+ 
+	$.ajax({
+				url : 'getPath.do',
+				type : 'get',
+				dataType : 'json',
+				data : {'sigungucode' : sigungucode},
+				success : function(jsonData) {
 
-               var path = jsonData.path;
-               var sidePath = "";
-               var count = 0; //몇 번째인지 알기 위해서 사용
+					var path = jsonData.path;
+					var sidePath = "";
+					var count = 0; //몇 번째인지 알기 위해서 사용(첫번째 돌 때만 마커,라인 지우기 위해서)
 
-               for (var i = path.length - 1; i >= 0; i--) {
-                  for (var j = 0; j < positions.length; j++) {
-                     if (path[i] == (positions[j].contentid)) {
-                        count++;
-                        addMarker(positions[j].latlng,
-                              positions[j].title,
-                              positions[j].contentid,
-                              positions[j].contenttypeid, count);
+					for (var i = path.length - 1; i >= 0; i--) {
+						for (var j = 0; j < positions.length; j++) {
+							if (path[i] == (positions[j].contentid)) {
+								count++;
+								addMarker(positions[j].latlng,							//마커 추가 
+										positions[j].title,
+										positions[j].contentid,
+										positions[j].contenttypeid, count);
 
-                        sidePath += "<a href='javascript:panTo("
-                              + positions[j].mapy + ","
-                              + positions[j].mapx + ")'>"
-                              + positions[j].title + "</a>" + "</br>";
+								sidePath += "<a href='javascript:panTo("				//경로 목록 클릭시 화면이동
+										+ positions[j].mapy + ","
+										+ positions[j].mapx + ")'>"
+										+ positions[j].title + "</a>" + "</br>";
 
-                        console.log(positions[j].latlng);
+							}
+						}
+					}
+					$('#pathlist').html(sidePath); //경로 목록 찍어줌
 
-                     }
-                  }
-               }
-               $('#pathlist').html(sidePath); //경로 목록 찍어줌
-
-            },
-            error : function(XMLHttpRequest, textStatus, errorThrown) {
-               //          alert("Status: " + textStatus); alert("Error: " + errorThrown);  
-            }
-         });
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					//      	 alert("Status: " + textStatus); alert("Error: " + errorThrown);  
+				}
+			});
 
 }
 
-//클릭하면 해당 위치로 이동 (인포윈도우)
+//클릭하면 해당 위치로 이동
 function panTo(mapy, mapx) {
 
-   // 이동할 위도 경도 위치를 생성합니다 
-   var moveLatLon = new daum.maps.LatLng(mapy, mapx);
+	// 이동할 위도 경도 위치를 생성합니다 
+	var moveLatLon = new daum.maps.LatLng(mapy, mapx);
 
-   // 지도 중심을 부드럽게 이동시킵니다
-   // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-   map.panTo(moveLatLon);
+	// 지도 중심을 부드럽게 이동시킵니다
+	// 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+	map.panTo(moveLatLon);
 }

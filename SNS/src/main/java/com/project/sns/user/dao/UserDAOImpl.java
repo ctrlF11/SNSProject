@@ -38,4 +38,10 @@ public class UserDAOImpl implements UserDAO{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".getUser", keyword);
 	}
+
+	@Override
+	public String getUserImage(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getUserImage", id);
+	}
 }

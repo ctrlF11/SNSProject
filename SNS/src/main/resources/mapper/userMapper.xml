@@ -15,14 +15,22 @@
 				#{id} = id
 			</where>
 		</select>
+		<select id="getUserImage" parameterType="string" resultType="string">
+			select profile_img from SnsUser
+			<where>
+				#{id} = id
+			</where>		
+		</select>
 		<insert id="insertUser" parameterType="UserVO">
-			insert into snsUser(id, name, password, birthday, sex, email)
+			insert into SnsUser(id, name, password, birthday, sex, email)
 			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
 		</insert>
 		
 		<select id="getAddress" parameterType="int" resultType="AddrVO">
 			select * from TourMap
 		</select>
+		
+		
 		
 
 </mapper>

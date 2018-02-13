@@ -312,3 +312,30 @@ small.text-muted {
 #col-sm-6 {
 	overflow-y: auto;
 }
+
+.card-body-top {
+	vertical-align: center;
+	text-align: center;
+	list-style: none;
+}
+.card-body-top ul {
+	padding: 0;
+	vertical-align: middle;
+	text-align: center;
+	list-style: none;
+}
+.card-body-top ul li {
+	padding: 0;
+	vertical-align: middle;
+	text-align: center;
+	list-style: none;
+	max-height: 35px;
+	line-height: 35px;
+}
+.card-body-top ul li a {
+	width: 30%;
+	height: 34px;
+	border: 1px solid black;
+	display: inline-block;
+}
+	

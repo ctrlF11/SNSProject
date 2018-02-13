@@ -11,30 +11,13 @@
 	href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
-<script type="text/javascript" src="assets/js/jquery.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.js"></script>
-<!-- <script type="text/javascript">
-	function searchResize() {
-			alert("작동 확인....");
-		var search = document.getElementById("srch-term");
-		var wrap = document.getElementById("search_wrap");
-		var top = document.getElementById("navbar-top");
-		if(top.style.width < 980) {
-			alert("top.style.width < 980");
-			wrap.style.width = top.style.width - 200 + 'px';
-			search.style.width = wrap.style.width - 100 + 'px';
-		}
-		if(top.style.width >= 980) {
-			alert("top.style.width >= 980");
-			search.style.width = 620 + 'px';
-		}
-	}
-	
-	window.addEventListener('resize', searchResize);
-</script> -->
+<script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
+<script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
+
 </head>
 <body>
-					<div class="navbar navbar-blue navbar-static-top" id="navbar-top">
+
+					<div class="navbar navbar-blue navbar-static-top">
 						<!-- 
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
                    -->
@@ -44,7 +27,7 @@
 							<div class="search_wrap" id="search_wrap">
 								<form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
 									<div class="input-group input-group-sm">
-										<select id="search_category" style="height: 30px;" >
+										<select id="search_category" style="height: 32px;" >
 											<option value="user">사람</option>
 											<option value="map">가게</option>
 											<option value="board">글</option>
@@ -76,11 +59,11 @@
 									%>
 									</li>
 									<li>
-										<a href="Path.do" role="button" data-toggle="modal">
+										<a href="Address.do" role="button" data-toggle="modal">
 										추천 경로+</a>
 									</li>
 									<li>
-										<a href="story.do">스토리</a>
+										<a href="#">스토리</a>
 									</li>
 									<!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
 									 <li class="dropdown">

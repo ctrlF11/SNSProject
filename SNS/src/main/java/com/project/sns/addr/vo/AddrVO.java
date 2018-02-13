@@ -14,12 +14,13 @@ public class AddrVO {
 	private String mapy;
 	private String areacode;
 	private String sigungucode;
-	private String grade;
 	private String inside;
 	private String link3;
 	private String image1;
 	private String image2;
 	private String image3;
+	private String scope;
+	
 	public String getContentTypeId() {
 		return contentTypeId;
 	}
@@ -98,12 +99,6 @@ public class AddrVO {
 	public void setSigungucode(String sigungucode) {
 		this.sigungucode = sigungucode;
 	}
-	public String getGrade() {
-		return grade;
-	}
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
 	public String getInside() {
 		return inside;
 	}
@@ -133,6 +128,12 @@ public class AddrVO {
 	}
 	public void setImage3(String image3) {
 		this.image3 = image3;
+	}
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 
 	

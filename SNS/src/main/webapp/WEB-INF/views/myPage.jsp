@@ -55,7 +55,34 @@
 			}
 		})
 	}
-  
+  	var aaa = function() {
+  		$.ajax({
+			url : 'getFollowingCount.do',
+			data : {
+				id : id
+			},
+			success : function(data) {
+				$("#counts").appendTo("<a>"+data+"</a> | ");
+			},
+			error : function(error) {
+				alert("error : " + error);
+			}
+		})
+  	}
+  	var bbb = function() {
+  		$.ajax({
+			url : 'getFollowerCount.do',
+			data : {
+				id : id
+			},
+			success : function(data) {
+				$("#counts").appendTo("<a>"+data+"</a> | ");
+			},
+			error : function(error) {
+				alert("error : " + error);
+			}
+		})
+  	}
 	
 	var index = 0;
 	
@@ -70,26 +97,18 @@
 	
 	$(function() {
 		mmm();
-
-      $("#main").scroll(function() {
-         var sh = $("#main").scrollTop() + $("#main").height();
-         var dh = $("#main").prop("scrollHeight");
-
-         if (sh == dh) {
-            index += 4;
-            $.ajax({
-               url : 'getStoryList.do',
-               data : {
-            	   index : index,
-                   id : id
-				},
-               success : function(data) {
-                  $("#col-sm-8").append(data);
-               }
-            })
-         }
-      })
-
+		$.ajax({
+			url : 'getStoryCount.do',
+			data : {
+				id : id
+			},
+			success : function(data) {
+				$("#counts").append("<a>"+data+"</a> | ");
+			},
+			error : function(error) {
+				alert("error : " + error);
+			}
+		})
 	});
 
 </script>
@@ -105,41 +124,6 @@
                      다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
                      글씨가 겹쳐 보이는 문제가 발생함.
                   -->
-				<div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar">
-
-					<ul class="nav">
-						<li><a href="#" data-toggle="offcanvas"
-							class="visible-xs text-center"><i
-								class="glyphicon glyphicon-chevron-right"></i></a></li>
-					</ul>
-
-					<ul class="nav hidden-xs" id="lg-menu">
-						<li class="active"><a href="#featured"><i
-								class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
-						<li><a href="#stories"><i
-								class="glyphicon glyphicon-list"></i> Stories</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-paperclip"></i>
-								Saved</a></li>
-						<li><a href="#"><i class="glyphicon glyphicon-refresh"></i>
-								Refresh</a></li>
-					</ul>
-					<ul class="list-unstyled hidden-xs" id="sidebar-footer">
-						<li><a href="http://usebootstrap.com/theme/facebook"><h3>Bootstrap</h3>
-								<i class="glyphicon glyphicon-heart-empty"></i> Bootply</a></li>
-					</ul>
-
-					<ul class="nav visible-xs" id="xs-menu">
-						<li><a href="#featured" class="text-center"><i
-								class="glyphicon glyphicon-list-alt"></i></a></li>
-						<li><a href="#stories" class="text-center"><i
-								class="glyphicon glyphicon-list"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-paperclip"></i></a></li>
-						<li><a href="#" class="text-center"><i
-								class="glyphicon glyphicon-refresh"></i></a></li>
-					</ul>
-
-				</div>
 				<!--
                   col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
                   col-xs-12는 disable된 상태
@@ -147,21 +131,39 @@
                   맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
                   백그라운드의 회색 화면이 나타남.                  
                 -->
-				<div id="main" class="column col-sm-10 col-xs-11"
+				<div id="main" class="column col-sm-12 col-xs-12"
 					style="overflow-y: auto;">
 					<!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
 					<%@ include file="include/topbar.jsp"%>
 					<div class="padding">
-						<div class="full col-sm-9">
-							<div>
-								현재까지 작성한 스토리 목록
-							</div>
-							<div class="col-sm-8" id="col-sm-8">
+						<div class="full col-sm-12">
+							<div class="row">
+								<div class="panel panel-default">
+									<div class="card-body">
+										<div class="card-body-top">
+											<img>
+											<%= session.getAttribute("name") %> 님
+											<hr>
+											<ul>
+												<li id="counts">
+												</li>
+												<li>
+													<a>스토리 수</a> | 
+													<a>팔로잉 수</a> | 
+													<a>팔로워 수</a>
+												</li>
+											</ul>
+										</div>	
+									</div>
+							<div class="col-sm-2" id="col-sm-8" style="position: fixed; left: 40px">
 		
 							</div>
-							<div class="col-sm-4"  style="width: 474.333px; position: fixed; right: 83px">
+							<div>
+								
+							</div>
+							<div class="col-sm-2" style="position: fixed; right: 40px">
 								<div class="row">
 									<div class="panel panel-default">
 										<div class="card-body" >

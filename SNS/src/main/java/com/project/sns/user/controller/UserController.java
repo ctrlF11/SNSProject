@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.project.sns.board.service.BoardService;
 import com.project.sns.user.service.UserService;
 import com.project.sns.user.vo.UserVO;
 
@@ -28,6 +30,7 @@ import A.algorithm.AES;
 	
 	@Autowired
 	private UserService service;
+	private BoardService boardService;
 	
 	@RequestMapping("/register.do")
 	public String write(UserVO vo){
@@ -100,7 +103,7 @@ import A.algorithm.AES;
     	if(checkVO == null) {
     		System.out.println("checkVO = null");
     		out.println("<script>");
-    		out.println("alert('없는 아이디입니다.');");
+    		out.println("alert('�뾾�뒗 �븘�씠�뵒�엯�땲�떎.');");
     		out.println("</script>");
     		return "redirect:login.do";
     	}
@@ -108,7 +111,7 @@ import A.algorithm.AES;
     		System.out.println(checkVO.getPassword().equals(vo.getPassword()));
     		System.out.println("vo.getPassword = '' | checkVO.getPassword().equals(vo.getPassword())");
     		out.println("<script>");
-    		out.println("alert('비밀번호가 틀립니다.');");
+    		out.println("alert('鍮꾨�踰덊샇媛� ��由쎈땲�떎.');");
     		out.println("</script>");
     		return "redirect:login.do";
     	} 
@@ -116,7 +119,7 @@ import A.algorithm.AES;
     	String ip = getIP(request);
     	System.out.println("IP : " + ip);
     	out.println("<script>");
-    	out.println("alert('뭐.');");
+    	out.println("alert('萸�.');");
     	out.println("</script>");
     	
     	
@@ -140,24 +143,40 @@ import A.algorithm.AES;
     }
     
     @RequestMapping("/myPage.do")
-    public String myPage() {
+    public String myPage(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    	HttpSession session = req.getSession();
+    	String id = (String)session.getAttribute("id");
+    	System.out.println("아이디 : " + id);
+	     id = AES.setDecrypting(id);
+	     System.out.println("복호화한 아이디 : " + id);
+    	String img = service.getUserImage(id);
+    	
+    	req.setAttribute("img", img);
     	return "myPage";
     }
+    
+    @RequestMapping("/following.do")
+    public String following(@RequestParam("follower_id") String flw_id, @RequestParam("following_id") String flg_id) {
+    	
+    	return "";
+    }
+    
+    
     
     public static String getIP(HttpServletRequest request) {
     	String ip = request.getHeader("X-FORWARDED-FOR");
     	
-    	// 프록시 검증
+    	// �봽濡앹떆 寃�利�
     	if(ip == null || ip.length() == 0) {
     		ip = request.getHeader("Proxy-Client-IP");
     	}
     	
-    	// 웹 로직 서버인 경우
+    	// �쎒 濡쒖쭅 �꽌踰꾩씤 寃쎌슦
     	if(ip == null || ip.length() == 0) {
     		ip = request.getHeader("WL-Proxy-Client-IP");
     	}
 
-    	// 최종적으로 IP 확인
+    	// 理쒖쥌�쟻�쑝濡� IP �솗�씤
     	if(ip == null || ip.length() == 0) {
     		ip = request.getRemoteAddr();
     	}

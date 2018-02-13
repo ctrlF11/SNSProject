@@ -29,6 +29,12 @@ public class UserServiceImpl implements UserService {
 	public UserVO getUser(String keyword) {
 		return userDao.getUser(keyword);
 	}
+
+	@Override
+	public String getUserImage(String id) {
+		// TODO Auto-generated method stub
+		return userDao.getUserImage(id);
+	}
 	
 	/*@Override
 	public List<UserVO> getUser1(int index){

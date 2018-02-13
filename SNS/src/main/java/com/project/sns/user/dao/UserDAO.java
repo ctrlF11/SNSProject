@@ -12,5 +12,5 @@ public interface UserDAO {
 	public List<UserVO> getUserList(UserVO vo);
 	public UserVO getUser(String keyword);
 //	public List<UserVO> getUser1(@Param("index") int index); // ?
-	
+	public String getUserImage(String id);
 }

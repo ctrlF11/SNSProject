@@ -140,16 +140,16 @@ function makeOutListener(infowindow) {
 	alert("click 작동");
    }) 
 </script>--%>
-<c:forEach var="list" items="${requestScope.list}">
 	<div class="panel panel-default">
-		<div class="card-body">
-			<p class="card-text small">
-				<a href="getBoardValue.do?story_seq=${list.story_seq }&writer=<%= session.getAttribute("id") %>">${list.story_title }</a>
-				<a href="#">#workinghardorhardlyworking</a>
-			</p>
-		</div>
+		<c:forEach var="list" items="${requestScope.list}">
+				<div class="card-body">
+					<p class="lead-myBar">
+						<a href="getBoardValue.do?story_seq=${list.story_seq }&writer=<%= session.getAttribute("id") %>">${list.story_title }</a>
+					</p>
+				</div>
+				<hr>
+		</c:forEach>
 	</div>
-</c:forEach>
 
 
 

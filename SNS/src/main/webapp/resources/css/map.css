@@ -23,33 +23,33 @@
             position:fixed;           
         }      
         #sidemenu{
-              width:450px;
-              height:100vh;
-              padding-top:70px;
-           float:right;  
-           background-color:#393939;            
+           	width:450px;
+           	height:100vh;
+           	padding-top:70px;
+        	float:right;  
+        	background-color:#393939;      		
         }
-      #map{
-          position: absolute;
-          /* padding-left: 100px; */
-         width: calc(100% - 450px);
-         height:100vh;
-         float:left;
-      }        
-      
-      .area {
-            position: absolute;
-            background: #fff;
-            border: 1px solid #888;
-            border-radius: 3px;
-            font-size: 12px;
-            top: -5px;
-            left: 15px;
-          padding:2px;
+		#map{
+		 	position: absolute;
+		 	/* padding-left: 100px; */
+			width: calc(100% - 450px);
+			height:100vh;
+			float:left;
+		}        
+		
+		.area {
+  		    position: absolute;
+  		    background: #fff;
+  		    border: 1px solid #888;
+  		    border-radius: 3px;
+  		    font-size: 12px;
+  		    top: -5px;
+  		    left: 15px;
+    		padding:2px;
 }
         
         *{ margin: 0; padding: 0;}
-      .accordian {list-style: none }
-      .accordian--box { margin-bottom: 5px;}
-      .accordian--box h3 { background: #333; padding: 5px; color: #fff; cursor: pointer}
-      .accordian--box h4 { background: #ccc; padding: 5px; display: none; }
+		.accordian {list-style: none }
+		.accordian--box { margin-bottom: 5px;}
+		.accordian--box h3 { background: #333; padding: 5px; color: #fff; cursor: pointer}
+		.accordian--box h4 { background: #ccc; padding: 5px; display: none; }
