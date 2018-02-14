@@ -104,6 +104,14 @@
 	margin-top : 20px;
 	
 	}
+	
+#searchMap{
+	background-color: white;
+	background-image: url('musica-searcher.png');
+	background-position: 2px 2px;
+	background-repeat: no-repeat;
+	padding-left: 40px;
+	}
 
 </style>
 <title>Insert title here</title>
@@ -235,8 +243,10 @@
 								<c:forEach items="${story}" var="story">
 									<option value='${story.story_seq}'>${story.story_title}</option>
 								</c:forEach>
+								<option disabled></option>
+								<option value="스토리삭제">스토리삭제</option>
 								<option value="스토리추가">스토리추가</option>
-							</select>
+							</select> 
 						</form>
 					</div>
 					<hr>
@@ -267,7 +277,7 @@
                    <div class="panel panel-default">
                         <div id="mapBox">
 	                   		<div id="searchBox" style="z-index: 2;">
-	                  			<input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" onclick="searchMap();" value="검색"/>
+	                  			<input type="text" id="searchMap" onkeydown="enterkey();" placeholder="검색.."/><input id = "searchMapBtn" type="button" onclick="searchMap();" value="검색"/>
 	                   		</div>
 	                   		<div id="map" style="width: 40%; height: 100%;" style="z-index: 1;"></div>
 	                   		<div id="searchResult" style="z-index: 3;">
@@ -487,16 +497,20 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
 		
 		if((this.value)=='스토리추가'){
 			var a = prompt('새로운 스토리명을 입력하시오.');
-			
+			if(a==false || a==null){
+				$('#storyBox').val('스토리선택').prop('selected',true); 
+				return false;
+				}
 			$.ajax({
 				url: 'inputStory.do',
 				type: 'POST',
 				data: {id:id, story_title:a},
 				success: function(data){
-					$('#storyBox option:last').before("<option value='"+ data + "'>" + a + "</option>");
-					$('#storyBox').val(data).prop('selected',true);		
+					//$('#storyBox option:last').before("<option value='"+ data + "'>" + a + "</option>");
+					$('#storyBox option:eq(-3)').before("<option value='"+ data + "'>" + a + "</option>");
+					$('#storyBox').val(data).prop('selected',true);
 					
-					//스토리로 글 조회.
+					//스토리로 글 조회 추가하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				}
 			})
 		}else if((this.value)=='스토리삭제'){

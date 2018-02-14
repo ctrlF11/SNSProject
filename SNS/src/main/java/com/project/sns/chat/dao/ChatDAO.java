@@ -10,4 +10,6 @@ public interface ChatDAO {
 	public List<ChatVO> getChatListByRecent(ChatVO vo);
 	public int readChat(ChatVO vo);
 	public int newChat(ChatVO vo);
+	
+	public List<ChatVO> getFollowerList(String id);
 }

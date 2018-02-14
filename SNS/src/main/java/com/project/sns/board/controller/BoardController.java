@@ -1,6 +1,7 @@
 package com.project.sns.board.controller;
  
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -8,6 +9,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -27,6 +29,8 @@ import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
+import com.project.sns.chat.service.ChatService;
+import com.project.sns.chat.vo.ChatVO;
 import com.project.sns.user.service.UserService;
 import com.project.sns.user.vo.UserVO;
  
@@ -38,19 +42,31 @@ public class BoardController {
     
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
     
-    
-	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	@RequestMapping("/message")
-	public String message() {
-		return "chat";
-	}
-	
 	@Autowired
     private BoardService service;
     private UserService  userService;
+    
+    @Autowired
+    private ChatService cservice;
     /**
      * Simply selects the home view to render by returning its name.
      */
+    
+	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	@RequestMapping("/message")
+	public String message(HttpServletRequest request, HttpSession session) {
+		//session에서 id 받아오기
+		String id = "123";
+		//상대방 id도 받아와야함
+		List<ChatVO> list = cservice.getFollowerList(id);
+		if(cservice.getFollowerList(id)==null) {
+			System.out.println("followerlist가 null");
+		}else {
+			System.out.println("null이 아님");
+		}
+		request.setAttribute("follower", list);
+		return "chat";
+	}
     
     @RequestMapping("/getBoardList.do")
     public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int story_seq, HttpServletRequest req) throws Exception{

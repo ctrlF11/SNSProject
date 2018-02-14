@@ -197,8 +197,6 @@ var positions =  [
 ];
 
 
-
-
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
    $(document)
          .ready(
@@ -488,70 +486,20 @@ function addMarker(position, title, contentid, contenttypeid) {
       var obj = new Object();
       obj.contentId = contentid;
       obj.contentTypeId = contenttypeid;
-      //obj.mapy = position.ib;
-      //obj.mapx = position.jb;
       obj.mapy = position.jb;
       obj.mapx = position.ib;
       obj.title = title;
       arr.push(obj);
       markersArr.push(this);
-      //createArrMarkers(this);
       
-      $.ajax({        
-          url: 'callDetail.do',
-          type: 'get',
-          data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
-          dataType: 'json',
-          success: function(data){
-               var myItem = data.response.body.items.item;
-                  var output = '<div class="pin" value="'+ contentid + '" id="' + contentid + '" text-align:left>';
-                  	output += '<h4 class="title">' + title + '</h4>';
-                  var outputTitle = '<div class="pin" value="'+ contentid + '" id="' + contentid + '" text-align:left>';
-                  	outputTitle += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' + title + '</h4></div>';
-                  if(contenttypeid == 12){
-   	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
-   	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
-   	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                  }else if(contenttypeid == 14){
-   	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
-   	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
-   	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
-   	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-                  }else if(contenttypeid == 15){
-   	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
-   	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
-   	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
-   	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-                  }else if(contenttypeid == 28){
-   	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
-   	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-                  }else if(contenttypeid == 32){
-   	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
-   	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
-   	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-                  }else if(contenttypeid == 38){
-   	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
-   	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
-   	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
-   	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                  }else if(contenttypeid == 39){
-   	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
-   	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
-   	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
-   	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-                  }
-                  output += '</div>';
-                  $('#path').append(outputTitle);
-                  //$('#window').html(output);
-          },
-        error: function(XMLHttpRequest, textStatus, errorThrown) { 
-            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-        } 
-   	});
+      var outputTitle = '<div class="pin" value="'+ contenttypeid + '" id="' + contentid + '" text-align:left>';
+                  	outputTitle += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' 
+                  				+ "<a href='javascript:panTo(" + position.jb + ',' + position.ib + ',' + contentid + ',' + contenttypeid + ")'>"
+                  				+ title + '</a></h4></div>';
+      $('#path').append(outputTitle);
    });
    
 }
-
 
 
 
@@ -612,6 +560,7 @@ function wrapWindowByMask() {
    $('#window').show();
 }
 
+var count = 0;
 //경로 추천
 function recommend() {
    
@@ -627,15 +576,16 @@ function recommend() {
                var path = jsonData.path;
                var sidePath = "";
                recPath = [];
-
+               count++;
+               if(count > 1){
+            	   newpath();
+               }
                for (var i = path.length - 1; i >= 0; i--) {
                   for (var j = 0; j < positions.length; j++) {
                      if (path[i] == (positions[j].contentid)) {
                          var obj = new Object();
                          obj.contentId = positions[j].contentid;
                          obj.contentTypeId = positions[j].contenttypeid;
-                         //obj.mapy = positions[j].latlng.ib;
-                         //obj.mapx = positions[j].latlng.jb;
                          obj.mapy = positions[j].latlng.jb;
                          obj.mapx = positions[j].latlng.ib;
                          obj.title = positions[j].title;
@@ -646,15 +596,10 @@ function recommend() {
                               positions[j].title,
                               positions[j].contentid,
                               positions[j].contenttypeid);
-
-                        //sidePath += "<a href='javascript:panTo("
-                             // + positions[j].mapy + ","
-                             // + positions[j].mapx + ")'>"
-                             // + positions[j].title + "</a>" + "</br>";
                               
-                        sidePath += '<div class="pin' + positions[j].contentid + '" id="' + positions[j].contentid + '"text-align:left>';
+                        sidePath += '<div class="pinn ' + positions[j].contentid + '" id="' + positions[j].contentid + '" text-align:left)>';
  					    sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
-			   						+ "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + ")'>"
+			   						+ "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
 			   						+ positions[j].title + "</a>" + '</h4>';
 			  			sidePath += '</div>'; 
                         
@@ -718,10 +663,9 @@ function getpath(){
 					   bounds.extend(latlng);
 					   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
 					   
-					   //sidePath += "<a href='javascript:panTo(" + val.mapy + "," + val.mapx + ")'>" + val.title + "</a>" + "</br>";
-					   sidePath += '<div class="pin' + val.contentId + '" id="' + val.contentId + '"text-align:left>';
+					   sidePath += '<div class="pinn ' + val.contentId+ '" id="' + val.contentId + '"text-align:left)">';
 					   sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + val.contentId + '"onclick="deletePin(this)"></div>'
-					   			+ "<a href='javascript:panTo(" + val.mapy + "," + val.mapx + ")'>"
+					   			+ "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contnetTypeId + ")'>"
 					   			+ val.title + "</a>" + '</h4>';
 					   sidePath += '</div>';
 				   });
@@ -736,7 +680,7 @@ function getpath(){
 
 
 //클릭하면 해당 위치로 이동 (인포윈도우)
-function panTo(mapy, mapx) {
+function panTo(mapy, mapx, contentid, contenttypeid) {
 
    // 이동할 위도 경도 위치를 생성합니다 
    var moveLatLon = new daum.maps.LatLng(mapy, mapx);
@@ -744,29 +688,8 @@ function panTo(mapy, mapx) {
    // 지도 중심을 부드럽게 이동시킵니다
    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
    map.panTo(moveLatLon);
-}
-
-//추천경로순으로 뿌리기
-function plusPath(a){
-	var contentid = a.contentId;
-	var contenttypeid = a.contentTypeId;
-	 $.ajax({        
-        url: 'callDetail.do',
-        type: 'get',
-        data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
-        dataType: 'json',
-        success: function(data){
-             var myItem = data.response.body.items.item;
-                var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
-                output += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' + a.title + '</h4>';
-                output += '</div>';
-                
-                $('#path').append(output);
-        },
-      error: function(XMLHttpRequest, textStatus, errorThrown) { 
-          alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-      } 
-	});
+   
+   getDetail(contentid, contenttypeid);
 }
 
 //지도 검색
@@ -864,8 +787,6 @@ function deletePin(event){
 		arr.splice(i, 1);
 		console.log("markersArr[i] : ");
 		console.log(markersArr[i]);
-		//마커 삭제
-		//markersArr[i].setMap(null);
 
 		//markersArr에서 삭제
 		markersArr.splice(i, 1);
@@ -878,19 +799,16 @@ function deletePin(event){
 		//}else{//아닐 경우, 마커의 이미지를 normalImage로 바꾼다.
 			//markersArr[i].setImage(normalImage);
 		//}
-		
-		
-		
-		
+
 	}
 	console.log("markersArr : ");
 	console.log(markersArr);
 	
+	
 	//div 지우기 경로 후
-	//var top = document.getElementById('path');
-	//var garbage = document.getElementById(cid);
-	//document.getElementById('path').removeChild(garbage);
-	//top.removeChild(garbage);
+	var top1 = document.getElementById('path');
+	var garbage1 = document.getElementById(cid);
+	top1.removeChild(garbage1);
 	
 	
 	//div 지우기 경로 전
@@ -903,13 +821,15 @@ function deletePin(event){
 //경로 새로고침
 function newpath(){
 	//마커지우기
-	setMarkers(null);
-	setMarkersArr(null);
-	
+	deleteMarker();
+		
 	//배열 다 비우기
 	arr = new Array();
 	markersArr = [];
 	markers = [];
+	
+	//라인 지우기
+	deletePolyLine();
 	
 	//div 지우기
 	$('#path').empty();
@@ -917,8 +837,60 @@ function newpath(){
 }
 
 
-
-
+function getDetail(contentid, contenttypeid){
+	wrapWindowByMask();
+	var contentid;
+	var contenttypeid;
+	var title ="aa";
+    $.ajax({        
+        url: 'callDetail.do',
+        type: 'get',
+        data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+        dataType: 'json',
+        success: function(data){
+             var myItem = data.response.body.items.item;
+                var output = '<div class="detailBox" text-align:left>';
+                	output += '<h4 class="title">' + title + '</h4>';
+                if(contenttypeid == 12){
+ 	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                }else if(contenttypeid == 14){
+ 	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                }else if(contenttypeid == 15){
+ 	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+ 	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+ 	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+ 	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                }else if(contenttypeid == 28){
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                }else if(contenttypeid == 32){
+ 	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+ 	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                }else if(contenttypeid == 38){
+ 	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                }else if(contenttypeid == 39){
+ 	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                }
+                output += '</div>';
+                $('#window').html(output);
+        },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+          alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+      } 
+ 	});
+}
 
 
 
