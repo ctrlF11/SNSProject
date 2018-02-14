@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.project.sns.board.service.BoardService;
@@ -155,10 +156,28 @@ import A.algorithm.AES;
     	return "myPage";
     }
     
-    @RequestMapping("/following.do")
-    public String following(@RequestParam("follower_id") String flw_id, @RequestParam("following_id") String flg_id) {
-    	
-    	return "";
+    @ResponseBody
+	@RequestMapping("/getFollowingCount.do")
+	public int getFollowingCount(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
+		throws Exception{
+		id = AES.setDecrypting(id);
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;chatset=UTF-8");
+		int count = service.getFollowingCount(id);
+		System.out.println("count : " + count);
+		return count;
+	}
+
+    @ResponseBody
+    @RequestMapping("/getFollowerCount.do")
+    public int getFollowerCount(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
+    		throws Exception{
+    	id = AES.setDecrypting(id);
+    	request.setCharacterEncoding("UTF-8");
+    	response.setContentType("text/html;chatset=UTF-8");
+    	int count = service.getFollowerCount(id);
+    	System.out.println("count : " + count);
+    	return count;
     }
     
     

@@ -11,4 +11,6 @@ public interface UserService {
 	public UserVO getUser(String keyword);
 //	public List<UserVO> getUser1(int index);
 	public String getUserImage(String id);
+	public int getFollowingCount(String id);
+	public int getFollowerCount(String id);
 }
