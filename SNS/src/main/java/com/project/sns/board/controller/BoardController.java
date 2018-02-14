@@ -1,5 +1,6 @@
 package com.project.sns.board.controller;
  
+import java.lang.ProcessBuilder.Redirect;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,37 +46,29 @@ public class BoardController {
      */
     @RequestMapping("/getBoardList.do")
     public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req,HttpSession se) throws Exception{
-	 	 String id = (String)se.getAttribute("id");
-	     System.out.println("아이디 : " + id);
-	     id = aes.setDecrypting(id);
-	     System.out.println("복호화한 아이디 : " + id);
-	     
-    	logger.info("getBoardList");
-        System.out.println("index : " + index +" story-seq : " + stroy_seq);
- 
-        HashMap map = new HashMap();
-        map.put("id", id);
-        map.put("index", index);
-        map.put("story_seq", stroy_seq);
-        List<BoardVO> user = service.getBoardList(map);
-        req.setAttribute("user", user);
-        /*if(index == 0)
-          return "home1";
-        else*/ 
-        se.setAttribute("userH", user);
-        	return "table";
+    	    logger.info("getBoardList");
+            System.out.println("index : " + index +" story-seq : " + stroy_seq);
+            HashMap map = new HashMap();
+            map.put("index", index);
+            map.put("story_seq", stroy_seq);
+            List<BoardVO> user = service.getBoardList(map);
+            req.setAttribute("user", user);
+            /*if(index == 0)
+              return "home1";
+            else*/ 
+            //se.setAttribute("userH", user);
+            return "table";
+      
+      
+
     }
     
  @ResponseBody
  @RequestMapping("/getBoardStoryList.do")
-    public List<BoardVO> getBoardStoryList(HttpServletRequest req,HttpSession se) throws Exception{
-	 	
-	 	 String id = (String)se.getAttribute("id");
-	     System.out.println("아이디 : " + id);
-	     id = aes.setDecrypting(id);
-	     System.out.println("복호화한 아이디 : " + id);
+    public List<BoardVO> getBoardStoryList(@RequestParam("boardUser") String boardUser,HttpServletRequest req,HttpSession se) throws Exception{
+	 	 
 	     BoardVO vo = new BoardVO();
-	     vo.setWriter(id);
+	     vo.setWriter(boardUser);
 	     System.out.println("스토리 값 : "+ vo.getWriter());
 	     return service.getBoardStoryList(vo);
     }
@@ -89,7 +82,7 @@ public class BoardController {
         ArrayList<String> mainTime = new <String>ArrayList();
         for(int i = 0; i < mainTable.size(); i++)
         {
-        	mainTime.add(time.calculateTime(mainTable.get(i).getRegdate()));
+        	mainTime.add(time.calculateTime( mainTable.get(i).getRegdate()) );
         }
         req.setAttribute("mainTime", mainTime);
         req.setAttribute("mainTable", mainTable);
@@ -104,9 +97,20 @@ public class BoardController {
 //    }
     
     @RequestMapping("/homeview.do")
-    public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req){
-       req.setAttribute("story_seq", story_seq);
-       return "home1";
+    public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req,HttpSession se){
+     
+	 	 String id = (String)se.getAttribute("id");
+	     if(null == id)
+	     {
+	    	 return "redirect:login.do";
+	     }
+	     else
+	     {
+		     id = aes.setDecrypting(id);
+	    	 req.setAttribute("story_seq", story_seq);
+	    	 return "home1";
+	     }
+        
     }//�뜝�뙃�떆源띿삕
     
     @RequestMapping("/modifyBoard")
@@ -238,12 +242,17 @@ public class BoardController {
     @RequestMapping("/list.do") //댓글 리스트
     @ResponseBody
     private List<ReplyVO> replyList(Model model,ReplyVO vo) throws Exception{
+    	logger.info("list.do");
         return service.replyList(vo);
     }
     @RequestMapping("/insert.do") //댓글 작성 
     @ResponseBody
-    private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent) throws Exception{
-        
+    private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent,HttpSession se) throws Exception{
+	 	 String id = (String)se.getAttribute("id");
+         id = aes.setDecrypting(id);
+
+	     
+    	logger.info("insert.do");
     	
         ReplyVO reply = new ReplyVO();
         reply.setBoard_seq(board_seq);
@@ -251,21 +260,21 @@ public class BoardController {
         reply.setStory_seq(story_seq);;
         System.out.println("insert.do : " + rcontent + " : " + board_seq);
         //로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
-        reply.setRwriter("test");  
+        reply.setRwriter(id);  
         return service.replyInsert(reply);
     }
     
     @RequestMapping("/update.do") //댓글 수정  
     @ResponseBody
     private int mCommentServiceUpdateProc(ReplyVO reply) throws Exception{
-        
+    	logger.info("update.do");
         return service.replyUpdate(reply);
     }
     
     @RequestMapping("/delete.do") //댓글 삭제  
     @ResponseBody
     private int mCommentServiceDelete(ReplyVO reply) throws Exception{
-        
+    	logger.info("delete.do");
         return service.replyDelete(reply);
     }
 

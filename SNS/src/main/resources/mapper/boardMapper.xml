@@ -45,6 +45,7 @@
 			LIMIT #{index},4;
 			
 		</select> -->
+		
 		<select id="getBoardList" parameterType="map" resultType="BoardVO" >
 			Select * From 
 			Board b left JOIN TourMap t  
@@ -52,7 +53,6 @@
 			left JOIN Story s
 			ON b.story_seq = s.story_seq 
 			where b.story_seq = #{story_seq}
-			and s.id = #{id}
 			limit #{index},4;
 			
 		</select>

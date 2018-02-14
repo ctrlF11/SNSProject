@@ -1,4 +1,3 @@
-
 <style>
 div.img {
 	border: 1px solid #ccc;

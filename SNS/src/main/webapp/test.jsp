@@ -10,7 +10,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<<<<<<< HEAD
 	<script type="text/javascript">
 		// 다익스트라.
 		Graph.prototype.shortest = function(startKey) {
@@ -75,9 +74,6 @@
 		// F까지의 최단 거리는 9입니다.
 	</script>
 	<input type="text">
-=======
-	
->>>>>>> refs/remotes/origin/mwbear
 
 </body>
 </html>
