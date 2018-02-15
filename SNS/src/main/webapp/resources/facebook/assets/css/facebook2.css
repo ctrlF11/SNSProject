@@ -323,6 +323,7 @@ small.text-muted {
 	vertical-align: middle;
 	text-align: center;
 	list-style: none;
+	height: 70px;
 }
 .card-body-top ul li {
 	padding: 0;
@@ -335,7 +336,6 @@ small.text-muted {
 .card-body-top ul li a {
 	width: 30%;
 	height: 34px;
-	border: 1px solid black;
 	display: inline-block;
 }
 	

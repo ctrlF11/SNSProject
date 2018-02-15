@@ -1,5 +1,6 @@
 package com.project.sns.user.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,18 @@ public class UserServiceImpl implements UserService {
 	public int getFollowerCount(String id) {
 		// TODO Auto-generated method stub
 		return userDao.getFollowerCount(id);
+	}
+
+	@Override
+	public int followByBoard(HashMap<String, String> ids) {
+		// TODO Auto-generated method stub
+		return userDao.followByBoard(ids);
+	}
+	
+	@Override
+	public int followByPage(HashMap<String, String> ids) {
+		// TODO Auto-generated method stub
+		return userDao.followByPage(ids);
 	}
 	
 	/*@Override

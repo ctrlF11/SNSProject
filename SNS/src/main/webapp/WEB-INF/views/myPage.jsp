@@ -40,6 +40,21 @@
 													'hidden-xs');
 											$('#btnShow').toggle();
 										});
+						mmm();
+						$.ajax({
+							url : 'getCounts.do',
+							data : {
+								id : id
+							},
+							success : function(data) {
+								$("#counts").html("<a>"+data[0]+"</a> | "
+												+ 	"<a>"+data[1]+"</a> | "
+												+	"<a>"+data[2]+"</a>");
+							},
+							error:function(request,status,error){
+						        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+							}
+						})
 					});
 	var id = (String)("<%=session.getAttribute("id")%>");
 	
@@ -55,39 +70,6 @@
 			}
 		})
 	}
-	var aaa = function() {
-		
-	}
-	
-  	var bbb = function() {
-  		$.ajax({
-			url : 'getFollowingCount.do',
-			data : {
-				id : id
-			},
-			success : function(data) {
-				$("#counts").append("<a>"+data+"</a> | ");
-				ccc();
-			},
-			error : function(error) {
-				alert("error : " + error);
-			}
-		})
-  	}
-  	var ccc = function() {
-  		$.ajax({
-			url : 'getFollowerCount.do',
-			data : {
-				id : id
-			},
-			success : function(data) {
-				$("#counts").append("<a>"+data+"</a>");
-			},
-			error : function(error) {
-				alert("error : " + error);
-			}
-		})
-  	}
 	
 	var index = 0;
 	
@@ -99,23 +81,7 @@
 			replyDiv.style.display = "none";
 		}
 	} */
-	
-	$(function() {
-		mmm();
-		$.ajax({
-			url : 'getStoryCount.do',
-			data : {
-				id : id
-			},
-			success : function(data) {
-				$("#counts").append("<a>"+data+"</a> | ");
-				bbb();
-			},
-			error : function(error) {
-				alert("error : " + error);
-			}
-		})
-	});
+
 
 </script>
 </head>
@@ -123,65 +89,73 @@
 	<div class="wrapper">
 		<div class="box">
 			<div class="row row-offcanvas row-offcanvas-left">
-
-
-				<!--
-                     원본 왼쪽에 있던 사이드바.
-                     다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
-                     글씨가 겹쳐 보이는 문제가 발생함.
-                  -->
-				<!--
-                  col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
-                  col-xs-12는 disable된 상태
-                  
-                  맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
-                  백그라운드의 회색 화면이 나타남.                  
-                -->
-				<div id="main" class="column col-sm-12 col-xs-12"
-					style="overflow-y: auto;">
-					<!-- 
-                  Topbar. 기존 부트스트랩보다 height를 늘림.
-                -->
-					<%@ include file="include/topbar.jsp"%>
-					<div class="padding">
-						<div class="full col-sm-12">
-							<div class="row">
-								<div class="panel panel-default">
-									<div class="card-body">
-										<div class="card-body-top">
-											<img>
-											<%= session.getAttribute("name") %> 님
-											<hr>
-											<ul>
-												<li id="counts">
-												</li>
-												<li>
-													<a>스토리 수</a> | 
-													<a>팔로잉 수</a> | 
-													<a>팔로워 수</a>
-												</li>
-											</ul>
-										</div>	
-									</div>
-							<div class="col-sm-2" id="col-sm-8" style="position: fixed; left: 40px">
-		
-							</div>
-							<div>
-								
-							</div>
-							<div class="col-sm-2" style="position: fixed; right: 40px">
-								<div class="row">
-									<div class="panel panel-default">
-										<div class="card-body" >
-											<p class="lead-myBar">
-												<a href="myPage.do">스토리 목록</a>
-											</p>
+						<!--
+		                     원본 왼쪽에 있던 사이드바.
+		                     다만 밑의 메인 화면의 가로 길이를 100%로 하였기 때문에
+		                     글씨가 겹쳐 보이는 문제가 발생함.
+		                  -->
+						<!--
+		                  col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
+		                  col-xs-12는 disable된 상태
+		                  
+		                  맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
+		                  백그라운드의 회색 화면이 나타남.                  
+		                -->
+						<div id="main" class="column col-sm-12 col-xs-12"
+							style="overflow-y: auto;">
+							<!-- 
+		                  Topbar. 기존 부트스트랩보다 height를 늘림.
+		                -->
+							<%@ include file="include/topbar.jsp"%>
+							<div class="padding">
+								<div class="full col-sm-12">
+									<div class="row">
+										<div class="panel panel-default">
+											<div class="card-body">
+												<div class="card-body-top">
+													<img>
+													<%= session.getAttribute("name") %> 님
+													<hr>
+													<ul>
+														<li>
+															<a>스토리 수</a> | 
+															<a>팔로잉 수</a> | 
+															<a>팔로워 수</a>
+														</li>
+														<li id="counts">
+														</li>
+													</ul>
+													<hr>
+													<ul style="height: 55px;">
+														<li>
+															<a>1</a> | 
+															<a>1</a> | 
+															<a>1</a>
+														</li>
+													</ul>
+												</div>	
+											</div>
+									<div class="col-sm-12">
+										<div class="col-sm-8" id="col-sm-8" style="position: fixed; left: 40px">
+					
 										</div>
-										<hr>
-										<div class="card-body">
-											<p class="lead-myBar">
-												<a href="myPage.do">더미</a>
-											</p>
+											
+										<div class="col-sm-2" style="position: fixed; right: 40px">
+											<div class="row">
+												<div class="panel panel-default">
+													<div class="card-body" >
+														<p class="lead-myBar">
+															<a href="myPage.do">스토리 목록</a>
+														</p>
+													</div>
+													<hr>
+													<div class="card-body">
+														<p class="lead-myBar">
+															<a href="myPage.do">더미</a>
+														</p>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -192,7 +166,6 @@
 			</div>
 		</div>
 	</div>
-
 	<script type="text/javascript">
 		
 		function checkgo() {

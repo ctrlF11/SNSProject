@@ -2,6 +2,7 @@ package com.project.sns.user.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import A.algorithm.AES;
 	
 	@Autowired
 	private UserService service;
+	@Autowired
 	private BoardService boardService;
 	
 	@RequestMapping("/register.do")
@@ -157,30 +159,46 @@ import A.algorithm.AES;
     }
     
     @ResponseBody
-	@RequestMapping("/getFollowingCount.do")
-	public int getFollowingCount(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
-		throws Exception{
+	@RequestMapping("/getCounts.do")
+	public List<Integer> getCounts(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		id = AES.setDecrypting(id);
+		System.out.println("?");
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;chatset=UTF-8");
-		int count = service.getFollowingCount(id);
-		System.out.println("count : " + count);
+		List<Integer> count = new ArrayList<Integer>();
+		count.add(boardService.getStoryCount(id));
+		count.add(service.getFollowingCount(id));
+		count.add(service.getFollowerCount(id));
+		System.out.println("count[0] : " + count.get(0));
+		System.out.println("count[1] : " + count.get(1));
+		System.out.println("count[2] : " + count.get(2));
 		return count;
 	}
-
+    
     @ResponseBody
-    @RequestMapping("/getFollowerCount.do")
-    public int getFollowerCount(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
-    		throws Exception{
+    @RequestMapping("/followByBoard.do")
+    public int followByBoard(@RequestParam("id") String id, @RequestParam("writer") String writer,
+    		HttpServletRequest req, HttpServletResponse res) {
     	id = AES.setDecrypting(id);
-    	request.setCharacterEncoding("UTF-8");
-    	response.setContentType("text/html;chatset=UTF-8");
-    	int count = service.getFollowerCount(id);
-    	System.out.println("count : " + count);
-    	return count;
+    	HashMap<String, String> ids = new HashMap();
+    	ids.put("id", id);
+    	ids.put("writer", writer);
+    	int result = service.followByBoard(ids);
+    	return result;
     }
     
-    
+    @ResponseBody
+    @RequestMapping("/followByPage.do")
+    public int followByPage(@RequestParam("id") String id, @RequestParam("f_id") String f_id,
+    		HttpServletRequest req, HttpServletResponse res) {
+    	id = AES.setDecrypting(id);
+    	HashMap<String, String> ids = new HashMap();
+    	ids.put("id", id);
+    	ids.put("f_id", f_id);
+    	int result = service.followByPage(ids);
+    	return result;
+    }
     
     public static String getIP(HttpServletRequest request) {
     	String ip = request.getHeader("X-FORWARDED-FOR");

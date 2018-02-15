@@ -1,5 +1,6 @@
 package com.project.sns.user.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.project.sns.addr.vo.AddrVO;
@@ -13,4 +14,6 @@ public interface UserService {
 	public String getUserImage(String id);
 	public int getFollowingCount(String id);
 	public int getFollowerCount(String id);
+	public int followByBoard(HashMap<String, String> ids);
+	public int followByPage(HashMap<String, String> ids);
 }
