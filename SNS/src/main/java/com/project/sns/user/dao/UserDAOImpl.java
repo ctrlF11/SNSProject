@@ -1,5 +1,6 @@
 package com.project.sns.user.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -55,5 +56,17 @@ public class UserDAOImpl implements UserDAO{
 	public int getFollowerCount(String id) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".getFollowerCount", id);
+	}
+
+	@Override
+	public int followByBoard(HashMap<String, String> ids) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert(namespace+".followByBoard", ids);
+	}
+
+	@Override
+	public int followByPage(HashMap<String, String> ids) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert(namespace+".followByPage", ids);
 	}
 }

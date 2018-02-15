@@ -32,15 +32,19 @@ body { width: 500px; margin: 30px auto;}
 <script type="text/javascript">
 var index = 0;
 $(function(){
-   getBoard();
-   $("#main").scroll(function() {
-      var sh = $("#main").scrollTop() + $("#main").height();
-      var dh = $("#main").prop("scrollHeight");
-
-      if (sh == dh) {   
-         getBoardScroll();
-      }
-     })
+      index = 0;
+      var story_seq = <%=request.getAttribute("story_seq")%>;
+      getBoard(story_seq);
+      $("#main").scroll(function() {
+         var sh = $("#main").scrollTop() + $("#main").height();
+         var dh = $("#main").prop("scrollHeight");
+      
+         if (sh == dh) {   
+            alert("만난다");
+            getBoardScroll(story_seq);
+         }
+        })
+   
      
  $('[data-toggle=offcanvas]').click(function() {
                $(this).toggleClass('visible-xs text-center');
@@ -60,49 +64,53 @@ function togglethis(num) {
          replyDiv.style.display = "none";
       }
 }
-function getBoardScroll()
+function getBoardScroll(story)
 {
+   alert("스크롤 인덱스:"+index);
+   alert("만나서 실행");
    index += 4;
    $.ajax({
       url : 'getBoardList.do',
       data : {
              index : index,
-             story_seq : <%=request.getAttribute("story_seq")%>
+             story_seq : story
                },
-      success : function(data1) {
-         alert("비동기 성공1");
-         $("#col-sm-6").append(data1);
+      success : function(data){
+         alert("만나서 실행 성공");
+         $("#col-sm-6").append(data);
       }
    })
 }
 
-function getBoard(){
+function getBoard(story_seq){
+   index = 0;
    $.ajax({
       url : 'getBoardList.do',
       data : {
                index : index,
-               story_seq : <%=request.getAttribute("story_seq")%>
+               story_seq : story_seq
                },
       success : function(data) {
          $("#col-sm-6").append(data);
          alert("비동기 진입전");
-          getStory();
+          getStory(story_seq);
       }
    })
 
 }
-
 function getStory()
 {
-$.ajax({
-   url : 'getBoardStoryList.do',
-   success : function(data){
-      var b ='';
-      var title = '';
-      alert("비동기 진입");
-            $.each(data, function(key, value){
 
-               
+    $.ajax({
+      url : 'getBoardStoryList.do',
+      data:{
+           boardUser : $('#boardUser').val()
+       },
+       success : function(data){
+         var b ='';
+         var title = '';
+      
+            $.each(data, function(key, value){
                if(key==0){
                  title = value.story_title;
                    b += '<ul class="accodian">';
@@ -129,43 +137,37 @@ $.ajax({
                   }
 
                }
-               
-
-
-               
-//                '<button onclick="replyUpdate('+value.reply_seq+',\''+value.rcontent+'\');"> 수정 </button>'
-            });
+           });
          
               $("[name=story]").html(b); 
     }
 })
 }
-function story_button(story_seq)
+
+function story_button(story)
 {
-   
-        alert(story_seq);
+       alert(story);
          index = 0;
+         alert("index ="+index);
        $.ajax({
          url : 'getBoardList.do',
          data : {
                   index : index,
-                  story_seq : story_seq
+                  story_seq : story
                   },
          success : function(data) {
-            alert("ddd");
             $("#col-sm-6").html(data);
-            alert("비동기 진입전");
-             getStory();
+            getStory();
          }
       })
-        getBoardScroll();
+         alert("바뀌어서 만낫다");
+         getBoardScroll(story);
+
       
 }
 
 function r_button(board_seq,story_seq){ //댓글 등록 버튼 클릭시 
 var insertData = $('[name=commentInsertForm]').serialize(); //commentInsertForm의 내용을 가져옴
- alert("버튼작동" + "보드넘버:" +board_seq +" 스토리 넘어:"+story_seq); 
- 
       $.ajax({
                url : 'insert.do',
                type : 'get',
@@ -215,12 +217,10 @@ function replyUpdate(reply_seq, rcontent, board_seq, story_seq){
       a += '<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="replyUpdateProc('
             + reply_seq +","+board_seq+","+story_seq+ ');">수정</button> </span>';
       a += '</div>'; 
-      alert(a);
      $('.commentContent' + reply_seq).html(a);
 }
 //댓글 수정
 function replyUpdateProc(reply_seq,board_seq,story_seq) {
-   alert();
    var updateContent = $('[name=content_' + reply_seq + ']').val();
 
    $.ajax({
@@ -235,7 +235,6 @@ function replyUpdateProc(reply_seq,board_seq,story_seq) {
       success : function(data) {
          
          if (data == 1){
-            alert("수정완료");
             replyList(board_seq,story_seq);//댓글 수정후 목록 출력 
          }   
       }
@@ -274,8 +273,10 @@ function replyDelete(reply_seq,board_seq,story_seq){
                   col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
                   col-xs-12는 disable된 상태
                   
-                  맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
-                  백그라운드의 회색 화면이 나타남.                  
+                 
+                 
+                                       맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
+                                        백그라운드의 회색 화면이 나타남.                  
                 -->
                 </div>
             <div id="main" class="column col-sm-10 col-xs-11"
@@ -327,8 +328,7 @@ function replyDelete(reply_seq,board_seq,story_seq){
          }
          return false;
       }
-      
-   
+
       var accModule = function(){
            // private member (비공개 멤버, 고유멤버)
            var acc_wrap = $('.accodian'),
