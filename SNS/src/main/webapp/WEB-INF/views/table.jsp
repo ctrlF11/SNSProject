@@ -187,6 +187,7 @@ function makeOutListener(infowindow) {
          <h6 class="card-title mb-1">
             <a
                href="getBoardValue.do?story_seq=${user.story_seq}&writer=${user.writer}">
+               <input type="hidden" id="boardUser" value="${user.writer}"  />
                ${user.content}
                </a>
          </h6>
@@ -234,35 +235,35 @@ function makeOutListener(infowindow) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-      <%
+	   <%
        for (int i = 0; i < list.size(); i++) {
        %>
-       replyList( <%=list.get(i).getBoard_seq()%>,<%=list.get(i).getStory_seq()%>);
-      <%}%>
-      
+	    replyList( <%=list.get(i).getBoard_seq()%>,<%=list.get(i).getStory_seq()%>);
+	   <%}%>
+	   
 })
 function replyList(board_seq,story_seq){
-     $.ajax({
-           url : 'list.do',
-           type : 'get',
-           data : {
-                 'board_seq':board_seq,
-                 'story_seq' :story_seq   
-           },
-           success : function(data){
-               var a =''; 
-               $.each(data, function(key, value){ 
-                   a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                   a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
-                   a += '<button onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+');"> 수정 </button>';
-                   a += '<button onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
-                   a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
-                   a += '</div></div>';
-                   $('[name=commentList'+board_seq+']').html(a);
-               });
-               
-               
-           }
-       });
+ 	 $.ajax({
+	        url : 'list.do',
+	        type : 'get',
+	        data : {
+		        	'board_seq':board_seq,
+		        	'story_seq' :story_seq	
+	        },
+	        success : function(data){
+	            var a =''; 
+	            $.each(data, function(key, value){ 
+	                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+	                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
+	                a += '<button onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+');"> 수정 </button>';
+	                a += '<button onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
+	                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
+	                a += '</div></div>';
+	                $('[name=commentList'+board_seq+']').html(a);
+	            });
+	            
+	            
+	        }
+	    });
 } 
 </script>

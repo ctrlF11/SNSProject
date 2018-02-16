@@ -48,7 +48,6 @@ var scollB = function() {
             url : 'getMainBoardList.do',
             data : {
                index : index
-        
             },
             success : function(data) {
                $("#col-sm-6").append(data);
@@ -131,7 +130,7 @@ function reply_check(sessionID, num) {
 							<div class="row">
 								<div class="col-sm-12" id="col-sm-6">
 									<div>
-											인기 여행기					
+											<h1>인기 여행기</h1>				
 									</div>
 									<%@ include file="include/half_Mainmap.jsp"%>
 								   </div>
