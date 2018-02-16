@@ -43,5 +43,11 @@ public class ChatDAOImpl implements ChatDAO{
 		return session.selectOne(namespace + ".newChat", vo);
 	}
 
+	@Override
+	public List<ChatVO> getFollowerList(String id) {
+		// TODO Auto-generated method stub
+		return session.selectList(namespace + ".getFollowerList", id);
+	}
+
 }
 

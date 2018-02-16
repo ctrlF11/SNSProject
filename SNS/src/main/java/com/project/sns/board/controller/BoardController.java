@@ -1,31 +1,39 @@
 package com.project.sns.board.controller;
-
+ 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Locale;
+ 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
 import com.project.sns.board.vo.TIME_MAXIMUM;
+import com.project.sns.chat.service.ChatService;
+import com.project.sns.chat.vo.ChatVO;
 import com.project.sns.user.service.UserService;
-
+import com.project.sns.user.vo.UserVO;
 import A.algorithm.AES;
 
 /**
@@ -37,15 +45,29 @@ public class BoardController {
 	private final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	AES aes = new AES();
 
-	// 추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	@Autowired
+	private BoardService service;
+	@Autowired
+	private UserService userService;
+	@Autowired
+    private ChatService cservice;
+
 	@RequestMapping("/message")
-	public String message() {
+	public String message(HttpServletRequest request, HttpSession session) {
+		//session에서 id 받아오기
+		String id = "123";
+		//상대방 id도 받아와야함
+		List<ChatVO> list = cservice.getFollowerList(id);
+		if(cservice.getFollowerList(id)==null) {
+			System.out.println("followerlist가 null");
+		}else {
+			System.out.println("null이 아님");
+		}
+		request.setAttribute("follower", list);
 		return "chat";
 	}
 
-	@Autowired
-	private BoardService service;
-	private UserService userService;
+	
 
 	/**
 	 * Simply selects the home view to render by returning its name.
