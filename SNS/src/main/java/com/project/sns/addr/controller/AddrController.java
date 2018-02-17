@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.sns.addr.service.AddrService;
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.board.vo.BoardVO;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -349,6 +350,7 @@ public class AddrController {
 
 		
 		List<AddrVO> list = service.getAddrWithCode(sigungucode);
+		List<BoardVO> listHeart = service.getHeart();
 //		List<AddrVO> getScope = service.getScope();
 	      
 		double distanceMeter = 0;
@@ -378,6 +380,15 @@ public class AddrController {
 				mapList.add(list.get(j).getScope());
 				mapList.add(list.get(j).getContentId());
 				mapList.add(list.get(j).getContentTypeId());
+				
+				for(int k=0; k<listHeart.size(); k++) {
+					if(listHeart.get(k) != null && list.get(j).getContentId().equals(listHeart.get(k).getContentId())) {
+						mapList.add(listHeart.get(k).getHeart());
+				} 
+				
+					
+					
+				};				
 				tempMap.put(list.get(j).getContentId(), mapList);			
 			}	
 			distanceMap.put(list.get(i).getContentId(), tempMap);
@@ -395,35 +406,43 @@ public class AddrController {
 			}
 		};
 		
-//		String destination = list.get(1).getContentId();	//도착지 무작위 값
-		
 
 		String start = list.get(0).getContentId();
 		
-		ArrayList destinationArry = new ArrayList<>();
+		ArrayList destinationArry = new ArrayList<>();			//임의의 목적지 고르기 위해서 목적지 리스트 담을 배열
 		
-		Integer timeNode = 0;
+		int lastTime = 0;			//경로 중 가장 마지막 시간
 		Result result = dijkstra(distanceMap, start, list.get(0).getContentTypeId(), time);    	//dijkstra(거리 맵, 출발지, 콘텐츠타입ID, 현재날짜시간)			//출발지 무작위 값
 		
 
-		for(String key : result.preNode.keySet()) {	
-			if(!result.preNode.get(key).isEmpty()) {
-				if((int) result.preNode.get(key).get(1) > timeNode) 
-					timeNode = (int) result.preNode.get(key).get(1);	
-			}
-		};
 		
 		for(String key : result.preNode.keySet()) {	
-			if(!result.preNode.get(key).isEmpty()) {
-				int resultTime = (Integer) result.preNode.get(key).get(1);
-				if(resultTime==timeNode) {
-					destinationArry.add(key);
+			if(!result.preNode.get(key).isEmpty()) {							//출발지는 preNode 배열이 없으므로 result.preNode.get(key).get(1)에서 IndexOutBoundsException 에러남.  그래서 사용				
+				if((int) result.preNode.get(key).get(1) > lastTime) { 					
+					lastTime = (int) result.preNode.get(key).get(1);	
 				}
-
+				
+				int resultTime = (Integer) result.preNode.get(key).get(1);
+				if(1130 <= lastTime && lastTime <= 1330 || 1730 <= lastTime && lastTime <= 1930) {
+												//마지막 시간이 동일한 노드 리스트
+					if(result.preNode.get(key).get(2).equals("39") && resultTime == lastTime) {
+							destinationArry.add(key);						
+					}
+				} else {
+					if(!result.preNode.get(key).get(2).equals("39") && resultTime == lastTime) {
+							destinationArry.add(key);						
+					}					
+				}
 			}
 		};
+			
+		
+		//목적지 밥시간엔 음식점, 밥시간 외에는 관광지로 세팅
+
+
+
 	
-		Collections.shuffle(destinationArry);
+		Collections.shuffle(destinationArry);						
 		String destination = destinationArry.get(0).toString();
                
         ArrayList<String> path = new ArrayList<>();			//경로 담아두는 LIST
@@ -440,10 +459,7 @@ public class AddrController {
            path.add(curNode);
         }																
         
-        
-        
-
-        
+       
         Map<String, Object> jsonData = new HashMap<String, Object>();
         jsonData.put("path",path);
         return jsonData;
@@ -666,7 +682,7 @@ public class AddrController {
 	    //output: Result object
 	    //do: dijkstra 알고리즘을 이용하여 출발지부터 각 노드까지 최단 거리, 루트 계산
 	    private static Result dijkstra(HashMap<String, HashMap<String, ArrayList>> graph, String start, String typeid, Integer time){
-	    	HashMap<String, Double> shortestPath= new HashMap<>();
+	    		HashMap<String, Double> shortestPath= new HashMap<>();
 	        HashMap<String, ArrayList> preNode = new HashMap<>();			//<시간, 이전노드이름>
 	        HashMap<String, String> typeId = new HashMap<>();			//이전 노드와 같은 콘텐츠 타입의 장소 추천해주지 않기 위해서
 	        HashMap<String, Integer> timeMap = new HashMap<>();
@@ -699,7 +715,7 @@ public class AddrController {
 	            for(String node: Q){
 
 	            		if(shortestPath.get(node) < minNodeDistance){	//최소거리 map에서 node까지의 거리가 가장 낮은걸 minNode, minNodeDistance에 업데이트
-	            		minNode = node;								
+	            			minNode = node;								
 	                    minNodeDistance = shortestPath.get(node);	
 	                    minTypeId = typeId.get(node);
 	                    curTime = timeMap.get(node);
@@ -717,35 +733,43 @@ public class AddrController {
 	            		String sco = minNodeMap.get(key).get(1).toString().replaceAll("\n", "");
 	            		Double scop = Double.parseDouble(sco);
 	            		int scope = (int)Math.round(scop);
-
-		               	String contentId = minNodeMap.get(key).get(2).toString();
-		               	String contentTypeId = minNodeMap.get(key).get(3).toString();
-		               	int nextTime = curTime + 200;
-	            	
+		            String contentId = minNodeMap.get(key).get(2).toString();
+		            String contentTypeId = minNodeMap.get(key).get(3).toString();
+		            int nextTime = curTime + 200;
+		            int like = 0;
+		            if(minNodeMap.get(key).size()==5) {
+		            like = (int) minNodeMap.get(key).get(4);
+		            }
 	            		double distance = minNodeDistance + Double.parseDouble(minNodeMap.get(key).get(0).toString());		//처음 = 0 + 거리, 첫바퀴는 거리세팅      		//이동한 거리 + 출발지에서 다음 노드까지 거리
 
 	            		distance = distance + 10;
            			    	            		
-	            		if(minNodeDistance!=0.0) {			//처음 거리 판별할 때
+
 	            			if(1130<=nextTime && nextTime<=1330 || 1730<=nextTime && nextTime<=1930) {
 	            				if(contentTypeId.equals("39")) {					//밥 시간에 음식점 코드면 평점에 따라 가중치 차등 부여
 
 	            					switch (scope){
-	            					case 1: distance = distance - 5; break;
-	            					case 2: distance = distance - 4; break;
+	            					case 1: distance = distance - 1; break;
+	            					case 2: distance = distance - 2; break;
 	            					case 3: distance = distance - 3; break;
-	            					case 4: distance = distance - 2; break;
-	            					case 5: distance = distance - 1; break;
-					                default : distance = distance - 5; break;
+	            					case 4: distance = distance - 4; break;
+	            					case 5: distance = distance - 5; break;
+					            default : distance = distance - 1; break;
 					                }
 			                	} else {
-			                		distance = distance + 1000;						//음식점이 아닌 곳은 가중치 더해서 못가도록
+			                		distance = distance +10000;						//음식점이 아닌 곳은 가중치 더해서 못가도록
 			                	} 		                	
 			                } else {
 			                	if(contentTypeId.equals("39"))		            //밥 시간이 아닐 때 음식점들에 대해서 가중치 부여
 			                		distance = distance + 10000;
 			                }		                				                				                
-		            	}
+
+	            			if(like <= 50) {
+	            				distance = distance - 1;
+	            			} else {
+	            				distance = distance - 10;
+	            			}
+	            			
 /*		                if(typeId.get(minNode).equals("39")) {
 		                	distance = distance + 1000;
 		                }*/
@@ -754,7 +778,8 @@ public class AddrController {
 		                	ArrayList<Object> nodeMap = new ArrayList<>();
 		                	shortestPath.put(key, distance);						//minNode(출발) -> key(도착) 거리 update		                    
 		                	nodeMap.add(minNode);
-		                	nodeMap.add(nextTime);		                	
+		                	nodeMap.add(nextTime);
+		                	nodeMap.add(contentTypeId);
 		                									//minNode -> key 이전 노드(=minNode) 
 		                    typeId.put(key, contentTypeId);							//이전 노드의 콘텐츠 타입 저장
 		                    timeMap.put(key, nextTime);

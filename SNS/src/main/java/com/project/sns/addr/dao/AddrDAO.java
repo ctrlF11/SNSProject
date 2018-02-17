@@ -3,6 +3,7 @@ package com.project.sns.addr.dao;
 import java.util.List;
 
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.board.vo.BoardVO;
 
 public interface AddrDAO {
 	public int inputAddr(List<AddrVO> vo);
@@ -14,4 +15,5 @@ public interface AddrDAO {
 	   public AddrVO getAddress3() throws Exception;
 	   
 	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;
+	public List<BoardVO> getHeart() throws Exception;
 }

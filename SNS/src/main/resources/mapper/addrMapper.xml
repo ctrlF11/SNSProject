@@ -61,6 +61,15 @@
 		select * from TourMap m, TourMapCat c <where>m.contentId = c.contentId and sigungucode = #{sigungucode}</where>
 	</select> 
 
+	<select id="getHeart" resultMap = "getHeartMap">
+		select contentId, sum(heart) from Board group by contentId;
+	</select>
+	
 
+	
+	<resultMap id="getHeartMap" type="BoardVO">
+		<result property="contentId" column="contentId"/>
+		<result property="heart" column = "sum(heart)"/>
+	</resultMap>
 		
 </mapper>

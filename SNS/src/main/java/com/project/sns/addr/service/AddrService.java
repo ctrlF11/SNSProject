@@ -3,6 +3,7 @@ package com.project.sns.addr.service;
 import java.util.List;
 
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.board.vo.BoardVO;
 
 public interface AddrService {
 	public int inputAddr(List<AddrVO> vo);
@@ -13,5 +14,6 @@ public interface AddrService {
 	public List<AddrVO> getAddress2(String inside) throws Exception;
     public AddrVO getAddress3() throws Exception;
     
-	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;    
+	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;  
+	public List<BoardVO> getHeart() throws Exception;  
 }
