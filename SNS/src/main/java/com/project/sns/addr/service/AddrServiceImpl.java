@@ -2,6 +2,7 @@ package com.project.sns.addr.service;
 
 import com.project.sns.addr.dao.AddrDAO;
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.board.vo.BoardVO;
 
 import java.util.List;
 
@@ -46,5 +47,10 @@ public class AddrServiceImpl implements AddrService{
 	@Override
 	 public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
 	      return dao.getAddrWithCode(sigungucode);
+	   }
+	
+	@Override
+	 public List<BoardVO> getHeart() throws Exception {
+	      return dao.getHeart();
 	   }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.sns.addr.vo.AddrVO;
+import com.project.sns.board.vo.BoardVO;
 
 @Repository
 public class AddrDAOImpl implements AddrDAO{
@@ -55,5 +56,10 @@ public class AddrDAOImpl implements AddrDAO{
 	      // TODO Auto-generated method stub
 	      return sqlSession.selectList(namespace+".getAddrWithCode", sigungucode);   
 	 }
-	
+	 
+	 @Override
+	 public List<BoardVO> getHeart() throws Exception {
+	      // TODO Auto-generated method stub
+	      return sqlSession.selectList(namespace+".getHeart");   
+	 }
 }
