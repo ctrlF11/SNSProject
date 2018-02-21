@@ -12,8 +12,15 @@ public interface AddrDAO {
 	
 	public List<AddrVO> getAddrByWeather(String sigungucode, String inside) throws Exception;  
 	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;
+
 	public List<BoardVO> getHeart() throws Exception;
 	
 	public void insertPath(BoardVO vo);
 	public int getCount(String id);
+
+	
+	public AddrVO callInfo(String contentId) throws Exception;
+	public AddrVO callReview(String contentId) throws Exception;
+	public double getStarAvg(String contentId) throws Exception;
+
 }

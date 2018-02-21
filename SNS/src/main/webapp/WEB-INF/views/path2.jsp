@@ -18,7 +18,20 @@
 <!-- <script type="text/javascript" src="resources/js/map.js"></script> -->
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
+<style>
 
+.scope{
+	float:left;
+	margin: 10px;
+	top: 0;
+	}
+	
+.review{
+	clear: left;
+	margin: 10px;
+	}
+	
+</style>
 <title>TourSNS</title>
 </head>
 <body>   
@@ -35,98 +48,29 @@
                 -->
             <div id="main" class="column col-sm-12 col-xs-12">
                
-               <!-- 
-                  Topbar. 기존 부트스트랩보다 height를 늘림.
-                -->
-               <div class="navbar navbar-blue navbar-static-top">
-                  <!-- 
-                     아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
-                   -->
-                  <div class="navbar-header">
-                     <!-- 토글용 버튼인데.... collapse되어있어 비활성화된 듯 함. -->
-                     <button class="navbar-toggle" type="button"
-                        data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle</span>
-                     </button>
-                     <!-- 아이콘. margin-top을 늘림. -->
-                     <a href="main.do" class="navbar-brand logo">N</a>
-                  </div>
-                  
-                  <!-- 아이콘을 제외한 오른쪽 영역. -->
-                  <nav class="navbar-collapse" role="navigation">
-                     <!-- 검색 폼. -->
-                     <div class="search_wrap">
-                        <form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
-                           <div class="input-group input-group-sm">
-                              <select id="search_category" style="width: 55.2px; height: 30px;" >
-                                 <option value="user">사람</option>
-                                 <option value="map">가게</option>
-                                 <option value="board">글</option>
-                              </select>
-                              <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-                              <div class="input-group-btn">
-                                 <button class="btn btn-default" type="submit">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                 </button>
-                              </div>
-                           </div>
-                        </form>
-                     </div>
-                     <!-- 오른쪽 아이콘 모음집. 가로 957.333px에 찌그러짐-->
-                     <div class="icon_wrap">
-                        <ul class="nav navbar-nav navbar-right">
-                           <li>
-                              <a href="#">로그인</a>
-                           </li>
-                           <li>
-                              <a href="#postModal" role="button" data-toggle="modal">
-                              추천 경로+</a>
-                           </li>
-                           <li>
-                              <a href="#">스토리</a>
-                           </li>
-                           <!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
-                            <li class="dropdown">
-                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                           <i class="glyphicon glyphicon-user"></i></a>
-                           <ul class="dropdown-menu">
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                           </ul>
-                          </li>
-                        </ul>
-                     </div>
-                  </nav>
-               </div>
+            <%@ include file="include/topbar.jsp"%>
    <div id="setDiv">
       <div id="mask"></div>
       <div id="window"></div>
       <div id="mapBox">
-         <div id="searchBox" style="z-index: 22;">
-         <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
-      </div>
-         <div id="map" style="z-index: 1;" ></div> 
+      	<div id="searchBox" style="z-index: 2;">
+	      <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
+		</div>
+      	<div id="map" style="z-index: 1;" ></div> 
       </div>
       
       <!-- 오른쪽 사이드 -->  
       <div id="sidemenu">  
-         <button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
-         <button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
-         <button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
-         <ul class="accordian">
-            <li class="accordian--box">
-               <h3 id="recommend" onclick="recommend()">추천코스</h3>
-               <h4 id="pathlist"></h4>
-            </li>
-         </ul>
-         <div id="path"></div> 
-         <div>
-         	<select id="selectHour"></select>      	
-         	<select id="selectMinute"></select>
-         </div>       
+      	<button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
+      	<button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
+      	<button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
+      	<ul class="accordian">
+      		<li class="accordian--box">
+      			<h3 id="recommend" onclick="recommend()">추천코스</h3>
+      			<h4 id="pathlist"></h4>
+      		</li>
+      	</ul>
+      	<div id="path"></div>        
       </div>      
    </div>
             </div>         
@@ -393,22 +337,13 @@ function addMarker(position, title, contentid, contenttypeid) {
 
    //만약 arr에 존재하는 marker라면 빨간색 마커로 생성하겠다. 그리고 markerArr에 추가하겠다.
    if(arr.findIndex(function(item){return item.contentId === contentid})>-1){
-
-      createArrMarkers(marker);
-      
-      
-      
-      console.log(markersArr.findIndex(function(item){return item.contentid === contentid}));
-      console.log(markersArr.indexOf(this));
-      if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
-         //markersArr에도 존재한다면?
-         console.log("markersArr에도 존재함");
-         return false;
-      }
+   	createArrMarkers(marker);
+   	
+   	if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
+   		//markersArr에도 존재한다면?
+   		return false;
+   	}
    }
-   
-   console.log("markersArr");
-   console.log(markersArr);
    
    // 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
    marker.normalImage = normalImage;
@@ -451,8 +386,6 @@ function addMarker(position, title, contentid, contenttypeid) {
    
  //마커 클릭시! 
    daum.maps.event.addListener(marker, 'click', function() {
-         console.log("클릭");
-         console.log(marker);
          marker = this;
          //wrapWindowByMask();//팝업 레이어 검정 배경
          
@@ -491,8 +424,6 @@ function addMarker(position, title, contentid, contenttypeid) {
 
       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
       selectedMarker = marker;
-      console.log("22??");
-      console.log(marker);
       var obj = new Object();
       obj.contentId = contentid;
       obj.contentTypeId = contenttypeid;
@@ -776,22 +707,16 @@ function drawLine(recPath){
 
 //엑스표 누르면 arr와 div 삭제
 function deletePin(event){
-   console.log("event : " + event);
-   console.log(event);
    var cid = (event.id).replace('d','');
    
    //arr에서 지우기
    var i = arr.findIndex(function(item){return item.contentId === cid});
    //이미지 노말로 바꾸기
    markersArr[i].setImage(normalImage);
-   console.log("arr에서의 index");
-   console.log(i);
    if(i > -1){//엑스표 누른게 arr배열에 있다면
       
       //arr에서 삭제
       arr.splice(i, 1);
-      console.log("markersArr[i] : ");
-      console.log(markersArr[i]);
 
       //markersArr에서 삭제
       markersArr.splice(i, 1);
@@ -805,22 +730,24 @@ function deletePin(event){
          //markersArr[i].setImage(normalImage);
       //}
 
-   }
-   console.log("markersArr : ");
-   console.log(markersArr);
-   
+   }   
    
    //div 지우기 경로 후
-   var top1 = document.getElementById('path');
-   var garbage1 = document.getElementById(cid);
-   top1.removeChild(garbage1);
+	var top1 = document.getElementById('path');
+	var garbage1 = document.getElementById(cid);
+	if(!garbage1){
+	top1.removeChild(garbage1);
+	}else{
    
    
    //div 지우기 경로 전
-   var top = document.getElementById('pathlist');
-   var garbage = document.getElementById(cid);
-   top.removeChild(garbage);
-   deletePolyLine();
+	var top = document.getElementById('pathlist');
+	var garbage = document.getElementById(cid);
+	if(!garbage){
+	top.removeChild(garbage);
+	}
+	}
+	deletePolyLine();
 }
 
 //경로 새로고침
@@ -843,102 +770,119 @@ function newpath(){
 
 
 function getDetail(contentid, contenttypeid){
-   wrapWindowByMask();
-   var contentid;
-   var contenttypeid;
-   var title ="aa";
+	wrapWindowByMask();
+	var contentid = contentid;
+	var contenttypeid = contenttypeid;
     $.ajax({        
         url: 'callDetail.do',
         type: 'get',
         data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
         dataType: 'json',
         success: function(data){
-           var myItem = data.response.body.items.item;
-            var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
-               output += '<h4 id="title">' + title + '</h4>';
+            var addr = getInfo(contentid, contenttypeid);
+        	var myItem = data.response.body.items.item;
+            var output = '<div class="pin1 ' + contentid + '" id="' + contentid + '" text-align:left>';
+            	output += '<h4 id="title">' + addr.title + '</h4>';
+            	output += '<div class="scope" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/>';
+            if(addr.scope && addr.scope !="0" && addr.scope!="0.0"){
+            	output += '<p><div class="glyphicon glyphicon-star" />' + addr.scope + '</p></div>';
+            }else output += '</div>';
             if(contenttypeid == 12){
-                  if(myItem.parking){
+          	  	if(myItem.parking){
                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
-                  }if(myItem.restdate){
+          	  	}if(myItem.restdate){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
-                  }if(myItem.infocenter){
+          	  	}if(myItem.infocenter){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 14){
-                  if(myItem.usefee){
+          	  	if(myItem.usefee){
                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
-                  }if(myItem.usetimeculture){
+          	  	}if(myItem.usetimeculture){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
-                  }if(myItem.restdateculture){
+          	  	}if(myItem.restdateculture){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
-                  }if(myItem.infocenterculture){
+          	  	}if(myItem.infocenterculture){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 15){
-                  if(myItem.eventplace){
+          	  	if(myItem.eventplace){
                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
-                  }if(myItem.eventstartdate){
+          	  	}if(myItem.eventstartdate){
                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
-                  }if(myItem.playtime){
+          	  	}if(myItem.playtime){
                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
-                  }if(myItem.sponsor1 || myItem.sponsor1tel){
+          	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 28){
-                  if(myItem.usetimeleports){
+          	  	if(myItem.usetimeleports){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
-                  }if(myItem.infocenterleports){
+          	  	}if(myItem.infocenterleports){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 32){
-                  if(myItem.reservationurl){
+          	  	if(myItem.reservationurl){
                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
-                  }if(myItem.subfacility){
+          	  	}if(myItem.subfacility){
                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
-                  }if(myItem.infocenterlodging){
+          	  	}if(myItem.infocenterlodging){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 38){
-                  if(myItem.saleitem){
+          	  	if(myItem.saleitem){
                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
-                  }if(myItem.opentime){
+          	  	}if(myItem.opentime){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
-                  }if(myItem.restdateshopping){
+          	  	}if(myItem.restdateshopping){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
-                  }if(myItem.infocenter){
+          	  	}if(myItem.infocenter){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 39){
-                  if(myItem.treatmenu){
+          	  	if(myItem.treatmenu){
                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
-                  }if(myItem.opentimefood){
+          	  	}if(myItem.opentimefood){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
-                  }if(myItem.restdatefood){
+          	  	}if(myItem.restdatefood){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
-                  }if(myItem.infocenterfood){
+          	  	}if(myItem.infocenterfood){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-                  }
+          	  	}
             }
+            if(addr.image1 && addr.link1){
+            	output += '<p class="p">리뷰보기:(클릭으로 이동) </p><a class="review" href="' + addr.link1 + '"><img src="' + addr.image1 + '"/>'
+            			+ '</a>';
+            }if(addr.image2 && addr.link2){
+            	output += '<a class="review" href="' + addr.link2 + '"><img src="' + addr.image2 + '"/>'
+    			+ '</a>';
+   			}if(addr.image3 && addr.link3){
+            	output += '<a class="review" href="' + addr.link3 + '"><img src="' + addr.image3 + '"/>'
+    			+ '</a>';
+    		}
                 output += '</div>';
                 $('#window').html(output);
         },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
           alert("Status: " + textStatus); alert("Error: " + errorThrown); 
       } 
-    });
+ 	});
 }
 
 function getInfo(contentid, contenttypeid){
-   $.ajax({
-      url:'callInfo.do',
-      type:'POST',
-      data: {"contentid" : contentid, "contenttypeid" : contenttypeid},
-      dataType: 'jason',
-      success: function(data){
-         
-      }
-      
-   })
+	var addr;
+	$.ajax({
+		url:'callInfo.do',
+		type:'POST',
+		async: false, 
+		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		dataType: 'json',
+		success: function(data){
+			addr = data;
+		}
+		
+	});
+	return addr;
 }
 
 //행정구역 표시 텍스트

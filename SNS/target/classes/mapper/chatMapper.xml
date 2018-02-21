@@ -6,7 +6,7 @@
 
 	<insert id = "submit" parameterType="ChatVO">
 		insert into Chat (fromID, toID, chatContent, chatTime, chatRead)
-		values (#{fromID}, #{toID}, #{chatContent}, NOW(), 0)
+		values (#{fromID}, #{toID}, #{chatContent}, NOW(), 0)s
 	</insert>
 	
 	<select id = "listByID" parameterType="ChatVO" resultType="ChatVO">
@@ -37,5 +37,11 @@
 	SELECT * FROM Chat
 	WHERE (fromID = #{userID}) 
 	AND chatRead = 0
+	</select>
+	
+	<select id= "getFollowerList" parameterType="String" resultType="ChatVO">
+	SELECT * FROM Chat
+	WHERE ((fromID = #{value}) OR (toID = #{value}))
+	ORDER BY chatTime 
 	</select>
 </mapper>

@@ -26,7 +26,6 @@
 </head>
 <body>
 <div id="map" style="width:100%;height:350px;"></div>
-
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도의 중심좌표
@@ -72,24 +71,24 @@ var contents =  [
             %>
             {
             value :  
-               '<div class="wrap">' + 
-                  '    <div class="info">' + 
-                  '        <div class="title">' + 
-                           "<%=list.get(i).getTitle()%>"+ 
-                  '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
-                  '        </div>' + 
-                  '        <div class="body">' + 
-                  '            <div class="img">' +
-                  '                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
-                  '           </div>' + 
-                  '            <div class="desc">' + 
-                  '                <div class="ellipsis"><%=list.get(i).getAddr1()%></div>' + 
-                  '                <div class="예제.. 아무정보 다들어감jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
-                  '                <div><a href="http://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
-                  '            </div>' + 
-                  '        </div>' + 
-                  '    </div>' +    
-                  '</div>' 
+                '<div class="wrap">' + 
+                '    <div class="info">' + 
+                '        <div class="title">' + 
+                         "<%=list.get(i).getTitle()%>"+ 
+                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
+                '        </div>' + 
+                '        <div class="body">' + 
+                '            <div class="img">' +
+                '                <img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
+                '           </div>' + 
+                '            <div class="desc">' + 
+                '                <div class="ellipsis"><%=list.get(i).getAddr1()%></div>' + 
+                '                <div class="예제.. 아무정보 다들어감jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
+                '                <div><a href="http://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
+                '            </div>' + 
+                '        </div>' + 
+                '    </div>' +    
+                '</div>' 
             
             }
              <%

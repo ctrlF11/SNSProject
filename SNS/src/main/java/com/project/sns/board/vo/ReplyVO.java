@@ -10,6 +10,32 @@ public class ReplyVO {
 	private String rcontent;
 	private String rwriter;
 	private Date rregdate;
+    private String reparent;
+    private String redepth;
+    
+    
+    public String getReparent() {
+		return reparent;
+	}
+	public void setReparent(String reparent) {
+		this.reparent = reparent;
+	}
+	public String getRedepth() {
+		return redepth;
+	}
+	public void setRedepth(String redepth) {
+		this.redepth = redepth;
+	}
+	public Integer getReorder() {
+		return reorder;
+	}
+	public void setReorder(Integer reorder) {
+		this.reorder = reorder;
+	}
+	private Integer reorder;
+
+	
+	
 	public Integer getReply_seq() {
 		return reply_seq;
 	}

@@ -14,6 +14,7 @@ import com.project.sns.board.vo.StoryVO;
 
 public interface BoardDAO {
 	public List<BoardVO> getBoardList(HashMap map);
+	public List<BoardVO> getBoardStoryList(BoardVO vo);
 	// 疫뀐옙 揶쏆뮇�땾(占쎌뵬占쎌뵥 甕곕뜇�깈)
 	public List<BoardVO> getMainBoardList(@Param("index") int index);
 	public int getBoardCount(int line_seq) throws Exception;
@@ -48,5 +49,27 @@ public interface BoardDAO {
 	
 	public int saveImage(ImageVO vo) throws SQLException;
 	public ImageVO getImage(int img_seq) throws Exception;
-	public void insertReply(ReplyVO vo);
+	
+	// 2018/02/05 in
+	public List<StoryVO> getStoryAll(String id) throws Exception;
+//	public List<StoryVO> getStoryAll(HashMap map) throws Exception;
+	
+	public int getStoryCount(String id) throws Exception;
+	
+
+    // 댓글 개수
+    public int replyCount() throws Exception;
+    // 댓글 목록
+    public List<ReplyVO> replyList(ReplyVO reply) throws Exception;
+ 
+    // 댓글 작성
+    public int replyInsert(ReplyVO reply) throws Exception;
+    
+    // 댓글 수정
+    public int replyUpdate(ReplyVO reply) throws Exception;
+ 
+    // 댓글 삭제
+    public int replyDelete(ReplyVO reply) throws Exception;
+
+   
 }

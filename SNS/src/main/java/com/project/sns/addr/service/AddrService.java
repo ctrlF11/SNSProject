@@ -16,4 +16,8 @@ public interface AddrService {
 	
 	public void insertPath(BoardVO vo);
 	public int getCount(String id);
+	
+	public AddrVO callInfo(String contentId) throws Exception;
+	public AddrVO callReview(String contentId) throws Exception;
+	public double getStarAvg(String contentId) throws Exception;
 }

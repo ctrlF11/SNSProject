@@ -38,6 +38,12 @@ public class ChatServiceImpl implements ChatService{
 	public int newChat(ChatVO vo) {
 		return dao.newChat(vo);
 	}
+
+	@Override
+	public List<ChatVO> getFollowerList(String id) {
+		// TODO Auto-generated method stub
+		return dao.getFollowerList(id);
+	}
 	
 
 }

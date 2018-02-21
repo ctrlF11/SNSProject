@@ -21,6 +21,34 @@ public class AddrVO {
 	private String image3;
 	private String scope;
 	
+	private String link1;
+	private String link2;
+	private String tv;
+	
+	public String getTv() {
+		return tv;
+	}
+	public void setTv(String tv) {
+		this.tv = tv;
+	}
+	public String getLink1() {
+		return link1;
+	}
+	public void setLink1(String link1) {
+		this.link1 = link1;
+	}
+	public String getLink2() {
+		return link2;
+	}
+	public void setLink2(String link2) {
+		this.link2 = link2;
+	}
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
 	public String getContentTypeId() {
 		return contentTypeId;
 	}
@@ -129,12 +157,7 @@ public class AddrVO {
 	public void setImage3(String image3) {
 		this.image3 = image3;
 	}
-	public String getScope() {
-		return scope;
-	}
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
+
 
 	
 }

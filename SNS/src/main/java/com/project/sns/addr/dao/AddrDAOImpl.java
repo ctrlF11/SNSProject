@@ -61,4 +61,23 @@ public class AddrDAOImpl implements AddrDAO {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace + ".getCount", id);
 	}
+	
+		@Override
+	public AddrVO callInfo(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".callInfo", contentId);
+	}
+
+	@Override
+	public AddrVO callReview(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".callReview", contentId);
+	}
+
+	@Override
+	public double getStarAvg(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getStarAvg", contentId);
+		
+	}
 }

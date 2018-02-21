@@ -54,4 +54,22 @@ public class AddrServiceImpl implements AddrService{
 	public int getCount(String id) {
 		return dao.getCount(id);
 	}
+	
+	@Override
+	public AddrVO callInfo(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.callInfo(contentId);
+	}
+
+	@Override
+	public AddrVO callReview(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.callReview(contentId);
+	}
+
+	@Override
+	public double getStarAvg(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getStarAvg(contentId);
+	}
 }

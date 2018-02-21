@@ -15,6 +15,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +29,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.cxf.helpers.IOUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -264,6 +271,41 @@ public class AddrController {
 		
 		System.out.println(s);
 		System.out.println(json);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/callInfo")
+	public AddrVO callInfo(@RequestParam String contentId, @RequestParam String contentTypeId) throws Exception{
+		AddrVO vo = service.callInfo(contentId);
+		double star = 0;
+		if(vo.getScope()!=null) {
+			star = Double.parseDouble(vo.getScope());
+			if(star != 0) {
+				if(service.getStarAvg(contentId)>0) {
+					double star2 = service.getStarAvg(contentId);
+					if(star2!=0) {
+						star = (star + star2)/2;
+					}
+				}
+			}
+		}
+		String stars = Double.toString(star);
+		if(contentTypeId.equals("39")) {
+		AddrVO vo2 = service.callReview(contentId);
+		if(vo2!=null) {
+		vo.setLink1(vo2.getLink1());
+		vo.setLink2(vo2.getLink2());
+		vo.setLink3(vo2.getLink3());
+		vo.setImage1(vo2.getImage1());
+		vo.setImage2(vo2.getImage2());
+		vo.setImage3(vo2.getImage3());
+		vo.setScope(stars);
+		}else {
+			vo.setScope(stars);
+			vo2 = null;
+		}
+		}
+		return vo;
 	}
 
 	@RequestMapping("/Address.do")
@@ -561,7 +603,7 @@ public class AddrController {
           return re;
     }  
 		
-	//좌표로 위치 계산
+	//거리 포인트 가중치 (Dijkstra)
 	private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
 
 		double theta = lon1 - lon2;
@@ -732,7 +774,7 @@ public class AddrController {
 }
 
 
-
+//TSP에서 사용하는 클래스
 class getP{
 	   public static int[][] W;
 	   public static int[][] dp;
@@ -832,7 +874,7 @@ class getP{
 	      return path;
 	   }
 	   
-	   //좌표로 위치 계산
+	   //좌표로 거리 계산(TSP)
 	   private static double distance2(double lat1, double lon1, double lat2, double lon2, String unit) {
 
 	      double theta = lon1 - lon2;
@@ -848,10 +890,6 @@ class getP{
 	      } else if (unit == "meter") {
 	         dist = dist * 1609.344;
 	      }
-	      
-//	      int distPoint = (int) Math.floor(dist/2000) * 10;
-	      //Meter로 계산할 때 2000으로 나눠서 소수점 이하 버림
-	      // * 10은 가중치 값 계산할 때 범위 적용가능하게 범위 늘리기용
 	      
 	      return dist;
 	   }
