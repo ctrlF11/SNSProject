@@ -12,5 +12,9 @@ public interface AddrService {
 	public List<AddrVO> getAddress2(String inside) throws Exception;
     public AddrVO getAddress3() throws Exception;
     
-    public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception; 
+    public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;
+    
+	public AddrVO callInfo(String contentId) throws Exception;
+	public AddrVO callReview(String contentId) throws Exception;
+	public double getStarAvg(String contentId) throws Exception;
 }

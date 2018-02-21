@@ -226,7 +226,7 @@ String toID = "456";
 								<div class="row heading">
 									<div class="col-sm-3 col-xs-3 heading-avatar">
 										<div class="heading-avatar-icon">
-											<!-- 자기 프로필 사진 입력!! -->
+											<!-- 자기 프로필 사진 입력!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 											<img src="https://bootdey.com/img/Content/avatar/avatar1.png">
 										</div>
 									</div>
@@ -360,12 +360,12 @@ String toID = "456";
 								<div class="row heading">
 									<div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
 										<div class="heading-avatar-icon">
-											<!-- 상대방 프로필 이미지 등록. -->
+											<!-- 상대방 프로필 이미지 등록.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 -->
 											<img src="https://bootdey.com/img/Content/avatar/avatar6.png">
 										</div>
 									</div>
 									<div class="col-sm-8 col-xs-7 heading-name">
-										<!-- 상대방 이름 등록. -->
+										<!-- 상대방 이름 등록.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 										<a class="heading-name-meta">John Doe </a> <span
 											class="heading-online">Online</span>
 									</div>

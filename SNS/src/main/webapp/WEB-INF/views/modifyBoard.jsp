@@ -113,6 +113,24 @@
 	padding-left: 40px;
 	}
 
+.image{
+	float:left;
+	top: 0;
+	}
+
+.tourbox{
+	background:white;
+	overflow:hidden;
+	height: auto;
+	clear: left;
+	border-radius: 12px;
+	margin: 5px;
+	}
+
+.star{
+	float: right;
+	}
+
 </style>
 <title>Insert title here</title>
 
@@ -244,7 +262,6 @@
 									<option value='${story.story_seq}'>${story.story_title}</option>
 								</c:forEach>
 								<option disabled></option>
-								<option value="스토리삭제">스토리삭제</option>
 								<option value="스토리추가">스토리추가</option>
 							</select> 
 						</form>
@@ -264,8 +281,8 @@
 							</form>
 							<div id="glyphicon">
 								<span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
-								<span class="glyphicon glyphicon-trash" id="delete" aria-hidden="true"></span>
-								<span class="glyphicon glyphicon-screenshot" id="reloacate" aria-hidden="true"></span>
+								<!-- <span class="glyphicon glyphicon-trash" id="delete" aria-hidden="true"></span>
+								<span class="glyphicon glyphicon-screenshot" id="reloacate" aria-hidden="true"></span> -->
 							</div>
 							<!-- <div class='fileDrop'></div>  -->
 						</div>
@@ -306,10 +323,9 @@
 var id = '<%=id%>';
 var files = [];
 var blob;
-
 var contentId;
 var mtitle;
-
+var starvalue;
 //보드 받아올 때 빼오기. 
 var board_seq =3; 
 //선택한 마커
@@ -423,49 +439,90 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
        mtitle = title;
        
       createArrMarkers();
-      
+      starvalue = 0;
+      locked = 0;
       $.ajax({        
           url: 'callDetail.do',
           type: 'get',
           data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
           dataType: 'json',
           success: function(data){
-               var myItem = data.response.body.items.item;
-                  var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
-                  	output += '<h4 id="title">' + title + '</h4>';
+        	  var addr = getInfo(contentid, contenttypeid);
+              var myItem = data.response.body.items.item;
+              var output = '<div class="tourbox ' + contentid + '" id="' + contentid + '" text-align:left>';
+              output += '<h4 id="title">' + addr.title + '<div class="star" id="star">별점주기'
+              		+ '<img src="empty_star3.png" id="star1" onmouseover=show(1) onclick=mark(1) onmouseout=noshow(1)>'
+              		+ '<img src="empty_star3.png" id="star2" onmouseover=show(2) onclick=mark(2) onmouseout=noshow(2)>'
+              		+ '<img src="empty_star3.png" id="star3" onmouseover=show(3) onclick=mark(3) onmouseout=noshow(3)>'
+              		+ '<img src="empty_star3.png" id="star4" onmouseover=show(4) onclick=mark(4) onmouseout=noshow(4)>'
+              		+ '<img src="empty_star3.png" id="star5" onmouseover=show(5) onclick=mark(5) onmouseout=noshow(5)>'
+              		+'</div></h4>';
+          	  output += '<div class="image" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/></div>';
+          	  output += '<div class="info">';
                   if(contenttypeid == 12){
+                	  	if(myItem.parking){
  	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+                	  	}if(myItem.restdate){
  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+                	  	}if(myItem.infocenter){
  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                	  	}
                   }else if(contenttypeid == 14){
+                	  	if(myItem.usefee){
  	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+                	  	}if(myItem.usetimeculture){
  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+                	  	}if(myItem.restdateculture){
  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+                	  	}if(myItem.infocenterculture){
  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                	  	}
                   }else if(contenttypeid == 15){
+                	  	if(myItem.eventplace){
  	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+                	  	}if(myItem.eventstartdate){
  	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+                	  	}if(myItem.playtime){
  	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+                	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
  	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                	  	}
                   }else if(contenttypeid == 28){
+                	  	if(myItem.usetimeleports){
  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+                	  	}if(myItem.infocenterleports){
  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                	  	}
                   }else if(contenttypeid == 32){
+                	  	if(myItem.reservationurl){
  	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+                	  	}if(myItem.subfacility){
  	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+                	  	}if(myItem.infocenterlodging){
  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                	  	}
                   }else if(contenttypeid == 38){
+                	  	if(myItem.saleitem){
  	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+                	  	}if(myItem.opentime){
  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+                	  	}if(myItem.restdateshopping){
  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+                	  	}if(myItem.infocenter){
  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                	  	}
                   }else if(contenttypeid == 39){
+                	  	if(myItem.treatmenu){
  	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+                	  	}if(myItem.opentimefood){
  	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+                	  	}if(myItem.restdatefood){
  	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+                	  	}if(myItem.infocenterfood){
  	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                	  	}
                   }
-                  output += '</div>';
+                  output += '</div></div>';
                   $('#searchResult').show();
                   $('#searchContent').show();
                   $('#searchContent').html(output);
@@ -476,6 +533,24 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
  	});
    });
    } 
+	
+function getInfo(contentid, contenttypeid){
+	var addr;
+	console.log("getInfo 실행");
+	console.log(contentid);
+	$.ajax({
+		url:'callInfo.do',
+		type:'POST',
+		async: false, 
+		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		dataType: 'json',
+		success: function(data){
+			addr = data;
+		}
+		
+	});
+	return addr;
+}
 	
 	
 	function setMarkers(map){
@@ -494,11 +569,10 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
 	
 	//스토리 추가 선택 시 스토리 추가하기.
 	$('#storyBox').change(function(){
-		
 		if((this.value)=='스토리추가'){
 			var a = prompt('새로운 스토리명을 입력하시오.');
-			if(a==false || a==null){
-				$('#storyBox').val('스토리선택').prop('selected',true); 
+			if(a==null || a==''){
+				$('#storyBox option:eq(0)').prop('selected',true);
 				return false;
 				}
 			$.ajax({
@@ -506,15 +580,12 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
 				type: 'POST',
 				data: {id:id, story_title:a},
 				success: function(data){
-					//$('#storyBox option:last').before("<option value='"+ data + "'>" + a + "</option>");
-					$('#storyBox option:eq(-3)').before("<option value='"+ data + "'>" + a + "</option>");
+					$('#storyBox option:eq(-2)').before("<option value='"+ data + "'>" + a + "</option>");
 					$('#storyBox').val(data).prop('selected',true);
 					
 					//스토리로 글 조회 추가하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				}
 			})
-		}else if((this.value)=='스토리삭제'){
-			
 		}
 	})
 	
@@ -524,12 +595,18 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
 		var story_seq = $('#storyBox').val();
 		var title = $('#title').val();
 		var content = $('#content').html();
-		
-		
+		console.log("SAVE 후의 star " + starvalue);
+		if(starvalue==null || starvalue==0){
+			alert("별점을 입력하시오.");
+			return false;
+		}if(contentId==null || contentId==''){
+			alert("위치를 입력하시오.");
+			return false;
+		}
 		$.ajax({
 			url:'inputBoard.do',
 			type:'POST',
-			data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentId:contentId}
+			data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentId:contentId, star:starvalue}
 				
 				//성공시 글 전체 조회.
 		})
@@ -649,7 +726,7 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
 //지도 검색
 function searchMap(){
 	var keyword = $('#searchMap').val();
-	if(keyword == null){
+	if(keyword == null || keyword ==''){
 		alert("검색어를 입력하세요.");
 		return false;
 	}
@@ -666,7 +743,7 @@ function searchMap(){
 			array = data;
 			if(array.length==0){
 				alert("검색 결과가 없습니다.");
-				
+				return false;
 			}
 			var bounds = new daum.maps.LatLngBounds();
 			
@@ -690,6 +767,47 @@ function setMarkersArr(map){
 	$.each(markersArr,function(i,val){
 		val.setMap(map);
 	})
+}
+
+//별점 부분!!!!!!!
+var locked = 0;
+
+function show(star){
+	if(locked) return;
+	var i;
+	var image;
+	var el;
+	
+	for(i = 1; i <= star; i++){
+		image = 'star' + i;
+		el = document. getElementById(image);
+		el.src = "star3.png";
+	}
+	
+}
+
+function noshow(star){
+	if(locked) return;
+	var i;
+	var image;
+	var el;
+	
+	for( i = 1; i <= star; i++){
+		image = 'star' + i;
+		el = document.getElementById(image);
+		el.src = "empty_star3.png";
+	}
+}
+
+function lock(star){
+	show(star);
+	locked = 1;
+}
+
+function mark(star){
+	lock(star);
+	starvalue = star;
+	console.log("star " + starvalue);
 }
 
 

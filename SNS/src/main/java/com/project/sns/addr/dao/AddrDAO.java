@@ -13,4 +13,8 @@ public interface AddrDAO {
 	public AddrVO getAddress3() throws Exception;
 	
 	public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception;
+	
+	public AddrVO callInfo(String contentId) throws Exception;
+	public AddrVO callReview(String contentId) throws Exception;
+	public double getStarAvg(String contentId) throws Exception;
 }

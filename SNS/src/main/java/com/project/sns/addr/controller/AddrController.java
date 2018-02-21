@@ -261,6 +261,41 @@ public class AddrController {
 		System.out.println(s);
 		System.out.println(json);
 	}
+	
+	@ResponseBody
+	@RequestMapping("/callInfo")
+	public AddrVO callInfo(@RequestParam String contentId, @RequestParam String contentTypeId) throws Exception{
+		AddrVO vo = service.callInfo(contentId);
+		double star = 0;
+		if(vo.getScope()!=null) {
+			star = Double.parseDouble(vo.getScope());
+			if(star != 0) {
+				if(service.getStarAvg(contentId)>0) {
+					double star2 = service.getStarAvg(contentId);
+					if(star2!=0) {
+						star = (star + star2)/2;
+					}
+				}
+			}
+		}
+		String stars = Double.toString(star);
+		if(contentTypeId.equals("39")) {
+		AddrVO vo2 = service.callReview(contentId);
+		if(vo2!=null) {
+		vo.setLink1(vo2.getLink1());
+		vo.setLink2(vo2.getLink2());
+		vo.setLink3(vo2.getLink3());
+		vo.setImage1(vo2.getImage1());
+		vo.setImage2(vo2.getImage2());
+		vo.setImage3(vo2.getImage3());
+		vo.setScope(stars);
+		}else {
+			vo.setScope(stars);
+			vo2 = null;
+		}
+		}
+		return vo;
+	}
 
 	@RequestMapping("/Address.do")
 	public String Address(HttpServletRequest req) throws Exception {
@@ -681,8 +716,6 @@ class getP{
     }	
 	
 	public static int getShortestPath(int current, int visited, int[][] W) {
-		
-
 		
 		// 모든 정점을 다 들른 경우
 		if (visited == (1 << N) - 1) {	

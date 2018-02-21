@@ -50,4 +50,6 @@ public interface BoardDAO {
 	public ImageVO getImage(int img_seq) throws Exception;
 	public void insertReply(ReplyVO vo);
 	
+
+	
 }

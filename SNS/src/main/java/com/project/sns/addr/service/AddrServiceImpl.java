@@ -48,4 +48,22 @@ public class AddrServiceImpl implements AddrService{
     public List<AddrVO> getAddrWithCode(String sigungucode) throws Exception {
          return dao.getAddrWithCode(sigungucode);
       }
+
+	@Override
+	public AddrVO callInfo(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.callInfo(contentId);
+	}
+
+	@Override
+	public AddrVO callReview(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.callReview(contentId);
+	}
+
+	@Override
+	public double getStarAvg(String contentId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getStarAvg(contentId);
+	}
 }

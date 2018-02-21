@@ -23,6 +23,15 @@ public class BoardVO {
 	private Date regdate;
 	private Integer heart;
 	private String heart_id;
+	private Integer star;
+
+	public Integer getStar() {
+		return star;
+	}
+
+	public void setStar(Integer star) {
+		this.star = star;
+	}
 
 	public Integer getBoard_seq() {
 		return board_seq;

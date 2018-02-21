@@ -14,15 +14,27 @@
    href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
-<link rel="stylesheet" href="resources/css/map.css" type="text/css"/>
+<link rel="stylesheet" href="resources/css/map.css?val=1" type="text/css"/>
 <!-- <script type="text/javascript" src="resources/js/map.js"></script> -->
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
+<style>
 
+.scope{
+	float:left;
+	margin: 10px;
+	top: 0;
+	}
+	
+.review{
+	clear: left;
+	margin: 10px;
+	}
+	
+</style>
 <title>TourSNS</title>
 </head>
 <body>   
-
 <div class="wrapper">
       <div class="box">
          <div class="row row-offcanvas row-offcanvas-left">
@@ -379,26 +391,15 @@ function addMarker(position, title, contentid, contenttypeid) {
       image : normalImage
    // 마커 이미지 
    });
-   console.log("arr");
-   console.log(arr);
    //만약 arr에 존재하는 marker라면 빨간색 마커로 생성하겠다. 그리고 markerArr에 추가하겠다.
    if(arr.findIndex(function(item){return item.contentId === contentid})>-1){
-	console.log("arr에 존재하는 marker이다.");	
    	createArrMarkers(marker);
    	
-   	
-   	
-   	console.log(markersArr.findIndex(function(item){return item.contentid === contentid}));
-   	console.log(markersArr.indexOf(this));
    	if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
    		//markersArr에도 존재한다면?
-   		console.log("markersArr에도 존재함");
    		return false;
    	}
    }
-   
-   console.log("markersArr");
-   console.log(markersArr);
    
    // 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
    marker.normalImage = normalImage;
@@ -441,8 +442,6 @@ function addMarker(position, title, contentid, contenttypeid) {
    
  //마커 클릭시! 
    daum.maps.event.addListener(marker, 'click', function() {
-   	   console.log("클릭");
-   	   console.log(marker);
    	   marker = this;
    	   //wrapWindowByMask();//팝업 레이어 검정 배경
    	   
@@ -459,7 +458,7 @@ function addMarker(position, title, contentid, contenttypeid) {
        }
        var i = arr.findIndex(function(item){return item.contentId === contentid});
        if(i > -1){
-    	   
+    	   return false;
        	//이미지 노말로 변경
     	   marker.setImage(normalImage);
     	   
@@ -481,8 +480,6 @@ function addMarker(position, title, contentid, contenttypeid) {
 
       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
       selectedMarker = marker;
-      console.log("22??");
-      console.log(marker);
       var obj = new Object();
       obj.contentId = contentid;
       obj.contentTypeId = contenttypeid;
@@ -497,7 +494,7 @@ function addMarker(position, title, contentid, contenttypeid) {
                   				+ "<a href='javascript:panTo(" + position.jb + ',' + position.ib + ',' + contentid + ',' + contenttypeid + ")'>"
                   				+ title + '</a></h4></div>';
       $('#path').append(outputTitle);
-   });
+   });			
    
 }
 
@@ -589,6 +586,7 @@ function recommend() {
                          obj.mapy = positions[j].latlng.jb;
                          obj.mapx = positions[j].latlng.ib;
                          obj.title = positions[j].title;
+                         console.log("contentTypeId : " + positions[j].contenttypeid);
                          arr.push(obj);
                          //arr.push(positions[j]);
                          
@@ -603,9 +601,6 @@ function recommend() {
 			   						+ positions[j].title + "</a>" + '</h4>';
 			  			sidePath += '</div>'; 
                         
-                        console.log("333");
-                        console.log("positons[j]");
-                        console.log(positions[j]);
                         recPath.push(positions[j].latlng);
                      }
                   }
@@ -642,9 +637,6 @@ function getpath(){
 		   success: function(data){
 			   console.log(data);
 			   $('#path').empty();
-			   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!afterpath
-			   //var arra = new Array();
-			   //arra = data;
 			   markersArr = [];
 			   deletePolyLine();
 			   recPath = [];
@@ -652,20 +644,14 @@ function getpath(){
 			   var sidePath = '';
 			   var bounds = new daum.maps.LatLngBounds();
 				   $.each(afterpath, function(i, val){
-					   console.log("444");
-					   console.log(val);
-					   console.log('val.mapy');
-					   console.log(val.mapy);
 					   var latlng = new daum.maps.LatLng(val.mapy,val.mapx);
-					   console.log("latlng");
-					   console.log(latlng);
 					   recPath.push(latlng);
 					   bounds.extend(latlng);
 					   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
 					   
 					   sidePath += '<div class="pinn ' + val.contentId+ '" id="' + val.contentId + '"text-align:left)">';
 					   sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + val.contentId + '"onclick="deletePin(this)"></div>'
-					   			+ "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contnetTypeId + ")'>"
+					   			+ "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contentTypeId + ")'>"
 					   			+ val.title + "</a>" + '</h4>';
 					   sidePath += '</div>';
 				   });
@@ -705,16 +691,12 @@ function searchMap(){
 	if(afterSearchArr!=null){
 	setMarkers(null);
 	setMarkersArr(map);
-	console.log('markersArr');
-	console.log(markersArr);
 	}
 	$.ajax({
 		url:'search.do',
 		type: 'POST',
 		data: {keyword:keyword},
 		success: function(data){
-			console.log("555");
-			console.log(data);
 			afterSearchArr = data;
 			if(afterSearchArr.length==0){
 				alert("검색 결과가 없습니다.");
@@ -771,8 +753,6 @@ function drawLine(recPath){
 
 //엑스표 누르면 arr와 div 삭제
 function deletePin(event){
-	console.log("event : " + event);
-	console.log(event);
 	var cid = (event.id).replace('d','');
 	
 	//arr에서 지우기
@@ -808,13 +788,17 @@ function deletePin(event){
 	//div 지우기 경로 후
 	var top1 = document.getElementById('path');
 	var garbage1 = document.getElementById(cid);
+	if(!garbage1){
 	top1.removeChild(garbage1);
-	
+	}else{
 	
 	//div 지우기 경로 전
 	var top = document.getElementById('pathlist');
 	var garbage = document.getElementById(cid);
+	if(!garbage){
 	top.removeChild(garbage);
+	}
+	}
 	deletePolyLine();
 }
 
@@ -839,50 +823,95 @@ function newpath(){
 
 function getDetail(contentid, contenttypeid){
 	wrapWindowByMask();
-	var contentid;
-	var contenttypeid;
-	var title ="aa";
+	var contentid = contentid;
+	var contenttypeid = contenttypeid;
     $.ajax({        
         url: 'callDetail.do',
         type: 'get',
         data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
         dataType: 'json',
         success: function(data){
-             var myItem = data.response.body.items.item;
-                var output = '<div class="detailBox" text-align:left>';
-                	output += '<h4 class="title">' + title + '</h4>';
-                if(contenttypeid == 12){
- 	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                }else if(contenttypeid == 14){
- 	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-                }else if(contenttypeid == 15){
- 	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
- 	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
- 	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
- 	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-                }else if(contenttypeid == 28){
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-                }else if(contenttypeid == 32){
- 	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
- 	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-                }else if(contenttypeid == 38){
- 	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                }else if(contenttypeid == 39){
- 	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-                }
+            var addr = getInfo(contentid, contenttypeid);
+        	var myItem = data.response.body.items.item;
+            var output = '<div class="pin1 ' + contentid + '" id="' + contentid + '" text-align:left>';
+            	output += '<h4 id="title">' + addr.title + '</h4>';
+            	output += '<div class="scope" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/>';
+            if(addr.scope && addr.scope !="0" && addr.scope!="0.0"){
+            	output += '<p><div class="glyphicon glyphicon-star" />' + addr.scope + '</p></div>';
+            }else output += '</div>';
+            if(contenttypeid == 12){
+          	  	if(myItem.parking){
+                   output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+          	  	}if(myItem.restdate){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+          	  	}if(myItem.infocenter){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+          	  	}
+            }else if(contenttypeid == 14){
+          	  	if(myItem.usefee){
+                   output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+          	  	}if(myItem.usetimeculture){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+          	  	}if(myItem.restdateculture){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+          	  	}if(myItem.infocenterculture){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+          	  	}
+            }else if(contenttypeid == 15){
+          	  	if(myItem.eventplace){
+                   output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+          	  	}if(myItem.eventstartdate){
+                   output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+          	  	}if(myItem.playtime){
+                   output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+          	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
+                   output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+          	  	}
+            }else if(contenttypeid == 28){
+          	  	if(myItem.usetimeleports){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+          	  	}if(myItem.infocenterleports){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+          	  	}
+            }else if(contenttypeid == 32){
+          	  	if(myItem.reservationurl){
+                   output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+          	  	}if(myItem.subfacility){
+                   output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+          	  	}if(myItem.infocenterlodging){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+          	  	}
+            }else if(contenttypeid == 38){
+          	  	if(myItem.saleitem){
+                   output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+          	  	}if(myItem.opentime){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+          	  	}if(myItem.restdateshopping){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+          	  	}if(myItem.infocenter){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+          	  	}
+            }else if(contenttypeid == 39){
+          	  	if(myItem.treatmenu){
+                   output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+          	  	}if(myItem.opentimefood){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+          	  	}if(myItem.restdatefood){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+          	  	}if(myItem.infocenterfood){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+          	  	}
+            }
+            if(addr.image1 && addr.link1){
+            	output += '<p class="p">리뷰보기:(클릭으로 이동) </p><a class="review" href="' + addr.link1 + '"><img src="' + addr.image1 + '"/>'
+            			+ '</a>';
+            }if(addr.image2 && addr.link2){
+            	output += '<a class="review" href="' + addr.link2 + '"><img src="' + addr.image2 + '"/>'
+    			+ '</a>';
+   			}if(addr.image3 && addr.link3){
+            	output += '<a class="review" href="' + addr.link3 + '"><img src="' + addr.image3 + '"/>'
+    			+ '</a>';
+    		}
                 output += '</div>';
                 $('#window').html(output);
         },
@@ -890,6 +919,22 @@ function getDetail(contentid, contenttypeid){
           alert("Status: " + textStatus); alert("Error: " + errorThrown); 
       } 
  	});
+}
+
+function getInfo(contentid, contenttypeid){
+	var addr;
+	$.ajax({
+		url:'callInfo.do',
+		type:'POST',
+		async: false, 
+		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		dataType: 'json',
+		success: function(data){
+			addr = data;
+		}
+		
+	});
+	return addr;
 }
 
 

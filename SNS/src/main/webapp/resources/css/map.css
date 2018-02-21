@@ -16,11 +16,12 @@
 #window {
 	display: none;
 	background-color: #ffffff;
-	height: 200px;
+	overflow: hidden;
+	height: auto;
 	z-index: 999;
 	width: 600px;
-	height: 250px;
 	border: 1px;
+	border-radius: 12px;
 	solid: #ccc;
 	position: fixed;
 }
