@@ -26,22 +26,13 @@ public class AddrServiceImpl implements AddrService{
 	}
 	
 	@Override
-	public int deleteAddr(List<AddrVO> vo) {
-		return dao.deleteAddr(vo);
-	}
-	
-	@Override
 	public List<AddrVO> getAddress() throws Exception {
 		return dao.getAddress();
 	}
 	
 	@Override
-	   public List<AddrVO> getAddress2(String inside) throws Exception {
-	      return dao.getAddress2(inside);
-	   }
-	@Override
-	 public AddrVO getAddress3() throws Exception {
-	      return dao.getAddress3();
+	   public List<AddrVO> getAddrByWeather(String sigungucode, String inside) throws Exception {
+	      return dao.getAddrByWeather(sigungucode, inside);
 	   }
 	
 	@Override
@@ -53,4 +44,14 @@ public class AddrServiceImpl implements AddrService{
 	 public List<BoardVO> getHeart() throws Exception {
 	      return dao.getHeart();
 	   }
+
+	@Override
+	public void insertPath(BoardVO vo) {
+		dao.insertPath(vo);
+	}
+	
+	@Override
+	public int getCount(String id) {
+		return dao.getCount(id);
+	}
 }

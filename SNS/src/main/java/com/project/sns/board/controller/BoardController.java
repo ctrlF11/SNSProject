@@ -3,32 +3,28 @@ package com.project.sns.board.controller;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
- 
-import javax.inject.Inject;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
 import com.project.sns.board.vo.StoryVO;
 import com.project.sns.user.service.UserService;
-import com.project.sns.user.vo.UserVO;
+
+import A.algorithm.AES;
  
 /**
  * Handles requests for the application home page.
@@ -37,6 +33,7 @@ import com.project.sns.user.vo.UserVO;
 public class BoardController {
     
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
+    AES aes = new AES();
     
 	@Autowired
     private BoardService service;
@@ -208,4 +205,6 @@ public class BoardController {
     	
     	return "home1";
     }
+    
+
 }
