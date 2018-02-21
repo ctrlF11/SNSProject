@@ -3,6 +3,12 @@
 #setDiv {
 	text-align: center;
 }
+        
+        *{ margin: 0; padding: 0;}
+		.accordian {list-style: none }
+		.accordian--box { margin-bottom: 5px;}
+		.accordian--box h3 { background: #333; padding: 5px; color: #fff; cursor: pointer}
+		.accordian--box h4 { background: #ccc; padding: 5px; display: none; }
 
 #mask {
 	position: absolute;

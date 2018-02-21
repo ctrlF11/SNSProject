@@ -344,7 +344,7 @@ hr {
 }
 
 p {
-	margin: 0 0 10px
+	margin: 10px;
 }
 
 .lead {
@@ -352,6 +352,16 @@ p {
 	font-size: 16px;
 	font-weight: 200;
 	line-height: 1.4
+}
+
+.lead-myBar {
+	margin-bottom: 20px;
+	margin-top: 20px;
+	margin-left: 20px;
+	font-size: 16px;
+	font-weight: 200;
+	line-height: 1.4;
+	border: 1px solid black;
 }
 
 @media ( min-width :768px) {
@@ -3128,7 +3138,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 	position: absolute;
 	top: 100%;
 	left: 0;
-	z-index: 1000;
+	z-index: 2000;
 	display: none;
 	float: left;
 	min-width: 160px;
@@ -3503,7 +3513,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 
 .input-group {
 	position: relative;
-	display: table;
+	display: inline-table;
 	border-collapse: separate
 }
 
@@ -3540,7 +3550,7 @@ textarea.input-group-lg>.form-control, textarea.input-group-lg>.input-group-addo
 
 .input-group-sm>.form-control, .input-group-sm>.input-group-addon,
 	.input-group-sm>.input-group-btn>.btn {
-	height: 30px;
+	height: 32px;
 	padding: 5px 10px;
 	font-size: 12px;
 	line-height: 1.5;

@@ -6,7 +6,7 @@
 
 	<insert id = "submit" parameterType="ChatVO">
 		insert into Chat (fromID, toID, chatContent, chatTime, chatRead)
-		values (#{fromID}, #{toID}, #{chatContent}, NOW(), 0)
+		values (#{fromID}, #{toID}, #{chatContent}, NOW(), 0)s
 	</insert>
 	
 	<select id = "listByID" parameterType="ChatVO" resultType="ChatVO">

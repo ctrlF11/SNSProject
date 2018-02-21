@@ -36,7 +36,6 @@ public class AddrServiceImpl implements AddrService{
 	
 	@Override
 	   public List<AddrVO> getAddress2(String inside) throws Exception {
-	      System.out.println("inside : " + inside);
 	      return dao.getAddress2(inside);
 	   }
 	@Override
@@ -66,4 +65,5 @@ public class AddrServiceImpl implements AddrService{
 		// TODO Auto-generated method stub
 		return dao.getStarAvg(contentId);
 	}
+
 }

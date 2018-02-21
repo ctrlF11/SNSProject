@@ -1,5 +1,6 @@
 package com.project.sns.user.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -12,5 +13,9 @@ public interface UserDAO {
 	public List<UserVO> getUserList(UserVO vo);
 	public UserVO getUser(String keyword);
 //	public List<UserVO> getUser1(@Param("index") int index); // ?
-	
+	public String getUserImage(String id);
+	public int getFollowingCount(String id);
+	public int getFollowerCount(String id);
+	public int followByBoard(HashMap<String, String> ids);
+	public int followByPage(HashMap<String, String> ids);
 }

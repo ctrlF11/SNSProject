@@ -74,5 +74,6 @@ public class AddrDAOImpl implements AddrDAO{
 		return sqlSession.selectOne(namespace+".getStarAvg", contentId);
 		
 	}
+
 	
 }

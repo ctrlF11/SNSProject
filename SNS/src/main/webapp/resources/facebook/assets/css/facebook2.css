@@ -171,7 +171,7 @@ h1,h2,h3 {
     text-shadow:0 0 1px rgba(0,0,0,.3);
 }
 .form-control {
-	
+	display: inline-block;
 }
 
 .panel textarea, .well textarea, textarea.form-control
@@ -303,10 +303,7 @@ small.text-muted {
 	justify-content: flex-start;
 	height: 70px;
 	box-sizing: border-box;
-<<<<<<< HEAD
-=======
-	width: 275px;
->>>>>>> refs/remotes/origin/mwbear
+	width: 500px;
 	display: inline-block;
 	float: right;
 	
@@ -315,3 +312,30 @@ small.text-muted {
 #col-sm-6 {
 	overflow-y: auto;
 }
+
+.card-body-top {
+	vertical-align: center;
+	text-align: center;
+	list-style: none;
+}
+.card-body-top ul {
+	padding: 0;
+	vertical-align: middle;
+	text-align: center;
+	list-style: none;
+	height: 70px;
+}
+.card-body-top ul li {
+	padding: 0;
+	vertical-align: middle;
+	text-align: center;
+	list-style: none;
+	max-height: 35px;
+	line-height: 35px;
+}
+.card-body-top ul li a {
+	width: 30%;
+	height: 34px;
+	display: inline-block;
+}
+	

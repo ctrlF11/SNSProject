@@ -9,6 +9,7 @@ public interface AddrService {
 	public int inputAddrCat(List<AddrVO> vo);
 	public int deleteAddr(List<AddrVO> vo);
 	public List<AddrVO> getAddress() throws Exception;
+	
 	public List<AddrVO> getAddress2(String inside) throws Exception;
     public AddrVO getAddress3() throws Exception;
     
@@ -17,4 +18,5 @@ public interface AddrService {
 	public AddrVO callInfo(String contentId) throws Exception;
 	public AddrVO callReview(String contentId) throws Exception;
 	public double getStarAvg(String contentId) throws Exception;
+
 }

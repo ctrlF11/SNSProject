@@ -3,12 +3,65 @@
 
 
 <mapper namespace="com.project.sns.mapper.boardMapper">
-		 <select id="getBoardList" parameterType="map" resultType="BoardVO" >
+<!--댓글  -->
+	<select id="replyCount" resultType="int">
+		select TABLE_ROWS from information_schema.tables where table_name = 'Reply';
+	</select>
+    <select id="replyList" parameterType="ReplyVO" resultType="ReplyVO">
+        SELECT
+            *
+        FROM Reply
+        <where>
+        	board_seq = #{board_seq} and story_seq = #{story_seq}
+        </where>
+    </select>
+    
+    <insert id="insertReply" parameterType="ReplyVO">
+        INSERT INTO
+        Reply (story_seq, board_seq, rcontent, rwriter)
+        VALUES(#{story_seq},#{board_seq},#{rcontent},#{rwriter}) 
+    </insert>
+    <update id="replyUpdate" parameterType="ReplyVO">
+        UPDATE Reply
+            SET
+            rcontent = #{rcontent}
+        WHERE board_seq = #{board_seq}
+        AND   story_seq = #{story_seq}
+        AND   reply_seq = #{reply_seq}
+    </update>
+    
+    <delete id="replyDelete" parameterType="ReplyVO">
+        DELETE FROM Reply 
+        WHERE board_seq = #{board_seq}
+        AND   story_seq = #{story_seq}
+        AND   reply_seq = #{reply_seq}
+    </delete>
+<!--댓글  -->
+<!-- 		 <select id="getBoardList" parameterType="map" resultType="BoardVO" >
 			select * 
-			from Board
-			where story_seq = #{story_seq}
+			from Board b, TourMap t
+			where b.story_seq = #{story_seq}
+			and   b.contentId = t.contentId
 			LIMIT #{index},4;
 			
+		</select> -->
+		
+		<select id="getBoardList" parameterType="map" resultType="BoardVO" >
+			Select * From 
+			Board b left JOIN TourMap t  
+			ON b.contentId = t.contentId
+			left JOIN Story s
+			ON b.story_seq = s.story_seq 
+			where b.story_seq = #{story_seq}
+			limit #{index},4;
+			
+		</select>
+		<select id="getBoardStoryList" parameterType="BoardVO" resultType="BoardVO" >
+				select * 
+				from Story s, Board b
+	            where s.story_seq = b.story_seq
+		        and b.writer = #{writer}
+		        order by s.story_title;
 		</select>
 		
 		<select id="getMainBoardList" parameterType="int" resultType="BoardVO" >
@@ -21,7 +74,7 @@
 			    ) p
 			    group by story_seq
 			    order by heart desc
-			 	LIMIT #{index},5;
+			 	LIMIT #{index},8;
 		</select>
 		
 		<select id="getBoardCount" parameterType="int">
@@ -56,11 +109,11 @@
      order by reply_seq  
    </select>	
 		
-    <insert id="insertReply" parameterType="ReplyVO">
+<!--     <insert id="insertReply" parameterType="ReplyVO">
       insert into Reply (board_seq, seq, writer, content) values
       ( #{contentId},(select * from (select max(Reply_seq)+1 from tbl_board),
       #{writer},#{content}  )
-   </insert>
+   </insert> -->
 		
 		
 	<insert id="inputBoard" parameterType="BoardVO">
