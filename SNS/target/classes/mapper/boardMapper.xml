@@ -21,6 +21,7 @@
         Reply (story_seq, board_seq, rcontent, rwriter)
         VALUES(#{story_seq},#{board_seq},#{rcontent},#{rwriter}) 
     </insert>
+    
     <update id="replyUpdate" parameterType="ReplyVO">
         UPDATE Reply
             SET
@@ -115,7 +116,6 @@
       #{writer},#{content}  )
    </insert> -->
 		
-		
 	<insert id="inputBoard" parameterType="BoardVO">
 			insert into Board(story_seq, title, content, writer, mtitle, contentId, heart)
 			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentId}, 0)
@@ -186,5 +186,37 @@
 			</where>
 		</select>
 
-		
+<!-- Like -->
+		<insert id="likeInsert" parameterType="BoardVO">
+			insert into heartList (story_seq, board_seq, heartId) 
+			VALUES(#{story_seq}, #{board_seq}, #{heartId})
+		</insert>
+<!--같이사용  -->
+		<update id="likeUp" parameterType="BoardVO">
+			UPDATE Board SET heart = #{heart}
+		    where  
+		    board_seq = #{board_seq}
+			and story_seq = #{story_seq}
+		</update>
+		<select id="getBoard" parameterType="BoardVO" resultType="BoardVO">
+			    select heart+1 AS 'heart' from Board
+				where board_seq = #{board_seq}
+				and story_seq = #{story_seq}
+		</select>
+<!--같이사용 -->	
+	  	<delete id="likeDelete" parameterType="BoardVO">
+			delete from heartList
+			<where>
+				story_seq = #{story_seq}
+				and board_seq = #{board_seq}
+				and heartId = #{heartId}
+			</where>
+		</delete>
+
+	
+		<select id="getBoardlikeId" parameterType="BoardVO" resultType="BoardVO">
+			    select likeId1 from Board
+				where board_seq = #{board_seq}
+				and story_seq = #{story_seq}
+		</select>
 </mapper>

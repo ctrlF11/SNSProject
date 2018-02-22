@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.user.vo.UserVO;
 
+
 @Service
 public class UserDAOImpl implements UserDAO{
 	@Autowired
@@ -38,4 +39,10 @@ public class UserDAOImpl implements UserDAO{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".getUser", keyword);
 	}
+	
+	public UserVO getId(UserVO vo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getId", vo);
+	}
+
 }

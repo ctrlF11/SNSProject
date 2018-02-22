@@ -15,8 +15,9 @@
 				#{id} = id
 			</where>
 		</select>
+		
 		<insert id="insertUser" parameterType="UserVO">
-			insert into snsUser(id, name, password, birthday, sex, email)
+			insert into SnsUser(id, name, password, birthday, sex, email)
 			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
 		</insert>
 		
@@ -24,5 +25,8 @@
 			select * from TourMap
 		</select>
 		
-
+		<select id="getId" parameterType="UserVO" resultType="UserVO">
+			select * from SnsUser
+			where id = #{id}
+		</select>
 </mapper>

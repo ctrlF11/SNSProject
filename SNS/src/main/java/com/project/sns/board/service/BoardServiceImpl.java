@@ -18,7 +18,7 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDAO dao;
 	
-
+	
 	public List<BoardVO> getBoardList(HashMap map)
 	{
 		return dao.getBoardList(map);
@@ -217,5 +217,23 @@ public class BoardServiceImpl implements BoardService {
     public int replyDelete(ReplyVO reply) throws Exception{
     	return dao.replyDelete(reply);
     };
+    
+    //¡¡æ∆ø‰
+    public int likeInsert(BoardVO board) throws Exception{
+    	return dao.likeInsert(board);
+    }
+    
+    public int likeUp(BoardVO board) throws Exception{
+        return dao.likeUp(board);
+    }
+    public List<BoardVO> getBoard(BoardVO vo) throws Exception{
+    	return dao.getBoard(vo);
+    }
+    public int likeDelete(BoardVO board) throws Exception{
+    	return dao.likeDelete(board);
+    }
+    public BoardVO getBoardlikeId(BoardVO vo) throws Exception{
+    	return dao.getBoardlikeId(vo);
+    }
 
 }

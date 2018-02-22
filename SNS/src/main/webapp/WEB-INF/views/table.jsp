@@ -197,8 +197,8 @@ function makeOutListener(infowindow) {
       </div>
       <hr class="my-0">
       <div class="card-body py-2 small">
-         <a class="mr-3 d-inline-block" href="#">
-            <i class="fa fa-fw fa-thumbs-up"></i>Like
+         <a class="mr-3 d-inline-block" name="like${user.board_seq}" onclick="like_button(${user.board_seq},${user.story_seq})" href="#">
+            <i class="fa fa-fw fa-thumbs-up"></i>${user.heart}명 Like
          </a>
          <a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment">
             <i class="fa fa-fw fa-comment"></i>Comment

@@ -30,6 +30,10 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUser(keyword);
 	}
 	
+	@Override // get one user data
+	public UserVO getId(UserVO vo) {
+		return userDao.getId(vo);
+	}
 	/*@Override
 	public List<UserVO> getUser1(int index){
 		return userDao.getUser1(index);

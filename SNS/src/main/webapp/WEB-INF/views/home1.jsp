@@ -98,6 +98,7 @@ function getBoard(story_seq){
 	})
 
 }
+
 function getStory()
 {
 
@@ -162,8 +163,7 @@ function story_button(story)
 		})
 			alert("바뀌어서 만낫다");
 			getBoardScroll(story);
-
-		
+	
 }
 
 function r_button(board_seq,story_seq){ //댓글 등록 버튼 클릭시 
@@ -241,6 +241,7 @@ function replyUpdateProc(reply_seq,board_seq,story_seq) {
 	});
 }
 //댓글 삭제 
+
 function replyDelete(reply_seq,board_seq,story_seq){
     $.ajax({
         url : 'delete.do',
@@ -255,7 +256,25 @@ function replyDelete(reply_seq,board_seq,story_seq){
         }
     });
 }
-
+//좋아요
+function like_button(board_seq,story_seq)
+{
+		 alert("좋아요 버튼 눌림");
+		 $.ajax({
+			url : 'likeUp.do',
+			data : {
+						board_seq : board_seq,
+						story_seq : story_seq
+	               },
+			success : function(data) {
+				alert("좋아요 눌리고 나서 업데이트 된 수 :" + data);
+				   var a = '';
+				   a += '<i class="fa fa-fw fa-thumbs-up"></i>'+data+'명 Like';
+				   $('[name=like'+board_seq+']').html(a);
+					
+			}
+		})
+}
 </script>
 </head>
 <body>

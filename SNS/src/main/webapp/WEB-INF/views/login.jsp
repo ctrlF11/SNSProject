@@ -18,6 +18,7 @@ video {
 	height: auto;
 	z-index: -1;
 }
+
 </style>
  <head>
     <meta charset="utf-8">
@@ -57,7 +58,7 @@ video {
           <div class="col-12 my-auto">
             <div class="masthead-content text-white py-5 py-md-0">
             
-              <h1 class="mb-3">GAZUA!!</h1>
+              <h1 class="mb-3"><div style="position: relative; left: 65px;  bottom: 30px"><input type="image" src="resources/image/gazua.png"></div></h1>
               <p class="mb-5">
                 <strong>Share Travel Information For You,Guiding</strong></p>
               <div class="container">
@@ -83,7 +84,7 @@ video {
 						<input type="submit" class="btn btn-primary btn-block" value="Login">
 			        </form>
 			        <div class="text-center">
-			          <a class="d-block small mt-3" href="register.html">Register an Account</a>
+			          <a class="d-block small mt-3" href="#" onclick="register()">Register an Account</a>
 			          <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
 			        </div>
 			      </div>
@@ -126,7 +127,7 @@ video {
     <script src="resources/login/js/coming-soon.min.js"></script>
      
 	<video autoplay loop poster = "img.jpg">
-		<source src ="resources/login//mp4/bg.mp4" type ="video/mp4">
+		<source src ="resources/login/mp4/bg.mp4" type ="video/mp4">
 	</video>
 	
 	
@@ -135,5 +136,17 @@ video {
   <script src="resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Core plugin JavaScript-->
   <script src="resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript">
+     function register()
+     {
+		 $.ajax({
+			url : 'registerForm.do',
+			success : function(data) {
+				$(".masthead-content").html(data);   
+			}
+		})
+     }
+  </script>
   </body>
 </html>

@@ -245,6 +245,7 @@ public class BoardController {
     	logger.info("list.do");
         return service.replyList(vo);
     }
+    
     @RequestMapping("/insert.do") //댓글 작성 
     @ResponseBody
     private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent,HttpSession se) throws Exception{
@@ -278,5 +279,39 @@ public class BoardController {
         return service.replyDelete(reply);
     }
 
+    @RequestMapping("/likeUp.do") //댓글 작성 
+    @ResponseBody
+    private int likeUp(@RequestParam int board_seq,@RequestParam int story_seq,HttpSession session) throws Exception{
 
+    	logger.info("likeUp.do");
+    	int heart = 0;
+    	BoardVO vo = new BoardVO();
+    	String id = (String) session.getAttribute("id");
+    	id = aes.setDecrypting(id);
+
+  
+    	try {
+        	vo.setBoard_seq(board_seq);
+        	vo.setStory_seq(story_seq);
+        	vo.setHearId(id);
+    		service.likeInsert(vo);
+         	vo.setHeart(service.getBoard(vo).get(0).getHeart());//좋아요 +1
+        	service.likeUp(vo);//좋아요 +1 업데이트
+           	heart = service.getBoard(vo).get(0).getHeart();//+1 된 좋아요 반환
+        	System.out.println("좋아요 수 :" + heart);
+            return heart;
+            
+            
+		} catch (Exception e) {
+			
+	    	vo.setBoard_seq(board_seq);
+	    	vo.setStory_seq(story_seq);
+	    	vo.setHearId(id);
+			heart = service.getBoard(vo).get(0).getHeart();
+			heart = heart -2;
+			service.likeDelete(vo);
+			return heart;
+		}
+    	
+    }
 }

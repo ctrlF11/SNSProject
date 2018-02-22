@@ -65,5 +65,10 @@ public interface BoardDAO {
     // 댓글 삭제
     public int replyDelete(ReplyVO reply) throws Exception;
 
-
+    //좋아요
+    public int likeInsert(BoardVO board) throws Exception;
+    public int likeUp(BoardVO board) throws Exception;
+    public List<BoardVO> getBoard(BoardVO vo) throws Exception;
+    public int likeDelete(BoardVO board) throws Exception;
+    public BoardVO getBoardlikeId(BoardVO vo) throws Exception;
 }
