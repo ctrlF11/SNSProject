@@ -20,29 +20,6 @@
 <script src="resources/facebook/assets/js/check.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(
-					function() {
-						$('[data-toggle=offcanvas]')
-								.click(
-										function() {
-											$(this).toggleClass(
-													'visible-xs text-center');
-											$(this)
-													.find('i')
-													.toggleClass(
-															'glyphicon-chevron-right glyphicon-chevron-left');
-											$('.row-offcanvas').toggleClass(
-													'active');
-											$('#lg-menu').toggleClass(
-													'hidden-xs').toggleClass(
-													'visible-xs');
-											$('#xs-menu').toggleClass(
-													'visible-xs').toggleClass(
-													'hidden-xs');
-											$('#btnShow').toggle();
-										});
-					});
-
 var scollB = function() {
          $.ajax({
             url : 'getMainBoardList.do',

@@ -7,10 +7,6 @@
 <title>Insert title here</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet"
-	href="resources/facebook/assets/css/bootstrap2.css">
-<link rel="stylesheet"
-	href="resources/facebook/assets/css/facebook2.css">
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
 
@@ -59,11 +55,14 @@
 									%>
 									</li>
 									<li>
-										<a href="Address.do" role="button" data-toggle="modal">
+										<a href="Address.do">
 										추천 경로+</a>
 									</li>
 									<li>
 										<a href="#">스토리</a>
+									</li>
+									<li>
+										<a href="modifyBoard.do">글쓰기</a>
 									</li>
 									<!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
 									 <li class="dropdown">
@@ -74,7 +73,6 @@
 									  <li><a href="">More</a></li>
 									  <li><a href="">More</a></li>
 									  <li><a href="">More</a></li>
-									  <li><a href="">More</a></li>
 									</ul>
 								  </li>
 								</ul>
@@ -82,4 +80,26 @@
 						</nav>
 					</div>
 </body>
+<script type="text/javascript">function checkgo() {
+	var check = document.getElementById("search_category").value;
+	var keyword = document.getElementById("srch-term").value;
+	alert(check);
+	alert(keyword);
+	if(keyword == "") {
+		alert("키워드를 입력해주세요.");
+		return false;
+	}			
+	if(check == "user") {
+		location.href = "searchAll.do?keyword=" + keyword + "&number=1";
+	}
+	if(check == "map") {
+		location.href = "searchAll.do?keyword=" + keyword + "&number=2";
+	}
+	if(check == "board") {
+		location.href = "searchAll.do?keyword=" + keyword + "&number=3";
+	}
+	return false;
+}
+</script>
 </html>
+

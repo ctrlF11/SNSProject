@@ -76,6 +76,19 @@
 			    order by heart desc
 			 	LIMIT #{index},8;
 		</select>
+		<select id="getFollowerStoryList" parameterType="map" resultType="BoardVO">
+			select p.* from
+			(
+				select * from Board where writer in 
+					(select following from Follow
+						<where>
+							follower = #{id}
+						</where>
+					)
+				order by regdate desc
+			) p limit #{index}, #{index2};
+		</select>
+		
 		
 		<select id="getBoardCount" parameterType="int">
 			select count(*) from Board
@@ -179,12 +192,24 @@
 			</where>
 		</delete>
 		
+		<select id="getStoryCount" parameterType="string" resultType="int">
+			select count(*) from Story
+			<where>
+				id = #{id}
+			</where>
+		</select>
 		<select id="getImage" parameterType="int" resultType="com.project.sns.board.vo.ImageVO">
 			select * from Image_upload
 			<where>
 				img_seq = ${value}
 			</where>
 		</select>
-
+		<select id="getStoryAll" parameterType="string" resultType="StoryVO">
+			select * from Story
+			<where>
+				id = #{id}
+			</where>
+		</select>
+		
 		
 </mapper>

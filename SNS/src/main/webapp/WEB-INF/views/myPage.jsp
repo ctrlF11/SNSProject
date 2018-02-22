@@ -16,7 +16,6 @@
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
-<script src="resources/facebook/assets/js/check.js"></script>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(
@@ -40,39 +39,75 @@
 													'hidden-xs');
 											$('#btnShow').toggle();
 										});
-						mmm();
-						$.ajax({
-							url : 'getCounts.do',
-							data : {
-								id : id
-							},
-							success : function(data) {
-								$("#counts").html("<a>"+data[0]+"</a> | "
-												+ 	"<a>"+data[1]+"</a> | "
-												+	"<a>"+data[2]+"</a>");
-							},
-							error:function(request,status,error){
-						        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-							}
-						})
 					});
 	var id = (String)("<%=session.getAttribute("id")%>");
-	
+	var mode = 1;	
+
 	var mmm = function() {
 		$.ajax({
 			url : 'getStoryList.do',
 			data : {
-				index : index,
 				id : id
 			},
 			success : function(data) {
-				$("#col-sm-8").html(data);
+				$("#col-sm-12").html(data);
+				mode = 1;
+			},
+			error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		})
 	}
-	
+
 	var index = 0;
+	var nnn = function() {
+		$.ajax({
+			url : 'getFollowerStoryList.do',
+			data : {
+				id : id,
+				index : index
+			},
+			success : function(data) {
+				$("#col-sm-12").html(data);
+				mode = 2;
+			},
+			error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	}
+	$(function() {
+		mmm();
+     	$("#main").scroll(function() {
+        	var sh = $("#main").scrollTop() + $("#main").height();
+    	    var dh = $("#main").prop("scrollHeight");
+
+	        if (sh == dh && mode == 2) {
+				index += 6;
+				$.ajax({
+					url : 'getFollowerStoryList.do',
+					data : {
+						id : id,
+						index : index
+					},
+					success : function(data) {
+						$("#col-sm-12").append(data);
+					},
+					error:function(request,status,error){
+				        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					}
+				})
+			}
+		})
+	})
 	
+	function ajaxStory(){
+		mmm();
+	}
+	
+	function ajaxFollowerStory() {
+		nnn();
+	}
 	/* function togglethis(num) {
 		var replyDiv = document.getElementById("replyDiv"+num);
 		if(replyDiv.style.display == "none") {
@@ -115,6 +150,11 @@
 												<div class="card-body-top">
 													<img>
 													<%= session.getAttribute("name") %> 님
+													<a>
+														<i class="glyphicon glyphicon-cog">
+														
+														</i>
+													</a>
 													<hr>
 													<ul>
 														<li>
@@ -123,43 +163,30 @@
 															<a>팔로워 수</a>
 														</li>
 														<li id="counts">
+															<a><%= request.getAttribute("storyCount") %></a> | 
+															<a><%= request.getAttribute("followingCount") %></a> | 
+															<a><%= request.getAttribute("followerCount") %></a>
 														</li>
 													</ul>
 													<hr>
 													<ul style="height: 55px;">
 														<li>
-															<a>1</a> | 
-															<a>1</a> | 
+															<a onclick="ajaxStory();">스토리 목록</a> | 
+															<a onclick="ajaxFollowerStory();">최신 스토리	</a> | 
 															<a>1</a>
 														</li>
 													</ul>
 												</div>	
 											</div>
-									<div class="col-sm-12">
-										<div class="col-sm-8" id="col-sm-8" style="position: fixed; left: 40px">
+								</div>
+										<div class="col-sm-12" id="col-sm-12">
 					
 										</div>
-											
-										<div class="col-sm-2" style="position: fixed; right: 40px">
-											<div class="row">
-												<div class="panel panel-default">
-													<div class="card-body" >
-														<p class="lead-myBar">
-															<a href="myPage.do">스토리 목록</a>
-														</p>
-													</div>
-													<hr>
-													<div class="card-body">
-														<p class="lead-myBar">
-															<a href="myPage.do">더미</a>
-														</p>
-													</div>
-												</div>
-											</div>
-										</div>
+<!-- 								<div class="panel panel-default">
+									<div class="col-sm-12">
 									</div>
 								</div>
-							</div>
+ -->							</div>
 						</div>
 					</div>
 				</div>

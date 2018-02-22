@@ -217,6 +217,11 @@ public class BoardDAOImpl implements BoardDAO {
 		public int getStoryCount(String id) throws Exception {
 			// TODO Auto-generated method stub
 			return sqlSession.selectOne(namespace+".getStoryCount", id);
+		}
+
+		@Override
+		public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map) {
+			return sqlSession.selectList(namespace+".getFollowerStoryList", map);
 		};
 
 }

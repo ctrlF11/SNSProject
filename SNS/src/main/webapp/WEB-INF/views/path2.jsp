@@ -105,24 +105,24 @@
       <div id="mask"></div>
       <div id="window"></div>
       <div id="mapBox">
-      	<div id="searchBox" style="z-index: 2;">
-	      <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
-		</div>
-      	<div id="map" style="z-index: 1;" ></div> 
+         <div id="searchBox" style="z-index: 2;">
+         <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
+      </div>
+         <div id="map" style="z-index: 1;" ></div> 
       </div>
       
       <!-- 오른쪽 사이드 -->  
       <div id="sidemenu">  
-      	<button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
-      	<button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
-      	<button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
-      	<ul class="accordian">
-      		<li class="accordian--box">
-      			<h3 id="recommend" onclick="recommend()">추천코스</h3>
-      			<h4 id="pathlist"></h4>
-      		</li>
-      	</ul>
-      	<div id="path"></div>        
+         <button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
+         <button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
+         <button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
+         <ul class="accordian">
+            <li class="accordian--box">
+               <h3 id="recommend" onclick="recommend()">추천코스</h3>
+               <h4 id="pathlist"></h4>
+            </li>
+         </ul>
+         <div id="path"></div>        
       </div>      
    </div>
             </div>         
@@ -359,8 +359,8 @@ overMarkerSize = new daum.maps.Size(over_marker_width, over_marker_height),
 spriteImageSize = new daum.maps.Size(marker_width, marker_height);
 
 function createMarkerImage(src, size){
-	var markerImage = new daum.maps.MarkerImage(src, size);
-	return markerImage;
+   var markerImage = new daum.maps.MarkerImage(src, size);
+   return markerImage;
 }
 
 var normalImage = createMarkerImage(sprite_marker_url, markerSize),
@@ -369,10 +369,10 @@ clickImage = createMarkerImage(click_marker_url, markerSize);
 
 
 function addMarker(position, title, contentid, contenttypeid) {
-	console.log("addMarker");
+   console.log("addMarker");
    // 마커를 생성합니다
-  	  var marker = new daum.maps.Marker({
-	  contentId: contentid,
+       var marker = new daum.maps.Marker({
+     contentId: contentid,
       map : map, // 마커를 표시할 지도
       position : position, // 마커를 표시할 위치
       title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
@@ -383,18 +383,18 @@ function addMarker(position, title, contentid, contenttypeid) {
    console.log(arr);
    //만약 arr에 존재하는 marker라면 빨간색 마커로 생성하겠다. 그리고 markerArr에 추가하겠다.
    if(arr.findIndex(function(item){return item.contentId === contentid})>-1){
-	console.log("arr에 존재하는 marker이다.");	
-   	createArrMarkers(marker);
-   	
-   	
-   	
-   	console.log(markersArr.findIndex(function(item){return item.contentid === contentid}));
-   	console.log(markersArr.indexOf(this));
-   	if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
-   		//markersArr에도 존재한다면?
-   		console.log("markersArr에도 존재함");
-   		return false;
-   	}
+   console.log("arr에 존재하는 marker이다.");   
+      createArrMarkers(marker);
+      
+      
+      
+      console.log(markersArr.findIndex(function(item){return item.contentid === contentid}));
+      console.log(markersArr.indexOf(this));
+      if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
+         //markersArr에도 존재한다면?
+         console.log("markersArr에도 존재함");
+         return false;
+      }
    }
    
    console.log("markersArr");
@@ -410,42 +410,42 @@ function addMarker(position, title, contentid, contenttypeid) {
    //마커에 mouseover 이벤트 등록    
    daum.maps.event.addListener(marker, 'mouseover', function(){
 
-   	//클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면 마커의 이미지를 오버 이미지로 변경
-   	if(!selectedMarker || selectedMarker != marker){
-   		if(arr.findIndex(function(item){return item.contentId === contentid})>-1){return false;}
-   		if($.inArray(marker, markersArr) != -1 ){return false;}
-   		marker.setImage(overImage);
-   	}
+      //클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면 마커의 이미지를 오버 이미지로 변경
+      if(!selectedMarker || selectedMarker != marker){
+         if(arr.findIndex(function(item){return item.contentId === contentid})>-1){return false;}
+         if($.inArray(marker, markersArr) != -1 ){return false;}
+         marker.setImage(overImage);
+      }
    });
    
-	// 마커에 mouseout 이벤트를 등록합니다
+   // 마커에 mouseout 이벤트를 등록합니다
    daum.maps.event.addListener(marker, 'mouseout', function() {
 
        // 클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면 마커의 이미지를 기본 이미지로 변경합니다
        if (!selectedMarker || selectedMarker !== marker) {
-   		if($.inArray(marker, markersArr) != -1 ){return false;}
-   		if(arr.findIndex(function(item){return item.contentId === contentid})>-1){return false;}
+         if($.inArray(marker, markersArr) != -1 ){return false;}
+         if(arr.findIndex(function(item){return item.contentId === contentid})>-1){return false;}
            marker.setImage(normalImage);
        }
    });
    
    //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
    function createArrMarkers(marker){
-	   	console.log('marker');
-	   	console.log(marker);
-   		marker.setImage(clickImage);
-   		markersArr.push(marker);
-   		marker.setMap(map);
+         console.log('marker');
+         console.log(marker);
+         marker.setImage(clickImage);
+         markersArr.push(marker);
+         marker.setMap(map);
    }
 
    
  //마커 클릭시! 
    daum.maps.event.addListener(marker, 'click', function() {
-   	   console.log("클릭");
-   	   console.log(marker);
-   	   marker = this;
-   	   //wrapWindowByMask();//팝업 레이어 검정 배경
-   	   
+         console.log("클릭");
+         console.log(marker);
+         marker = this;
+         //wrapWindowByMask();//팝업 레이어 검정 배경
+         
        // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면 마커의 이미지를 클릭 이미지로 변경합니다
        if (!selectedMarker || selectedMarker !== marker) {
 
@@ -459,24 +459,24 @@ function addMarker(position, title, contentid, contenttypeid) {
        }
        var i = arr.findIndex(function(item){return item.contentId === contentid});
        if(i > -1){
-    	   
-       	//이미지 노말로 변경
-    	   marker.setImage(normalImage);
-    	   
-    	   //arr에서 삭제.
-    	   arr.splice(i, 1);
-    	   markersArr.splice(i, 1);
-    	   
-    	   //if(afterpath.findIndex(function(item){return item.contentId === contentid})>-1){
-    		   //console.log("이미지 삭제");
-    		   //marker.setMap(null);
-    		   //}
-    	   
-    	   //div 지우기
-    	   var garbage = document.getElementById(contentid);
-    	   document.getElementById('path').removeChild(garbage);
-    	   
-    	   return false;
+          
+          //이미지 노말로 변경
+          marker.setImage(normalImage);
+          
+          //arr에서 삭제.
+          arr.splice(i, 1);
+          markersArr.splice(i, 1);
+          
+          //if(afterpath.findIndex(function(item){return item.contentId === contentid})>-1){
+             //console.log("이미지 삭제");
+             //marker.setMap(null);
+             //}
+          
+          //div 지우기
+          var garbage = document.getElementById(contentid);
+          document.getElementById('path').removeChild(garbage);
+          
+          return false;
        }
 
       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
@@ -493,9 +493,9 @@ function addMarker(position, title, contentid, contenttypeid) {
       markersArr.push(this);
       
       var outputTitle = '<div class="pin" value="'+ contenttypeid + '" id="' + contentid + '" text-align:left>';
-                  	outputTitle += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' 
-                  				+ "<a href='javascript:panTo(" + position.jb + ',' + position.ib + ',' + contentid + ',' + contenttypeid + ")'>"
-                  				+ title + '</a></h4></div>';
+                     outputTitle += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' 
+                              + "<a href='javascript:panTo(" + position.jb + ',' + position.ib + ',' + contentid + ',' + contenttypeid + ")'>"
+                              + title + '</a></h4></div>';
       $('#path').append(outputTitle);
    });
    
@@ -570,15 +570,15 @@ function recommend() {
             dataType : 'json',
             data : {'sigungucode' : sigungucode},
             success : function(jsonData) {
-            	console.log("recommend의 결과 ");
-            	console.log(jsonData);
+               console.log("recommend의 결과 ");
+               console.log(jsonData);
                deleteMarker();
                var path = jsonData.path;
                var sidePath = "";
                recPath = [];
                count++;
                if(count > 1){
-            	   newpath();
+                  newpath();
                }
                for (var i = path.length - 1; i >= 0; i--) {
                   for (var j = 0; j < positions.length; j++) {
@@ -598,10 +598,10 @@ function recommend() {
                               positions[j].contenttypeid);
                               
                         sidePath += '<div class="pinn ' + positions[j].contentid + '" id="' + positions[j].contentid + '" text-align:left)>';
- 					    sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
-			   						+ "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
-			   						+ positions[j].title + "</a>" + '</h4>';
-			  			sidePath += '</div>'; 
+                    sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
+                              + "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
+                              + positions[j].title + "</a>" + '</h4>';
+                    sidePath += '</div>'; 
                         
                         console.log("333");
                         console.log("positons[j]");
@@ -623,59 +623,59 @@ function recommend() {
 
 //추천경로 구하기
 function getpath(){
-		if(arr.length < 3){
-			alert("3개 이상의 장소를 입력하시오.");
-			return false;
-		}
-	   //마커 재배치
-	   if(afterSearchArr!=null){
-			setMarkers(null);
-			setMarkersArr(map);
-			}
-	   $.ajaxSettings.traditional = true;
-	   $.ajax({
-		   url: 'getpath.do',
-		   type: 'POST',
-		   data: JSON.stringify(arr),
-		   dataType: 'json',
-		   contentType: 'application/json',
-		   success: function(data){
-			   console.log(data);
-			   $('#path').empty();
-			   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!afterpath
-			   //var arra = new Array();
-			   //arra = data;
-			   markersArr = [];
-			   deletePolyLine();
-			   recPath = [];
-			   afterpath = data;
-			   var sidePath = '';
-			   var bounds = new daum.maps.LatLngBounds();
-				   $.each(afterpath, function(i, val){
-					   console.log("444");
-					   console.log(val);
-					   console.log('val.mapy');
-					   console.log(val.mapy);
-					   var latlng = new daum.maps.LatLng(val.mapy,val.mapx);
-					   console.log("latlng");
-					   console.log(latlng);
-					   recPath.push(latlng);
-					   bounds.extend(latlng);
-					   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
-					   
-					   sidePath += '<div class="pinn ' + val.contentId+ '" id="' + val.contentId + '"text-align:left)">';
-					   sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + val.contentId + '"onclick="deletePin(this)"></div>'
-					   			+ "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contnetTypeId + ")'>"
-					   			+ val.title + "</a>" + '</h4>';
-					   sidePath += '</div>';
-				   });
-				   
-				   drawLine(recPath);
-				   map.setBounds(bounds);
-				   $('#path').empty();
-				   $('#pathlist').html(sidePath);
-				   }
-	   });
+      if(arr.length < 3){
+         alert("3개 이상의 장소를 입력하시오.");
+         return false;
+      }
+      //마커 재배치
+      if(afterSearchArr!=null){
+         setMarkers(null);
+         setMarkersArr(map);
+         }
+      $.ajaxSettings.traditional = true;
+      $.ajax({
+         url: 'getpath.do',
+         type: 'POST',
+         data: JSON.stringify(arr),
+         dataType: 'json',
+         contentType: 'application/json',
+         success: function(data){
+            console.log(data);
+            $('#path').empty();
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!afterpath
+            //var arra = new Array();
+            //arra = data;
+            markersArr = [];
+            deletePolyLine();
+            recPath = [];
+            afterpath = data;
+            var sidePath = '';
+            var bounds = new daum.maps.LatLngBounds();
+               $.each(afterpath, function(i, val){
+                  console.log("444");
+                  console.log(val);
+                  console.log('val.mapy');
+                  console.log(val.mapy);
+                  var latlng = new daum.maps.LatLng(val.mapy,val.mapx);
+                  console.log("latlng");
+                  console.log(latlng);
+                  recPath.push(latlng);
+                  bounds.extend(latlng);
+                  addMarker(latlng, val.title, val.contentId, val.contentTypeId);
+                  
+                  sidePath += '<div class="pinn ' + val.contentId+ '" id="' + val.contentId + '"text-align:left)">';
+                  sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + val.contentId + '"onclick="deletePin(this)"></div>'
+                           + "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contnetTypeId + ")'>"
+                           + val.title + "</a>" + '</h4>';
+                  sidePath += '</div>';
+               });
+               
+               drawLine(recPath);
+               map.setBounds(bounds);
+               $('#path').empty();
+               $('#pathlist').html(sidePath);
+               }
+      });
 }
 
 
@@ -694,202 +694,246 @@ function panTo(mapy, mapx, contentid, contenttypeid) {
 
 //지도 검색
 function searchMap(){
-	if(polygons!=null){
-		deletePolygon(polygons); 
-	}
-	var keyword = $('#searchMap').val();
-	if(keyword == null){
-		alert("검색어를 입력하세요.");
-		return false;
-	}
-	if(afterSearchArr!=null){
-	setMarkers(null);
-	setMarkersArr(map);
-	console.log('markersArr');
-	console.log(markersArr);
-	}
-	$.ajax({
-		url:'search.do',
-		type: 'POST',
-		data: {keyword:keyword},
-		success: function(data){
-			console.log("555");
-			console.log(data);
-			afterSearchArr = data;
-			if(afterSearchArr.length==0){
-				alert("검색 결과가 없습니다.");
-				return false;
-			}
-			var bounds = new daum.maps.LatLngBounds();
-			
-			$.each(afterSearchArr, function(i, val){
-				var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
-				bounds.extend(latlng);
-				addMarker(latlng, val.title, val.contentId, val.contentTypeId);
-			})
-			map.setBounds(bounds);
-			
-			//keyword값 ''로
-			$('#searchMap').val('');
-		}
-	})
+   if(polygons!=null){
+      deletePolygon(polygons); 
+   }
+   var keyword = $('#searchMap').val();
+   if(keyword == null){
+      alert("검색어를 입력하세요.");
+      return false;
+   }
+   if(afterSearchArr!=null){
+   setMarkers(null);
+   setMarkersArr(map);
+   console.log('markersArr');
+   console.log(markersArr);
+   }
+   $.ajax({
+      url:'search.do',
+      type: 'POST',
+      data: {keyword:keyword},
+      success: function(data){
+         console.log("555");
+         console.log(data);
+         afterSearchArr = data;
+         if(afterSearchArr.length==0){
+            alert("검색 결과가 없습니다.");
+            return false;
+         }
+         var bounds = new daum.maps.LatLngBounds();
+         
+         $.each(afterSearchArr, function(i, val){
+            var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
+            bounds.extend(latlng);
+            addMarker(latlng, val.title, val.contentId, val.contentTypeId);
+         })
+         map.setBounds(bounds);
+         
+         //keyword값 ''로
+         $('#searchMap').val('');
+      }
+   })
 }
 
 function setMarkers(map){
-	 $.each(markers,function(i, val){
-		 val.setMap(map);
-	 })
+    $.each(markers,function(i, val){
+       val.setMap(map);
+    })
 }
-	
+   
 function setMarkersArr(map){
-	$.each(markersArr,function(i,val){
-		val.setMap(map);
-	})
+   $.each(markersArr,function(i,val){
+      val.setMap(map);
+   })
 }
 
 //엔터로 검색
 function enterkey(){
-	if(window.event.keyCode == 13){
-		searchMap();
-	}
+   if(window.event.keyCode == 13){
+      searchMap();
+   }
 }
 
 function drawLine(recPath){
-	deletePolyLine();
-	
-	var polyline = new daum.maps.Polyline({
-	path : recPath, // 선을 구성하는 좌표배열 입니다
-	strokeWeight : 3, // 선의 두께 입니다
-	strokeColor : '#db4040', // 선의 색깔입니다
-	strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-	strokeStyle : 'solid' // 선의 스타일입니다
-	});
-	
-	polyline.setMap(map); //지도에 라인 추가
-	polylines.push(polyline); //배열에 라인 담기 
+   deletePolyLine();
+   
+   var polyline = new daum.maps.Polyline({
+   path : recPath, // 선을 구성하는 좌표배열 입니다
+   strokeWeight : 3, // 선의 두께 입니다
+   strokeColor : '#db4040', // 선의 색깔입니다
+   strokeOpacity : 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+   strokeStyle : 'solid' // 선의 스타일입니다
+   });
+   
+   polyline.setMap(map); //지도에 라인 추가
+   polylines.push(polyline); //배열에 라인 담기 
 }
 
 //엑스표 누르면 arr와 div 삭제
 function deletePin(event){
-	console.log("event : " + event);
-	console.log(event);
-	var cid = (event.id).replace('d','');
-	
-	//arr에서 지우기
-	var i = arr.findIndex(function(item){return item.contentId === cid});
-	//이미지 노말로 바꾸기
-	markersArr[i].setImage(normalImage);
-	console.log("arr에서의 index");
-	console.log(i);
-	if(i > -1){//엑스표 누른게 arr배열에 있다면
-		
-		//arr에서 삭제
-		arr.splice(i, 1);
-		console.log("markersArr[i] : ");
-		console.log(markersArr[i]);
+   console.log("event : " + event);
+   console.log(event);
+   var cid = (event.id).replace('d','');
+   
+   //arr에서 지우기
+   var i = arr.findIndex(function(item){return item.contentId === cid});
+   //이미지 노말로 바꾸기
+   markersArr[i].setImage(normalImage);
+   console.log("arr에서의 index");
+   console.log(i);
+   if(i > -1){//엑스표 누른게 arr배열에 있다면
+      
+      //arr에서 삭제
+      arr.splice(i, 1);
+      console.log("markersArr[i] : ");
+      console.log(markersArr[i]);
 
-		//markersArr에서 삭제
-		markersArr.splice(i, 1);
-		
-		
-		//console.log("getpath의 결과?");
-		//console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
-		//if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){//getpath의 결과 일 경우. 마커를 삭제한다 
-			//markersArr[i].setMap(null);
-		//}else{//아닐 경우, 마커의 이미지를 normalImage로 바꾼다.
-			//markersArr[i].setImage(normalImage);
-		//}
+      //markersArr에서 삭제
+      markersArr.splice(i, 1);
+      
+      
+      //console.log("getpath의 결과?");
+      //console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
+      //if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){//getpath의 결과 일 경우. 마커를 삭제한다 
+         //markersArr[i].setMap(null);
+      //}else{//아닐 경우, 마커의 이미지를 normalImage로 바꾼다.
+         //markersArr[i].setImage(normalImage);
+      //}
 
-	}
-	console.log("markersArr : ");
-	console.log(markersArr);
-	
-	
-	//div 지우기 경로 후
-	var top1 = document.getElementById('path');
-	var garbage1 = document.getElementById(cid);
-	top1.removeChild(garbage1);
-	
-	
-	//div 지우기 경로 전
-	var top = document.getElementById('pathlist');
-	var garbage = document.getElementById(cid);
-	top.removeChild(garbage);
-	deletePolyLine();
+   }
+   console.log("markersArr : ");
+   console.log(markersArr);
+   
+   
+   //div 지우기 경로 후
+   var top1 = document.getElementById('path');
+   var garbage1 = document.getElementById(cid);
+   top1.removeChild(garbage1);
+   
+   
+   //div 지우기 경로 전
+   var top = document.getElementById('pathlist');
+   var garbage = document.getElementById(cid);
+   top.removeChild(garbage);
+   deletePolyLine();
 }
 
 //경로 새로고침
 function newpath(){
-	//마커지우기
-	deleteMarker();
-		
-	//배열 다 비우기
-	arr = new Array();
-	markersArr = [];
-	markers = [];
-	
-	//라인 지우기
-	deletePolyLine();
-	
-	//div 지우기
-	$('#path').empty();
-	$('#pathlist').empty();
+   //마커지우기
+   deleteMarker();
+      
+   //배열 다 비우기
+   arr = new Array();
+   markersArr = [];
+   markers = [];
+   
+   //라인 지우기
+   deletePolyLine();
+   
+   //div 지우기
+   $('#path').empty();
+   $('#pathlist').empty();
 }
 
 
 function getDetail(contentid, contenttypeid){
-	wrapWindowByMask();
-	var contentid;
-	var contenttypeid;
-	var title ="aa";
+   wrapWindowByMask();
+   var contentid;
+   var contenttypeid;
+   var title ="aa";
     $.ajax({        
         url: 'callDetail.do',
         type: 'get',
         data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
         dataType: 'json',
         success: function(data){
-             var myItem = data.response.body.items.item;
-                var output = '<div class="detailBox" text-align:left>';
-                	output += '<h4 class="title">' + title + '</h4>';
-                if(contenttypeid == 12){
- 	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                }else if(contenttypeid == 14){
- 	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-                }else if(contenttypeid == 15){
- 	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
- 	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
- 	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
- 	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-                }else if(contenttypeid == 28){
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-                }else if(contenttypeid == 32){
- 	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
- 	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-                }else if(contenttypeid == 38){
- 	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                }else if(contenttypeid == 39){
- 	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
- 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
- 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
- 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-                }
+           var myItem = data.response.body.items.item;
+            var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
+               output += '<h4 id="title">' + title + '</h4>';
+            if(contenttypeid == 12){
+                  if(myItem.parking){
+                   output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+                  }if(myItem.restdate){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+                  }if(myItem.infocenter){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }
+            }else if(contenttypeid == 14){
+                  if(myItem.usefee){
+                   output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+                  }if(myItem.usetimeculture){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+                  }if(myItem.restdateculture){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+                  }if(myItem.infocenterculture){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                  }
+            }else if(contenttypeid == 15){
+                  if(myItem.eventplace){
+                   output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+                  }if(myItem.eventstartdate){
+                   output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+                  }if(myItem.playtime){
+                   output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+                  }if(myItem.sponsor1 || myItem.sponsor1tel){
+                   output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                  }
+            }else if(contenttypeid == 28){
+                  if(myItem.usetimeleports){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+                  }if(myItem.infocenterleports){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                  }
+            }else if(contenttypeid == 32){
+                  if(myItem.reservationurl){
+                   output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+                  }if(myItem.subfacility){
+                   output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+                  }if(myItem.infocenterlodging){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                  }
+            }else if(contenttypeid == 38){
+                  if(myItem.saleitem){
+                   output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+                  }if(myItem.opentime){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+                  }if(myItem.restdateshopping){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+                  }if(myItem.infocenter){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }
+            }else if(contenttypeid == 39){
+                  if(myItem.treatmenu){
+                   output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+                  }if(myItem.opentimefood){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+                  }if(myItem.restdatefood){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+                  }if(myItem.infocenterfood){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                  }
+            }
                 output += '</div>';
                 $('#window').html(output);
         },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
           alert("Status: " + textStatus); alert("Error: " + errorThrown); 
       } 
- 	});
+    });
+}
+
+function getInfo(contentid, contenttypeid){
+   $.ajax({
+      url:'callInfo.do',
+      type:'POST',
+      data: {"contentid" : contentid, "contenttypeid" : contenttypeid},
+      dataType: 'jason',
+      success: function(data){
+         
+      }
+      
+   })
 }
 
 

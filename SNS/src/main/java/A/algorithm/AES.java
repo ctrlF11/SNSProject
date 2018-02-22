@@ -80,20 +80,12 @@ public class AES {
    public static String setCrypting(String strToEncrypt) {
       AES.setKey(strPassword);
       AES.encrypt(strToEncrypt.trim());
-      
-      System.out.println("String to Encrypt : " + strToEncrypt);
-      System.out.println("Encrypted : " + AES.getEncryptedString());
-      
       return encryptedString;
    }
    
    public static String setDecrypting(String strToDecrypt) {
       AES.setKey(strPassword);
-      
-      AES.decrpyt(strToDecrypt.trim());
-      System.out.println("String to Decrypt : " + strToDecrypt);
-      System.out.println("Decrypted : " + AES.getDecryptedString());
-      
+      AES.decrpyt(strToDecrypt.trim());    
       return decryptedString;
    }
 }

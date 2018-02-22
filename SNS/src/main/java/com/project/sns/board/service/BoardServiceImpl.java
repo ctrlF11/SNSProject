@@ -226,6 +226,7 @@ public class BoardServiceImpl implements BoardService {
  
     // ��� ����
     public int replyDelete(ReplyVO reply) throws Exception{
+    	// TODO
     	return dao.replyDelete(reply);
     }
 
@@ -233,6 +234,12 @@ public class BoardServiceImpl implements BoardService {
 	public int getStoryCount(String id) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.getStoryCount(id);
+	}
+
+	@Override
+	public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		return dao.getFollowerStoryList(map);
 	};
 
 }

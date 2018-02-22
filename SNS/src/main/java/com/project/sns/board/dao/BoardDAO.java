@@ -70,6 +70,7 @@ public interface BoardDAO {
  
     // 댓글 삭제
     public int replyDelete(ReplyVO reply) throws Exception;
+	public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map);
 
    
 }

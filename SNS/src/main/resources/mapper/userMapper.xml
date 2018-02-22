@@ -43,6 +43,10 @@
 		</select>
 		
 		
+		<insert id="followByBoard" parameterType="string">
+			insert Follow(follower, following)
+			values(#{id}, #{writer}) 
+		</insert>
 		
 
 </mapper>

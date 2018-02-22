@@ -23,8 +23,7 @@
     opacity: .5;
 }
  </style>  
-
-<c:forEach var="mainTable" items="${requestScope.mainTable}" begin="0" end="0">
+<c:forEach var="mainTable" items="${requestScope.mainTable}" begin="0" end="7" varStatus="status">
 		<div class="responsive">
 			<div class="img">
 			${mainTable.regdate}
@@ -34,12 +33,13 @@
 					
 				</a>
 				<div class="desc">
-					${mainTable.mtitle}<br/><c:forEach var="mainTime" items="${requestScope.mainTime}" begin="0" end="0">${mainTime}</c:forEach>
-				</div>
+					${mainTable.mtitle}<br/>
+					<c:forEach var="mainTime" items="${requestScope.mainTime}" begin="${status.index }" end="${status.index }">${mainTime}</c:forEach>
+ 				</div>
 			</div>
 		</div>
 </c:forEach>	
-<c:forEach var="mainTable" items="${requestScope.mainTable}" begin="1" end="1">	
+<%-- <c:forEach var="mainTable" items="${requestScope.mainTable}" begin="1" end="1">	
 		<div class="responsive">
 			<div class="img">
 			${mainTable.regdate}
@@ -137,9 +137,9 @@
 				<a target="_blank"
 					href="/sns/homeview.do?story_seq=${mainTable.story_seq}">
 					<figure>${mainTable.content}</figure>
-					<%-- <img
+					<img
 					src="${mainTable.content}"
-					alt="The Mulberry Tree" width="400" height="300"> --%>
+					alt="The Mulberry Tree" width="400" height="300">
 				</a>
 				<div class="desc">
 					${mainTable.mtitle}<br/>
@@ -148,7 +148,7 @@
 			</div>
 		</div>
 </c:forEach>
-<div class="clearfix"></div>
+ --%><div class="clearfix"></div>
 
 
 

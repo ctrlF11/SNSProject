@@ -268,7 +268,7 @@ public class AddrController {
 		req.setAttribute("list", list);		
 		return "Map";
 	}
-
+	
 	@RequestMapping("/marker.do")
 	public String marker(HttpServletRequest req) throws Exception {
 		return "marker";
@@ -281,9 +281,9 @@ public class AddrController {
    
    @RequestMapping("/newMap")
    public String path2(HttpServletRequest req)throws Exception{
-		List<AddrVO> list = service.getAddress();
-		req.setAttribute("list", list);	
-	   return "path2";
+      List<AddrVO> list = service.getAddress();
+      req.setAttribute("list", list);   
+      return "path2";
    }
 	   
 	   

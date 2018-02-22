@@ -30,28 +30,33 @@ public class SearchController{
 	
 	@RequestMapping("/searchAll.do")
 	public String SearchAll(@RequestParam("keyword") String keyword, @RequestParam("number") int number, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HashMap<Integer, List> map = new HashMap<Integer, List>();
-		PrintWriter out = response.getWriter();
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+		/*PrintWriter out = response.getWriter();
 		keyword = '%'+keyword+'%';
 		List<UserVO> userList = service.searchUser(keyword);
 		List<TourMapVO> tourMapList = service.searchMap(keyword);
 		List<BoardVO> boardList = service.searchBoard(keyword);
+		String[] order = new String[3];
+		
 		System.out.println("userListSize : " + userList.size());
 		System.out.println("tourMapListSize : " + tourMapList.size());
 		System.out.println("boardListSize : " + boardList.size());
 		
+		
+		
 		if(number == 1) {
-			map.put(1, userList);
-			map.put(2, tourMapList);
-			map.put(3, boardList);
+			order[0] = "사용자";
+			order[1] = "관광지";
+			order[2] = "게시글";
 		} else if(number == 2) {
-			map.put(1, tourMapList);
-			map.put(2, userList);
-			map.put(3, boardList);
+			order[0] = "관광지";
+			order[1] = "사용자";
+			order[2] = "게시글";
 		} else if(number == 3) {
-			map.put(1, boardList);
-			map.put(3, userList);
-			map.put(2, tourMapList);			
+			order[0] = "게시글";
+			order[1] = "관광지";
+			order[2] = "사용자";
 		} else {
 			out.println("<script>");
 			out.println("alert('잘못된 동작입니다.');");
@@ -59,10 +64,57 @@ public class SearchController{
 			out.println("</script>");
 		}
 		
-		request.setAttribute("map", map);		
-		
+		request.setAttribute("order", order);
+		request.setAttribute("number", number);
+		request.setAttribute("userList", userList);
+		request.setAttribute("boardList", boardList);
+		request.setAttribute("tourMapList", tourMapList);
+	*/	
+		request.setAttribute("keyword", keyword);
+		request.setAttribute("number", number);
+		System.out.println("searchTest");
 		return "searchTest";
 	}
+	
+	@RequestMapping("/searchUser.do")
+	public String searchUser(@RequestParam("keyword") String keyword, HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		keyword = '%'+keyword+'%';
+		List<UserVO> userList = service.searchUser(keyword);
+
+		request.setAttribute("order", "사용자");
+		request.setAttribute("number", 1);
+		request.setAttribute("list", userList);
+		System.out.println("searchUser");
+		return "searchTable";
+	}
+
+	@RequestMapping("/searchTourMap.do")
+	public String searchTourMap(@RequestParam("keyword") String keyword, HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		keyword = '%'+keyword+'%';
+		List<TourMapVO> tourMapList = service.searchMap(keyword);
+
+		request.setAttribute("order", "관광지");
+		request.setAttribute("number", 2);
+		request.setAttribute("list", tourMapList);
+		System.out.println("searchTM");
+		return "searchTable";
+	}
+
+	@RequestMapping("/searchBoard.do")
+	public String searchBoard(@RequestParam("keyword") String keyword, HttpServletRequest request) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		keyword = '%'+keyword+'%';
+		List<BoardVO> boardList = service.searchBoard(keyword);
+		
+		request.setAttribute("order", "게시글");
+		request.setAttribute("number", 3);
+		request.setAttribute("list", boardList);
+		System.out.println("searchTB");
+		return "searchTable";
+	}
+	
 	
 	@ResponseBody
     @RequestMapping("/search")

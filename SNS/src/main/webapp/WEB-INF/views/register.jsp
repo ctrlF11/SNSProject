@@ -78,12 +78,12 @@
 
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark" onload="document.regForm.reset();">
 	<div class="container">
 		<div class="card card-register mx-auto mt-5">
 			<div class="card-header">회원가입</div>
 			<div class="card-body">
-				<form action="register.do" id="regForm">
+				<form action="register.do" id="regForm" name="regForm" autocomplete="off">
 					<div class="form-group">
 						<div class="form-row">
 							<label for="exampleInputEmail1">이메일</label> <input

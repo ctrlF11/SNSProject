@@ -5,6 +5,6 @@
 <head>
 <title>Home</title>
 </head>
-<body onload="javascript:location.href='mainHomeView.do'"> 
+<body onload="javascript:location.href='killSession.do'"> 
 </body>
 </html>

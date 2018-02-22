@@ -39,7 +39,7 @@ import A.algorithm.AES;
 	public String write(UserVO vo){
 		logger.info("write");
 		service.insertUser(vo);
-		return "home1";
+		return "redirect:mainHomeView.do";
 	}
 	
 	@RequestMapping("/registerForm.do")
@@ -146,46 +146,43 @@ import A.algorithm.AES;
     }
     
     @RequestMapping("/myPage.do")
-    public String myPage(HttpServletRequest req, HttpServletResponse res) throws Exception {
-    	HttpSession session = req.getSession();
+    public String myPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	request.setCharacterEncoding("UTF-8");
+    	response.setContentType("text/html;chatset=UTF-8");
+    	HttpSession session = request.getSession();
     	String id = (String)session.getAttribute("id");
     	System.out.println("아이디 : " + id);
+    	if(id == null || id == "") {
+    		return "redirect:login.do";
+    	}
 	     id = AES.setDecrypting(id);
 	     System.out.println("복호화한 아이디 : " + id);
     	String img = service.getUserImage(id);
     	
-    	req.setAttribute("img", img);
+    	request.setAttribute("img", img);
+
+		int storyCount = boardService.getStoryCount(id);
+		int followingCount = service.getFollowingCount(id);
+		int followerCount = service.getFollowerCount(id);
+		
+		request.setAttribute("storyCount", storyCount);
+		request.setAttribute("followingCount", followingCount);
+		request.setAttribute("followerCount", followerCount);
     	return "myPage";
     }
     
-    @ResponseBody
-	@RequestMapping("/getCounts.do")
-	public List<Integer> getCounts(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		id = AES.setDecrypting(id);
-		System.out.println("?");
-		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html;chatset=UTF-8");
-		List<Integer> count = new ArrayList<Integer>();
-		count.add(boardService.getStoryCount(id));
-		count.add(service.getFollowingCount(id));
-		count.add(service.getFollowerCount(id));
-		System.out.println("count[0] : " + count.get(0));
-		System.out.println("count[1] : " + count.get(1));
-		System.out.println("count[2] : " + count.get(2));
-		return count;
-	}
-    
-    @ResponseBody
     @RequestMapping("/followByBoard.do")
-    public int followByBoard(@RequestParam("id") String id, @RequestParam("writer") String writer,
+    public String followByBoard(@RequestParam("id") String id, @RequestParam("writer") String writer,
     		HttpServletRequest req, HttpServletResponse res) {
     	id = AES.setDecrypting(id);
     	HashMap<String, String> ids = new HashMap();
+    	System.out.println("fBB id : " + id);
+    	System.out.println("fBB writer : " + writer);
     	ids.put("id", id);
     	ids.put("writer", writer);
-    	int result = service.followByBoard(ids);
-    	return result;
+    	service.followByBoard(ids);
+    	String uri = req.getHeader("Referer").substring(26);
+    	return "redirect:"+uri;
     }
     
     @ResponseBody

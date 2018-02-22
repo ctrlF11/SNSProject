@@ -70,5 +70,6 @@ public interface BoardService {
 //		public List<StoryVO> getStoryAll(HashMap map) throws Exception;
 		
 		public int getStoryCount(String id) throws Exception;
+		public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map);
 		
 }

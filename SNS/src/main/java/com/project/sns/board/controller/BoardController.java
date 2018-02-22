@@ -1,12 +1,12 @@
 package com.project.sns.board.controller;
- 
+
 import java.lang.ProcessBuilder.Redirect;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
- 
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,246 +51,180 @@ public class BoardController {
 	@Autowired
 	private UserService userService;
 	@Autowired
-    private ChatService cservice;
+	private ChatService cservice;
 
-    /**
-     * Simply selects the home view to render by returning its name.
-     */
-    @RequestMapping("/getBoardList.do")
-    public String getBoardList(@RequestParam("index") int index,@RequestParam("story_seq") int stroy_seq, HttpServletRequest req,HttpSession se) throws Exception{
-    	    logger.info("getBoardList");
-            System.out.println("index : " + index +" story-seq : " + stroy_seq);
-            HashMap map = new HashMap();
-            map.put("index", index);
-            map.put("story_seq", stroy_seq);
-            List<BoardVO> user = service.getBoardList(map);
-            req.setAttribute("user", user);
-            /*if(index == 0)
-              return "home1";
-            else*/ 
-            //se.setAttribute("userH", user);
-            return "table";
-      
-      
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
 
-    }
-    
- @ResponseBody
- @RequestMapping("/getBoardStoryList.do")
-    public List<BoardVO> getBoardStoryList(@RequestParam("boardUser") String boardUser,HttpServletRequest req,HttpSession se) throws Exception{
-	 	 
-	     BoardVO vo = new BoardVO();
-	     vo.setWriter(boardUser);
-	     System.out.println("스토리 값 : "+ vo.getWriter());
-	     return service.getBoardStoryList(vo);
-    }
- 	
-    @RequestMapping("/getMainBoardList.do")  // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
-    public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
-    	TIME_MAXIMUM time = new  TIME_MAXIMUM();
-        logger.info("getMainBoardList");
-        System.out.println("index : " + index);
-        List<BoardVO> mainTable = service.getMainBoardList(index);
-        ArrayList<String> mainTime = new <String>ArrayList();
-        for(int i = 0; i < mainTable.size(); i++)
-        {
-        	mainTime.add(time.calculateTime( mainTable.get(i).getRegdate()) );
-        }
-        req.setAttribute("mainTime", mainTime);
-        req.setAttribute("mainTable", mainTable);
-        return "mainTable";
-    }
-       
-//    @RequestMapping("insertReply.do")
-//    String insertReply(ReplyVO vo,Model model){ 
-//    	service.insertReply(vo);
-//    	model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
-//       return "replylist";
-//    }
-    
-    @RequestMapping("/homeview.do")
-    public String home1(@RequestParam("story_seq") int story_seq,HttpServletRequest req,HttpSession se){
-     
-	 	 String id = (String)se.getAttribute("id");
-	     if(null == id)
-	     {
-	    	 return "redirect:login.do";
-	     }
-	     else
-	     {
-		     id = aes.setDecrypting(id);
-	    	 req.setAttribute("story_seq", story_seq);
-	    	 return "home1";
-	     }
-        
-    }//�뜝�뙃�떆源띿삕
-    
-    @RequestMapping("/modifyBoard")
-    public String writeForm(Model model) {
-    	String id = "123asdf";
-    	List<StoryVO> story = service.getStory(id);
-    	
-    	model.addAttribute("story",story);
-    	return "modifyBoard";
-    }
-    
-    @ResponseBody
-    @RequestMapping("/inputStory")
-    public int inputStory(StoryVO vo) {    	
-    	service.inputStory(vo);
-    	int nr = vo.getStory_seq();
-    	return nr;
-    }
-    
+	@ResponseBody
+	@RequestMapping("/getBoardStoryList.do")
+	public List<BoardVO> getBoardStoryList(@RequestParam("boardUser") String boardUser, HttpServletRequest request,
+			HttpSession se) throws Exception {
+
+		BoardVO vo = new BoardVO();
+		vo.setWriter(boardUser);
+		System.out.println("스토리 값 : " + vo.getWriter());
+		return service.getBoardStoryList(vo);
+	}
+
+	@RequestMapping("/getMainBoardList.do") // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
+	public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest request) throws Exception {
+		TIME_MAXIMUM time = new TIME_MAXIMUM();
+		logger.info("getMainBoardList");
+		System.out.println("index : " + index);
+		List<BoardVO> mainTable = service.getMainBoardList(index);
+		ArrayList<String> mainTime = new <String>ArrayList();
+		for (int i = 0; i < mainTable.size(); i++) {
+			mainTime.add(time.calculateTime(mainTable.get(i).getRegdate()));
+		}
+		request.setAttribute("mainTime", mainTime);
+		request.setAttribute("mainTable", mainTable);
+		return "mainTable";
+	}
+
+	// @RequestMapping("insertReply.do")
+	// String insertReply(ReplyVO vo,Model model){
+	// service.insertReply(vo);
+	// model.addAttribute("reply",service.getBoardReply(vo.getBoard_seq()));
+	// return "replylist";
+	// }
+
+	@RequestMapping("/homeview.do")
+	public String home1(@RequestParam("story_seq") int story_seq, HttpServletRequest request, HttpSession se) {
+
+		String id = (String) se.getAttribute("id");
+		if (null == id) {
+			return "redirect:login.do";
+		} else {
+			id = aes.setDecrypting(id);
+			request.setAttribute("story_seq", story_seq);
+			return "home1";
+		}
+
+	}// �뜝�뙃�떆源띿삕
+
+	@RequestMapping("/modifyBoard")
+	public String writeForm(Model model, HttpServletRequest request, HttpServletResponse res) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+		id = AES.setDecrypting(id);
+		List<StoryVO> story = service.getStory(id);
+		if (story != null) {
+			model.addAttribute("story", story);
+		}
+		return "modifyBoard";
+	}
+
+	@ResponseBody
+	@RequestMapping("/inputStory")
+	public int inputStory(StoryVO vo) {
+		vo.setId(AES.setDecrypting(vo.getId()));
+		service.inputStory(vo);
+		int nr = vo.getStory_seq();
+		return nr;
+	}
+
 	@RequestMapping("/message")
 	public String message(HttpServletRequest request, HttpSession session) {
-		//session에서 id 받아오기
+		// session에서 id 받아오기
 		String id = "123";
-		//상대방 id도 받아와야함
+		// 상대방 id도 받아와야함
 		List<ChatVO> list = cservice.getFollowerList(id);
-		if(cservice.getFollowerList(id)==null) {
+		if (cservice.getFollowerList(id) == null) {
 			System.out.println("followerlist가 null");
-		}else {
+		} else {
 			System.out.println("null이 아님");
 		}
 		request.setAttribute("follower", list);
 		return "chat";
 	}
-    
-     @RequestMapping("/mainHomeView.do")
-    public String mainHome(ImageVO vo) throws SQLException{
-    	
-    	return "mainHome";
-    }
-    
-    @RequestMapping("/deleteBoard")
-    public void deleteBoard(BoardVO vo){
-    	service.deleteBoard(vo);
-    }
-    
-    @RequestMapping("/deleteStory")
-    public void deleteStory(StoryVO vo){
-    	service.deleteStory(vo);
-    	service.deleteBoardByStory(vo);
-    }
-    
-    @RequestMapping("/saveImage")
-    public void saveImage(ImageVO vo) throws SQLException{
-    	service.saveImage(vo);
-    }
-    
-   /* @RequestMapping("/getUser1.do")
-    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
-        logger.info("getBoardList");
-        System.out.println("index : " + index);
-        List<UserVO> user = userService.getUser1(index);
-        req.setAttribute("user", user);
-        if(index == 0)
-          return "home1";
-        else 
-        	return "user";
-    }*/
-    
-//  @RequestMapping("/getBoardList.do")
-//  public String getBoardList(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
-//
-//      logger.info("getBoardList");
-//      
-//      List<BoardVO> boardList = service.getBoardList(line_seq);
-//      
-//      model.addAttribute("boardList", boardList);
-//
-//      return "BoardList";
-//  }
-  
-//  @RequestMapping("/getBoardList2.do")
-//  public String getBoardList2(@RequestParam("line_seq") int line_seq, Model model) throws Exception{
-//  	
-//  	logger.info("getBoardList2");
-//  	
-//  	List<BoardVO> boardList = service.getBoardList(line_seq);
-//  	System.out.println(boardList.get(0).getLine_seq());
-//  	model.addAttribute("boardList", boardList);
-//  	
-//  	return "BoardList2";
-//  }
-    
-    /* @RequestMapping("/getBoardValue.do")
-    public String getBoardValue(@RequestParam("board_seq") int board_seq, @RequestParam("line_seq") int line_seq) {
-    	logger.info("getBoardValue");
-    	BoardVO vo = service.getBoardValue(line_seq, board_seq);
-    	
-    	return "BoardValue";
-    }*/
-    
-    /*@RequestMapping("/test")
-    public String test() {
-    	return "test";
-    }*/
-    
-  /*  @RequestMapping("/testGet")
-    public String testGet(BoardVO vo) {
-    	logger.info("testGet");
-    	service.inputBoard(vo);
-    	return "redirect:do.do";
-    }
-    
-    @RequestMapping("/getTest")
-    public String getTest() {
-    	return "getTest";
-    }*/
-    
-    @RequestMapping("/inputReply.do")
-    public String inputReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	request.setCharacterEncoding("UTF-8");
-    	response.setContentType("text/html;charset=UTF-8");
-    	
-    	
-    	return "home1";
-    }
-    
-    
-    
-    @RequestMapping("/list.do") //댓글 리스트
-    @ResponseBody
-    private List<ReplyVO> replyList(Model model,ReplyVO vo) throws Exception{
-    	logger.info("list.do");
-        return service.replyList(vo);
-    }
-    @RequestMapping("/insert.do") //댓글 작성 
-    @ResponseBody
-    private int replyInsert(@RequestParam int board_seq,@RequestParam int story_seq, @RequestParam String rcontent,HttpSession se) throws Exception{
-	 	 String id = (String)se.getAttribute("id");
-         id = aes.setDecrypting(id);
 
-	     
-    	logger.info("insert.do");
-    	
-        ReplyVO reply = new ReplyVO();
-        reply.setBoard_seq(board_seq);
-        reply.setRcontent(rcontent);
-        reply.setStory_seq(story_seq);;
-        System.out.println("insert.do : " + rcontent + " : " + board_seq);
-        //로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
-        reply.setRwriter(id);  
-        return service.replyInsert(reply);
-    }
-    
-    @ResponseBody
-    @RequestMapping("/update.do") //댓글 수정  
-    private int mCommentServiceUpdateProc(ReplyVO reply) throws Exception{
-    	logger.info("update.do");
-        return service.replyUpdate(reply);
-    }
-    
-    @ResponseBody
-    @RequestMapping("/delete.do") //댓글 삭제  
-    private int mCommentServiceDelete(ReplyVO reply) throws Exception{
-    	logger.info("delete.do");
-        return service.replyDelete(reply);
-    }
+	@RequestMapping("/mainHomeView.do")
+	public String mainHome(HttpServletRequest request) throws SQLException {
+		return "mainHome";
+	}
 
+	@RequestMapping("/killSession.do")
+	public String killSession(HttpServletRequest request) throws SQLException {
+		HttpSession session = request.getSession();
+		session.invalidate();
+		return "redirect:mainHomeView.do";
+	}
 	
+	@RequestMapping("/deleteBoard")
+	public void deleteBoard(BoardVO vo) {
+		service.deleteBoard(vo);
+	}
+
+	@RequestMapping("/deleteStory")
+	public void deleteStory(StoryVO vo) {
+		service.deleteStory(vo);
+		service.deleteBoardByStory(vo);
+	}
+
+	@RequestMapping("/saveImage")
+	public void saveImage(ImageVO vo) throws SQLException {
+		service.saveImage(vo);
+	}
+
+	/*
+	 * @RequestMapping("/getUser1.do") public String getUser1(@RequestParam("index")
+	 * int index, HttpServletRequest request) throws Exception{
+	 * logger.info("getBoardList"); System.out.println("index : " + index);
+	 * List<UserVO> user = userService.getUser1(index); request.setAttribute("user",
+	 * user); if(index == 0) return "home1"; else return "user"; }
+	 */
+
+	@RequestMapping("/inputReply.do")
+	public String inputReply(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html;charset=UTF-8");
+
+		return "home1";
+	}
+
+	@RequestMapping("/list.do") // 댓글 리스트
+	@ResponseBody
+	private List<ReplyVO> replyList(Model model, ReplyVO vo) throws Exception {
+		logger.info("list.do");
+		return service.replyList(vo);
+	}
+
+	@RequestMapping("/insert.do") // 댓글 작성
+	@ResponseBody
+	private int replyInsert(@RequestParam int board_seq, @RequestParam int story_seq, @RequestParam String rcontent,
+			HttpSession se) throws Exception {
+		String id = (String) se.getAttribute("id");
+		id = aes.setDecrypting(id);
+
+		logger.info("insert.do");
+
+		ReplyVO reply = new ReplyVO();
+		reply.setBoard_seq(board_seq);
+		reply.setRcontent(rcontent);
+		reply.setStory_seq(story_seq);
+		;
+		System.out.println("insert.do : " + rcontent + " : " + board_seq);
+		// 로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지
+		// 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
+		reply.setRwriter(id);
+		return service.replyInsert(reply);
+	}
+
+	@ResponseBody
+	@RequestMapping("/update.do") // 댓글 수정
+	private int mCommentServiceUpdateProc(ReplyVO reply) throws Exception {
+		logger.info("update.do");
+		return service.replyUpdate(reply);
+	}
+
+	@ResponseBody
+	@RequestMapping("/delete.do") // 댓글 삭제
+	private int mCommentServiceDelete(ReplyVO reply) throws Exception {
+		logger.info("delete.do");
+		return service.replyDelete(reply);
+	}
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -298,58 +232,35 @@ public class BoardController {
 
 	@RequestMapping("/getBoardList.do")
 	public String getBoardList(@RequestParam("index") int index, @RequestParam("story_seq") int story_seq,
-			HttpServletRequest req) throws Exception {
+			HttpServletRequest request) throws Exception {
 		logger.info("getBoardList");
 		System.out.println("index : " + index + " story-seq : " + story_seq);
 		HashMap map = new HashMap();
 		map.put("index", index);
 		map.put("story_seq", story_seq);
 		List<BoardVO> user = service.getBoardList(map);
-		req.setAttribute("user", user);
+		request.setAttribute("user", user);
 		/*
 		 * if(index == 0) return "home1"; else
 		 */
-		HttpSession se = req.getSession();
+		HttpSession se = request.getSession();
 		se.setAttribute("userH", user);
 		return "table";
 	}
 
-	@ResponseBody
-	@RequestMapping("/getBoardStoryList.do")
-	public List<BoardVO> getBoardStoryList(HttpServletRequest req, HttpSession se) throws Exception {
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("/getBoardStoryList.do") public List<BoardVO>
+	 * getBoardStoryList(HttpServletRequest request, HttpSession se) throws Exception {
+	 * 
+	 * String id = (String) se.getAttribute("id"); System.out.println("아이디 : " +
+	 * id); id = aes.setDecrypting(id); System.out.println("복호화한 아이디 : " + id);
+	 * BoardVO vo = new BoardVO(); vo.setWriter(id); System.out.println("스토리 값 : " +
+	 * vo.getWriter()); return service.getBoardStoryList(vo); }
+	 */
 
-		String id = (String) se.getAttribute("id");
-		System.out.println("아이디 : " + id);
-		id = aes.setDecrypting(id);
-		System.out.println("복호화한 아이디 : " + id);
-		BoardVO vo = new BoardVO();
-		vo.setWriter(id);
-		System.out.println("스토리 값 : " + vo.getWriter());
-		return service.getBoardStoryList(vo);
-	}
 
-	@RequestMapping("/getMainBoardList.do") // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
-	public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest req, HttpServletResponse res)
-			throws Exception {
-		logger.info("getMainBoardList");
-		req.setCharacterEncoding("UTF-8");
-		res.setContentType("text/html;charset=UTF-8");
-
-		TIME_MAXIMUM time = new TIME_MAXIMUM();
-		System.out.println("index : " + index);
-		List<BoardVO> mainTable = service.getMainBoardList(index);
-		ArrayList<String> mainTime = new <String>ArrayList();
-		for (int i = 0; i < mainTable.size(); i++) {
-			mainTime.add(time.calculateTime(mainTable.get(i).getRegdate()));
-		}
-
-		for (int i = 0; i < mainTime.size(); i++) {
-			System.out.println(mainTime.get(i));
-		}
-		req.setAttribute("mainTime", mainTime);
-		req.setAttribute("mainTable", mainTable);
-		return "mainTable";
-	}
 
 	// @RequestMapping("insertReply.do")
 	// String insertReply(ReplyVO vo,Model model){
@@ -362,25 +273,22 @@ public class BoardController {
 	@RequestMapping("/getStoryCount.do")
 	public int getStoryCount(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		System.out.println("getStoryCount");
 		id = AES.setDecrypting(id);
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;chatset=UTF-8");
+		System.out.println("getStoryCount.do : id : " + id);
 		int count = service.getStoryCount(id);
 		System.out.println("count : " + count);
 		return count;
 	}
-	
-	@RequestMapping("/homeview.do")
-	public String home1(@RequestParam("story_seq") int story_seq, HttpServletRequest req) {
-		req.setAttribute("story_seq", story_seq);
-		return "home1";
-	}// �뜝�뙃�떆源띿삕
 
 	@ResponseBody
 	@RequestMapping("/inputBoard")
 	public void inputBoard(BoardVO vo) throws Exception {
 		System.out.println("BoardVO.getFiles() : " + vo.getFiles());
 		System.out.println("BoardVO.getTitle() : " + vo.getTitle());
+		vo.setWriter(AES.setDecrypting(vo.getWriter()));
 		// 占쌉시깍옙 占쏙옙占쏙옙확占쏙옙
 		int i = service.getBoardSeq(vo);
 		int k = 100;
@@ -390,81 +298,20 @@ public class BoardController {
 			service.registup(vo);
 	}
 
-
-
 	/*
-	 * @RequestMapping("/getUser1.do") public String getUser1(@RequestParam("index")
-	 * int index, HttpServletRequest req) throws Exception{
-	 * logger.info("getBoardList"); System.out.println("index : " + index);
-	 * List<UserVO> user = userService.getUser1(index); req.setAttribute("user",
-	 * user); if(index == 0) return "home1"; else return "user"; }
-	 */
-
-	// @RequestMapping("/getBoardList.do")
-	// public String getBoardList(@RequestParam("line_seq") int line_seq, Model
-	// model) throws Exception{
-	//
-	// logger.info("getBoardList");
-	//
-	// List<BoardVO> boardList = service.getBoardList(line_seq);
-	//
-	// model.addAttribute("boardList", boardList);
-	//
-	// return "BoardList";
-	// }
-
-	// @RequestMapping("/getBoardList2.do")
-	// public String getBoardList2(@RequestParam("line_seq") int line_seq, Model
-	// model) throws Exception{
-	//
-	// logger.info("getBoardList2");
-	//
-	// List<BoardVO> boardList = service.getBoardList(line_seq);
-	// System.out.println(boardList.get(0).getLine_seq());
-	// model.addAttribute("boardList", boardList);
-	//
-	// return "BoardList2";
-	// }
-
-	/*
-	 * @RequestMapping("/getBoardValue.do") public String
-	 * getBoardValue(@RequestParam("board_seq") int
-	 * board_seq, @RequestParam("line_seq") int line_seq) {
-	 * logger.info("getBoardValue"); BoardVO vo = service.getBoardValue(line_seq,
-	 * board_seq);
+	 * @RequestMapping("/insert.do") // 댓글 작성
 	 * 
-	 * return "BoardValue"; }
-	 */
-
-	/*
-	 * @RequestMapping("/test") public String test() { return "test"; }
-	 */
-
-	/*
-	 * @RequestMapping("/testGet") public String testGet(BoardVO vo) {
-	 * logger.info("testGet"); service.inputBoard(vo); return "redirect:do.do"; }
+	 * @ResponseBody private int replyInsert(@RequestParam int
+	 * board_seq, @RequestParam int story_seq, @RequestParam String rcontent) throws
+	 * Exception {
 	 * 
-	 * @RequestMapping("/getTest") public String getTest() { return "getTest"; }
+	 * ReplyVO reply = new ReplyVO(); reply.setBoard_seq(board_seq);
+	 * reply.setRcontent(rcontent); reply.setStory_seq(story_seq); ;
+	 * System.out.println("insert.do : " + rcontent + " : " + board_seq); // 로그인 기능을
+	 * 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지 // 않았기때문에 임시로
+	 * "test"라는 값을 입력해놨습니다. reply.setRwriter("test"); return
+	 * service.replyInsert(reply); }
 	 */
-
-
-	@RequestMapping("/insert.do") // 댓글 작성
-	@ResponseBody
-	private int replyInsert(@RequestParam int board_seq, @RequestParam int story_seq, @RequestParam String rcontent)
-			throws Exception {
-
-		ReplyVO reply = new ReplyVO();
-		reply.setBoard_seq(board_seq);
-		reply.setRcontent(rcontent);
-		reply.setStory_seq(story_seq);
-		;
-		System.out.println("insert.do : " + rcontent + " : " + board_seq);
-		// 로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지
-		// 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
-		reply.setRwriter("test");
-		return service.replyInsert(reply);
-	}
-
 
 	// 2018/02/05 in : story.do, getStoryList.do
 	@RequestMapping("/story.do")
@@ -473,8 +320,8 @@ public class BoardController {
 	}
 
 	@RequestMapping("/getStoryList.do")
-	public String getStoryList(@RequestParam("index") int index, @RequestParam("id") String id,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String getStoryList(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		logger.info("getStoryList.do");
 		request.setCharacterEncoding("UTF-8");
 		System.out.println("아이디 : " + id);
@@ -485,18 +332,20 @@ public class BoardController {
 		request.setAttribute("list", list);
 		return "table2";
 	}
-	/*
-	 * 수정으로 인해서 일시 동결.
-	 * 
-	 * @RequestMapping("/getStoryList.do") public String
-	 * getStoryList(@RequestParam("index") int index, @RequestParam("id") String id,
-	 * HttpServletRequest request, HttpServletResponse response) throws Exception {
-	 * logger.info("getStoryList.do"); request.setCharacterEncoding("UTF-8");
-	 * System.out.println("아이디 : " + id); id = AES.setDecrypting(id);
-	 * System.out.println("복호화한 아이디 : " + id); HashMap<String, Object> map = new
-	 * HashMap<String, Object>(); map.put("index", index); map.put("id", id);
-	 * 
-	 * List<StoryVO> list = service.getStoryAll(map); request.setAttribute("list",
-	 * list); return "table2"; }
-	 */
+	
+	@RequestMapping("/getFollowerStoryList.do")
+	public String getFollowerStoryList(@RequestParam("index") int index, @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse res) {
+		id = AES.setDecrypting(id);
+		logger.info("getMainBoardList");
+		System.out.println("index : " + index);
+		int index2 = index + 6;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("index", index);
+		map.put("index2", index2);	
+		List<BoardVO> storyList = service.getFollowerStoryList(map);
+		request.setAttribute("storyList", storyList);
+		return "table3";
+	}
+	
 }
