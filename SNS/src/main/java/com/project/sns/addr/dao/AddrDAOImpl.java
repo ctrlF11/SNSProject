@@ -52,31 +52,26 @@ public class AddrDAOImpl implements AddrDAO {
 
 	@Override
 	public void insertPath(BoardVO vo) {
-		// TODO Auto-generated method stub
 		sqlSession.insert(namespace + ".insertPath", vo);
 	}
 
 	@Override
-	public int getCount(String id) {
-		// TODO Auto-generated method stub
+	public BoardVO getCount(String id) throws Exception {
 		return sqlSession.selectOne(namespace + ".getCount", id);
 	}
 	
-		@Override
+	@Override
 	public AddrVO callInfo(String contentId) throws Exception {
-		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".callInfo", contentId);
 	}
 
 	@Override
 	public AddrVO callReview(String contentId) throws Exception {
-		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".callReview", contentId);
 	}
 
 	@Override
 	public double getStarAvg(String contentId) throws Exception {
-		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace+".getStarAvg", contentId);
 		
 	}

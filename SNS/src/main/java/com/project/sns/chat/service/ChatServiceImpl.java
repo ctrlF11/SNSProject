@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.project.sns.chat.dao.ChatDAO;
 import com.project.sns.chat.vo.ChatVO;
+import com.project.sns.user.vo.UserVO;
 
 @Service
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
 
 	@Autowired
 	private ChatDAO dao;
@@ -44,6 +45,10 @@ public class ChatServiceImpl implements ChatService{
 		// TODO Auto-generated method stub
 		return dao.getFollowerList(id);
 	}
-	
 
+	@Override
+	public UserVO getUser(String id) {
+		// TODO Auto-generated method stub
+		return dao.getUser(id);
+	}
 }

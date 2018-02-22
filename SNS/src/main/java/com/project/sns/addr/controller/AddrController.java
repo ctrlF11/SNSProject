@@ -320,12 +320,20 @@ public class AddrController {
 	    List<AddrVO> list = service.getAddress();
 	    req.setAttribute("list", list);   
 	    
-	    if(session.getAttribute("id") != null) {				//로그인이 되어있을 때만 count를(경로 묶음) 불러온다.
-	    String id = (String) session.getAttribute("id");
-	    id = AES.setDecrypting(id);
-	    
-	    int count = service.getCount(id);
-	    req.setAttribute("count", count);
+	    if(session.getAttribute("id") != null) {				//로그인이 되어있을 때만 pathCount를(경로 묶음) 불러온다.
+	    	
+	    	String id = (String) session.getAttribute("id");
+	    	id = AES.setDecrypting(id);
+	    	Integer pathCount = 0;
+	    	System.out.println();
+	    	try {
+	    		 pathCount = service.getCount(id).getCount();
+	    	} catch (Exception e) {
+	    		System.out.println(service.getCount(id).getCount());
+	    	}
+	    	
+	    req.setAttribute("pathCount", pathCount);
+	    req.setAttribute("id", id);
 	    }
 	    return "path2";
 	 }

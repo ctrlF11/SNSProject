@@ -126,18 +126,37 @@ public class BoardController {
    }
 
    @RequestMapping("/message")
-   public String message(HttpServletRequest requestuest, HttpSession session) {
+   public String message(HttpServletRequest request, HttpSession session) {
       String id = (String) session.getAttribute("id");
       AES aes = new AES();
       id = aes.setDecrypting(id);
-      // 상대방 id도 받아와야함
+      
+      List<ChatVO> resultList = new ArrayList<ChatVO>();
       List<ChatVO> list = cservice.getFollowerList(id);
-      if (cservice.getFollowerList(id) == null) {
-         System.out.println("followerlist가 null");
-      } else {
-         System.out.println("null이 아님");
+      List<String> namecheck = new ArrayList<String>();
+      UserVO myvo = cservice.getUser(id);
+      if(list!=null) {
+         for(ChatVO vo : list) {
+            String name = "";
+            UserVO uvo = null;
+            if(vo.getToID()==id) {
+               name = vo.getFromID();
+            }else {
+               name = vo.getToID();
+            }
+            System.out.println(resultList.indexOf(name));
+            if(namecheck.indexOf(name)==-1) {
+               namecheck.add(name);
+               uvo = cservice.getUser(name);
+               vo.setName(uvo.getName());
+               vo.setPicture(uvo.getProfile_img());
+               resultList.add(vo);
+            }
+         }
       }
-      requestuest.setAttribute("follower", list);
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!follower list도 보내야함
+      request.setAttribute("myInfo", myvo);
+      request.setAttribute("chatList", resultList);
       return "chat";
    }
 

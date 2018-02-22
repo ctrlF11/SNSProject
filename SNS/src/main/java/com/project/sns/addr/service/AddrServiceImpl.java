@@ -51,7 +51,7 @@ public class AddrServiceImpl implements AddrService{
 	}
 	
 	@Override
-	public int getCount(String id) {
+	public BoardVO getCount(String id) throws Exception {
 		return dao.getCount(id);
 	}
 	

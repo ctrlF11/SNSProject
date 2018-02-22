@@ -46,7 +46,7 @@
 
 	<select id="getHeart" resultMap="getHeartMap">
 		select contentId, sum(heart)
-		from Board group by contentId;
+		from Board group by contentId
 	</select>
 
 	<resultMap id="getHeartMap" type="BoardVO">
@@ -60,7 +60,7 @@
       ( #{writer},#{contentId},#{count} )
    </insert>
    
-    <select id="getCount" parameterType="int" resultMap="getCountMap">
+   <select id="getCount" parameterType="int" resultMap="getCountMap">
      select max(count) from Path <where> id = #{id} </where>
    </select>	
 

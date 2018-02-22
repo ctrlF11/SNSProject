@@ -23,10 +23,8 @@ public class BoardVO {
 	private Date regdate;
 	private Integer heart;
 	private String heart_id;
-<<<<<<< HEAD
-	private Integer count;
-=======
 	private Integer star;
+	private Integer count;
 
 	public Integer getStar() {
 		return star;
@@ -60,7 +58,6 @@ public class BoardVO {
 	public void setStory_regdate(String story_regdate) {
 		this.story_regdate = story_regdate;
 	}
->>>>>>> refs/remotes/origin/b5
 
 	public Integer getBoard_seq() {
 		return board_seq;

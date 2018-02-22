@@ -7,7 +7,8 @@ public class ChatVO {
 	private String chatContent;
 	private String chatTime;
 	private int chatRead;
-	
+	private String name;
+	private String picture;
 
 	public int getChatID() {
 		return chatID;
@@ -44,6 +45,18 @@ public class ChatVO {
 	}
 	public void setChatRead(int chatRead) {
 		this.chatRead = chatRead;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPicture() {
+		return picture;
+	}
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 	
 	

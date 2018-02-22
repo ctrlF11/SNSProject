@@ -16,8 +16,7 @@ public interface AddrDAO {
 	public List<BoardVO> getHeart() throws Exception;
 	
 	public void insertPath(BoardVO vo);
-	public int getCount(String id);
-
+	public BoardVO getCount(String id) throws Exception;
 	
 	public AddrVO callInfo(String contentId) throws Exception;
 	public AddrVO callReview(String contentId) throws Exception;

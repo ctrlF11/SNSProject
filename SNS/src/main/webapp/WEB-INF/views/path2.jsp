@@ -14,7 +14,7 @@
    href="resources/facebook/assets/css/bootstrap2.css">
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
-<link rel="stylesheet" href="resources/css/map.css?val=1" type="text/css"/>
+<link rel="stylesheet" href="resources/css/map.css" type="text/css"/>
 <!-- <script type="text/javascript" src="resources/js/map.js"></script> -->
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
@@ -66,11 +66,15 @@
       	<button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
       	<ul class="accordian">
       		<li class="accordian--box">
-      			<h3 id="recommend" onclick="recommend()">추천코스</h3>
+      			<h3 id="recommend" onclick="recommend()">추천코스</h3>    			
       			<h4 id="pathlist"></h4>
       		</li>
       	</ul>
-      	<div id="path"></div>        
+		<div id="path"></div>
+      	<div>
+      		<select id="selectHour"></select>
+      		<select id="selectMinute"></select>
+      	</div>       
       </div>      
    </div>
             </div>         
@@ -81,12 +85,12 @@
 
 
 
-var accModule = function() {
+ var accModule = function() {
 
      // private member (비공개 멤버, 고유멤버)
-     var acc_wrap = $('.accodian'),
-       question = acc_wrap.find('h3'),
-       answer = question.next('h4');
+     var acc_wrap = $('.accordian'),
+       question = $('#recommend'),
+       answer = $('#pathlist');
 
      // privilieged member(공용 인터페이스)
      return {
@@ -94,24 +98,21 @@ var accModule = function() {
          this.accHandler();
        },
        accHandler: function() {
-         var accodian = {
+         var accordian = {
            targetClick: function(e) {
              var eTarget = $(e.currentTarget);
-             if (eTarget.next().is(':visible')) {
-               eTarget.next().slideUp();
-               return;
-             }
-             answer.slideUp();
+
+             
              eTarget.next().slideDown();
            }
          };
-         question.on('click', accodian.targetClick);
+         question.on('click', accordian.targetClick);
        }
      }
    }();
 
    // 실행
-   accModule.runInit();
+   accModule.runInit(); 
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
@@ -376,8 +377,6 @@ function addMarker(position, title, contentid, contenttypeid) {
    
    //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
    function createArrMarkers(marker){
-         console.log('marker');
-         console.log(marker);
          marker.setImage(clickImage);
          markersArr.push(marker);
          marker.setMap(map);
@@ -538,15 +537,13 @@ function recommend() {
                               positions[j].contentid,
                               positions[j].contenttypeid);
                               
-                    sidePath += '<div class="pinn'+j+'" id="' + positions[j].contentid + '" value="' + positions[j].contentid +'" text-align:left)>';
-                    sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
-                              + "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
-                              + positions[j].title + "</a>" + '</h4>';
-                    sidePath += '</div>'; 
-                        
+                        sidePath += '<div class="pinn ' + positions[j].contentid + '" id="' + positions[j].contentid + '">';
+                        sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
+                                  + "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
+                                  + positions[j].title + "</a>" + '</h4>';
+                        sidePath += '</div>'; 
 
                         recPath.push(positions[j].latlng);
-      
 
                      }
                   }
@@ -599,7 +596,7 @@ function getpath(){
                   bounds.extend(latlng);
                   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
                   
-                  sidePath += '<div class="pinn" id="' + val.contentId + '" value="' + val.contentId + '"text-align:left)>';
+                  sidePath += '<div class="pinn" id="' + val.contentId +  '"text-align:left>';
                   sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="' + val.contentId + '"onclick="deletePin(this)"></div>'
                            + "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contentTypeId + ")'>"
                            + val.title + "</a>" + '</h4>';
@@ -608,7 +605,7 @@ function getpath(){
                
                drawLine(recPath);
                map.setBounds(bounds);
-               $('#path').empty();
+               $('#pathlist').empty();
                $('#pathlist').html(sidePath);
                }
       });
@@ -641,16 +638,12 @@ function searchMap(){
    if(afterSearchArr!=null){
    setMarkers(null);
    setMarkersArr(map);
-   console.log('markersArr');
-   console.log(markersArr);
    }
    $.ajax({
       url:'search.do',
       type: 'POST',
       data: {keyword:keyword},
       success: function(data){
-         console.log("555");
-         console.log(data);
          afterSearchArr = data;
          if(afterSearchArr.length==0){
             alert("검색 결과가 없습니다.");
@@ -966,16 +959,16 @@ $(function setMinute(){
 })
 
 
-//경로저장
+ //경로저장
 function savepath(){
 	
-	var id = <%=session.getAttribute("id")%>;
-	var count = <%=request.getAttribute("count")%>;		//코스 구분 용도
+	var id = "<%=request.getAttribute("id")%>";		//이거 이상함
+	var pathCount = <%=request.getAttribute("pathCount")%>;		//코스 구분 용도
 	var oneAlert = 0;									//alert 한번만 나오도록 하기 위해서 사용
-	if(count == null){
-		count = 1;
+	if(pathCount == null){
+		pathCount = 1;
 	} 
-		count = count + 1;
+		pathCount = pathCount + 1;	
 
 	if(id == null){
 		alert("회원만 이용 가능합니다.");
@@ -984,11 +977,10 @@ function savepath(){
 
 	for(var i=0; i<arr.length; i++){
 
-		console.log(arr[i].contentId);
 		
   	$.ajax({
 		url:'insertPath.do',
-		data:{"writer" : id, "contentId" : arr[i].contentId, "count" : count},	
+		data:{"writer" : id, "contentId" : arr[i].contentId, "count" : pathCount},	
 		success: function(){
 			if(oneAlert==0)
 				alert("경로가 저장되었습니다.");
@@ -997,7 +989,7 @@ function savepath(){
 	
 	})
 	}
-	}
+	} 
 
 }
 
