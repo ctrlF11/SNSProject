@@ -69,4 +69,10 @@ public class UserServiceImpl implements UserService {
 	public List<UserVO> getUser1(int index){
 		return userDao.getUser1(index);
 	}*/
+
+	@Override
+	public List<UserVO> getFollower(String id) {
+		// TODO Auto-generated method stub
+		return userDao.getFollower(id);
+	}
 }

@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<meta name="viewport"
+   content="width=device-width, initial-scale=1, maximum-scale=1">
 <head>
-<link href="resources/vendor/font-awesome/css/font-awesome.min.css"
-   rel="stylesheet" type="text/css">
+<link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <style>
 *{ margin: 0; padding: 0;}
 body { width: 500px; margin: 30px auto;}
@@ -19,12 +19,9 @@ body { width: 500px; margin: 30px auto;}
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<meta name="viewport"
-   content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet"
-   href="resources/facebook/assets/css/bootstrap2.css">
-<link rel="stylesheet"
-   href="resources/facebook/assets/css/facebook2.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="resources/facebook/assets/css/bootstrap2.css">
+<link rel="stylesheet" href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
 <script src="resources/facebook/assets/js/check.js"></script>
 <script src="js/home1.js" type="text/javascript"></script>
@@ -33,7 +30,7 @@ body { width: 500px; margin: 30px auto;}
 var index = 0;
 $(function(){
       index = 0;
-      var story_seq = <%=request.getAttribute("story_seq")%>;
+      var story_seq = 10;
       getBoard(story_seq);
       $("#main").scroll(function() {
          var sh = $("#main").scrollTop() + $("#main").height();
@@ -287,24 +284,29 @@ function like_button(board_seq,story_seq)
                      글씨가 겹쳐 보이는 문제가 발생함.
                   -->
               
-            <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar" name ="story"> 
-            <!--
-                  col-sm-12, col-xs-12 둘 다 같은 width 설정 class.
-                  col-xs-12는 disable된 상태
-                  
-                 
-                 
-                                       맨 뒤의 숫자를 변경하면(col-sm-10) 회색 화면의 가로가 줄어들어 
-                                        백그라운드의 회색 화면이 나타남.                  
-                -->
-                </div>
-            <div id="main" class="column col-sm-10 col-xs-11"
-               style="overflow-y: auto;">
-               <!-- 
+            
+            <div id="main" style="overflow-y: auto;" class="column col-sm-12 col-xs-12">
+               <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar" name="story" style="position: fixed; margin-top: 74px;"><ul class="accodian"><ul class="accodian"><input value="39" name="storyHidden" type="hidden"><h3 onclick="story_button(39)"><a href="#">#asdasdas</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="7" name="storyHidden" type="hidden"><h3 onclick="story_button(7)"><a href="#">#ㅁㄴㅇㄹ</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="1" name="storyHidden" type="hidden"><h3 onclick="story_button(1)"><a href="#">#강남역 맛집</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="5" name="storyHidden" type="hidden"><h3 onclick="story_button(5)"><a href="#">#고고고</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="10" name="storyHidden" type="hidden"><h3 onclick="story_button(10)"><a href="#">#동대문</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="37" name="storyHidden" type="hidden"><h3 onclick="story_button(37)"><a href="#">#민웅스 스퇼</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="6" name="storyHidden" type="hidden"><h3 onclick="story_button(6)"><a href="#">#오오오오오</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="2" name="storyHidden" type="hidden"><h3 onclick="story_button(2)"><a href="#">#제주도 여행</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="36" name="storyHidden" type="hidden"><h3 onclick="story_button(36)"><a href="#">#지니지니</a></h3></ul></ul></div><!-- 
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
-               <%@ include file="include/topbar.jsp"%>
-               <%@ include file="include/half_map.jsp"%>
+              <%@ include file="include/topbar.jsp" %>             
+              <div class="padding">
+   <div class="full col-sm-10" id="full1" style="float: right;">
+      <div class="row">
+         <div class="col-sm-6" id="col-sm-6">
+            <!-- ê¸  ì  ì   -->
+         </div>
+         <div class="col-sm-6">
+            <div id="map" style="width: 40%; height: 100%;"></div>
+               <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
+               <script>
+               
+               </script>
+            </div>
+         </div>
+      </div>
+</div>
+
             </div>
          </div>
       </div>
@@ -380,6 +382,7 @@ function like_button(board_seq,story_seq)
          accModule.runInit();
    
    </script>
-</body>
-</html>
 
+
+
+</body>

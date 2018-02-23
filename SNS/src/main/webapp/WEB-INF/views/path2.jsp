@@ -401,23 +401,7 @@ function addMarker(position, title, contentid, contenttypeid) {
        }
        var i = arr.findIndex(function(item){return item.contentId === contentid});
        if(i > -1){
-          
-          //이미지 노말로 변경
-          marker.setImage(normalImage);
-          
-          //arr에서 삭제.
-          arr.splice(i, 1);
-          markersArr.splice(i, 1);
-          
-          //if(afterpath.findIndex(function(item){return item.contentId === contentid})>-1){
-             //console.log("이미지 삭제");
-             //marker.setMap(null);
-             //}
-          
-          //div 지우기
-          var garbage = document.getElementById(contentid);
-          document.getElementById('path').removeChild(garbage);
-          
+    	   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           return false;
        }
 

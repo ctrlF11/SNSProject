@@ -1,1497 +1,707 @@
 <%@page import="A.algorithm.AES"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-
     pageEncoding="UTF-8"%>
-
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
-
 <head>
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
 <meta name="viewport"
-
    content="width=device-width, initial-scale=1, maximum-scale=1">
-
 <link rel="stylesheet"
-
    href="resources/facebook/assets/css/bootstrap2.css">
-
 <link rel="stylesheet"
-
    href="resources/facebook/assets/css/facebook2.css">
-
 <link rel="stylesheet"
-
    href="resources/css/map.css">
-
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
-
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
-
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
 <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-
 <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
-
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
 <style>
-
- 
-
 #map {
-
    position: fixed;
-
 }
-
- 
-
 .fileDrop {
-
-   width: 100%;
-
-   height: 50px;
-
-   background: gray;
-
-   border: 1px dotted black;
-
+	width: 100%;
+	height: 50px;
+	background: gray;
+	border: 1px dotted black;
 }
-
- 
-
 .pull-right{
-
-   float: right !important;
-
-   }
-
-   
-
+	float: right !important;
+	}
+	
 .con{
-
-   overflow:hidden;
-
-   height:auto;
-
-   }
-
-   
-
+	overflow:hidden;
+	height:auto;
+	}
+	
 #content{
-
-   width: 100%;
-
-   height: 300px;
-
-   background: white;
-
-   margin-top: 10px;
-
-   margin-bottom: 10px;
-
-   overflow: auto;
-
-   padding: 10px;
-
-   }
-
-   
-
+	width: 100%;
+	height: 300px;
+	background: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	overflow: auto;
+	padding: 10px;
+	}
+	
 #searchBox{
-
-   position: fixed;
-
-   float: right;
-
-   background-color: #4CAF50;
-
-   height : 50px;
-
-   top: 75px;
-
-   right: 1%;
-
-   }
-
-   
-
+	position: fixed;
+	float: right;
+	background-color: #4CAF50;
+	height : 50px;
+	top: 75px;
+	right: 1%;
+	}
+	
 #searchResult{
-
-   position: fixed;
-
-   bottom: 0;
-
-   right: 0;
-
-   background-color: #4CAF50;
-
-   height : 250px;
-
-   width : 50%;
-
-   }
-
- 
-
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background-color: #4CAF50;
+	height : 250px;
+	width : 50%;
+	}
 #searchContent{
-
-   background: white;
-
-   padding: 14px 40px;
-
-   font-size: 16px;
-
-   border-radius: 12px;
-
-   width: auto;
-
-   margin: 10px;
-
-   overflow: auto;
-
-   }
-
-   
-
+	background: white;
+	padding: 14px 40px;
+	font-size: 16px;
+	border-radius: 12px;
+	width: auto;
+	margin: 10px;
+	overflow: auto;
+	}
+	
 #file{
-
-   display:none;
-
-   }
-
-   
-
+	display:none;
+	}
+	
 .toolBox{
-
-   height : 50px;
-
-   }
-
- 
-
+	height : 50px;
+	}
 #glyphicon span {
-
     font-size: 50px;
-
     margin-left : 0;
-
     margin-right : 0;
-
- 
-
 }
-
- 
-
 #modifyForm {
-
-   margin-top : 80px;
-
-   left: 10px;
-
-   }
-
-   
-
+	margin-top : 80px;
+	left: 10px;
+	}
+	
 #mapBox {
-
-   margin-top : 80px;
-
-   }
-
- 
-
+	margin-top : 80px;
+	}
 .story {
-
-   margin-top : 20px;
-
-   
-
-   }
-
-   
-
+	margin-top : 20px;
+	
+	}
+	
 #searchMap{
-
-   background-color: white;
-
-   background-image: url('musica-searcher.png');
-
-   background-position: 2px 2px;
-
-   background-repeat: no-repeat;
-
-   padding-left: 40px;
-
-   }
-
- 
-
+	background-color: white;
+	background-image: url('musica-searcher.png');
+	background-position: 2px 2px;
+	background-repeat: no-repeat;
+	padding-left: 40px;
+	}
 .image{
-
-   float:left;
-
-   top: 0;
-
-   }
-
- 
-
+	float:left;
+	top: 0;
+	}
 .tourbox{
-
-   background:white;
-
-   overflow:hidden;
-
-   height: auto;
-
-   clear: left;
-
-   border-radius: 12px;
-
-   margin: 5px;
-
-   }
-
- 
-
+	background:white;
+	overflow:hidden;
+	height: auto;
+	clear: left;
+	border-radius: 12px;
+	margin: 5px;
+	}
 .star{
-
-   float: right;
-
-   }
-
-   
-
+	float: right;
+	}
+	
 #search_wrap form, #search_wrap div, #search_wrap{
-
-   display: inline;
-
+	display: inline;
 }
-
- 
-
 .icon_wrap ul  li{
-
-   display: inline-block;
-
-   }
-
- 
-
+	display: inline-block;
+	}
 </style>
-
 <title>Insert title here</title>
 
- 
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
       <div class="box">
-
          <div class="row row-offcanvas row-offcanvas-left">
-
          
-
                   
-
             <div id="main" class="column col-sm-12 col-xs-12">
-
-         <%@ include file="include/topbar.jsp"%>                      
-
+			<%@ include file="include/topbar.jsp"%>                      
                         
-
             <!--  수정 폼 -->           
+			<div class="col-sm-6" id="modifyForm">
+					<button id='save' class="btn btn-warning pull-right" >저장</button>
+					
+					<!--  스토리  -->
+					<div class='story form-group'>
+						<form class='storyForm'>
+							<select name='storyBox' id='storyBox' class='form-control'>
+								<option>스토리 선택</option>
+								<c:forEach items="${story}" var="story">
+									<option value='${story.story_seq}'>${story.story_title}</option>
+								</c:forEach>
+								<option disabled></option>
+								<option value="스토리추가">스토리추가</option>
+							</select> 
+						</form>
+					</div>
+					<hr>
+					
+					<!-- 글작성 -->
+					<div class='board form-group'>
+						<div class="btitle">
+							<input  class="form-control" type="text" id='title' placeholder='글 제목'/>
+						</div>
 
-         <div class="col-sm-6" id="modifyForm">
-
-               <button id='save' class="btn btn-warning pull-right" >저장</button>
-
-               
-
-               <!--  스토리  -->
-
-               <div class='story form-group'>
-
-                  <form class='storyForm'>
-
-                     <select name='storyBox' id='storyBox' class='form-control'>
-
-                        <option>스토리 선택</option>
-
-                        <c:forEach items="${story}" var="story">
-
-                           <option value='${story.story_seq}'>${story.story_title}</option>
-
-                        </c:forEach>
-
-                        <option disabled></option>
-
-                        <option value="스토리추가">스토리추가</option>
-
-                     </select> 
-
-                  </form>
-
-               </div>
-
-               <hr>
-
-               
-
-               <!-- 글작성 -->
-
-               <div class='board form-group'>
-
-                  <div class="btitle">
-
-                     <input  class="form-control" type="text" id='title' placeholder='글 제목'/>
-
-                  </div>
-
+						<div class='uploadedList' id="content" contentEditable="true"></div>
+						<div class='toolBox'>
+							<form id="imageUpload" method='POST' enctype='multipart/form-data'>
+								<input type="file" name="image" id="file"/>
+							</form>
+							<div id="glyphicon">
+								<span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
+								<!-- <span class="glyphicon glyphicon-trash" id="delete" aria-hidden="true"></span>
+								<span class="glyphicon glyphicon-screenshot" id="reloacate" aria-hidden="true"></span> -->
+							</div>
+							<!-- <div class='fileDrop'></div>  -->
+						</div>
+					</div>
+					<hr>
+				</div>
  
-
-                  <div class='uploadedList' id="content" contentEditable="true"></div>
-
-                  <div class='toolBox'>
-
-                     <form id="imageUpload" method='POST' enctype='multipart/form-data'>
-
-                        <input type="file" name="image" id="file"/>
-
-                     </form>
-
-                     <div id="glyphicon">
-
-                        <span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
-
-                        <!-- <span class="glyphicon glyphicon-trash" id="delete" aria-hidden="true"></span>
-
-                        <span class="glyphicon glyphicon-screenshot" id="reloacate" aria-hidden="true"></span> -->
-
-                     </div>
-
-                     <!-- <div class='fileDrop'></div>  -->
-
-                  </div>
-
-               </div>
-
-               <hr>
-
-            </div>
-
- 
-
                <div class="col-sm-6">
-
                    <div class="panel panel-default">
-
                         <div id="mapBox">
-
-                            <div id="searchBox" style="z-index: 2;">
-
-                              <input type="text" id="searchMap" onkeydown="enterkey();" placeholder="검색.."/><input id = "searchMapBtn" type="button" onclick="searchMap();" value="검색"/>
-
-                            </div>
-
-                            <div id="map" style="width: 50%; height: 100%;" style="z-index: 1;"></div>
-
-                            <div id="searchResult" style="z-index: 3;">
-
-                               <div id="searchContent" style="z-index: 4;"></div>
-
-                            </div>
-
-                       </div>
-
+	                   		<div id="searchBox" style="z-index: 2;">
+	                  			<input type="text" id="searchMap" onkeydown="enterkey();" placeholder="검색.."/><input id = "searchMapBtn" type="button" onclick="searchMap();" value="검색"/>
+	                   		</div>
+	                   		<div id="map" style="width: 50%; height: 100%;" style="z-index: 1;"></div>
+	                   		<div id="searchResult" style="z-index: 3;">
+	                   			<div id="searchContent" style="z-index: 4;"></div>
+	                   		</div>
+                    	</div>
                    </div>
-
                 </div>
-
             </div>
-
          </div>
-
       </div>
-
    </div>
-
-               
-
-            </div>
-
-         </div>
-
-      </div>
-
-   </div>
-
+					
+				</div>
+			</div>
+		</div>
+	</div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
-
 <script type="text/javascript">
-
- 
-
 <%
-
 String id = (String) session.getAttribute("id");
-
 AES aes = new AES();
-
 id = aes.setDecrypting(id);
-
 %>
-
- 
-
 var id = '<%=id%>';
-
 var files = [];
-
 var blob;
-
 var contentId;
-
 var mtitle;
-
 var starvalue;
-
 //보드 받아올 때 빼오기. 
-
 var board_seq =3; 
-
 //선택한 마커
-
 var selectedMarker = null;
-
 //검색결과.
-
 var array = new Array();
-
- 
-
 var markersArr = []; 
-
 var markers = [];
-
- 
-
 $(function(){
-
-   
-
-   $('#searchResult').hide();
-
-   $('#searchContent').hide();
-
-})   
-
-   
-
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-
-   mapOption = { 
-
-       center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-
-       level: 3 // 지도의 확대 레벨
-
-   };
-
- 
-
-var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
- 
-
-var marker_width = 24,
-
-   marker_height = 35,
-
-   over_marker_width = 30,
-
-   over_marker_height = 40,
-
-   sprite_marker_url = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
-
-   click_marker_url = "markerStarRed.png";
-
-   
-
-var markerSize = new daum.maps.Size(marker_width, marker_height), 
-
-   overMarkerSize = new daum.maps.Size(over_marker_width, over_marker_height),
-
-   spriteImageSize = new daum.maps.Size(marker_width, marker_height);
-
- 
-
-//마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
-
-function createMarkerImage(src, size){
-
-   var markerImage = new daum.maps.MarkerImage(src, size);
-
-   return markerImage;
-
-}
-
-   //좌표와 마커이미지를 받아 마커를 생성하여 리턴하는 함수입니다
-
-function createMarker(position, image){
-
-   var marker = new daum.maps.Marker({
-
-      position: position,
-
-      image: image
-
-   });
-
-   return marker;
-
-}
-
- 
-
- 
-
-//마커 추가.
-
-function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {            
-
- 
-
-   var normalImage = createMarkerImage(sprite_marker_url, markerSize),
-
-       overImage = createMarkerImage(sprite_marker_url, overMarkerSize),
-
-       clickImage = createMarkerImage(click_marker_url, markerSize);
-
-    // 마커를 생성합니다
-
-   var marker = new daum.maps.Marker({
-
-      contentId: contentid,
-
-       map: map, // 마커를 표시할 지도
-
-       position: position, // 마커를 표시할 위치
-
-       title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-
-       image : normalImage // 마커 이미지
-
-   });
-
-   
-
-   markers.push(marker);
-
-   
-
-   // 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
-
-   marker.normalImage = normalImage;
-
-   
-
-    //마커에 mouseover 이벤트 등록    
-
-    daum.maps.event.addListener(marker, 'mouseover', function(){
-
-       //클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면 마커의 이미지를 오버 이미지로 변경
-
-       if(!selectedMarker || selectedMarker != marker){
-
-          marker.setImage(overImage);
-
-       }
-
-    });
-
-    
-
-   // 마커에 mouseout 이벤트를 등록합니다
-
-    daum.maps.event.addListener(marker, 'mouseout', function() {
-
- 
-
-        // 클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면 마커의 이미지를 기본 이미지로 변경합니다
-
-        if (!selectedMarker || selectedMarker !== marker) {
-
-            marker.setImage(normalImage);
-
-        }
-
-    });
-
-   
-
-  //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
-
-    function createArrMarkers(){
-
-          marker.setImage(clickImage);
-
-          markersArr.pop();
-
-          markersArr.push(marker);
-
-          marker.setMap(map);
-
-    }
-
-   
-
-    //마커 클릭시! 
-
-   daum.maps.event.addListener(marker, 'click', function() {
-
-       // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면 마커의 이미지를 클릭 이미지로 변경합니다
-
-       if (!selectedMarker || selectedMarker !== marker) {
-
- 
-
-           // 클릭된 마커 객체가 null이 아니면 클릭된 마커의 이미지를 기본 이미지로 변경하고
-
-           !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
-
- 
-
-           // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
-
-           marker.setImage(clickImage);
-
-       }
-
- 
-
-       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
-
-       selectedMarker = marker;
-
-       contentId = contentid;
-
-       mtitle = title;
-
-       
-
-      createArrMarkers();
-
-      starvalue = 0;
-
-      locked = 0;
-
-      $.ajax({        
-
-          url: 'callDetail.do',
-
-          type: 'get',
-
-          data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
-
-          dataType: 'json',
-
-          success: function(data){
-
-             var addr = getInfo(contentid, contenttypeid);
-
-              var myItem = data.response.body.items.item;
-
-              var output = '<div class="tourbox ' + contentid + '" id="' + contentid + '" text-align:left>';
-
-              output += '<h4 id="title">' + addr.title + '<div class="star" id="star">별점주기'
-
-                    + '<img src="empty_star3.png" id="star1" onmouseover=show(1) onclick=mark(1) onmouseout=noshow(1)>'
-
-                    + '<img src="empty_star3.png" id="star2" onmouseover=show(2) onclick=mark(2) onmouseout=noshow(2)>'
-
-                    + '<img src="empty_star3.png" id="star3" onmouseover=show(3) onclick=mark(3) onmouseout=noshow(3)>'
-
-                    + '<img src="empty_star3.png" id="star4" onmouseover=show(4) onclick=mark(4) onmouseout=noshow(4)>'
-
-                    + '<img src="empty_star3.png" id="star5" onmouseover=show(5) onclick=mark(5) onmouseout=noshow(5)>'
-
-                    +'</div></h4>';
-
-               output += '<div class="image" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/></div>';
-
-               output += '<div class="info">';
-
-                  if(contenttypeid == 12){
-
-                        if(myItem.parking){
-
-                        output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
-
-                        }if(myItem.restdate){
-
-                        output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
-
-                        }if(myItem.infocenter){
-
-                        output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-
-                        }
-
-                  }else if(contenttypeid == 14){
-
-                        if(myItem.usefee){
-
-                        output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
-
-                        }if(myItem.usetimeculture){
-
-                        output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
-
-                        }if(myItem.restdateculture){
-
-                        output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
-
-                        }if(myItem.infocenterculture){
-
-                        output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-
-                        }
-
-                  }else if(contenttypeid == 15){
-
-                        if(myItem.eventplace){
-
-                        output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
-
-                        }if(myItem.eventstartdate){
-
-                        output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
-
-                        }if(myItem.playtime){
-
-                        output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
-
-                        }if(myItem.sponsor1 || myItem.sponsor1tel){
-
-                        output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-
-                        }
-
-                  }else if(contenttypeid == 28){
-
-                        if(myItem.usetimeleports){
-
-                        output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
-
-                        }if(myItem.infocenterleports){
-
-                        output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-
-                        }
-
-                  }else if(contenttypeid == 32){
-
-                        if(myItem.reservationurl){
-
-                        output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
-
-                        }if(myItem.subfacility){
-
-                        output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
-
-                        }if(myItem.infocenterlodging){
-
-                        output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-
-                        }
-
-                  }else if(contenttypeid == 38){
-
-                        if(myItem.saleitem){
-
-                        output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
-
-                        }if(myItem.opentime){
-
-                        output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
-
-                        }if(myItem.restdateshopping){
-
-                        output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
-
-                        }if(myItem.infocenter){
-
-                        output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-
-                        }
-
-                  }else if(contenttypeid == 39){
-
-                        if(myItem.treatmenu){
-
-                        output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
-
-                        }if(myItem.opentimefood){
-
-                        output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
-
-                        }if(myItem.restdatefood){
-
-                        output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
-
-                        }if(myItem.infocenterfood){
-
-                        output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-
-                        }
-
-                  }
-
-                  output += '</div></div>';
-
-                  $('#searchResult').show();
-
-                  $('#searchContent').show();
-
-                  $('#searchContent').html(output);
-
-          },
-
-        error: function(XMLHttpRequest, textStatus, errorThrown) { 
-
-            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-
-        } 
-
-    });
-
-   });
-
-   } 
-
-   
-
-function getInfo(contentid, contenttypeid){
-
-   var addr;
-
-   console.log("getInfo 실행");
-
-   console.log(contentid);
-
-   $.ajax({
-
-      url:'callInfo.do',
-
-      type:'POST',
-
-      async: false, 
-
-      data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
-
-      dataType: 'json',
-
-      success: function(data){
-
-         addr = data;
-
-      }
-
-      
-
-   });
-
-   return addr;
-
-}
-
-   
-
-   
-
-   function setMarkers(map){
-
-       $.each(markers,function(i, val){
-
-          val.setMap(map);
-
-       })
-
-    }
-
-   
-
-   function setMarkersArr(map){
-
-      $.each(markersArr,function(i,val){
-
-         val.setMap(map);
-
-      })
-
-   }
-
-   
-
- 
-
-   
-
-   //스토리 추가 선택 시 스토리 추가하기.
-
-   $('#storyBox').change(function(){
-
-      if((this.value)=='스토리추가'){
-
-         var a = prompt('새로운 스토리명을 입력하시오.');
-
-         if(a==null || a==''){
-
-            $('#storyBox option:eq(0)').prop('selected',true);
-
-            return false;
-
-            }
-
-         $.ajax({
-
-            url: 'inputStory.do',
-
-            type: 'POST',
-
-            data: {id:id, story_title:a},
-
-            success: function(data){
-
-               $('#storyBox option:eq(-2)').before("<option value='"+ data + "'>" + a + "</option>");
-
-               $('#storyBox').val(data).prop('selected',true);
-
-               
-
-               //스토리로 글 조회 추가하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-            }
-
-         })
-
-      }
-
-   })
-
-   
-
-   //저장버튼 클릭시 글 전체와 이미지 저장
-
-   $('#save').click(function(){
-
-      
-
-      var story_seq = $('#storyBox').val();
-
-      var title = $('#title').val();
-
-      var content = $('#content').html();
-
-      console.log("SAVE 후의 star " + starvalue);
-
-      if(starvalue==null || starvalue==0){
-
-         alert("별점을 입력하시오.");
-
-         return false;
-
-      }if(contentId==null || contentId==''){
-
-         alert("위치를 입력하시오.");
-
-         return false;
-
-      }
-
-      $.ajax({
-
-         url:'inputBoard.do',
-
-         type:'POST',
-
-         data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentId:contentId, star:starvalue},
-
-         success: window.location.replace("homeview.do?story_seq="+story_seq)
-
-            
-
-      })
-
-      
-
-   })
-
-   
-
-   //이미지 클릭시 업로드창 실행
-
-   $('#imageUp').click(function(){
-
-      console.log('fileadd');
-
-      $('input[name="image"]').click();
-
-   })
-
-   
-
-   //업로드 파일체인지가 됐을 경우 실행되는 이벤트
-
-   $('input[name="image"]').change(function(event){
-
-      
-
-      
-
-      var form = $('#imageUpload')[0];
-
-      var formData = new FormData(form);
-
-      var f = $('input[name="image"]')[0].files[0]
-
-      formData.append('file',f);   
-
-      
-
-      
-
-      $.ajax({
-
-           url: 'uploadAjax.do',
-
-           data: formData,
-
-           dataType:'text',
-
-           processData: false,
-
-           contentType: false,
-
-           type: 'POST',
-
-           success: function(data){
-
-             // files.push(data);
-
-              var str ="";
-
- 
-
-              
-
-              console.log(name);
-
-              //if(checkImageType(name)){
-
-                 str = "<br/><img src='displayFile.do?img_seq="+data+"' style='max-width: 100%; height: auto;'/><br/>";
-
-              //}
-
-              
-
-              $(".uploadedList").append(str);
-
-           }
 	
-         });   
-
-      
-
-      
-
-      
-
-   })
-
-   
-
-   $(".fileDrop").on("dragenter dragover", function(event) {
-
-      event.preventDefault();
-
+	$('#searchResult').hide();
+	$('#searchContent').hide();
+})	
+	
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+	mapOption = { 
+	    center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+	    level: 3 // 지도의 확대 레벨
+	};
+var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+var marker_width = 24,
+	marker_height = 35,
+	over_marker_width = 30,
+	over_marker_height = 40,
+	sprite_marker_url = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+	click_marker_url = "markerStarRed.png";
+	
+var markerSize = new daum.maps.Size(marker_width, marker_height), 
+	overMarkerSize = new daum.maps.Size(over_marker_width, over_marker_height),
+	spriteImageSize = new daum.maps.Size(marker_width, marker_height);
+//마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
+function createMarkerImage(src, size){
+	var markerImage = new daum.maps.MarkerImage(src, size);
+	return markerImage;
+}
+	//좌표와 마커이미지를 받아 마커를 생성하여 리턴하는 함수입니다
+function createMarker(position, image){
+	var marker = new daum.maps.Marker({
+		position: position,
+		image: image
+	});
+	return marker;
+}
+//마커 추가.
+function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {     		 
+ 
+   var normalImage = createMarkerImage(sprite_marker_url, markerSize),
+       overImage = createMarkerImage(sprite_marker_url, overMarkerSize),
+       clickImage = createMarkerImage(click_marker_url, markerSize);
+    // 마커를 생성합니다
+   var marker = new daum.maps.Marker({
+   	contentId: contentid,
+       map: map, // 마커를 표시할 지도
+       position: position, // 마커를 표시할 위치
+       title : title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+       image : normalImage // 마커 이미지
    });
-
- 
-
-   $(".fileDrop").on("drop", function(event){
-
-      event.preventDefault();
-
-      
-
    
-
-      var fils = event.originalEvent.dataTransfer.files;
-
-      var file = fils[0];      
-
-      var formData = new FormData();      
-
-      formData.append("file", file);
-
-            
-
-      $.ajax({
-
-           url: 'uploadAjax.do',
-
-           data: formData,
-
-           dataType:'text',
-
-           processData: false,
-
-           contentType: false,
-
-           type: 'POST',
-
-           success: function(data){
-
-             // files.push(data);
-
-              var str ="";
-
-              var name = data.img_name;
-
-              if(checkImageType(data.getImg_name())){
-
-                 str ="<br/><img src='displayFile.do?img_seq="+data+"'style='max-width: 100%; height: auto;'/><br/>";
-
-              }
-
-              
-
-              $(".uploadedList").append(str);
-
-           }
-
-         });   
-
+   markers.push(marker);
+   
+	// 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
+   marker.normalImage = normalImage;
+   
+    //마커에 mouseover 이벤트 등록    
+    daum.maps.event.addListener(marker, 'mouseover', function(){
+    	//클릭된 마커가 없고, mouseover된 마커가 클릭된 마커가 아니면 마커의 이미지를 오버 이미지로 변경
+    	if(!selectedMarker || selectedMarker != marker){
+    		marker.setImage(overImage);
+    	}
+    });
+    
+	// 마커에 mouseout 이벤트를 등록합니다
+    daum.maps.event.addListener(marker, 'mouseout', function() {
+        // 클릭된 마커가 없고, mouseout된 마커가 클릭된 마커가 아니면 마커의 이미지를 기본 이미지로 변경합니다
+        if (!selectedMarker || selectedMarker !== marker) {
+            marker.setImage(normalImage);
+        }
+    });
+	
+  //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
+    function createArrMarkers(){
+    		marker.setImage(clickImage);
+    		markersArr.pop();
+    		markersArr.push(marker);
+    		marker.setMap(map);
+    }
+   
+    //마커 클릭시! 
+   daum.maps.event.addListener(marker, 'click', function() {
+       // 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면 마커의 이미지를 클릭 이미지로 변경합니다
+       if (!selectedMarker || selectedMarker !== marker) {
+           // 클릭된 마커 객체가 null이 아니면 클릭된 마커의 이미지를 기본 이미지로 변경하고
+           !!selectedMarker && selectedMarker.setImage(selectedMarker.normalImage);
+           // 현재 클릭된 마커의 이미지는 클릭 이미지로 변경합니다
+           marker.setImage(clickImage);
+       }
+       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
+       selectedMarker = marker;
+       contentId = contentid;
+       mtitle = title;
+       
+      createArrMarkers();
+      starvalue = 0;
+      starcount = 0;
+      locked = 0;
+      $.ajax({        
+          url: 'callDetail.do',
+          type: 'get',
+          data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+          dataType: 'json',
+          success: function(data){
+        	  var addr = getInfo(contentid, contenttypeid);
+              var myItem = data.response.body.items.item;
+              var output = '<div class="tourbox ' + contentid + '" id="' + contentid + '" text-align:left>';
+              output += '<h4 id="title">' + addr.title + '<div class="star" id="star">별점주기'
+              		+ '<img src="empty_star3.png" id="star1" onmouseover=show(1) onclick=mark(1) onmouseout=noshow(1)>'
+              		+ '<img src="empty_star3.png" id="star2" onmouseover=show(2) onclick=mark(2) onmouseout=noshow(2)>'
+              		+ '<img src="empty_star3.png" id="star3" onmouseover=show(3) onclick=mark(3) onmouseout=noshow(3)>'
+              		+ '<img src="empty_star3.png" id="star4" onmouseover=show(4) onclick=mark(4) onmouseout=noshow(4)>'
+              		+ '<img src="empty_star3.png" id="star5" onmouseover=show(5) onclick=mark(5) onmouseout=noshow(5)>'
+              		+'</div></h4>';
+          	  output += '<div class="image" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/></div>';
+          	  output += '<div class="info">';
+                  if(contenttypeid == 12){
+                	  	if(myItem.parking){
+ 	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+                	  	}if(myItem.restdate){
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+                	  	}if(myItem.infocenter){
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                	  	}
+                  }else if(contenttypeid == 14){
+                	  	if(myItem.usefee){
+ 	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+                	  	}if(myItem.usetimeculture){
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+                	  	}if(myItem.restdateculture){
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+                	  	}if(myItem.infocenterculture){
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                	  	}
+                  }else if(contenttypeid == 15){
+                	  	if(myItem.eventplace){
+ 	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+                	  	}if(myItem.eventstartdate){
+ 	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+                	  	}if(myItem.playtime){
+ 	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+                	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
+ 	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                	  	}
+                  }else if(contenttypeid == 28){
+                	  	if(myItem.usetimeleports){
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+                	  	}if(myItem.infocenterleports){
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                	  	}
+                  }else if(contenttypeid == 32){
+                	  	if(myItem.reservationurl){
+ 	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+                	  	}if(myItem.subfacility){
+ 	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+                	  	}if(myItem.infocenterlodging){
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                	  	}
+                  }else if(contenttypeid == 38){
+                	  	if(myItem.saleitem){
+ 	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+                	  	}if(myItem.opentime){
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+                	  	}if(myItem.restdateshopping){
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+                	  	}if(myItem.infocenter){
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                	  	}
+                  }else if(contenttypeid == 39){
+                	  	if(myItem.treatmenu){
+ 	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+                	  	}if(myItem.opentimefood){
+ 	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+                	  	}if(myItem.restdatefood){
+ 	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+                	  	}if(myItem.infocenterfood){
+ 	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                	  	}
+                  }
+                  output += '</div></div>';
+                  $('#searchResult').show();
+                  $('#searchContent').show();
+                  $('#searchContent').html(output);
+          },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        } 
+ 	});
    });
-
- 
-
-   
-
-   $('#delete').click(function(){
-
-      
-
-      //var delete_confirm = function(){
-
-         if(confirm('현재 작성 중이던 글을 삭제하시겠습니까?')){
-
-            //yes click
-
-            if(board_seq!=null){
-
-               $.ajax({
-
-                  url:"deleteBoard.do",
-
-                  type:"post",
-
-                  data:{board_seq:board_seq}
-
-                  //성공시 글 전체 조회.
-
-               })
-
-               }else{
-
-                  $('.board').remove();
-
-               }
-
-         }
-
-      //}
-
-      
-
-   })
-
-         
-
-      function checkImageType(fileName){
-
-         var pattern = /jpg|gif|png|jpeg/i;
-
-         return fileName.match(pattern);
-
-      }
-
-   
-
- 
-
+   } 
+	
+function getInfo(contentid, contenttypeid){
+	var addr;
+	console.log("getInfo 실행");
+	console.log(contentid);
+	$.ajax({
+		url:'callInfo.do',
+		type:'POST',
+		async: false, 
+		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		dataType: 'json',
+		success: function(data){
+			addr = data;
+		}
+		
+	});
+	return addr;
+}
+	
+	
+	function setMarkers(map){
+		 $.each(markers,function(i, val){
+			 val.setMap(map);
+		 })
+	 }
+	
+	function setMarkersArr(map){
+		$.each(markersArr,function(i,val){
+			val.setMap(map);
+		})
+	}
+	
+	
+	//스토리 추가 선택 시 스토리 추가하기.
+	$('#storyBox').change(function(){
+		if((this.value)=='스토리추가'){
+			var a = prompt('새로운 스토리명을 입력하시오.');
+			if(a==null || a==''){
+				$('#storyBox option:eq(0)').prop('selected',true);
+				return false;
+				}
+			$.ajax({
+				url: 'inputStory.do',
+				type: 'POST',
+				data: {id:id, story_title:a},
+				success: function(data){
+					$('#storyBox option:eq(-2)').before("<option value='"+ data + "'>" + a + "</option>");
+					$('#storyBox').val(data).prop('selected',true);
+					
+					//스토리로 글 조회 추가하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				}
+			})
+		}
+	})
+	
+	//저장버튼 클릭시 글 전체와 이미지 저장
+	$('#save').click(function(){
+		
+		var story_seq = $('#storyBox').val();
+		var title = $('#title').val();
+		var content = $('#content').html();
+		console.log("SAVE 후의 star " + starvalue);
+		if(starvalue==null || starvalue==0){
+			alert("별점을 입력하시오.");
+			return false;
+		}if(contentId==null || contentId==''){
+			alert("위치를 입력하시오.");
+			return false;
+		}
+		$.ajax({
+			url:'inputBoard.do',
+			type:'POST',
+			data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentId:contentId, star:starvalue},
+			success: window.location.replace("homeview.do?story_seq="+story_seq)
+				
+		})
+		
+	})
+	
+	//이미지 클릭시 업로드창 실행
+	$('#imageUp').click(function(){
+		console.log('fileadd');
+		$('input[name="image"]').click();
+	})
+	
+	//업로드 파일체인지가 됐을 경우 실행되는 이벤트
+	$('input[name="image"]').change(function(event){
+		
+		
+		var form = $('#imageUpload')[0];
+		var formData = new FormData(form);
+		var f = $('input[name="image"]')[0].files[0]
+		formData.append('file',f);	
+		
+		
+		$.ajax({
+			  url: 'uploadAjax.do',
+			  data: formData,
+			  dataType:'text',
+			  processData: false,
+			  contentType: false,
+			  type: 'POST',
+			  success: function(data){
+				 // files.push(data);
+				  var str ="";
+				  
+				  console.log(name);
+				  //if(checkImageType(name)){
+					  str = "<br/><img src='displayFile.do?img_seq="+data+"' style='max-width: 100%; height: auto;'/><br/>";
+				  //}
+				  
+				  $(".uploadedList").append(str);
+			  }
+			});	
+		
+		
+		
+	})
+	
+	$(".fileDrop").on("dragenter dragover", function(event) {
+		event.preventDefault();
+	});
+	$(".fileDrop").on("drop", function(event){
+		event.preventDefault();
+		
+	
+		var fils = event.originalEvent.dataTransfer.files;
+		var file = fils[0];		
+		var formData = new FormData();		
+		formData.append("file", file);
+				
+		$.ajax({
+			  url: 'uploadAjax.do',
+			  data: formData,
+			  dataType:'text',
+			  processData: false,
+			  contentType: false,
+			  type: 'POST',
+			  success: function(data){
+				 // files.push(data);
+				  var str ="";
+				  var name = data.img_name;
+				  if(checkImageType(data.getImg_name())){
+					  str ="<br/><img src='displayFile.do?img_seq="+data+"'style='max-width: 100%; height: auto;'/><br/>";
+				  }
+				  
+				  $(".uploadedList").append(str);
+			  }
+			});	
+	});
+	
+	$('#delete').click(function(){
+		
+		//var delete_confirm = function(){
+			if(confirm('현재 작성 중이던 글을 삭제하시겠습니까?')){
+				//yes click
+				if(board_seq!=null){
+					$.ajax({
+						url:"deleteBoard.do",
+						type:"post",
+						data:{board_seq:board_seq}
+						//성공시 글 전체 조회.
+					})
+					}else{
+						$('.board').remove();
+					}
+			}
+		//}
+		
+	})
+			
+		function checkImageType(fileName){
+			var pattern = /jpg|gif|png|jpeg/i;
+			return fileName.match(pattern);
+		}
+	
 //})
-
- 
-
 //엔터로 검색
-
-   function enterkey(){
-
-      if(window.event.keyCode == 13){
-
-         searchMap();
-
-      }
-
-   }
-
- 
-
+	function enterkey(){
+		if(window.event.keyCode == 13){
+			searchMap();
+		}
+	}
 //지도 검색
-
 function searchMap(){
-
-   var keyword = $('#searchMap').val();
-
-   if(keyword == null || keyword ==''){
-
-      alert("검색어를 입력하세요.");
-
-      return false;
-
-   }
-
-   if(array!=null){
-
-   setMarkers(null);
-
-   setMarkersArr(map);
-
-   }
-
-   $.ajax({
-
-      url:'search.do',
-
-      type: 'POST',
-
-      data: {keyword:keyword},
-
-      success: function(data){
-
-         console.log(data);
-
-         array = data;
-
-         if(array.length==0){
-
-            alert("검색 결과가 없습니다.");
-
-            return false;
-
-         }
-
-         var bounds = new daum.maps.LatLngBounds();
-
-         
-
-         $.each(array, function(i, val){
-
-            var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
-
-            bounds.extend(latlng);
-
-            addMarker(latlng, val.title, val.contentId, val.contentTypeId, val.mapY, val.mapX);
-
-         })
-
-         map.setBounds(bounds);
-
-      }
-
-   })
-
+	var keyword = $('#searchMap').val();
+	if(keyword == null || keyword ==''){
+		alert("검색어를 입력하세요.");
+		return false;
+	}
+	if(array!=null){
+	setMarkers(null);
+	setMarkersArr(map);
+	}
+	$.ajax({
+		url:'search.do',
+		type: 'POST',
+		data: {keyword:keyword},
+		success: function(data){
+			console.log(data);
+			array = data;
+			if(array.length==0){
+				alert("검색 결과가 없습니다.");
+				return false;
+			}
+			var bounds = new daum.maps.LatLngBounds();
+			
+			$.each(array, function(i, val){
+				var latlng = new daum.maps.LatLng(val.mapY,val.mapX);
+				bounds.extend(latlng);
+				addMarker(latlng, val.title, val.contentId, val.contentTypeId, val.mapY, val.mapX);
+			})
+			map.setBounds(bounds);
+		}
+	})
 }
-
- 
-
 function setMarkers(map){
-
-    $.each(markers,function(i, val){
-
-       val.setMap(map);
-
-    })
-
+	 $.each(markers,function(i, val){
+		 val.setMap(map);
+	 })
 }
-
- 
-
 function setMarkersArr(map){
-
-   $.each(markersArr,function(i,val){
-
-      val.setMap(map);
-
-   })
-
+	$.each(markersArr,function(i,val){
+		val.setMap(map);
+	})
 }
-
- 
-
 //별점 부분!!!!!!!
-
 var locked = 0;
-
 var starcount = 0;
-
- 
-
-function show(별){
-
-   if(locked) return;
-
-   var i;
-
-   var image;
-
-   var el;
-
-   
-
-   for(i = 1; i <= star; i++){
-
-      image = 'star' + i;
-
-      el = document. getElementById(image);
-
-      el.src = "star3.png";
-
-   }
-
-   
-
+function show(star){
+	if(locked) return;
+	var i;
+	var image;
+	var el;
+	
+	for(i = 1; i <= star; i++){
+		image = 'star' + i;
+		el = document. getElementById(image);
+		el.src = "star3.png";
+	}
+	
 }
-
- 
-
-function noshow(별){
-
-   if(locked) return;
-
-   var i;
-
-   var image;
-
-   var el;
-
-   
-
-   for( i = 1; i <= star; i++){
-
-      image = 'star' + i;
-
-      el = document.getElementById(image);
-
-      el.src = "empty_star3.png";
-
-   }
-
+function noshow(star){
+	if(locked) return;
+	var i;
+	var image;
+	var el;
+	
+	for( i = 1; i <= star; i++){
+		image = 'star' + i;
+		el = document.getElementById(image);
+		el.src = "empty_star3.png";
+	}
 }
-
- 
-
-function newshow(별){
-
-   var i;
-
-   var image;
-
-   var el;
-
-   for( i = 5; i > star; i--){
-
-      image = 'star' + i;
-
-      el = document.getElementById(image);
-
-      el.src = "empty_star3.png";
-
-   }
-
-   for(i = 1; i <= star; i++){
-
-      image = 'star' + i;
-
-      el = document. getElementById(image);
-
-      el.src = "star3.png";
-
-   }
-
+function newshow(star){
+	var i;
+	var image;
+	var el;
+	for( i = 5; i > star; i--){
+		image = 'star' + i;
+		el = document.getElementById(image);
+		el.src = "empty_star3.png";
+	}
+	for(i = 1; i <= star; i++){
+		image = 'star' + i;
+		el = document. getElementById(image);
+		el.src = "star3.png";
+	}
 }
-
- 
-
-function lock(별){
-
-   show(별);
-
-   locked = 1;
-
+function lock(star){
+	show(star);
+	locked = 1;
 }
-
- 
-
-function mark(별){
-
-   if(starcount==0){
-
-      lock(별);
-
-      starvalue = star;
-
-      starcount++;
-
-   }else{
-
-      newshow(별);
-
-      starvalue = star;
-
-   }
-
-   console.log("star " + star);
-
+function mark(star){
+	if(starcount==0){
+		lock(star);
+		starvalue = star;
+		starcount++;
+	}else{
+		newshow(star);
+		starvalue = star;
+	}
+	console.log("star " + star);
 }
-
- 
-
- 
-
 </script>
-
 </body>
-
 </html>

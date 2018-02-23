@@ -18,7 +18,7 @@
 		
 		<insert id="insertUser" parameterType="UserVO">
 			insert into SnsUser(id, name, password, birthday, sex, email)
-			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
+			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, 'bit@bit.com')
 		</insert>
 		
 		<select id="getAddress" parameterType="int" resultType="AddrVO">
@@ -51,6 +51,14 @@
 			insert Follow(follower, following)
 			values(#{id}, #{writer}) 
 		</insert>
+		
+		<select id="getFollower" parameterType="string" resultType = "com.project.sns.user.vo.UserVO">
+			select distinct * from SnsUser
+			<where>
+			id = (select follower from Follow where #{value} = following)
+			or id = (select following from Follow where #{value} = follower)
+			</where>
+		</select>
 		
 
 </mapper>
