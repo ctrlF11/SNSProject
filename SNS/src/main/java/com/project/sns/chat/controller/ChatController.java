@@ -26,13 +26,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.sns.board.service.BoardService;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.chat.service.ChatService;
 import com.project.sns.chat.vo.ChatVO;
+import com.project.sns.user.vo.UserVO;
 
+import A.algorithm.AES;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -40,37 +43,67 @@ import net.sf.json.JSONObject;
 @RequestMapping(value = "/chat")
 public class ChatController {
 
-	@Autowired
-	private ChatService service;
+   @Autowired
+   private ChatService service;
 
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<String> register(@RequestBody ChatVO vo) {
-		ResponseEntity<String> entity = null;
-		try {
-			service.submit(vo);
+   @RequestMapping(value = "", method = RequestMethod.POST)
+   public ResponseEntity<String> register(@RequestBody ChatVO vo) {
+      ResponseEntity<String> entity = null;
+      try {
+         service.submit(vo);
+         entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+      } catch (Exception e) {
+         e.printStackTrace();
+         entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      }
+      System.out.println("entity : " + entity);
+      return entity;
+   }
 
-			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-		
-		System.out.println("entity : " + entity);
-		return entity;
-	}
+   @RequestMapping(value = "/list", method = RequestMethod.POST)
+   public ResponseEntity<List<ChatVO>> getList(@RequestBody ChatVO vo) {
+      ResponseEntity<List<ChatVO>> entity = null;
+      try {
+         entity = new ResponseEntity<>(service.getChatListById(vo), HttpStatus.OK);
+         service.readChat(vo);
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public ResponseEntity<List<ChatVO>> getList(@RequestBody ChatVO vo) {
-		ResponseEntity<List<ChatVO>> entity = null;
-		try {
-			entity = new ResponseEntity<>(service.getChatListById(vo), HttpStatus.OK);
-			service.readChat(vo);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return entity;
-	}
+      } catch (Exception e) {
+         e.printStackTrace();
+         entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+      return entity;
+   }
+   
+   //chat.jsp side-one에 추가할 대화기록
+   @RequestMapping("/getNewFollower")
+   public List<ChatVO> getNewFollower(HttpSession session){
+      String id = (String) session.getAttribute("id");
+       AES aes = new AES();
+       id = aes.setDecrypting(id);
+       
+      List<ChatVO> resultList = new ArrayList<ChatVO>();
+      List<ChatVO> list = (List<ChatVO>)service.getFollowerList(id);
+      List<String> namecheck = new ArrayList<String>();
+      if(list!=null) {
+         for(ChatVO vo : list) {
+            String name = "";
+            UserVO uvo = null;
+            if(id == vo.getFromID()) {
+               name = vo.getFromID();
+            }else {
+               name = vo.getToID();
+            }
+            if(namecheck.indexOf(name)==-1) {
+               namecheck.add(name);
+               uvo = service.getUser(name);
+               vo.setName(uvo.getName());
+               vo.setPicture(uvo.getProfile_img());
+               resultList.add(vo);
+            }
+         }
+      }
+      return resultList;
+      
+   }
 
 }

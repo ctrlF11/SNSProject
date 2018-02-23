@@ -56,7 +56,7 @@ public class AddrDAOImpl implements AddrDAO {
 	}
 
 	@Override
-	public BoardVO getCount(String id) throws Exception {
+	public int getCount(String id) throws Exception {
 		return sqlSession.selectOne(namespace + ".getCount", id);
 	}
 	
@@ -72,7 +72,11 @@ public class AddrDAOImpl implements AddrDAO {
 
 	@Override
 	public double getStarAvg(String contentId) throws Exception {
-		return sqlSession.selectOne(namespace+".getStarAvg", contentId);
-		
+		return sqlSession.selectOne(namespace+".getStarAvg", contentId);	
+	}
+	
+	@Override
+	public List<BoardVO> getStarAvgList() throws Exception {
+		return sqlSession.selectList(namespace+".getStarAvgList");	
 	}
 }

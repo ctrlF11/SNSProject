@@ -26,13 +26,6 @@ public class BoardVO {
 	private Integer star;
 	private Integer count;
 
-	public Integer getStar() {
-		return star;
-	}
-
-	public void setStar(Integer star) {
-		this.star = star;
-	}
 	private String story_title;
 	private String id;
 	private String story_regdate;
@@ -228,4 +221,11 @@ public class BoardVO {
 		this.count = count;
 	}
 
+
+	public Integer getStar() {
+		return star;
+	}
+	public void setStar(Integer star) {
+		this.star = star;
+	}
 }

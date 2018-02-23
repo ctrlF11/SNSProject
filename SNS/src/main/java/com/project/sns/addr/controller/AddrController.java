@@ -327,9 +327,9 @@ public class AddrController {
 	    	Integer pathCount = 0;
 	    	System.out.println();
 	    	try {
-	    		 pathCount = service.getCount(id).getCount();
+	    		 pathCount = service.getCount(id);
 	    	} catch (Exception e) {
-	    		System.out.println(service.getCount(id).getCount());
+	    		System.out.println(service.getCount(id));
 	    	}
 	    	
 	    req.setAttribute("pathCount", pathCount);
@@ -414,7 +414,8 @@ public class AddrController {
 	       }
 
 		List<BoardVO> listHeart = service.getHeart();
-//		List<AddrVO> getScope = service.getScope();
+		System.out.println();
+		List<BoardVO> listStar = service.getStarAvgList();
 	       
 		double distanceMeter = 0;
 		//그래프 저장용 맵
@@ -447,17 +448,24 @@ public class AddrController {
 //				System.out.println(list.get(i).getTitle() + " --> " + distanceMeter + " --> " + list.get(j).getTitle() );	
 				ArrayList<Object> mapList = new ArrayList<>();
 				mapList.add(distanceMeter);									//거리
-				mapList.add(list.get(j).getScope());						//음식점 평점
+				mapList.add(list.get(j).getScope());						//네이버 음식점 평점
 				mapList.add(list.get(j).getContentId());					
 				mapList.add(list.get(j).getContentTypeId());
 				mapList.add(list.get(j).getInside());
-				
+				for(int l=0; l<listStar.size(); l++) {
+					if(listStar.get(l) !=null && list.get(j).getContentId().equals(listStar.get(l).getStar())) {
+						mapList.add(listStar.get(l).getStar());
+					}
+				}				
 				for(int k=0; k<listHeart.size(); k++) {
-					if(listHeart.get(k) != null && list.get(j).getContentId().equals(listHeart.get(k).getContentId())) {
+					if(listHeart.get(k) !=null && list.get(j).getContentId().equals(listHeart.get(k).getContentId())) {
 						mapList.add(listHeart.get(k).getHeart());			//게시글 좋아요
-				} 
+				}
+				}
 					
-				};				
+
+		
+					
 				tempMap.put(list.get(j).getContentId(), mapList);			
 			}	
 			distanceMap.put(list.get(i).getContentId(), tempMap);
@@ -706,11 +714,12 @@ public class AddrController {
 	            for(String key: minNodeMap.keySet()) {	
 	           
 	            //minNode.get(key).get(0) : 거리
-	            //minNode.get(key).get(1) : 평점(별점)
+	            //minNode.get(key).get(1) : 네이버 평점
 	            //minNode.get(key).get(2) : 콘텐츠ID
-	            //minNode.get(key).get(3) : 콘텐츠 타입ID (카테고리)
-	            //minNode.get(key).get(5) : 좋아요...임시
+	            //minNode.get(key).get(3) : 콘텐츠 타입ID (카테고리)	            
 	            //minNode.get(key).get(4) : 실내/실외
+	            //minNode.get(key).get(5) : 사용자가 준 별점
+	            //minNode.get(key).get(6) : 좋아요...임시
 	            	
 	            	String sco = minNodeMap.get(key).get(1).toString().replaceAll("\n", "");
 	            	Double scop = Double.parseDouble(sco);
@@ -718,12 +727,16 @@ public class AddrController {
 		            String contentId = minNodeMap.get(key).get(2).toString();
 		            String contentTypeId = minNodeMap.get(key).get(3).toString();
 		            int nextTime = curTime + 200;
-		            int like = 0;
 		            String inside = minNodeMap.get(key).get(4).toString();
+		            int like = 0;
+		            int star = 0;
 		            if(minNodeMap.get(key).size()==6) {
-		            like = (int) minNodeMap.get(key).get(5);
+		            	star = (int)Math.round(Double.parseDouble(minNodeMap.get(key).get(5).toString()));
 		            }
-		            
+		            if(minNodeMap.get(key).size()==7) {
+		            	like = (int) minNodeMap.get(key).get(6);
+		            }
+
 		            
 	            		double distance = minNodeDistance + Double.parseDouble(minNodeMap.get(key).get(0).toString());		//처음 = 0 + 거리, 첫바퀴는 거리세팅      		//이동한 거리 + 출발지에서 다음 노드까지 거리
 
@@ -741,23 +754,30 @@ public class AddrController {
 	            					default : distance = distance - 1; break;
 					                }
 			                	} else {
-			                		distance = distance +10000;						//음식점이 아닌 곳은 가중치 더해서 못가도록
+			                		distance = distance + 5000;						//음식점이 아닌 곳은 가중치 더해서 못가도록
 			                	} 		                	
 			                } else {
 			                	if(contentTypeId.equals("39"))		            //밥 시간이 아닐 때 음식점들에 대해서 가중치 부여
 			                		distance = distance + 10000;
 			                }		                				                				                
 
-	            			if(like <= 50) {
+	            			if(!contentTypeId.equals("39")) {
+		            			switch (star){
+	        					case 1: distance = distance - 1; break;
+	        					case 2: distance = distance - 2; break;
+	        					case 3: distance = distance - 3; break;
+	        					case 4: distance = distance - 4; break;
+	        					case 5: distance = distance - 5; break;
+	        					default : distance = distance - 1; break;
+				                }
+	            			}
+
+	            			
+/*	            			if(like <= 50) {
 	            				distance = distance - 1;
 	            			} else {
 	            				distance = distance - 10;
-	            			}
-	            			
-	            			
-/*		                if(typeId.get(minNode).equals("39")) {
-		                	distance = distance + 1000;
-		                }*/
+	            			}*/
 		                
 		                if(distance < shortestPath.get(key)){						//key까지 최소거리보다 distance가 적으면 그거로 바꿈		                	
 		                	ArrayList<Object> nodeMap = new ArrayList<>();

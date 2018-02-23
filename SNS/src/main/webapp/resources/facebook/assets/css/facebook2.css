@@ -84,7 +84,7 @@ hr {
     top:0;
     position:fixed;
     width:inherit;
-    height: 75px;
+    height: 74px;
 }
 
 .navbar-blue li > a,.navbar-toggle  {
@@ -296,7 +296,7 @@ small.text-muted {
 .search_wrap {
    flex: 1 1 auto;
    justify-content: flex-start;
-   width: 620px;
+   width: 650px;
    height: 70px;
    box-sizing: border-box;
    float: left;
@@ -306,7 +306,7 @@ small.text-muted {
 .icon_wrap {
    flex: 1 1 auto;
    justify-content: flex-start;
-   height: 70px;
+   height: 74px;
    box-sizing: border-box;
    width: 800px;
    display: inline-block;
@@ -343,4 +343,10 @@ small.text-muted {
    height: 34px;
    display: inline-block;
 }
-   
+
+.navbar-collapse a {
+	padding: 0;
+}
+.navbar-right li a {
+	padding: 0;
+}

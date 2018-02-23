@@ -51,7 +51,7 @@ public class AddrServiceImpl implements AddrService{
 	}
 	
 	@Override
-	public BoardVO getCount(String id) throws Exception {
+	public int getCount(String id) throws Exception {
 		return dao.getCount(id);
 	}
 	
@@ -71,5 +71,11 @@ public class AddrServiceImpl implements AddrService{
 	public double getStarAvg(String contentId) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.getStarAvg(contentId);
+	}
+	
+	@Override
+	public List<BoardVO> getStarAvgList() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getStarAvgList();
 	}
 }

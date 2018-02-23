@@ -15,9 +15,10 @@ public interface AddrService {
 	public List<BoardVO> getHeart() throws Exception;  
 	
 	public void insertPath(BoardVO vo);
-	public BoardVO getCount(String id) throws Exception;
+	public int getCount(String id) throws Exception;
 	
 	public AddrVO callInfo(String contentId) throws Exception;
 	public AddrVO callReview(String contentId) throws Exception;
 	public double getStarAvg(String contentId) throws Exception;
+	public List<BoardVO> getStarAvgList() throws Exception;
 }

@@ -13,7 +13,11 @@
    href="resources/facebook/assets/css/facebook2.css?val=2">
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
-
+<style>
+   .box-inline{
+   display:inline-block;
+   }
+</style>
 </head>
 <body>
                <div class="navbar navbar-blue navbar-static-top">
@@ -21,14 +25,12 @@
                      아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
                    -->
                   <nav class="navbar-collapse" role="navigation">
-                     <div class="main_icon">
-                        <a href="mainHomeView.do"><img src="문민웅-메인페이지_02.jpg"></img></a>
-                     </div>
                      <!-- 검색 폼. -->
+                     <a href="mainHomeView.do" class="navbar-brand"><img src="문민웅-메인페이지_02.jpg"></img></a>
                      <div class="search_wrap" id="search_wrap">
                         <form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
                            <div class="input-group input-group-sm">
-                              <select id="search_category" style="height: 32px; margin-right:10px;">
+                              <select id="search_category" style="height: 32px;">
                                  <option value="user">사람</option>
                                  <option value="map">가게</option>
                                  <option value="board">글</option>
@@ -62,9 +64,6 @@
                            <li>
                               <a href="newMap.do"><img src="path.jpg" role="button"></a>
                               </img>
-                           </li>
-                           <li>
-                              <a href="#">스토리</a>
                            </li>
                            <li>
                               <a href="message.do" role="button">메세지</a>
