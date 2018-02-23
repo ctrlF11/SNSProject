@@ -124,22 +124,7 @@ public class BoardController {
 		int nr = vo.getStory_seq();
 		return nr;
 	}
-
-	@RequestMapping("/message")
-	public String message(HttpServletRequest request, HttpSession session) {
-		// session에서 id 받아오기
-		String id = "123";
-		// 상대방 id도 받아와야함
-		List<ChatVO> list = cservice.getFollowerList(id);
-		if (cservice.getFollowerList(id) == null) {
-			System.out.println("followerlist가 null");
-		} else {
-			System.out.println("null이 아님");
-		}
-		request.setAttribute("follower", list);
-		return "chat";
-	}
-
+	
 	@RequestMapping("/mainHomeView.do")
 	public String mainHome(HttpServletRequest request) throws SQLException {
 		return "mainHome";
@@ -394,8 +379,8 @@ public class BoardController {
   
     	try {
         	vo.setBoard_seq(board_seq);
-        	vo.setStory_seq(story_seq);w
-        	vo.setHearId(id);
+        	vo.setStory_seq(story_seq);
+        	vo.setHeart_id(id);
     		service.likeInsert(vo);
          	vo.setHeart(service.getBoard(vo).get(0).getHeart());//좋아요 +1
         	service.likeUp(vo);//좋아요 +1 업데이트
@@ -408,7 +393,7 @@ public class BoardController {
 			
 	    	vo.setBoard_seq(board_seq);
 	    	vo.setStory_seq(story_seq);
-	    	vo.setHearId(id);
+	    	vo.setHeart_id(id);
 			heart = service.getBoard(vo).get(0).getHeart();
 			heart = heart -2;
 			service.likeDelete(vo);

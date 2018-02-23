@@ -238,16 +238,11 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-<<<<<<< HEAD
+
 	public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		return dao.getFollowerStoryList(map);
-=======
-	public void insertReply(ReplyVO vo) {
-		// TODO Auto-generated method stub
-		
->>>>>>> refs/remotes/origin/Leejh
-	};
+	}
     
     //���ƿ�
     public int likeInsert(BoardVO board) throws Exception{
@@ -266,5 +261,4 @@ public class BoardServiceImpl implements BoardService {
     public BoardVO getBoardlikeId(BoardVO vo) throws Exception{
     	return dao.getBoardlikeId(vo);
     }
-
 }

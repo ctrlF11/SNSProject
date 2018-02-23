@@ -50,7 +50,6 @@ public interface BoardService {
 		
 		public int saveImage(ImageVO vo) throws SQLException;
 		public ImageVO getImage(int img_seq) throws Exception;
-		public void insertReply(ReplyVO vo);
 		
 
 		
