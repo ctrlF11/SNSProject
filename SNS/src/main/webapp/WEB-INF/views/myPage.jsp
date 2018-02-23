@@ -120,7 +120,7 @@
 		}
 	} */
 
-	$('#imageUp').click(function(){
+/* 	$('#imageUp').click(function(){
 		console.log('fileadd');
 		$('input[name="image"]').click();
 	})
@@ -153,7 +153,7 @@
 				  
 				  $(".uploadedList").append(str);
 			  }
-			});
+			}); */
 	
 
 </script>
