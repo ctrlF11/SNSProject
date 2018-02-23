@@ -124,7 +124,7 @@ public class BoardController {
 		int nr = vo.getStory_seq();
 		return nr;
 	}
-	
+
 	@RequestMapping("/mainHomeView.do")
 	public String mainHome(HttpServletRequest request) throws SQLException {
 		return "mainHome";
@@ -136,40 +136,42 @@ public class BoardController {
 		session.invalidate();
 		return "redirect:mainHomeView.do";
 	}
-   @RequestMapping("/message")
-   public String message(HttpServletRequest request, HttpSession session) {
-      String id = (String) session.getAttribute("id");
-      AES aes = new AES();
-      id = aes.setDecrypting(id);
-      
-      List<ChatVO> resultList = new ArrayList<ChatVO>();
-      List<ChatVO> list = cservice.getFollowerList(id);
-      List<String> namecheck = new ArrayList<String>();
-      UserVO myvo = cservice.getUser(id);
-      if(list!=null) {
-         for(ChatVO vo : list) {
-            String name = "";
-            UserVO uvo = null;
-            if(vo.getToID()==id) {
-               name = vo.getFromID();
-            }else {
-               name = vo.getToID();
-            }
-            System.out.println(resultList.indexOf(name));
-            if(namecheck.indexOf(name)==-1) {
-               namecheck.add(name);
-               uvo = cservice.getUser(name);
-               vo.setName(uvo.getName());
-               vo.setPicture(uvo.getProfile_img());
-               resultList.add(vo);
-            }
-         }
-      }
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!follower list도 보내야함
-      request.setAttribute("myInfo", myvo);
-      request.setAttribute("chatList", resultList);
-      return "chat";
-   }
+
+	@RequestMapping("/message")
+	public String message(HttpServletRequest request, HttpSession session) {
+		String id = (String) session.getAttribute("id");
+		AES aes = new AES();
+		id = aes.setDecrypting(id);
+
+		List<ChatVO> resultList = new ArrayList<ChatVO>();
+		List<ChatVO> list = cservice.getFollowerList(id);
+		List<String> namecheck = new ArrayList<String>();
+		UserVO myvo = cservice.getUser(id);
+		if (list != null) {
+			for (ChatVO vo : list) {
+				String name = "";
+				UserVO uvo = null;
+				if (vo.getToID() == id) {
+					name = vo.getFromID();
+				} else {
+					name = vo.getToID();
+				}
+				System.out.println(resultList.indexOf(name));
+				if (namecheck.indexOf(name) == -1) {
+					namecheck.add(name);
+					uvo = cservice.getUser(name);
+					vo.setName(uvo.getName());
+					vo.setPicture(uvo.getProfile_img());
+					resultList.add(vo);
+				}
+			}
+		}
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!follower list도 보내야함
+		request.setAttribute("myInfo", myvo);
+		request.setAttribute("chatList", resultList);
+		return "chat";
+	}
+
 	@RequestMapping("/deleteBoard")
 	public void deleteBoard(BoardVO vo) {
 		service.deleteBoard(vo);
@@ -270,15 +272,14 @@ public class BoardController {
 	 * @ResponseBody
 	 * 
 	 * @RequestMapping("/getBoardStoryList.do") public List<BoardVO>
-	 * getBoardStoryList(HttpServletRequest request, HttpSession se) throws Exception {
+	 * getBoardStoryList(HttpServletRequest request, HttpSession se) throws
+	 * Exception {
 	 * 
 	 * String id = (String) se.getAttribute("id"); System.out.println("아이디 : " +
 	 * id); id = aes.setDecrypting(id); System.out.println("복호화한 아이디 : " + id);
 	 * BoardVO vo = new BoardVO(); vo.setWriter(id); System.out.println("스토리 값 : " +
 	 * vo.getWriter()); return service.getBoardStoryList(vo); }
 	 */
-
-
 
 	// @RequestMapping("insertReply.do")
 	// String insertReply(ReplyVO vo,Model model){
@@ -350,9 +351,10 @@ public class BoardController {
 		request.setAttribute("list", list);
 		return "table2";
 	}
-	
+
 	@RequestMapping("/getFollowerStoryList.do")
-	public String getFollowerStoryList(@RequestParam("index") int index, @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse res) {
+	public String getFollowerStoryList(@RequestParam("index") int index, @RequestParam("id") String id,
+			HttpServletRequest request, HttpServletResponse res) {
 		id = AES.setDecrypting(id);
 		logger.info("getMainBoardList");
 		System.out.println("index : " + index);
@@ -360,46 +362,49 @@ public class BoardController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("index", index);
-		map.put("index2", index2);	
+		map.put("index2", index2);
 		List<BoardVO> storyList = service.getFollowerStoryList(map);
 		request.setAttribute("storyList", storyList);
 		return "table3";
 	}
-	
-	@RequestMapping("/likeUp.do") //댓글 작성 
-    @ResponseBody
-    private int likeUp(@RequestParam int board_seq,@RequestParam int story_seq,HttpSession session) throws Exception{
 
-    	logger.info("likeUp.do");
-    	int heart = 0;
-    	BoardVO vo = new BoardVO();
-    	String id = (String) session.getAttribute("id");
-    	id = aes.setDecrypting(id);
+	@RequestMapping("/likeUp.do") // 댓글 작성
+	@ResponseBody
+	private int likeUp(@RequestParam int board_seq, @RequestParam int story_seq, HttpSession session) throws Exception {
 
-  
-    	try {
-        	vo.setBoard_seq(board_seq);
-        	vo.setStory_seq(story_seq);
-        	vo.setHeart_id(id);
-    		service.likeInsert(vo);
-         	vo.setHeart(service.getBoard(vo).get(0).getHeart());//좋아요 +1
-        	service.likeUp(vo);//좋아요 +1 업데이트
-           	heart = service.getBoard(vo).get(0).getHeart();//+1 된 좋아요 반환
-        	System.out.println("좋아요 수 :" + heart);
-            return heart;
-            
-            
+		logger.info("likeUp.do");
+		int heart = 0;
+		BoardVO vo = new BoardVO();
+		String id = (String) session.getAttribute("id");
+		id = aes.setDecrypting(id);
+
+		try {
+			vo.setBoard_seq(board_seq);
+			vo.setStory_seq(story_seq);
+			vo.setHeart_id(id);
+			service.likeInsert(vo);
+			vo.setHeart(service.getBoard(vo).get(0).getHeart());// 좋아요 +1
+			service.likeUp(vo);// 좋아요 +1 업데이트
+			heart = service.getBoard(vo).get(0).getHeart();// +1 된 좋아요 반환
+			System.out.println("좋아요 수 :" + heart);
+			return heart;
+
 		} catch (Exception e) {
-			
-	    	vo.setBoard_seq(board_seq);
-	    	vo.setStory_seq(story_seq);
-	    	vo.setHeart_id(id);
+
+			vo.setBoard_seq(board_seq);
+			vo.setStory_seq(story_seq);
+			vo.setHeart_id(id);
 			heart = service.getBoard(vo).get(0).getHeart();
-			heart = heart -2;
+			heart = heart - 2;
 			service.likeDelete(vo);
 			return heart;
 		}
-    	
-    }
-	
+
+	}
+
+	@RequestMapping("/webStart.do")
+	public String webStart(HttpServletRequest request) throws SQLException {
+		return "web";
+	}
+
 }

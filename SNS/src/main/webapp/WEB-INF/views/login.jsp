@@ -2,21 +2,21 @@
 <html lang="en">
 <style>
 body {
-	margin: 0;
-	padding: 0;
-	background: url(img.jpg) center center fixed no-repeat;
+   margin: 0;
+   padding: 0;
+   background: url(img.jpg) center center fixed no-repeat;
   
 }
 
 video {
-	position: fixed;
-	top: 0;
-	left: 0;
-	min-width: 100%;
-	min-height: 100%;
-	width: auto;
-	height: auto;
-	z-index: -1;
+   position: fixed;
+   top: 0;
+   left: 0;
+   min-width: 100%;
+   min-height: 100%;
+   width: auto;
+   height: auto;
+   z-index: -1;
 }
 
 </style>
@@ -38,8 +38,8 @@ video {
 
     <!-- Custom styles for this template -->
     <link href="resources/login/css/coming-soon.min.css" rel="stylesheet">
-	
-	
+   
+   
   <link href="resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->
   <link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -58,38 +58,38 @@ video {
           <div class="col-12 my-auto">
             <div class="masthead-content text-white py-5 py-md-0">
             
-              <h1 class="mb-3"><div style="position: relative; left: 65px;  bottom: 30px"><input type="image" src="resources/image/gazua.png"></div></h1>
+              <h1 class="mb-3"><div style="position: relative; left: 65px;  bottom: 30px"><a href="mainHomeView.do"><input type="image" src="resources/image/gazua.png"></a></div></h1>
               <p class="mb-5">
                 <strong>Share Travel Information For You,Guiding</strong></p>
               <div class="container">
-			    <div class="card card-login mx-auto mt-5">
-			      <div class="card-header" style="color:black">Login</div>
-			      <div class="card-body">
-			        <form action="loginCheck.do" method="post">
-			          <div class="form-group">
-			            <label for="exampleInputEmail1" style="color:black">Email address</label>
-			            <input class="form-control" name="id" type="email" aria-describedby="emailHelp" placeholder="Enter email">
-			          </div>
-			          <div class="form-group">
-			            <label for="exampleInputPassword1" style="color:black">Password</label>
-			            <input class="form-control" name="password" type="password" placeholder="Password">
-			          </div>
-			          <div class="form-group">
-			            <div class="form-check">
-			              <label class="form-check-label">
-			                <input class="form-check-input" type="checkbox" style="color:black"> Remember Password</label>
-			            </div>
-			          </div>
-			<!--           <a class="btn btn-primary btn-block" href="index.html">Login</a> -->
-						<input type="submit" class="btn btn-primary btn-block" value="Login">
-			        </form>
-			        <div class="text-center">
-			          <a class="d-block small mt-3" href="#" onclick="register()">Register an Account</a>
-			          <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
-			        </div>
-			      </div>
-			    </div>
-  				</div>
+             <div class="card card-login mx-auto mt-5">
+               <div class="card-header" style="color:black">Login</div>
+               <div class="card-body">
+                 <form action="loginCheck.do" method="post">
+                   <div class="form-group">
+                     <label for="exampleInputEmail1" style="color:black">Email address</label>
+                     <input class="form-control" name="id" type="email" aria-describedby="emailHelp" placeholder="Enter email">
+                   </div>
+                   <div class="form-group">
+                     <label for="exampleInputPassword1" style="color:black">Password</label>
+                     <input class="form-control" name="password" type="password" placeholder="Password">
+                   </div>
+                   <div class="form-group">
+                     <div class="form-check">
+                       <label class="form-check-label">
+                         <input class="form-check-input" type="checkbox" style="color:black"> Remember Password</label>
+                     </div>
+                   </div>
+         <!--           <a class="btn btn-primary btn-block" href="index.html">Login</a> -->
+                  <input type="submit" class="btn btn-primary btn-block" value="Login">
+                 </form>
+                 <div class="text-center">
+                   <a class="d-block small mt-3" href="#" onclick="register()">Register an Account</a>
+                   <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+                 </div>
+               </div>
+             </div>
+              </div>
             </div>
           </div>
         </div>
@@ -126,12 +126,12 @@ video {
     <!-- Custom scripts for this template -->
     <script src="resources/login/js/coming-soon.min.js"></script>
      
-	<video autoplay loop poster = "img.jpg">
-		<source src ="resources/login/mp4/bg.mp4" type ="video/mp4">
-	</video>
-	
-	
-	  <!-- Bootstrap core JavaScript-->
+   <video autoplay loop poster = "img.jpg">
+      <source src ="resources/login/mp4/bg.mp4" type ="video/mp4">
+   </video>
+   
+   
+     <!-- Bootstrap core JavaScript-->
   <script src="resources/vendor/jquery/jquery.min.js"></script>
   <script src="resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Core plugin JavaScript-->
@@ -140,12 +140,12 @@ video {
   <script type="text/javascript">
      function register()
      {
-		 $.ajax({
-			url : 'registerForm.do',
-			success : function(data) {
-				$(".masthead-content").html(data);   
-			}
-		})
+       $.ajax({
+         url : 'registerForm.do',
+         success : function(data) {
+            $(".masthead-content").html(data);   
+         }
+      })
      }
   </script>
   </body>
