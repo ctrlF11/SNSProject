@@ -29,4 +29,28 @@
 			select * from SnsUser
 			where id = #{id}
 		</select>
+		<select id="getUserImage" parameterType="string" resultType="string">
+			select profile_img from SnsUser
+			<where>
+				#{id} = id
+			</where>		
+		</select>
+		<select id="getFollowingCount" parameterType="string" resultType="int">
+			select count(*) from Follow
+			<where>
+				follower = #{id}
+			</where>
+		</select>
+		<select id="getFollowerCount" parameterType="string" resultType="int">
+			select count(*) from Follow
+			<where>
+				following = #{id}
+			</where>
+		</select>
+		<insert id="followByBoard" parameterType="string">
+			insert Follow(follower, following)
+			values(#{id}, #{writer}) 
+		</insert>
+		
+
 </mapper>

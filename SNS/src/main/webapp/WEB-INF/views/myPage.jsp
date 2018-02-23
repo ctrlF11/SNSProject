@@ -6,7 +6,6 @@
 <head>
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>가즈아 - 회원 화면</title>
 <meta name="viewport"
@@ -17,6 +16,10 @@
 	href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<%
+	String id =	(String) session.getAttribute("id");
+	id = "\"" + id.trim() + "\"";
+%>
 <script type="text/javascript">
 	$(document).ready(
 					function() {
@@ -40,7 +43,7 @@
 											$('#btnShow').toggle();
 										});
 					});
-	var id = (String)("<%=session.getAttribute("id")%>");
+	var id = <%= id %>;
 	var mode = 1;	
 
 	var mmm = function() {
@@ -198,8 +201,6 @@
 		function checkgo() {
 			var check = document.getElementById("search_category").value;
 			var keyword = document.getElementById("srch-term").value;
-			alert(check);
-			alert(keyword);
 			if (keyword == "") {
 				alert("키워드를 입력해주세요.");
 				return false;
