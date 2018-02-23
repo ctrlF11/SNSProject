@@ -151,7 +151,40 @@ public class BoardController {
 		session.invalidate();
 		return "redirect:mainHomeView.do";
 	}
-	
+   @RequestMapping("/message")
+   public String message(HttpServletRequest request, HttpSession session) {
+      String id = (String) session.getAttribute("id");
+      AES aes = new AES();
+      id = aes.setDecrypting(id);
+      
+      List<ChatVO> resultList = new ArrayList<ChatVO>();
+      List<ChatVO> list = cservice.getFollowerList(id);
+      List<String> namecheck = new ArrayList<String>();
+      UserVO myvo = cservice.getUser(id);
+      if(list!=null) {
+         for(ChatVO vo : list) {
+            String name = "";
+            UserVO uvo = null;
+            if(vo.getToID()==id) {
+               name = vo.getFromID();
+            }else {
+               name = vo.getToID();
+            }
+            System.out.println(resultList.indexOf(name));
+            if(namecheck.indexOf(name)==-1) {
+               namecheck.add(name);
+               uvo = cservice.getUser(name);
+               vo.setName(uvo.getName());
+               vo.setPicture(uvo.getProfile_img());
+               resultList.add(vo);
+            }
+         }
+      }
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!follower list도 보내야함
+      request.setAttribute("myInfo", myvo);
+      request.setAttribute("chatList", resultList);
+      return "chat";
+   }
 	@RequestMapping("/deleteBoard")
 	public void deleteBoard(BoardVO vo) {
 		service.deleteBoard(vo);
@@ -361,7 +394,7 @@ public class BoardController {
   
     	try {
         	vo.setBoard_seq(board_seq);
-        	vo.setStory_seq(story_seq);
+        	vo.setStory_seq(story_seq);w
         	vo.setHearId(id);
     		service.likeInsert(vo);
          	vo.setHeart(service.getBoard(vo).get(0).getHeart());//좋아요 +1

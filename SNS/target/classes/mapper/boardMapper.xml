@@ -21,7 +21,6 @@
         Reply (story_seq, board_seq, rcontent, rwriter)
         VALUES(#{story_seq},#{board_seq},#{rcontent},#{rwriter}) 
     </insert>
-    
     <update id="replyUpdate" parameterType="ReplyVO">
         UPDATE Reply
             SET
@@ -131,11 +130,11 @@
 		
 		
 	<insert id="inputBoard" parameterType="BoardVO">
-			insert into Board(story_seq, title, content, writer, mtitle, contentId, heart)
-			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentId}, 0)
+			insert into Board(story_seq, title, content, writer, mtitle, contentId, heart, star)
+			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentId}, 0 , #{star})
 		</insert>
 		<update id="updateBoard" parameterType="BoardVO">
-			update Board set title = #{title}, content = #{content}, mtitle = #{mtitle}, contentId = #{contentId}
+			update Board set title = #{title}, content = #{content}, mtitle = #{mtitle}, contentId = #{contentId}, star = #{star}
 			<where>
 				board_seq = ${board_seq}
 			</where> 

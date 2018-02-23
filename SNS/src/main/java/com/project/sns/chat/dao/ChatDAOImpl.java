@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.sns.chat.vo.ChatVO;
-
+import com.project.sns.user.vo.UserVO;
 
 @Repository
-public class ChatDAOImpl implements ChatDAO{
+public class ChatDAOImpl implements ChatDAO {
 
 	@Autowired
 	private SqlSession session;
-	
+
 	private static String namespace = "com.project.mapper.chatMapper";
-	
+
 	@Override
 	public int submit(ChatVO vo) {
 		return session.insert(namespace + ".submit", vo);
@@ -49,5 +49,9 @@ public class ChatDAOImpl implements ChatDAO{
 		return session.selectList(namespace + ".getFollowerList", id);
 	}
 
+	@Override
+	public UserVO getUser(String id) {
+		// TODO Auto-generated method stub
+		return session.selectOne(namespace + ".getUser", id);
+	}
 }
-

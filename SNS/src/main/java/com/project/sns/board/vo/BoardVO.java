@@ -22,24 +22,14 @@ public class BoardVO {
 	private String mapy;
 	private Date regdate;
 	private Integer heart;
-	private String heartId;
+	private String heart_id;
+	private Integer star;
+	private Integer count;
+
 	private String story_title;
 	private String id;
 	private String story_regdate;
-	private Integer star;
 
-	public String getHearId() {
-		return heartId;
-	}
-	public void setHearId(String hearId) {
-		this.heartId = hearId;
-	}
-	public Integer getStar() {
-		return star;
-	}
-	public void setStar(Integer star) {
-		this.star = star;
-	}
 	public void setStory_seq(int story_seq) {
 		this.story_seq = story_seq;
 	}
@@ -215,4 +205,27 @@ public class BoardVO {
 		this.heart = heart;
 	}
 
+	public String getHeart_id() {
+		return heart_id;
+	}
+
+	public void setHeart_id(String heart_id) {
+		this.heart_id = heart_id;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+
+	public Integer getStar() {
+		return star;
+	}
+	public void setStar(Integer star) {
+		this.star = star;
+	}
 }

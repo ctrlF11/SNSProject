@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
 import com.project.sns.board.vo.ReplyVO;
@@ -49,6 +50,8 @@ public interface BoardService {
 		
 		public int saveImage(ImageVO vo) throws SQLException;
 		public ImageVO getImage(int img_seq) throws Exception;
+		public void insertReply(ReplyVO vo);
+		
 
 		
 	    // 댓글 개수

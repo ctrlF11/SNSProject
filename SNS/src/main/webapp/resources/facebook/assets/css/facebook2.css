@@ -308,7 +308,11 @@ small.text-muted {
    justify-content: flex-start;
    height: 74px;
    box-sizing: border-box;
+<<<<<<< HEAD
    width: 600px;
+=======
+   width: 800px;
+>>>>>>> refs/remotes/origin/Leejh
    display: inline-block;
    float: right;
    

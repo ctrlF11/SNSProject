@@ -18,7 +18,20 @@
 <!-- <script type="text/javascript" src="resources/js/map.js"></script> -->
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
+<style>
 
+.scope{
+	float:left;
+	margin: 10px;
+	top: 0;
+	}
+	
+.review{
+	clear: left;
+	margin: 10px;
+	}
+	
+</style>
 <title>TourSNS</title>
 </head>
 <body>   
@@ -35,94 +48,33 @@
                 -->
             <div id="main" class="column col-sm-12 col-xs-12">
                
-               <!-- 
-                  Topbar. 기존 부트스트랩보다 height를 늘림.
-                -->
-               <div class="navbar navbar-blue navbar-static-top">
-                  <!-- 
-                     아이콘 영역. 기존 부트스트랩보다 margin-top을 늘림.
-                   -->
-                  <div class="navbar-header">
-                     <!-- 토글용 버튼인데.... collapse되어있어 비활성화된 듯 함. -->
-                     <button class="navbar-toggle" type="button"
-                        data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle</span>
-                     </button>
-                     <!-- 아이콘. margin-top을 늘림. -->
-                     <a href="main.do" class="navbar-brand logo">N</a>
-                  </div>
-                  
-                  <!-- 아이콘을 제외한 오른쪽 영역. -->
-                  <nav class="navbar-collapse" role="navigation">
-                     <!-- 검색 폼. -->
-                     <div class="search_wrap">
-                        <form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
-                           <div class="input-group input-group-sm">
-                              <select id="search_category" style="width: 55.2px; height: 30px;" >
-                                 <option value="user">사람</option>
-                                 <option value="map">가게</option>
-                                 <option value="board">글</option>
-                              </select>
-                              <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
-                              <div class="input-group-btn">
-                                 <button class="btn btn-default" type="submit">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                 </button>
-                              </div>
-                           </div>
-                        </form>
-                     </div>
-                     <!-- 오른쪽 아이콘 모음집. 가로 957.333px에 찌그러짐-->
-                     <div class="icon_wrap">
-                        <ul class="nav navbar-nav navbar-right">
-                           <li>
-                              <a href="#">로그인</a>
-                           </li>
-                           <li>
-                              <a href="#postModal" role="button" data-toggle="modal">
-                              추천 경로+</a>
-                           </li>
-                           <li>
-                              <a href="#">스토리</a>
-                           </li>
-                           <!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
-                            <li class="dropdown">
-                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                           <i class="glyphicon glyphicon-user"></i></a>
-                           <ul class="dropdown-menu">
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                           </ul>
-                          </li>
-                        </ul>
-                     </div>
-                  </nav>
-               </div>
+            <%@ include file="include/topbar.jsp"%>
    <div id="setDiv">
       <div id="mask"></div>
       <div id="window"></div>
       <div id="mapBox">
-         <div id="searchBox" style="z-index: 2;">
-         <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
-      </div>
-         <div id="map" style="z-index: 1;" ></div> 
+      	<div id="searchBox" style="z-index: 2;">
+	      <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
+		</div>
+      	<div id="map" style="z-index: 1;" ></div> 
       </div>
       
       <!-- 오른쪽 사이드 -->  
       <div id="sidemenu">  
-         <button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
-         <button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
-         <button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
-         <ul class="accordian">
-            <li class="accordian--box">
-               <h3 id="recommend" onclick="recommend()">추천코스</h3>
-               <h4 id="pathlist"></h4>
-            </li>
-         </ul>
-         <div id="path"></div>        
+      	<button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
+      	<button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
+      	<button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
+      	<ul class="accordian">
+      		<li class="accordian--box">
+      			<h3 id="recommend" onclick="recommend()">추천코스</h3>    			
+      			<h4 id="pathlist"></h4>
+      		</li>
+      	</ul>
+		<div id="path"></div>
+      	<div>
+      		<select id="selectHour"></select>
+      		<select id="selectMinute"></select>
+      	</div>       
       </div>      
    </div>
             </div>         
@@ -133,12 +85,12 @@
 
 
 
-var accModule = function() {
+ var accModule = function() {
 
      // private member (비공개 멤버, 고유멤버)
-     var acc_wrap = $('.accodian'),
-       question = acc_wrap.find('h3'),
-       answer = question.next('h4');
+     var acc_wrap = $('.accordian'),
+       question = $('#recommend'),
+       answer = $('#pathlist');
 
      // privilieged member(공용 인터페이스)
      return {
@@ -146,24 +98,21 @@ var accModule = function() {
          this.accHandler();
        },
        accHandler: function() {
-         var accodian = {
+         var accordian = {
            targetClick: function(e) {
              var eTarget = $(e.currentTarget);
-             if (eTarget.next().is(':visible')) {
-               eTarget.next().slideUp();
-               return;
-             }
-             answer.slideUp();
+
+             
              eTarget.next().slideDown();
            }
          };
-         question.on('click', accodian.targetClick);
+         question.on('click', accordian.targetClick);
        }
      }
    }();
 
    // 실행
-   accModule.runInit();
+   accModule.runInit(); 
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
@@ -240,6 +189,7 @@ $.getJSON("resources/json/seoul_gson.geojson", function(geojson) {
 //      console.log(coordinates);
    })
 })
+
 var sigungucode ='';         //function recommend()의 AJAX로 지역구 코드를 보내기 위한 변수
 var polygons=[];            //function 안 쪽에 지역변수로 넣으니깐 폴리곤 하나 생성할 때마다 배열이 비어서 클릭했을 때 전체를 못 없애줌.  그래서 전역변수로 만듦.
    //행정구역 폴리곤
@@ -267,6 +217,11 @@ function displayArea(coordinates, name, gucode) {
       fillColor : '#fff',
       fillOpacity : 0.7
    });
+   
+   
+   //행정구 이름 표시
+   var guName = new AddText(Centroid(points), name);
+   guName.setMap(map);
    
    polygons.push(polygon);         //폴리곤 제거하기 위한 배열
 
@@ -305,19 +260,20 @@ function displayArea(coordinates, name, gucode) {
       var level = map.getLevel()-2;
       
         // 지도를 클릭된 폴리곤의 중앙 위치를 기준으로 확대합니다
-        map.setLevel(level, {anchor: centroid(points), animate: {
+        map.setLevel(level, {anchor: Centroid(points), animate: {
             duration: 350
         }});         
         
-        sigungucode = gucode;                  
+        sigungucode = gucode;      				//클릭한 구의 시군구코드 넘겨줌            
 
         deletePolygon(polygons);               //폴리곤 제거      
+        guName.setMap(null);					//구 이름 제거
    });
 
 }
 
 //centroid 알고리즘 (폴리곤 중심좌표 구하기 위함)
-function centroid (points) {
+function Centroid(points) {
     var i, j, len, p1, p2, f, area, x, y;
 
     area = x = y = 0;
@@ -369,7 +325,7 @@ clickImage = createMarkerImage(click_marker_url, markerSize);
 
 
 function addMarker(position, title, contentid, contenttypeid) {
-   console.log("addMarker");
+
    // 마커를 생성합니다
        var marker = new daum.maps.Marker({
      contentId: contentid,
@@ -379,26 +335,16 @@ function addMarker(position, title, contentid, contenttypeid) {
       image : normalImage
    // 마커 이미지 
    });
-   console.log("arr");
-   console.log(arr);
+
    //만약 arr에 존재하는 marker라면 빨간색 마커로 생성하겠다. 그리고 markerArr에 추가하겠다.
    if(arr.findIndex(function(item){return item.contentId === contentid})>-1){
-   console.log("arr에 존재하는 marker이다.");   
-      createArrMarkers(marker);
-      
-      
-      
-      console.log(markersArr.findIndex(function(item){return item.contentid === contentid}));
-      console.log(markersArr.indexOf(this));
-      if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
-         //markersArr에도 존재한다면?
-         console.log("markersArr에도 존재함");
-         return false;
-      }
+   	createArrMarkers(marker);
+   	
+   	if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
+   		//markersArr에도 존재한다면?
+   		return false;
+   	}
    }
-   
-   console.log("markersArr");
-   console.log(markersArr);
    
    // 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
    marker.normalImage = normalImage;
@@ -431,8 +377,6 @@ function addMarker(position, title, contentid, contenttypeid) {
    
    //선택한 마커를 생성하고 선택마커 배열에 추가하는 함수
    function createArrMarkers(marker){
-         console.log('marker');
-         console.log(marker);
          marker.setImage(clickImage);
          markersArr.push(marker);
          marker.setMap(map);
@@ -441,8 +385,6 @@ function addMarker(position, title, contentid, contenttypeid) {
    
  //마커 클릭시! 
    daum.maps.event.addListener(marker, 'click', function() {
-         console.log("클릭");
-         console.log(marker);
          marker = this;
          //wrapWindowByMask();//팝업 레이어 검정 배경
          
@@ -481,8 +423,6 @@ function addMarker(position, title, contentid, contenttypeid) {
 
       // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
       selectedMarker = marker;
-      console.log("22??");
-      console.log(marker);
       var obj = new Object();
       obj.contentId = contentid;
       obj.contentTypeId = contenttypeid;
@@ -561,6 +501,7 @@ function wrapWindowByMask() {
 }
 
 var count = 0;
+
 //경로 추천
 function recommend() {
    
@@ -568,16 +509,15 @@ function recommend() {
             url : 'getPath.do',
             type : 'get',
             dataType : 'json',
-            data : {'sigungucode' : sigungucode},
+            data : {'sigungucode' : sigungucode, 'hour' : $('#selectHour').val(), 'minute' : $('#selectMinute').val()},
             success : function(jsonData) {
-               console.log("recommend의 결과 ");
-               console.log(jsonData);
-               deleteMarker();
+
+
                var path = jsonData.path;
-               var sidePath = "";
-               recPath = [];
+               var sidePath = "";					//오른쪽 사이드바에 경로 나열
+               recPath = [];						//추천 경로가 담겨질 배열
                count++;
-               if(count > 1){
+               if(count > 1){						//추천경로 클릭할 때마다 새로운 라인과 마커 생성
                   newpath();
                }
                for (var i = path.length - 1; i >= 0; i--) {
@@ -597,16 +537,14 @@ function recommend() {
                               positions[j].contentid,
                               positions[j].contenttypeid);
                               
-                        sidePath += '<div class="pinn ' + positions[j].contentid + '" id="' + positions[j].contentid + '" text-align:left)>';
-                    sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
-                              + "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
-                              + positions[j].title + "</a>" + '</h4>';
-                    sidePath += '</div>'; 
-                        
-                        console.log("333");
-                        console.log("positons[j]");
-                        console.log(positions[j]);
+                        sidePath += '<div class="pinn ' + positions[j].contentid + '" id="' + positions[j].contentid + '">';
+                        sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
+                                  + "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
+                                  + positions[j].title + "</a>" + '</h4>';
+                        sidePath += '</div>'; 
+
                         recPath.push(positions[j].latlng);
+
                      }
                   }
                }
@@ -615,7 +553,7 @@ function recommend() {
                drawLine(recPath);
             },
             error : function(XMLHttpRequest, textStatus, errorThrown) {
-               //          alert("Status: " + textStatus); alert("Error: " + errorThrown);  
+               alert("시간을 입력해주세요");  
             }
          });
 
@@ -640,7 +578,6 @@ function getpath(){
          dataType: 'json',
          contentType: 'application/json',
          success: function(data){
-            console.log(data);
             $('#path').empty();
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!afterpath
             //var arra = new Array();
@@ -652,27 +589,23 @@ function getpath(){
             var sidePath = '';
             var bounds = new daum.maps.LatLngBounds();
                $.each(afterpath, function(i, val){
-                  console.log("444");
-                  console.log(val);
-                  console.log('val.mapy');
-                  console.log(val.mapy);
+
                   var latlng = new daum.maps.LatLng(val.mapy,val.mapx);
-                  console.log("latlng");
-                  console.log(latlng);
+
                   recPath.push(latlng);
                   bounds.extend(latlng);
                   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
                   
-                  sidePath += '<div class="pinn ' + val.contentId+ '" id="' + val.contentId + '"text-align:left)">';
-                  sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + val.contentId + '"onclick="deletePin(this)"></div>'
-                           + "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contnetTypeId + ")'>"
+                  sidePath += '<div class="pinn" id="' + val.contentId +  '"text-align:left>';
+                  sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="' + val.contentId + '"onclick="deletePin(this)"></div>'
+                           + "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contentTypeId + ")'>"
                            + val.title + "</a>" + '</h4>';
                   sidePath += '</div>';
                });
                
                drawLine(recPath);
                map.setBounds(bounds);
-               $('#path').empty();
+               $('#pathlist').empty();
                $('#pathlist').html(sidePath);
                }
       });
@@ -705,16 +638,12 @@ function searchMap(){
    if(afterSearchArr!=null){
    setMarkers(null);
    setMarkersArr(map);
-   console.log('markersArr');
-   console.log(markersArr);
    }
    $.ajax({
       url:'search.do',
       type: 'POST',
       data: {keyword:keyword},
       success: function(data){
-         console.log("555");
-         console.log(data);
          afterSearchArr = data;
          if(afterSearchArr.length==0){
             alert("검색 결과가 없습니다.");
@@ -771,22 +700,16 @@ function drawLine(recPath){
 
 //엑스표 누르면 arr와 div 삭제
 function deletePin(event){
-   console.log("event : " + event);
-   console.log(event);
    var cid = (event.id).replace('d','');
    
    //arr에서 지우기
    var i = arr.findIndex(function(item){return item.contentId === cid});
    //이미지 노말로 바꾸기
    markersArr[i].setImage(normalImage);
-   console.log("arr에서의 index");
-   console.log(i);
    if(i > -1){//엑스표 누른게 arr배열에 있다면
       
       //arr에서 삭제
       arr.splice(i, 1);
-      console.log("markersArr[i] : ");
-      console.log(markersArr[i]);
 
       //markersArr에서 삭제
       markersArr.splice(i, 1);
@@ -800,22 +723,24 @@ function deletePin(event){
          //markersArr[i].setImage(normalImage);
       //}
 
-   }
-   console.log("markersArr : ");
-   console.log(markersArr);
-   
+   }   
    
    //div 지우기 경로 후
-   var top1 = document.getElementById('path');
-   var garbage1 = document.getElementById(cid);
-   top1.removeChild(garbage1);
+	var top1 = document.getElementById('path');
+	var garbage1 = document.getElementById(cid);
+	if(!garbage1){
+	top1.removeChild(garbage1);
+	}else{
    
    
    //div 지우기 경로 전
-   var top = document.getElementById('pathlist');
-   var garbage = document.getElementById(cid);
-   top.removeChild(garbage);
-   deletePolyLine();
+	var top = document.getElementById('pathlist');
+	var garbage = document.getElementById(cid);
+	if(!garbage){
+	top.removeChild(garbage);
+	}
+	}
+	deletePolyLine();
 }
 
 //경로 새로고침
@@ -838,105 +763,229 @@ function newpath(){
 
 
 function getDetail(contentid, contenttypeid){
-   wrapWindowByMask();
-   var contentid;
-   var contenttypeid;
-   var title ="aa";
+	wrapWindowByMask();
+	var contentid = contentid;
+	var contenttypeid = contenttypeid;
     $.ajax({        
         url: 'callDetail.do',
         type: 'get',
         data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
         dataType: 'json',
         success: function(data){
-           var myItem = data.response.body.items.item;
-            var output = '<div class="pin ' + contentid + '" id="' + contentid + '" text-align:left>';
-               output += '<h4 id="title">' + title + '</h4>';
+            var addr = getInfo(contentid, contenttypeid);
+        	var myItem = data.response.body.items.item;
+            var output = '<div class="pin1 ' + contentid + '" id="' + contentid + '" text-align:left>';
+            	output += '<h4 id="title">' + addr.title + '</h4>';
+            	output += '<div class="scope" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/>';
+            if(addr.scope && addr.scope !="0" && addr.scope!="0.0"){
+            	output += '<p><div class="glyphicon glyphicon-star" />' + addr.scope + '</p></div>';
+            }else output += '</div>';
             if(contenttypeid == 12){
-                  if(myItem.parking){
+          	  	if(myItem.parking){
                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
-                  }if(myItem.restdate){
+          	  	}if(myItem.restdate){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
-                  }if(myItem.infocenter){
+          	  	}if(myItem.infocenter){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 14){
-                  if(myItem.usefee){
+          	  	if(myItem.usefee){
                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
-                  }if(myItem.usetimeculture){
+          	  	}if(myItem.usetimeculture){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
-                  }if(myItem.restdateculture){
+          	  	}if(myItem.restdateculture){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
-                  }if(myItem.infocenterculture){
+          	  	}if(myItem.infocenterculture){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 15){
-                  if(myItem.eventplace){
+          	  	if(myItem.eventplace){
                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
-                  }if(myItem.eventstartdate){
+          	  	}if(myItem.eventstartdate){
                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
-                  }if(myItem.playtime){
+          	  	}if(myItem.playtime){
                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
-                  }if(myItem.sponsor1 || myItem.sponsor1tel){
+          	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 28){
-                  if(myItem.usetimeleports){
+          	  	if(myItem.usetimeleports){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
-                  }if(myItem.infocenterleports){
+          	  	}if(myItem.infocenterleports){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 32){
-                  if(myItem.reservationurl){
+          	  	if(myItem.reservationurl){
                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
-                  }if(myItem.subfacility){
+          	  	}if(myItem.subfacility){
                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
-                  }if(myItem.infocenterlodging){
+          	  	}if(myItem.infocenterlodging){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 38){
-                  if(myItem.saleitem){
+          	  	if(myItem.saleitem){
                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
-                  }if(myItem.opentime){
+          	  	}if(myItem.opentime){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
-                  }if(myItem.restdateshopping){
+          	  	}if(myItem.restdateshopping){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
-                  }if(myItem.infocenter){
+          	  	}if(myItem.infocenter){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-                  }
+          	  	}
             }else if(contenttypeid == 39){
-                  if(myItem.treatmenu){
+          	  	if(myItem.treatmenu){
                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
-                  }if(myItem.opentimefood){
+          	  	}if(myItem.opentimefood){
                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
-                  }if(myItem.restdatefood){
+          	  	}if(myItem.restdatefood){
                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
-                  }if(myItem.infocenterfood){
+          	  	}if(myItem.infocenterfood){
                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-                  }
+          	  	}
             }
+            if(addr.image1 && addr.link1){
+            	output += '<p class="p">리뷰보기:(클릭으로 이동) </p><a class="review" href="' + addr.link1 + '"><img src="' + addr.image1 + '"/>'
+            			+ '</a>';
+            }if(addr.image2 && addr.link2){
+            	output += '<a class="review" href="' + addr.link2 + '"><img src="' + addr.image2 + '"/>'
+    			+ '</a>';
+   			}if(addr.image3 && addr.link3){
+            	output += '<a class="review" href="' + addr.link3 + '"><img src="' + addr.image3 + '"/>'
+    			+ '</a>';
+    		}
                 output += '</div>';
                 $('#window').html(output);
         },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
           alert("Status: " + textStatus); alert("Error: " + errorThrown); 
       } 
-    });
+ 	});
 }
 
 function getInfo(contentid, contenttypeid){
-   $.ajax({
-      url:'callInfo.do',
-      type:'POST',
-      data: {"contentid" : contentid, "contenttypeid" : contenttypeid},
-      dataType: 'jason',
-      success: function(data){
-         
-      }
-      
-   })
+	var addr;
+	$.ajax({
+		url:'callInfo.do',
+		type:'POST',
+		async: false, 
+		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		dataType: 'json',
+		success: function(data){
+			addr = data;
+		}
+		
+	});
+	return addr;
 }
 
+//행정구역 표시 텍스트
+function AddText(position, text) {
+    this.position = position;
+    this.node = document.createElement('div');
+    this.node.style.position = 'absolute';
+    this.node.style.whiteSpace = 'nowrap';
+    this.node.appendChild(document.createTextNode(text));
+}
 
+// "AbstractOverlay":#AbstractOverlay 상속. 프로토타입 체인을 연결한다..
+AddText.prototype = new daum.maps.AbstractOverlay;
+
+// 필수 구현 메소드.
+// AbstractOverlay의 getPanels() 메소드로 MapPanel 객체를 가져오고
+// 거기에서 오버레이 레이어를 얻어 생성자에서 만든 엘리먼트를 자식 노드로 넣어준다.
+AddText.prototype.onAdd = function() {
+    var panel = this.getPanels().overlayLayer;
+    panel.appendChild(this.node);
+};
+
+// 필수 구현 메소드.
+// 생성자에서 만든 엘리먼트를 오버레이 레이어에서 제거한다.
+AddText.prototype.onRemove = function() {
+    this.node.parentNode.removeChild(this.node);
+};
+
+// 필수 구현 메소드.
+// 지도의 속성 값들이 변화할 때마다 호출된다. (zoom, center, mapType)
+// 엘리먼트의 위치를 재조정 해 주어야 한다.
+AddText.prototype.draw = function() {
+    var projection = this.getProjection();
+    var point = projection.pointFromCoords(this.position);
+    var width = this.node.offsetWidth;
+    var height = this.node.offsetHeight;
+
+    this.node.style.left = (point.x - width/2) + "px";
+    this.node.style.top = (point.y - height/2) + "px";
+
+};
+
+
+//시간
+$(function setHour(){
+	var result = "";			//select에 들어갈 값
+	var value = "";				//option에 들어갈 값
+
+	result += "<option value='hh'>" + "시" + "</option>";	
+	for(var i=0; i<24; i++){	
+		if(i<10){	
+			value = "0" + i;
+		} else {
+			value = i;
+		}
+		result += "<option value=" + value + ">" + value + "</option>";
+	}
+
+	$('#selectHour').empty();
+	$('#selectHour').append(result);
+	
+})
+
+//분
+$(function setMinute(){
+	var result = "";			//select에 들어갈 값
+	var value = "";				//option에 들어갈 값
+	
+	result += "<option value='mm'>" + "분" + "</option>";	
+	for(var i=0; i<6; i++){	
+			if(i==0){
+				value = "0" + i
+			} else {
+				value = i*10;
+			}			
+		result += "<option value=" + value + ">" + value + "</option>";
+	}
+
+	$('#selectMinute').empty();
+	$('#selectMinute').append(result);
+})
+
+
+ //경로저장
+function savepath(){
+	
+	var id = "<%=request.getAttribute("id")%>";		
+	var oneAlert = 0;									//alert 한번만 나오도록 하기 위해서 사용
+
+	if(id == null){
+		alert("회원만 이용 가능합니다.");
+		//로그인 화면으로 이동하게 ??
+	} else {		
+
+	for(var i=0; i<arr.length; i++){
+
+  	$.ajax({
+		url:'insertPath.do',
+		data:{"writer" : id, "contentId" : arr[i].contentId},	
+		success: function(){
+			if(oneAlert==0)
+				alert("경로가 저장되었습니다.");
+				oneAlert++;
+		}
+	
+	})
+	}
+	} 
+
+}
 
 </script>      
 </body>

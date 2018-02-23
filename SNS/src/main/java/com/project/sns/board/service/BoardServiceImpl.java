@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.sns.addr.vo.AddrVO;
 import com.project.sns.board.dao.BoardDAO;
 import com.project.sns.board.vo.BoardVO;
 import com.project.sns.board.vo.ImageVO;
@@ -237,9 +238,15 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		return dao.getFollowerStoryList(map);
+=======
+	public void insertReply(ReplyVO vo) {
+		// TODO Auto-generated method stub
+		
+>>>>>>> refs/remotes/origin/Leejh
 	};
     
     //���ƿ�
