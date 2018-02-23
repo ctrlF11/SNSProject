@@ -3528,7 +3528,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 }
 
 .input-group .form-control {
-	width: 89%;
+	width: 85%;
 	margin-bottom: 0
 }
 
@@ -4035,8 +4035,8 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
 		margin-left: -15px
 	}
 	.navbar-collapse .navbar-nav.navbar-right:last-child {
-		margin-top: 10px;
-		margin-bottom: 10px;
+		margin-top: 0px;
+		margin-bottom: 0px;
 	}
 	.navbar-collapse .navbar-text:last-child {
 		margin-right: 0

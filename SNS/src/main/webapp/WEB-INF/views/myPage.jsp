@@ -120,6 +120,41 @@
 		}
 	} */
 
+	$('#imageUp').click(function(){
+		console.log('fileadd');
+		$('input[name="image"]').click();
+	})
+
+	$('input[name="image"]').change(function(event){
+		
+		
+		var form = $('#imageUpload')[0];
+		var formData = new FormData(form);
+		var f = $('input[name="image"]')[0].files[0]
+		formData.append('file',f);	
+		
+		
+		$.ajax({
+			  url: 'uploadAjax.do',
+			  data: formData,
+			  dataType:'text',
+			  processData: false,
+			  contentType: false,
+			  type: 'POST',
+			  success: function(data){
+				 // files.push(data);
+				  var str ="";
+
+				  
+				  console.log(name);
+				  //if(checkImageType(name)){
+					  str = "<br/><img src='displayFile.do?img_seq="+data+"' style='max-width: 100%; height: auto;'/><br/>";
+				  //}
+				  
+				  $(".uploadedList").append(str);
+			  }
+			});
+	
 
 </script>
 </head>
@@ -154,10 +189,12 @@
 													<img>
 													<%= session.getAttribute("name") %> 님
 													<a>
-														<i class="glyphicon glyphicon-cog">
-														
+														<i class="glyphicon glyphicon-picture" id="imageUp" onclick="">
 														</i>
 													</a>
+														<form id="imageUpload" method='POST' enctype='multipart/form-data'>
+															<input type="file" name="image" id="file" style="display: none;"/>
+														</form>
 													<hr>
 													<ul>
 														<li>
