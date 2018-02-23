@@ -72,4 +72,11 @@ public interface BoardService {
 		public int getStoryCount(String id) throws Exception;
 		public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map);
 		
+	    
+	    //좋아요
+	    public int likeInsert(BoardVO board) throws Exception;
+	    public int likeUp(BoardVO board) throws Exception;
+	    public List<BoardVO> getBoard(BoardVO vo) throws Exception;
+	    public int likeDelete(BoardVO board) throws Exception;
+	    public BoardVO getBoardlikeId(BoardVO vo) throws Exception;
 }

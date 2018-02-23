@@ -1,0 +1,33 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+
+<mapper namespace="com.project.sns.mapper.userMapper">
+		
+		<select id="getUser1" parameterType="int" resultType="UserVO" >
+			select * 
+			from SnsUser
+			LIMIT #{index},2;
+		</select>
+		<select id="getUser" parameterType="string" resultType="UserVO">
+			select * from SnsUser
+			<where>
+				#{id} = id
+			</where>
+		</select>
+		
+		<insert id="insertUser" parameterType="UserVO">
+			insert into SnsUser(id, name, password, birthday, sex, email)
+			values(#{id}, #{name}, #{password}, #{birthday}, #{sex}, #{email})
+		</insert>
+		
+		<select id="getAddress" parameterType="int" resultType="AddrVO">
+			select * from TourMap
+		</select>
+		
+		<select id="getId" parameterType="UserVO" resultType="UserVO">
+			select * from SnsUser
+			where id = #{id}
+		</select>
+</mapper>

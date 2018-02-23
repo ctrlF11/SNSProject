@@ -16,6 +16,22 @@
    
    <!-- Root Context: defines shared resources visible to all other web components -->
       
+  <!-- 이메일 관련 -->
+   <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="smtp.gmail.com" />
+      <property name="port" value="587" />
+      <property name="username" value="mmwalsdnd123@gmail.com" />
+      <property name="password" value="rmsid123!!" />
+      <property name="javaMailProperties">
+         <props>
+            <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.smtp.auth">true</prop>
+         </props>
+      </property>
+   </bean>
+   <bean id="mailService" class="com.project.sns.user.service.MailServiceImpl">
+   </bean>
   
    <!-- mysql datasource -->      
    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -52,5 +68,7 @@
    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
    
    <context:component-scan base-package="com.project.sns.**"></context:component-scan>
+   
+   
    
 </beans>

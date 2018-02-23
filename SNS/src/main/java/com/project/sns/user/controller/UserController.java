@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.project.sns.board.service.BoardService;
+import com.project.sns.board.vo.BoardVO;
+import com.project.sns.user.service.MailServiceImpl;
 import com.project.sns.user.service.UserService;
 import com.project.sns.user.vo.UserVO;
 
@@ -34,12 +37,14 @@ import A.algorithm.AES;
 	private UserService service;
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private MailServiceImpl  serviceM;
 	
 	@RequestMapping("/register.do")
 	public String write(UserVO vo){
 		logger.info("write");
 		service.insertUser(vo);
-		return "redirect:mainHomeView.do";
+		return "redirect:login.do";
 	}
 	
 	@RequestMapping("/registerForm.do")
@@ -69,7 +74,36 @@ import A.algorithm.AES;
        else return "login";
     }
     
-  
+    @ResponseBody
+    @RequestMapping("/checkId.do")
+    private String getId(UserVO vo) {
+        String memberId = vo.getId();
+        System.out.println("받아온 아이디 : " + memberId);
+           UserVO id = new UserVO();
+           id.setId(memberId);   
+           try {
+        	  service.getId(id).getId();
+        	  return "get";
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "no";
+		}
+           
+     }
+    
+    @ResponseBody
+    @RequestMapping("/check.do")
+    private String sendMail(UserVO vo) {
+          String memberId = vo.getId();
+          int ran = new Random().nextInt(100000) + 10000; // 10000 ~ 99999
+          String joinCode = String.valueOf(ran);
+          System.out.println(joinCode);
+          String subject = "회원가입 인증 코드 발급 안내 입니다.";
+          StringBuilder sb = new StringBuilder();
+          sb.append("귀하의 인증 코드는 " + joinCode + " 입니다.");
+          serviceM.send(subject,sb.toString(), "mmwalsdnd123@gmail.com", memberId);
+          return joinCode;
+     }
 //    @RequestMapping("/getUser1.do")
 //    public String getUser1(@RequestParam("index") int index, HttpServletRequest req) throws Exception{
 //        logger.info("getBoardList");
@@ -128,7 +162,7 @@ import A.algorithm.AES;
     	
     	AES aes = new AES();
     	System.out.println("original : " + checkVO.getId());
-    	checkVO.setId(aes.setCrypting(checkVO.getId()).trim());
+    	checkVO.setId(aes.setCrypting(checkVO.getId()));
     	System.out.println("encrypted : " + checkVO.getId());
     	
     	session.setAttribute("id", checkVO.getId());

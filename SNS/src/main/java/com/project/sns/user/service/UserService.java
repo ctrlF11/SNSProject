@@ -10,6 +10,7 @@ public interface UserService {
 	public int insertUser(UserVO vo);
 	public List<UserVO> getUserList(UserVO vo);
 	public UserVO getUser(String keyword);
+	public UserVO getId(UserVO vo);
 //	public List<UserVO> getUser1(int index);
 	public String getUserImage(String id);
 	public int getFollowingCount(String id);

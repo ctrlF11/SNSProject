@@ -69,4 +69,10 @@ public class UserDAOImpl implements UserDAO{
 		// TODO Auto-generated method stub
 		return sqlSession.insert(namespace+".followByPage", ids);
 	}
+	
+	public UserVO getId(UserVO vo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace+".getId", vo);
+	}
+
 }

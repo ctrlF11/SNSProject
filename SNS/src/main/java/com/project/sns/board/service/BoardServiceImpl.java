@@ -241,5 +241,23 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return dao.getFollowerStoryList(map);
 	};
+    
+    //���ƿ�
+    public int likeInsert(BoardVO board) throws Exception{
+    	return dao.likeInsert(board);
+    }
+    
+    public int likeUp(BoardVO board) throws Exception{
+        return dao.likeUp(board);
+    }
+    public List<BoardVO> getBoard(BoardVO vo) throws Exception{
+    	return dao.getBoard(vo);
+    }
+    public int likeDelete(BoardVO board) throws Exception{
+    	return dao.likeDelete(board);
+    }
+    public BoardVO getBoardlikeId(BoardVO vo) throws Exception{
+    	return dao.getBoardlikeId(vo);
+    }
 
 }

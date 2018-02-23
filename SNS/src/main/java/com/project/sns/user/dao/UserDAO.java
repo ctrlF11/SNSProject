@@ -12,6 +12,7 @@ public interface UserDAO {
 	public int insertUser(UserVO vo);
 	public List<UserVO> getUserList(UserVO vo);
 	public UserVO getUser(String keyword);
+	public UserVO getId(UserVO vo);
 //	public List<UserVO> getUser1(@Param("index") int index); // ?
 	public String getUserImage(String id);
 	public int getFollowingCount(String id);

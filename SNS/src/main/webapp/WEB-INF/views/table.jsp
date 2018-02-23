@@ -197,8 +197,8 @@ function makeOutListener(infowindow) {
       </div>
       <hr class="my-0">
       <div class="card-body py-2 small">
-         <a class="mr-3 d-inline-block" href="followByBoard.do?id=<%= session.getAttribute("id") %>&writer=${user.writer}">
-            <i class="fa fa-fw fa-thumbs-up"></i>Like
+         <a class="mr-3 d-inline-block" name="like${user.board_seq}" onclick="like_button(${user.board_seq},${user.story_seq})" href="#">
+            <i class="fa fa-fw fa-thumbs-up"></i>${user.heart}명 Like
          </a>
          <a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment">
             <i class="fa fa-fw fa-comment"></i>Comment
@@ -219,7 +219,7 @@ function makeOutListener(infowindow) {
             <div class="input-group">
                <input type="hidden" name="board_seq${user.board_seq}" value="${user.board_seq}" id="board_seq${user.board_seq}" />
                <input type="hidden" name="story_seq${user.story_seq}" value="${user.story_seq}" id="board_seq${user.story_seq}"/>
-               <input type="text" class="form-control" id="content" name="content${user.board_seq}" placeholder="내용을 입력하세요." style="wid">
+               <input type="text" class="form-control" id="content" name="content${user.board_seq}" placeholder="내용을 입력하세요.">
                <span class="input-group-btn">
                     <button class="btn btn-default" type="button" name="rbtn" onclick="r_button(${user.board_seq},${user.story_seq})">등록</button>
                </span>

@@ -223,5 +223,32 @@ public class BoardDAOImpl implements BoardDAO {
 		public List<BoardVO> getFollowerStoryList(HashMap<String, Object> map) {
 			return sqlSession.selectList(namespace+".getFollowerStoryList", map);
 		};
+	    
+	    //���ƿ�
+	    public int likeInsert(BoardVO board) throws Exception
+	    {
+	    	return sqlSession.insert(namespace+".likeInsert", board);
+	    }
+	    public int likeUp(BoardVO board) throws Exception
+	    {
+	    	return sqlSession.update(namespace+".likeUp", board);
+	    }
+	    
+	    public List<BoardVO> getBoard(BoardVO vo) throws Exception
+	    {
+	    	return sqlSession.selectList(namespace+".getBoard", vo);
+	    }
+	    
+	    public int likeDelete(BoardVO board) throws Exception
+	    {
+	    	return sqlSession.delete(namespace+".likeDelete", board);
+	    }
+	    
+	    public BoardVO getBoardlikeId(BoardVO vo) throws Exception
+	    {
+	    	return sqlSession.selectOne(namespace+".getBoardlikeId", vo);
+	    }
+	    
+	    
 
 }
