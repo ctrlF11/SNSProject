@@ -144,7 +144,7 @@ function makeOutListener(infowindow) {
 		<c:forEach var="list" items="${requestScope.list}">
 				<div class="card-body">
 					<p class="lead-myBar">
-						<a href="getBoardValue.do?story_seq=${list.story_seq }&writer=<%= session.getAttribute("id") %>">${list.story_title }</a>
+						<a href="homeview.do?story_seq=${list.story_seq }">${list.story_title }</a>
 					</p>
 				</div>
 				<hr>
