@@ -33,8 +33,6 @@ String userID = (String) session.getAttribute("id");
 AES aes = new AES();
 userID = aes.setDecrypting(userID);
 
-//String toID = "456";
-
 %>
 /*    $(document).ready(
                function() {
@@ -92,7 +90,7 @@ userID = aes.setDecrypting(userID);
    var fromID = '<%=userID%>';
    var toID = '';
    
-   function chatListFunction(data) {
+   function chatListFunction(lastID) {
       $.ajax({
          type : "POST",
          url : "chat/list.do",
@@ -147,6 +145,135 @@ userID = aes.setDecrypting(userID);
          chatListFunction(lastID);
       }, 30000); //30초에 1번 실행
    }
+   
+   $(document)
+   .ready(
+         function() {
+            $('[data-toggle=offcanvas]')
+                  .click(
+                        function() {
+                           $(this)
+                                 .toggleClass(
+                                       'visible-xs text-center');
+                           $(this)
+                                 .find('i')
+                                 .toggleClass(
+                                       'glyphicon-chevron-right glyphicon-chevron-left');
+                           $('.row-offcanvas')
+                                 .toggleClass(
+                                       'active');
+                           $('#lg-menu')
+                                 .toggleClass(
+                                       'hidden-xs')
+                                 .toggleClass(
+                                       'visible-xs');
+                           $('#xs-menu')
+                                 .toggleClass(
+                                       'visible-xs')
+                                 .toggleClass(
+                                       'hidden-xs');
+                           $('#btnShow').toggle();
+                        });
+         });
+$(document).ready(function() {
+$('#submitMessage').click(function() {
+   submitFunction();
+});
+
+ $(".heading-compose").click(function() {
+     $(".side-two").css({
+       "left": "0"
+     });   
+   });
+   $(".newMessage-back").click(function() {
+     $(".side-two").css({
+       "left": "-100%"
+     });
+   });
+});
+function checkgo() {
+var check = document.getElementById("search_category").value;
+var keyword = document.getElementById("srch-term").value;
+alert(check);
+alert(keyword);
+if (keyword == "") {
+   alert("키워드를 입력해주세요.");
+   return false;
+}
+if (check == "user") {
+   location.href = "searchAll.do?keyword=" + keyword
+         + "&number=1";
+}
+if (check == "map") {
+   location.href = "searchAll.do?keyword=" + keyword
+         + "&number=2";
+}
+if (check == "board") {
+   location.href = "searchAll.do?keyword=" + keyword
+         + "&number=3";
+}
+return false;
+}
+
+function enterkey(){
+if(window.event.keyCode == 13){
+   submitFunction();
+}
+}
+
+function getNewChat(value){
+	toID = value.id;
+	lastID = 0;
+	$('#yourname').text($(document.getElementById(toID)).find('.name-meta').text());
+	$('.heading-avatar-icon').find('img').attr("src",$(document.getElementById(toID)).find('img').attr('src'));
+	$('#chatlist').html('');
+	$('.conversation').show();
+	chatListFunction(lastID);
+	getInfiniteChat();
+}
+
+function getSide(){
+$.ajax({
+   url:'chat/getNewFollower.do',
+   type:'POST',
+   data: {id: fromID},
+   contentType : "application/json; charset=UTF-8",
+   success: function(data){
+      console.log(data);
+      var side = '';
+      var namecheck = [];
+      side+='<div class="row1 sideBar" id="sideBar">';
+      for(var i = 0; i < data.length; i++){
+    	  var follow = "";
+    	  if(fromID == data[i].fromID){
+    		  follow = data[i].fromID;
+    	  }else{
+    		  follow = data[i].toID;
+    	  }
+    	  if(namecheck.indexOf(follow)==-1){
+    		  namecheck.push(follow);
+    		  side += '<div class="row1 sideBar-body" onclick="getNewChat(' + follow + ')">';
+    		  side += '<div class="col-sm-3 col-xs-3 sideBar-avatar"><div class="avatar-icon">';
+    		  if(data[i].picture != null){
+    			  side += '<img src=' + data[i].picture + '/>';
+    		  }else{
+    			  side += '<img src="https://bootdey.com/img/Content/avatar/avatar1.png">';
+    		  }//chatRead가 0이면 새로운 메세지 표시?? 빨간색 원?? 추가.
+    		  side += '</div></div>';
+    		  side += '<div class="col-sm-9 col-xs-9 sideBar-main"><div class="row1"><div class="col-sm-8 col-xs-8 sideBar-name">';
+    		  side += '<span class="name-meta">'+ data[i].name;
+    		  side += '</span></div><div class="col-sm-4 col-xs-4 pull-right sideBar-time">';
+    		  side += '<span class="time-meta pull-right">' + data[i].chatTime;
+    		  side += '</span></div></div></div></div>';
+    	  }
+      }
+      side += '</div>';
+      console.log(side);
+      $('#sideBar').html(side);
+      console.log('sideBar갱신');
+   }
+})
+}
 </script>
 <style>
 #message {
@@ -187,7 +314,7 @@ userID = aes.setDecrypting(userID);
                               <%
                                  }
                               %>
-                                 <div class="heading-name"><%=myvo.getName()%></div>
+                                 <span class="name-meta"><%=myvo.getName()%></span>
                               </div>
                            </div>
 <!--                            <div class="col-sm-1 col-xs-1  heading-dot  pull-right">
@@ -207,7 +334,7 @@ userID = aes.setDecrypting(userID);
                               </div>
                            </div>
                         </div> -->
-                        <div class="row1 sideBar">
+                        <div class="row1 sideBar" id="sideBar">
                         <%
                         List<ChatVO> list = (List<ChatVO>)request.getAttribute("chatList");
                         String st = "";
@@ -222,7 +349,7 @@ userID = aes.setDecrypting(userID);
                            if(followArr.indexOf(userID)==-1){
                               followArr.add(follow);
                         %>
-                            <div class="row1 sideBar-body" onclick="getNewChat('<%=follow%>')">
+                            <div class="row1 sideBar-body" id = "<%=follow%>" onclick="getNewChat(this)">
                               <div class="col-sm-3 col-xs-3 sideBar-avatar">
                                 <div class="avatar-icon">
                                 <%
@@ -272,33 +399,15 @@ userID = aes.setDecrypting(userID);
                                  Chat</div>
                            </div>
                         </div>
-<!--                         <div class="row1 composeBox">
-                           <div class="col-sm-12 composeBox-inner">
-                              <div class="form-group has-feedback">
-                                 <input id="composeText" type="text" class="form-control"
-                                    name="searchText" placeholder="Search People"> <span
-                                    class="glyphicon glyphicon-search form-control-feedback"></span>
-                              </div>
-                           </div>
-                        </div> -->
-
+                        
                         <div class="row1 compose-sideBar">
                            
                         <%
-                        List<ChatVO> list2 = (List<ChatVO>)request.getAttribute("chatList");
-                        String st2 = "";
+                        List<UserVO> followerList = (List<UserVO>)request.getAttribute("follower");
                         List<String> followArr2 = new ArrayList<String>();
-                        for(ChatVO vo : list2){
-                           String follow = "";
-                           if(userID == vo.getFromID()){
-                              follow = vo.getFromID();
-                           }else{
-                              follow = vo.getToID();
-                           }
-                           if(followArr2.indexOf(userID)==-1){
-                              followArr2.add(follow);
+                        for(UserVO vo : followerList){
                         %>
-                            <div class="row1 sideBar-body">
+                            <div class="row1 sideBar-body" id = "<%=vo.getId() %>" onclick="getNewChat(this)">
                               <div class="col-sm-3 col-xs-3 sideBar-avatar">
                                 <div class="avatar-icon">
                                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
@@ -307,11 +416,11 @@ userID = aes.setDecrypting(userID);
                               <div class="col-sm-9 col-xs-9 sideBar-main">
                                 <div class="row1">
                                   <div class="col-sm-8 col-xs-8 sideBar-name">
-                                    <span class="name-meta"><%=follow%>
+                                    <span class="name-meta"><%=vo.getName()%>
                                   </span>
                                   </div>
                                   <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                                    <span class="time-meta pull-right"><%=vo.getChatTime()%>
+                                    <span class="time-meta pull-right">
                                   </span>
                                   </div>
                                 </div>
@@ -319,7 +428,6 @@ userID = aes.setDecrypting(userID);
                             </div>
                         
                         <%
-                           }
                         }
                         %>
                            
@@ -337,7 +445,7 @@ userID = aes.setDecrypting(userID);
                            </div>
                            <div class="col-sm-8 col-xs-7 heading-name">
                               <!-- 상대방 이름 등록.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-                              <a class="heading-name-meta">John Doe </a> 
+                              <a class="heading-name-meta" id="yourname">John Doe </a> 
                               <span class="heading-online">Online</span>
                            </div>
 <!--                            <div class="col-sm-1 col-xs-1  heading-dot pull-right">
@@ -348,8 +456,8 @@ userID = aes.setDecrypting(userID);
                         <div class="row1 message" id="conversation">
                            <div class="row1 message-previous">
                               <div class="col-sm-12 previous">
-                                 <a onclick="previous(this)" id="ankitjain28" name="20">
-                                    Show Previous Message! </a>
+<!--                                  <a onclick="previous(this)" id="ankitjain28" name="20">
+                                    Show Previous Message! </a> -->
                               </div>
                            </div>
                            <div class="row1 message-body" id="chatlist"></div>
@@ -373,102 +481,8 @@ userID = aes.setDecrypting(userID);
          </div>
       </div>
 
-      <script type="text/javascript">
-         $(document)
-               .ready(
-                     function() {
-                        $('[data-toggle=offcanvas]')
-                              .click(
-                                    function() {
-                                       $(this)
-                                             .toggleClass(
-                                                   'visible-xs text-center');
-                                       $(this)
-                                             .find('i')
-                                             .toggleClass(
-                                                   'glyphicon-chevron-right glyphicon-chevron-left');
-                                       $('.row-offcanvas')
-                                             .toggleClass(
-                                                   'active');
-                                       $('#lg-menu')
-                                             .toggleClass(
-                                                   'hidden-xs')
-                                             .toggleClass(
-                                                   'visible-xs');
-                                       $('#xs-menu')
-                                             .toggleClass(
-                                                   'visible-xs')
-                                             .toggleClass(
-                                                   'hidden-xs');
-                                       $('#btnShow').toggle();
-                                    });
-                     });
-         $(document).ready(function() {
-            //chatListFunction('ten');
-            //getInfiniteChat();
-            $('#submitMessage').click(function() {
-               submitFunction();
-            });
-            
-             $(".heading-compose").click(function() {
-                 $(".side-two").css({
-                   "left": "0"
-                 });   
-               });
-               $(".newMessage-back").click(function() {
-                 $(".side-two").css({
-                   "left": "-100%"
-                 });
-               });
-         });
-         function checkgo() {
-            var check = document.getElementById("search_category").value;
-            var keyword = document.getElementById("srch-term").value;
-            alert(check);
-            alert(keyword);
-            if (keyword == "") {
-               alert("키워드를 입력해주세요.");
-               return false;
-            }
-            if (check == "user") {
-               location.href = "searchAll.do?keyword=" + keyword
-                     + "&number=1";
-            }
-            if (check == "map") {
-               location.href = "searchAll.do?keyword=" + keyword
-                     + "&number=2";
-            }
-            if (check == "board") {
-               location.href = "searchAll.do?keyword=" + keyword
-                     + "&number=3";
-            }
-            return false;
-         }
-         
-         function enterkey(){
-            if(window.event.keyCode == 13){
-               submitFunction();
-            }
-         }
-         
-         function getNewChat(value){
-            toID = value;
-            lastID = 0;
-            $('#chatlist').html('');
-            $('.conversation').show();
-            chatListFunction(lastID);
-         }
-         
-         function getSide(){
-            $.ajax({
-               url:'getNewFollower.do',
-               success: function(data){
-                  console.log(data);
-                  var side = '';
-                  
-               }
-            })
-         }
-      </script>
+
+
+
 </body>
 </html>

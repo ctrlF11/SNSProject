@@ -8,7 +8,7 @@
 		insert into Chat (fromID,
 		toID, chatContent, chatTime, chatRead)
 		values (#{fromID}, #{toID},
-		#{chatContent}, NOW(), 0)s
+		#{chatContent}, NOW(), 0)
 	</insert>
 
 	<select id="listByID" parameterType="ChatVO" resultType="ChatVO">

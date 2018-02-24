@@ -75,4 +75,10 @@ public class UserDAOImpl implements UserDAO{
 		return sqlSession.selectOne(namespace+".getId", vo);
 	}
 
+	@Override
+	public List<UserVO> getFollower(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(namespace+".getFollower", id);
+	}
+
 }

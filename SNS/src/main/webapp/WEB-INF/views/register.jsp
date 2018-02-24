@@ -181,7 +181,7 @@
                <div class="form-group">
                   <div class="form-row">
                      <label for="exampleInputPassword1" style="color:black">비밀번호 확인</label> <input
-                        class="form-control" name="password" type="password"
+                        class="form-control" name="password2" type="password"
                         placeholder="Password">
                   </div>
                   <div id="passwordHelp1" style="color: red"></div>

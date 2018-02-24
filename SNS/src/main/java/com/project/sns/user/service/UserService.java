@@ -17,4 +17,6 @@ public interface UserService {
 	public int getFollowerCount(String id);
 	public int followByBoard(HashMap<String, String> ids);
 	public int followByPage(HashMap<String, String> ids);
+	
+	public List<UserVO> getFollower(String id);
 }

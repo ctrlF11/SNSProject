@@ -166,9 +166,12 @@ public class BoardController {
 				}
 			}
 		}
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!follower list도 보내야함
+		//팔로워 모음
+		List<UserVO> followerlist = userService.getFollower(id);
 		request.setAttribute("myInfo", myvo);
 		request.setAttribute("chatList", resultList);
+		request.setAttribute("follower", followerlist);
+		
 		return "chat";
 	}
 

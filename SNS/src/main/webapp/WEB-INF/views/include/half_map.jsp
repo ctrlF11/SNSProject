@@ -1,5 +1,5 @@
 <div class="padding">
-	<div class="full col-sm-9" id="full1">
+	<div class="full col-sm-9" id="full1" style="float: right;">
 		<div class="row">
 			<div class="col-sm-6" id="col-sm-6">
 				<!-- 글 영역 -->
