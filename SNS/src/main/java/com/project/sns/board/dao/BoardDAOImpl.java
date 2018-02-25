@@ -249,6 +249,9 @@ public class BoardDAOImpl implements BoardDAO {
 	    	return sqlSession.selectOne(namespace+".getBoardlikeId", vo);
 	    }
 	    
-	    
+	    public List<AddrVO> getSavedPath(int story_seq) throws Exception
+	    {
+	    	return sqlSession.selectList(namespace+".getSavedPath", story_seq);
+	    }
 
 }

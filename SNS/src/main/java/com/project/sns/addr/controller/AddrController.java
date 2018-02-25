@@ -308,54 +308,38 @@ public class AddrController {
 		return vo;
 	}
 
-	@RequestMapping("/Address.do")
-	public String Address(HttpServletRequest req) throws Exception {
-		List<AddrVO> list = service.getAddress();
-		req.setAttribute("list", list);		
-		return "Map";
-	}
-
 	 @RequestMapping("/newMap")
-	 public String path2(HttpServletRequest req, HttpSession session)throws Exception{
+	 public String path2(HttpServletRequest request, HttpSession session)throws Exception{
 	    List<AddrVO> list = service.getAddress();
-	    req.setAttribute("list", list);   
+	    request.setAttribute("list", list);   
 	    
 	    if(session.getAttribute("id") != null) {				//로그인이 되어있을 때만 pathCount를(경로 묶음) 불러온다.
 	    	
 	    	String id = (String) session.getAttribute("id");
 	    	id = AES.setDecrypting(id);
 
-	    req.setAttribute("id", id);
+	    request.setAttribute("id", id);
 	    }
 	    return "path2";
 	 }
 
 	  @RequestMapping("/insertPath.do")
-	    public void insertPath(HttpServletRequest request, HttpServletResponse response, BoardVO vo) throws Exception {
+	    public void insertPath(HttpSession session, BoardVO vo) throws Exception {
 
-	    	Integer pathCount = 0;
-	    	try {
-	    		 pathCount = service.getCount(vo.getWriter());
-	    	} catch (Exception e) {
-	    		pathCount = 0;	
-	    	}
-	    	pathCount = pathCount + 1;
-	    	vo.setCount(pathCount);
+	    	String id = (String) session.getAttribute("id");
+	    	id = AES.setDecrypting(id);
+	    	
+		int storySeq = service.getStoryseq(id);
+		
+	    vo.setWriter(id);
+	    	vo.setStory_seq(storySeq);
 	    	service.insertPath(vo);
 	    
 	    }
-	 
-	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	   @RequestMapping("/Path.do")
-	   public String Path(HttpServletRequest req) throws Exception{
-		   List<AddrVO> list = service.getAddress();
-		   req.setAttribute("list", list);   
-		   return "path";
-	   }
 	
 	//Dijkstra - 코스추천 길찾기
 	@RequestMapping("/getPath.do")
-	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req, @RequestParam String sigungucode, @RequestParam String hour, @RequestParam String minute) throws Exception {
+	public @ResponseBody Map<String, Object> getPath(@RequestParam String sigungucode, @RequestParam String hour, @RequestParam String minute) throws Exception {
 		
 		
 		//날씨 API

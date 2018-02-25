@@ -79,4 +79,6 @@ public interface BoardDAO {
     public List<BoardVO> getBoard(BoardVO vo) throws Exception;
     public int likeDelete(BoardVO board) throws Exception;
     public BoardVO getBoardlikeId(BoardVO vo) throws Exception;
+    
+    public List<AddrVO> getSavedPath(int story_seq) throws Exception;
 }

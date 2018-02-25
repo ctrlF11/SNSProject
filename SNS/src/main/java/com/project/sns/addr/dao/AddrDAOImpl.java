@@ -54,11 +54,6 @@ public class AddrDAOImpl implements AddrDAO {
 	public void insertPath(BoardVO vo) {
 		sqlSession.insert(namespace + ".insertPath", vo);
 	}
-
-	@Override
-	public int getCount(String id) throws Exception {
-		return sqlSession.selectOne(namespace + ".getCount", id);
-	}
 	
 	@Override
 	public AddrVO callInfo(String contentId) throws Exception {
@@ -78,5 +73,9 @@ public class AddrDAOImpl implements AddrDAO {
 	@Override
 	public List<BoardVO> getStarAvgList() throws Exception {
 		return sqlSession.selectList(namespace+".getStarAvgList");	
+	}
+	@Override
+	public int getStoryseq(String id) throws Exception {
+		return sqlSession.selectOne(namespace + ".getStoryseq", id);
 	}
 }

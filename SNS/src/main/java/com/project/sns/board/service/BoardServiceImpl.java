@@ -261,4 +261,9 @@ public class BoardServiceImpl implements BoardService {
     public BoardVO getBoardlikeId(BoardVO vo) throws Exception{
     	return dao.getBoardlikeId(vo);
     }
+    
+    public List<AddrVO> getSavedPath(int story_seq) throws Exception
+    {
+    	return dao.getSavedPath(story_seq);
+    }
 }

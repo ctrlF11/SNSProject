@@ -496,7 +496,6 @@ function recommend() {
             data : {'sigungucode' : sigungucode, 'hour' : $('#selectHour').val(), 'minute' : $('#selectMinute').val()},
             success : function(jsonData) {
 
-
                var path = jsonData.path;
                var sidePath = "";					//오른쪽 사이드바에 경로 나열
                recPath = [];						//추천 경로가 담겨질 배열
@@ -903,7 +902,7 @@ AddText.prototype.draw = function() {
 };
 
 
-//시간
+//시간(시)
 $(function setHour(){
 	var result = "";			//select에 들어갈 값
 	var value = "";				//option에 들어갈 값
@@ -923,7 +922,7 @@ $(function setHour(){
 	
 })
 
-//분
+//시간(분)
 $(function setMinute(){
 	var result = "";			//select에 들어갈 값
 	var value = "";				//option에 들어갈 값
@@ -947,28 +946,26 @@ $(function setMinute(){
 function savepath(){
 	
 	var id = "<%=request.getAttribute("id")%>";		
-	var oneAlert = 0;									//alert 한번만 나오도록 하기 위해서 사용
 
 	if(id == null){
 		alert("회원만 이용 가능합니다.");
 		//로그인 화면으로 이동하게 ??
 	} else {		
-
-	for(var i=0; i<arr.length; i++){
-
-  	$.ajax({
-		url:'insertPath.do',
-		data:{"writer" : id, "contentId" : arr[i].contentId},	
-		success: function(){
-			if(oneAlert==0)
-				alert("경로가 저장되었습니다.");
-				oneAlert++;
+		var storyName = prompt('새로운 스토리명을 입력해주세요.');
+		if(storyName!=null && storyName!=''){
+			$.ajax({									//스토리 저장
+				url : "inputStory.do",
+				data : {"id":id, "story_title":storyName},
+				success : function(){
+					for(var i=0; i<arr.length; i++){
+						$.post("insertPath.do", {"contentId" : arr[i].contentId}, function(){				//경로 저장
+						})				
+					}
+					alert("경로가 저장되었습니다.");
+				}
+			})
 		}
-	
-	})
-	}
 	} 
-
 }
 
 </script>      

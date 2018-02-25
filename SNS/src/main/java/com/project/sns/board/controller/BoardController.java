@@ -410,4 +410,12 @@ public class BoardController {
 		return "web";
 	}
 
+	//저장된 경로들 불러오기
+	@RequestMapping("/loadPath.do")
+	public @ResponseBody List<AddrVO> loadPath(HttpServletRequest request, @RequestParam int story_seq) throws Exception {
+		List<AddrVO> pathList = service.getSavedPath(story_seq);
+		return pathList;
+		
+	}
+	
 }

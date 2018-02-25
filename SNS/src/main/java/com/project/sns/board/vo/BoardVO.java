@@ -24,7 +24,6 @@ public class BoardVO {
 	private Integer heart;
 	private String heart_id;
 	private Integer star;
-	private Integer count;
 
 	private String story_title;
 	private String id;
@@ -212,16 +211,6 @@ public class BoardVO {
 	public void setHeart_id(String heart_id) {
 		this.heart_id = heart_id;
 	}
-
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(Integer count) {
-		this.count = count;
-	}
-
-
 	public Integer getStar() {
 		return star;
 	}
