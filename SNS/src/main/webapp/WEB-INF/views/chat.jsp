@@ -90,7 +90,7 @@ userID = aes.setDecrypting(userID);
    var fromID = '<%=userID%>';
    var toID = '';
    
-   function chatListFunction(lastID) {
+   function chatListFunction() {
       $.ajax({
          type : "POST",
          url : "chat/list.do",
@@ -104,7 +104,6 @@ userID = aes.setDecrypting(userID);
             getSide();
             if (data == "")
                return;
-            console.log("data : " + data);
             for (var i = 0; i < data.length; i++) {
                addChat(data[i].fromID, data[i].chatContent,
                      data[i].chatTime);
@@ -142,7 +141,7 @@ userID = aes.setDecrypting(userID);
    }
    function getInfiniteChat() {
       setInterval(function() {
-         chatListFunction(lastID);
+         chatListFunction();
       }, 30000); //30초에 1번 실행
    }
    
@@ -228,7 +227,7 @@ function getNewChat(value){
 	$('.heading-avatar-icon').find('img').attr("src",$(document.getElementById(toID)).find('img').attr('src'));
 	$('#chatlist').html('');
 	$('.conversation').show();
-	chatListFunction(lastID);
+	chatListFunction();
 	getInfiniteChat();
 }
 
@@ -239,20 +238,19 @@ $.ajax({
    data: {id: fromID},
    contentType : "application/json; charset=UTF-8",
    success: function(data){
-      console.log(data);
       var side = '';
       var namecheck = [];
       side+='<div class="row1 sideBar" id="sideBar">';
       for(var i = 0; i < data.length; i++){
     	  var follow = "";
     	  if(fromID == data[i].fromID){
-    		  follow = data[i].fromID;
-    	  }else{
     		  follow = data[i].toID;
+    	  }else{
+    		  follow = data[i].fromID;
     	  }
     	  if(namecheck.indexOf(follow)==-1){
     		  namecheck.push(follow);
-    		  side += '<div class="row1 sideBar-body" onclick="getNewChat(' + follow + ')">';
+    		  side += '<div class="row1 sideBar-body" id="' + follow + '" onclick="getNewChat(this)">';
     		  side += '<div class="col-sm-3 col-xs-3 sideBar-avatar"><div class="avatar-icon">';
     		  if(data[i].picture != null){
     			  side += '<img src=' + data[i].picture + '/>';
@@ -268,9 +266,7 @@ $.ajax({
     	  }
       }
       side += '</div>';
-      console.log(side);
       $('#sideBar').html(side);
-      console.log('sideBar갱신');
    }
 })
 }
@@ -439,12 +435,10 @@ $.ajax({
                         <div class="row1 heading">
                            <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                               <div class="heading-avatar-icon">
-                                 <!-- 상대방 프로필 이미지 등록.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 -->
                                  <img src="https://bootdey.com/img/Content/avatar/avatar6.png">
                               </div>
                            </div>
                            <div class="col-sm-8 col-xs-7 heading-name">
-                              <!-- 상대방 이름 등록.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
                               <a class="heading-name-meta" id="yourname">John Doe </a> 
                               <span class="heading-online">Online</span>
                            </div>
