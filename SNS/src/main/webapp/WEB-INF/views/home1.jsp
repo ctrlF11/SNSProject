@@ -1,19 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-<<<<<<< HEAD
-	pageEncoding="UTF-8"%>
-=======
    pageEncoding="UTF-8"%>
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
 <meta name="viewport"
-<<<<<<< HEAD
-	content="width=device-width, initial-scale=1, maximum-scale=1">
-=======
    content="width=device-width, initial-scale=1, maximum-scale=1">
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject
 <head>
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <style>
@@ -294,14 +285,9 @@ function like_button(board_seq,story_seq)
               
             
             <div id="main" style="overflow-y: auto;" class="column col-sm-12 col-xs-12">
-<<<<<<< HEAD
-               <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar" name="story" style="position: fixed;"><ul class="accodian"><ul class="accodian"><input value="39" name="storyHidden" type="hidden"><h3 onclick="story_button(39)"><a href="#">#asdasdas</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="7" name="storyHidden" type="hidden"><h3 onclick="story_button(7)"><a href="#">#ㅁㄴㅇㄹ</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="1" name="storyHidden" type="hidden"><h3 onclick="story_button(1)"><a href="#">#강남역 맛집</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="5" name="storyHidden" type="hidden"><h3 onclick="story_button(5)"><a href="#">#고고고</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="10" name="storyHidden" type="hidden"><h3 onclick="story_button(10)"><a href="#">#동대문</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="37" name="storyHidden" type="hidden"><h3 onclick="story_button(37)"><a href="#">#민웅스 스퇼</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="6" name="storyHidden" type="hidden"><h3 onclick="story_button(6)"><a href="#">#오오오오오</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="2" name="storyHidden" type="hidden"><h3 onclick="story_button(2)"><a href="#">#제주도 여행</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="36" name="storyHidden" type="hidden"><h3 onclick="story_button(36)"><a href="#">#지니지니</a></h3></ul></ul></div><!-- 
-=======
                <div class="column col-sm-2 col-xs-1 sidebar-offcanvas" id="sidebar" name="story" style="position: fixed; margin-top: 74px;"><ul class="accodian"><ul class="accodian"><input value="39" name="storyHidden" type="hidden"><h3 onclick="story_button(39)"><a href="#">#asdasdas</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="7" name="storyHidden" type="hidden"><h3 onclick="story_button(7)"><a href="#">#ㅁㄴㅇㄹ</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="1" name="storyHidden" type="hidden"><h3 onclick="story_button(1)"><a href="#">#강남역 맛집</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="5" name="storyHidden" type="hidden"><h3 onclick="story_button(5)"><a href="#">#고고고</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="10" name="storyHidden" type="hidden"><h3 onclick="story_button(10)"><a href="#">#동대문</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="37" name="storyHidden" type="hidden"><h3 onclick="story_button(37)"><a href="#">#민웅스 스퇼</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="6" name="storyHidden" type="hidden"><h3 onclick="story_button(6)"><a href="#">#오오오오오</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="2" name="storyHidden" type="hidden"><h3 onclick="story_button(2)"><a href="#">#제주도 여행</a></h3></ul></ul><ul class="accodian"><ul class="accodian"><input value="36" name="storyHidden" type="hidden"><h3 onclick="story_button(36)"><a href="#">#지니지니</a></h3></ul></ul></div><!-- 
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject
                   Topbar. 기존 부트스트랩보다 height를 늘림.
                 -->
-<<<<<<< HEAD
   				<%@ include file="include/topbar.jsp" %>             
   				<div class="padding">
 	<div class="full col-sm-10" id="full1" style="float: right;">
@@ -318,24 +304,6 @@ function like_button(board_seq,story_seq)
 				</div>
 			</div>
 		</div>
-=======
-              <%@ include file="include/topbar.jsp" %>             
-              <div class="padding">
-   <div class="full col-sm-10" id="full1" style="float: right;">
-      <div class="row">
-         <div class="col-sm-6" id="col-sm-6">
-            <!-- ê¸  ì  ì   -->
-         </div>
-         <div class="col-sm-6">
-            <div id="map" style="width: 40%; height: 100%;"></div>
-               <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
-               <script>
-               
-               </script>
-            </div>
-         </div>
-      </div>
->>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject
 </div>
 
             </div>

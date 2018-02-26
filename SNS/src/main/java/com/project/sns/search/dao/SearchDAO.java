@@ -13,4 +13,5 @@ public interface SearchDAO {
 	public List<TourMapVO> searchMap(String keyword) throws Exception;
 	public List<BoardVO> searchBoard(String keyword) throws Exception;
 	public List<BoardVO> searchBoards(SearchVO vo) throws Exception;
+	public List<TourMapVO> searchMapInBar(String keyword) throws Exception;
 }

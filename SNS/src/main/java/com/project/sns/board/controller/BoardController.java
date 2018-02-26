@@ -253,23 +253,34 @@ public class BoardController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 
-	@RequestMapping("/getBoardList.do")
-	public String getBoardList(@RequestParam("index") int index, @RequestParam("story_seq") int story_seq,
-			HttpServletRequest request) throws Exception {
-		logger.info("getBoardList");
-		System.out.println("index : " + index + " story-seq : " + story_seq);
-		HashMap map = new HashMap();
-		map.put("index", index);
-		map.put("story_seq", story_seq);
-		List<BoardVO> user = service.getBoardList(map);
-		request.setAttribute("user", user);
-		/*
-		 * if(index == 0) return "home1"; else
-		 */
-		HttpSession se = request.getSession();
-		se.setAttribute("userH", user);
-		return "table";
-	}
+
+	   @RequestMapping("/getBoardList.do")
+	   public String getBoardList(@RequestParam("index") int index, @RequestParam("story_seq") int story_seq,
+	         HttpServletRequest request) throws Exception {
+	      logger.info("getBoardList");
+	      System.out.println("index : " + index + " story-seq : " + story_seq);
+	      HashMap map = new HashMap();
+	      map.put("index", index);
+	      map.put("story_seq", story_seq);
+	      List<BoardVO> user = service.getBoardList(map);
+	      TIME_MAXIMUM time = new TIME_MAXIMUM();
+	      ArrayList<String> timeS = new <String>ArrayList();
+	      for (int i = 0; i < user.size(); i++) {
+	         timeS.add(time.calculateTime(user.get(i).getRegdate()));
+	      }
+	      
+	      for (int i = 0; i < timeS.size(); i++) {
+	         System.out.println(timeS.get(i));
+	      }
+	      request.setAttribute("user", user);
+	      request.setAttribute("time",timeS);
+	      /*
+	       * if(index == 0) return "home1"; else
+	       */
+	      HttpSession se = request.getSession();
+	      se.setAttribute("userH", user);
+	      return "table";
+	   }
 
 	/*
 	 * @ResponseBody

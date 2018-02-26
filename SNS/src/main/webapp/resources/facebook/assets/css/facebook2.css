@@ -308,11 +308,7 @@ small.text-muted {
    justify-content: flex-start;
    height: 74px;
    box-sizing: border-box;
-<<<<<<< HEAD
-   width: 600px;
-=======
-   width: 800px;
->>>>>>> refs/remotes/origin/Leejh
+   width: 580px;
    display: inline-block;
    float: right;
    
@@ -354,3 +350,47 @@ small.text-muted {
 .navbar-right li a {
 	padding: 0;
 }
+
+.responsive {
+    padding: 0 6px;
+    float: left;
+    vertical-align: center;
+    width: 24%;
+    background-color: #ffffff;
+	margin-left: 8px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.card-body-bottom .responsive {
+    padding: 0;
+    margin: 0;
+    float: left;
+    vertical-align: middle;
+    width: 100%;
+    background-color: #ffffff;
+    margin-bottom: auto;
+    border: 1px solid black;
+    position: relative;
+    display: inline;
+}
+
+.card-body-bottom {
+	margin-left: 8px;
+	text-align: center;
+	width: 24%;
+	display: inline-block;
+	border: 1px solid red;
+	vertical-align: middle;
+}
+
+.search-result-area {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.search-catNameBar {
+	margin-bottom: 5px;
+	border-bottom: 1px double black;
+}
+

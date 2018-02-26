@@ -42,5 +42,10 @@ public class SearchDAOImpl implements SearchDAO{
 	public List<BoardVO> searchBoards(SearchVO vo) throws Exception {
 		return session.selectList(namespace+".searchBoards", vo);
 	}
+
+	@Override
+	public List<TourMapVO> searchMapInBar(String keyword) throws Exception {
+		return session.selectList(namespace + ".searchMapInBar", keyword);
+	}
 	
 }

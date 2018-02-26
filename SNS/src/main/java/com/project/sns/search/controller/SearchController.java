@@ -93,7 +93,7 @@ public class SearchController{
 	public String searchTourMap(@RequestParam("keyword") String keyword, HttpServletRequest request) throws Exception {
 		request.setCharacterEncoding("UTF-8");
 		keyword = '%'+keyword+'%';
-		List<TourMapVO> tourMapList = service.searchMap(keyword);
+		List<TourMapVO> tourMapList = service.searchMapInBar(keyword);
 
 		request.setAttribute("order", "관광지");
 		request.setAttribute("number", 2);

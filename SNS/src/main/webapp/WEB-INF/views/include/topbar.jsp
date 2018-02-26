@@ -51,12 +51,12 @@
                            <%
                               if(session.getAttribute("id") == null) {
                                  %>
-                                    <a href="login.do"><img src="login.jpg"></img></a>
+                                    <a href="login.do"><img src="login.jpg" /></a>
                                  <%
                               }
                               else {
                                  %>
-                                    <a href="logout.do">로그아웃</a>
+                                    <a href="logout.do"><img src="img/logout.jpg" /></a>
                                  <%
                               }
                            %>
@@ -66,7 +66,7 @@
                               </img>
                            </li>
                            <li>
-                              <a href="message.do" role="button">메세지</a>
+                              <a href="message.do" role="button"><img src="img/message.jpg"></a>
                            </li>
                            <li>
                               <a href="modifyBoard.do"><img src="write.jpg" onclick="message.do"></img></a>

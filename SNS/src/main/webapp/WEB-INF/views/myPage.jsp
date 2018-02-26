@@ -83,9 +83,8 @@
 		mmm();
      	$("#main").scroll(function() {
         	var sh = $("#main").scrollTop() + $("#main").height();
-    	    var dh = $("#main").prop("scrollHeight");
-
-	        if (sh == dh && mode == 2) {
+    	    var dh = $("#main").prop("scrollHeight") - 1;
+	        if (sh >= dh && mode == 2) {
 				index += 6;
 				$.ajax({
 					url : 'getFollowerStoryList.do',

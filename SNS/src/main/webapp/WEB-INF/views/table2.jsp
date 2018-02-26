@@ -5,7 +5,8 @@
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
 <meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1"><%--
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<%--
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
 <script type="text/javascript"
@@ -140,16 +141,19 @@ function makeOutListener(infowindow) {
 	alert("click 작동");
    }) 
 </script>--%>
-	<div class="panel panel-default">
-		<c:forEach var="list" items="${requestScope.list}">
-				<div class="card-body">
-					<p class="lead-myBar">
-						<a href="homeview.do?story_seq=${list.story_seq }">${list.story_title }</a>
-					</p>
+<div class="panel panel-default">
+	<c:forEach var="list" items="${requestScope.list}">
+		<div class="card-body-bottom">
+			<div class="responsive">
+				<div class="img">
+					<a target="_blank" href="homeview.do?story_seq=${list.story_seq}">
+						<figure>${list.story_title }</figure>
+					</a>
 				</div>
-				<hr>
-		</c:forEach>
-	</div>
+			</div>
+		</div>
+	</c:forEach>
+</div>
 
 
 

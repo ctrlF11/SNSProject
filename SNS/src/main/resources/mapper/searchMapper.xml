@@ -15,6 +15,19 @@
 			@rnum &lt; 5;
 		</where>
 	</select>
+	<select id="searchMapInBar" parameterType="String" resultType="TourMapVO">
+		select @rnum := @rnum +1 as rnum, a.* from
+			(select * from TourMap
+				<where>
+					title like #{keyword}
+				</where>
+			) a,
+		(select @rnum := 0) b
+		<where>
+			@rnum &lt; 5;
+		</where>
+	</select>
+	
 	
 	<select id="searchMap" parameterType="SearchVO" resultType="TourMapVO">
 		select @rnum := @rnum +1 as rnum, a.* from

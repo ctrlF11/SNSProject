@@ -40,6 +40,11 @@ public class SearchServiceImpl implements SearchService{
 	public List<BoardVO> searchBoards(SearchVO vo) throws Exception {
 		return dao.searchBoards(vo);
 	}
+
+	@Override
+	public List<TourMapVO> searchMapInBar(String keyword) throws Exception {
+		return dao.searchMapInBar(keyword);
+	}
 	
 	
 }

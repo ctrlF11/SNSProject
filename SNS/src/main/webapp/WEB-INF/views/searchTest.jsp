@@ -58,24 +58,37 @@
 		})
 	}
 	
+	function delay() {
+	}
+	
+	
 	function wtf() {
 		var number = <%= request.getAttribute("number")%>;
-		if(number == 1) {
-			aaa();
-			bbb();
-			ccc();
-		} else if(number == 2) {
-			bbb();
-			aaa();
-			ccc();
-		} else if(number == 3) {
-			ccc();
-			bbb();
-			aaa();
-		} else {
-			alert("잘못된 동작입니다.");
-			location.href="mainHomeView.do";
-		}
+			if(number == 1) {
+				aaa();
+				setTimeout(delay(), 1500);
+				bbb();
+				setTimeout(delay(), 1500);
+				ccc();
+				setTimeout(delay(), 1500);
+			} else if(number == 2) {
+				bbb();
+				setTimeout(delay(), 1500);
+				aaa();
+				setTimeout(delay(), 1500);
+				ccc();
+				setTimeout(delay(), 1500);
+			} else if(number == 3) {
+				ccc();
+				setTimeout(delay(), 1500);
+				bbb();
+				setTimeout(delay(), 1500);
+				aaa();
+				setTimeout(delay(), 1500);
+			} else {
+				alert("잘못된 동작입니다.");
+				location.href="mainHomeView.do";
+			}
 	}
 	
 
