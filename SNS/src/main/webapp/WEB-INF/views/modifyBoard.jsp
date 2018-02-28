@@ -22,6 +22,7 @@
 <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
 <link href="resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.rawgit.com/singihae/Webfonts/master/style.css" rel="stylesheet" type="text/css" />
 <style>
 #map {
    position: fixed;
@@ -140,8 +141,7 @@
 <div class="wrapper">
       <div class="box">
          <div class="row row-offcanvas row-offcanvas-left">
-         
-                  
+                          
             <div id="main" class="column col-sm-12 col-xs-12">
 			<%@ include file="include/topbar.jsp"%>                      
                         
@@ -221,7 +221,6 @@ var id = '<%=id%>';
 var files = [];
 var blob;
 var contentId;
-var mtitle;
 var starvalue;
 //보드 받아올 때 빼오기. 
 var board_seq =3; 
@@ -268,7 +267,7 @@ function createMarker(position, image){
 }
 //마커 추가
 
-function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {     		 
+function addMarker(position, title, contentid, contenttypeid) {     		 
  
 
    var normalImage = createMarkerImage(sprite_marker_url, markerSize),
@@ -324,8 +323,7 @@ function addMarker(position, title, contentid, contenttypeid, mapy, mapx) {
        // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
        selectedMarker = marker;
        createArrMarkers();
-     
-
+	   getDetail(contentid, contenttypeid, title);
    });
    } 
 
@@ -433,7 +431,7 @@ function getInfo(contentid, contenttypeid){
 		$.ajax({
 			url:'inputBoard.do',
 			type:'POST',
-			data:{story_seq:story_seq, title:title, content:content, writer:id, mtitle:mtitle, contentId:contentId, star:starvalue},
+			data:{story_seq:story_seq, title:title, content:content, writer:id, contentId:contentId, star:starvalue},
 			success: window.location.replace("homeview.do?story_seq="+story_seq)
 				
 		})
@@ -662,15 +660,16 @@ function loadPath(){
 			var path = "";
 			for(var i=0; i<pathList.length; i++){
 		        var latlng = new daum.maps.LatLng(pathList[i].mapy,pathList[i].mapx);
-				path += "<a href='javascript:panTo(" + pathList[i].mapy + "," + pathList[i].mapx +"," +  pathList[i].contentId + "," + pathList[i].contentTypeId + ")'>"
+				path += "<a href='javascript:panTo(" + pathList[i].mapy + "," + pathList[i].mapx +"," +  pathList[i].contentId + "," + pathList[i].contentTypeId + ","  + ")'>"
 			    	   	+ pathList[i].title + "</a>";
 				if(i<pathList.length-1){
-					path += "-";
+					path += "<img src='resources/image/up-broken-arrow.png'>";
 				}	
 				
-				addMarker(latlng, pathList[i].title, pathList[i].contentId, pathList[i].contentTypeId);
-	            pathes.push(latlng);
+				addMarker(latlng, pathList[i].title, pathList[i].contentId, pathList[i].contentTypeId);				
+	            pathes.push(latlng);				//polyline 그리기 용도
 			}
+			panTo(pathList[0].mapy, pathList[0].mapx, pathList[0].contentId, pathList[0].contentTypeId);      //스토리의 처음 위치를 보여줍니다.
 			$('#savedPath').html(path);				//경로리스트 보여주기
 			drawLine(pathes);						//라인 그리기
 
@@ -681,22 +680,21 @@ function loadPath(){
 
 //클릭하면 해당 위치로 이동 (인포윈도우)
 function panTo(mapy, mapx, contentid, contenttypeid) {
-
+ 
    // 이동할 위도 경도 위치를 생성합니다 
    var moveLatLon = new daum.maps.LatLng(mapy, mapx);
-
+ 
    // 지도 중심을 부드럽게 이동시킵니다
    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
    map.panTo(moveLatLon);
-   
    getDetail(contentid, contenttypeid);
 }
 
 //자세한 정보 및 별점 화면
 function getDetail(contentid, contenttypeid){
-    contentId = contentid;
-    mtitle = title;
-    
+
+
+   contentId = contentid;			//저장용도
    starvalue = 0;
    starcount = 0;
    locked = 0;

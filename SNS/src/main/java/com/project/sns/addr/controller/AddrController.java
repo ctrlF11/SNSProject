@@ -339,7 +339,7 @@ public class AddrController {
 	
 	//Dijkstra - 코스추천 길찾기
 	@RequestMapping("/getPath.do")
-	public @ResponseBody Map<String, Object> getPath(@RequestParam String sigungucode, @RequestParam String hour, @RequestParam String minute) throws Exception {
+	public @ResponseBody Map<String, Object> getPath(@RequestParam String sigungucode, @RequestParam String startTime) throws Exception {
 		
 		
 		//날씨 API
@@ -415,12 +415,19 @@ public class AddrController {
 		String curDate = dataFormat.format(cal.getTime());
 		
 		int time = 0;
-		if(hour.equals("hh") && minute.equals("mm")) {					//select box가 "시", "분" 으로 설정되어 있으면 현재시간으로 계산
+		String sTime = startTime.replace(":", "");
+		String ampm = sTime.substring(4);
+		System.out.println(sTime.substring(0,4));
+		if(sTime.substring(0,4).equals("0000")) {
 			time = Integer.parseInt(curDate.substring(8));
-		} else {														//입력된 출발 시간으로 계산
-			String hhmm = hour + minute;
-			time = Integer.parseInt(hhmm);
+		} else if(ampm.equals("PM")){
+			time = Integer.parseInt(sTime.substring(0,4)) + 1200;
 		}
+		
+		if(ampm.equals("PM")) {
+			time = Integer.parseInt(sTime.substring(0,4)) + 1200;
+		}
+
      		
 		for(int i=0; i<list.size(); i++) {
 			tempMap = new HashMap<>();

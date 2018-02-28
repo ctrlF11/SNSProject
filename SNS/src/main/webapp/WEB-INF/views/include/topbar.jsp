@@ -69,7 +69,8 @@
                               <a href="message.do" role="button">메세지</a>
                            </li>
                            <li>
-                              <a href="modifyBoard.do"><img src="write.jpg" onclick="message.do"></img></a>
+                                 
+                              <a href="modifyBoard.do"><img src="write.jpg" onclick="checkId(event)"></img></a>
                            </li>
                            <!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
                            <li class="dropdown">
@@ -88,4 +89,14 @@
                   </nav>
                </div>
 </body>
+<script>
+function checkId(event){
+	var id = <%=session.getAttribute("id")%>;
+	 if(id == null) {
+		 alert("회원만 이용 가능합니다.");
+		 location.href = "login.do";
+		 event.preventDefault();
+	 }
+}
+</script>
 </html>
