@@ -248,6 +248,12 @@ public class BoardDAOImpl implements BoardDAO {
 	    {
 	    	return sqlSession.selectOne(namespace+".getBoardlikeId", vo);
 	    }
+
+		@Override
+		public BoardVO getBoardBySeq(String board_seq) throws Exception {
+			// TODO Auto-generated method stub
+			return sqlSession.selectOne(namespace+".getBoardBySeq", board_seq);
+		}
 	    
 	    
 

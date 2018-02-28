@@ -1,24 +1,23 @@
 <%-- <%@include file ="addT.jsp" %> --%>
+<%@page import="A.algorithm.AES"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
-<link href="resources/vendor/font-awesome/css/font-awesome.min.css"
+
+
+<link href="resources/startbootstrap-coming-soon-gh-pages/vendor/font-awesome/css/font-awesome.min.css"
    rel="stylesheet" type="text/css">
 <meta name="viewport"
    content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet"
-   href="resources/facebook/assets/css/bootstrap2.css">
-<link rel="stylesheet"
-   href="resources/facebook/assets/css/facebook2.css">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script>
 // 지도에 마커를 표시합니다 
 var mapContainer = document.getElementById('map'), // 지도의 중심좌표
  mapOption = { 
  center: new daum.maps.LatLng(33.451475, 126.570528), // 지도의 중심좌표
-level: 15 // 지도의 확대 레벨
+level: 3 // 지도의 확대 레벨
  }; 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 // 지도에 마커를 표시합니다 
@@ -72,7 +71,7 @@ var contents =  [
             }
              <%
                 if (list.size() - 1 > i) {
-                      out.append(",");
+                      out.append(",");   
                    }
                 }
              %>  
@@ -179,11 +178,9 @@ function makeOutListener(infowindow) {
 <c:forEach var="user" items="${requestScope.user}">
 <br/>
    <div class="panel panel-default">
-      <a href="#"> <img class="card-img-top img-fluid w-100"
-         src="resources/facebook/assets/img/uFp_tsTJboUY7kue5XAsGAs28.png"
-         alt="">
-      </a>${user.mtitle}
+   <div class="card mb-3">
       <div class="card-body">
+      스토리 번호 :${user.story_seq }
          <h6 class="card-title mb-1">
             <a
                href="getBoardValue.do?story_seq=${user.story_seq}&writer=${user.writer}">
@@ -191,37 +188,54 @@ function makeOutListener(infowindow) {
                ${user.content}
                </a>
          </h6>
-         <p class="card-text small">
-            <a href="#">작성자:${user.writer}</a>
-         </p>
+         <c:set var="id2" value="${user.writer}" scope="request"/>
+        <%       
+         String id = (String) session.getAttribute("id");
+         AES aes = new AES();
+         id = aes.setDecrypting(id);
+         
+         String id2 = (String) request.getAttribute("id2");
+         if(id.equals(id2))
+         {
+        %>
+       <button class="btn btn-default"  style = "color :#e1494a" id="up${user.board_seq}" onclick="updateBoard(this)"> 수정 </button>
+       <button class="btn btn-default"  style = "color :#e1494a" id="del${user.board_seq}" name="${user.story_seq}" onclick="deleteBoard(this)"> 삭제</button>
+       <%}%>
+        
+       <p class="card-text small" >
+        <a href="#"><strong>by ${user.writer}</strong></a>
+       </p>
+       <p class="card-text small"><strong>
+       ${user.regdate}
+           <c:forEach var="time" items="${requestScope.time}" begin="${status.index}" end="${status.index }">${time}</strong></c:forEach>
+      </p>
       </div>
       <hr class="my-0">
       <div class="card-body py-2 small">
-         <a class="mr-3 d-inline-block" name="like${user.board_seq}" onclick="like_button(${user.board_seq},${user.story_seq})" href="#">
+         <a class="mr-3 d-inline-block" name="like${user.board_seq}" onclick="like_button(${user.board_seq},${user.story_seq})" href="#" style = "color :#e1494a;">
             <i class="fa fa-fw fa-thumbs-up"></i>${user.heart}명 Like
          </a>
-         <a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment">
+         <a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment" style = "color :#e1494a;">
             <i class="fa fa-fw fa-comment"></i>Comment
          </a>
-         <a class="d-inline-block" href="#">
+         <a class="d-inline-block" href="#" style = "color :#e1494a;">
             <i class="fa fa-fw fa-share"></i>Share
          </a>
       </div>
-      <hr class="my-0">
-      <div class="card-body small bg-faded"></div>
+      </div>
+
       
       
    <!--                     추가                         -->
     <!--  댓글  -->
     <div class="container">
-        <label for="content">comment</label>
         <form name="commentInsertForm">
             <div class="input-group">
                <input type="hidden" name="board_seq${user.board_seq}" value="${user.board_seq}" id="board_seq${user.board_seq}" />
                <input type="hidden" name="story_seq${user.story_seq}" value="${user.story_seq}" id="board_seq${user.story_seq}"/>
                <input type="text" class="form-control" id="content" name="content${user.board_seq}" placeholder="내용을 입력하세요.">
                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" name="rbtn" onclick="r_button(${user.board_seq},${user.story_seq})">등록</button>
+                    <button class="btn btn-default" type="button" name="rbtn" onclick="r_button(${user.board_seq},${user.story_seq})" style = "color :#e1494a;">등록</button>
                </span>
               </div>
         </form>
@@ -235,35 +249,75 @@ function makeOutListener(infowindow) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	   <%
+      <%
        for (int i = 0; i < list.size(); i++) {
        %>
-	    replyList( <%=list.get(i).getBoard_seq()%>,<%=list.get(i).getStory_seq()%>);
-	   <%}%>
-	   
+       replyList( <%=list.get(i).getBoard_seq()%>,<%=list.get(i).getStory_seq()%>);
+      <%}%>
+      
 })
+
 function replyList(board_seq,story_seq){
- 	 $.ajax({
-	        url : 'list.do',
-	        type : 'get',
-	        data : {
-		        	'board_seq':board_seq,
-		        	'story_seq' :story_seq	
-	        },
-	        success : function(data){
-	            var a =''; 
-	            $.each(data, function(key, value){ 
-	                a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-	                a += '<div class="commentInfo'+value.reply_seq+'">'+'댓글번호 : '+value.reply_seq+' / 작성자 : '+value.rwriter;
-	                a += '<button onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+');"> 수정 </button>';
-	                a += '<button onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
-	                a += '<div class="commentContent'+value.reply_seq+'"> <p> 내용 : '+value.rcontent +'</p>';
-	                a += '</div></div>';
-	                $('[name=commentList'+board_seq+']').html(a);
-	            });
-	            
-	            
-	        }
-	    });
+     $.ajax({
+           url : 'list.do',
+           type : 'get',
+           data : {
+                 'board_seq':board_seq,
+                 'story_seq' :story_seq   
+           },
+           success : function(data){
+               var a =''; 
+               $.each(data, function(key, value){ 
+                   a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+                   a += '<div class="commentInfo'+value.reply_seq+'"><div class="commentWrap"><a href="#"><img id ="pro" src="resources/image/gazua_icon.png" alt="Paris"></a><strong>'+value.rwriter+'</strong>';
+                   a += '<button style = "color :#e1494a;" class="btn btn-default" onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+'); style = "color :#e1494a;""> 수정 </button>';
+                   a += '<button style = "color :#e1494a;" class="btn btn-default" onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
+                   a += '<div class="commentContent'+value.reply_seq+'"> <p>'+value.rcontent +'</p>';
+                   a += '</div></div></div>';
+                   $('[name=commentList'+board_seq+']').html(a);
+               });
+               
+               
+           }
+       });
 } 
+
+function updateBoard(value){
+	var upseq = value.id.replace('up','');
+	console.log(upseq);
+	location.replace("modifyBoard.do?board_seq="+upseq);
+	
+}
+
+function deleteBoard(value){
+	var delseq = value.id.replace('del','');
+	var delstr = value.name;
+	console.log(delseq);
+	if(confirm('현재 작성 중이던 글을 삭제하시겠습니까?')){
+			$.ajax({
+				url:"deleteBoard.do",
+				type:"post",
+				data:{board_seq:delseq},
+				success: function(data){
+					location.replace("homeview.do?story_seq="+delstr);
+				}
+			})
+	}else{
+		return false;
+	}
+}
+
+
 </script>
+<style>
+#pro {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 35px;
+}
+
+#pro:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+</style>

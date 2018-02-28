@@ -61,12 +61,12 @@
       
       <!-- 오른쪽 사이드 -->  
       <div id="sidemenu">  
-      	<button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
+      	<button class="sideBtn" id="getpath" onclick="recommend()">경로 찾기</button>
       	<button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
       	<button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
       	<ul class="accordian">
       		<li class="accordian--box">
-      			<h3 id="recommend" onclick="recommend()">추천코스</h3>    			
+      			<h3 id="recommend">추천코스</h3>    			
       			<h4 id="pathlist"></h4>
       		</li>
       	</ul>
@@ -299,6 +299,7 @@ var markersArr = [];  //클릭해서 선택한 배열(빨간색)
 var markers = []; //검색 결과 마커들 모음 (노란색)
 var afterSearchPath = []; //검색 후 결과 배열
 var afterSearchArr = new Array(); //검색 한 결과 객체들 모음
+var afterpath = [];
 
 var selectedMarker = null;
 
@@ -414,6 +415,9 @@ function addMarker(position, title, contentid, contenttypeid) {
       obj.mapx = position.ib;
       obj.title = title;
       arr.push(obj);
+      console.log("마커 클릭시");
+      console.log(arr);
+      console.log(afterpath);
       markersArr.push(this);
       
       var outputTitle = '<div class="pin" value="'+ contenttypeid + '" id="' + contentid + '" text-align:left>';
@@ -488,7 +492,10 @@ var count = 0;
 
 //경로 추천
 function recommend() {
-   
+   if(sigungucode==''){
+	   alert("시군구를 입력해주세요.");
+	   return false;
+   }
    $.ajax({
             url : 'getPath.do',
             type : 'get',
@@ -496,13 +503,14 @@ function recommend() {
             data : {'sigungucode' : sigungucode, 'hour' : $('#selectHour').val(), 'minute' : $('#selectMinute').val()},
             success : function(jsonData) {
 
-
                var path = jsonData.path;
                var sidePath = "";					//오른쪽 사이드바에 경로 나열
                recPath = [];						//추천 경로가 담겨질 배열
+			   afterpath = [];
                count++;
                if(count > 1){						//추천경로 클릭할 때마다 새로운 라인과 마커 생성
-                  newpath();
+                  getpath();
+               		return false;
                }
                for (var i = path.length - 1; i >= 0; i--) {
                   for (var j = 0; j < positions.length; j++) {
@@ -514,6 +522,7 @@ function recommend() {
                          obj.mapx = positions[j].latlng.ib;
                          obj.title = positions[j].title;
                          arr.push(obj);
+                         afterpath.push(obj);
                          //arr.push(positions[j]);
                          
                         addMarker(positions[j].latlng,
@@ -533,7 +542,6 @@ function recommend() {
                   }
                }
                $('#pathlist').html(sidePath); //경로 목록 찍어줌
-               
                drawLine(recPath);
             },
             error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -569,10 +577,11 @@ function getpath(){
             markersArr = [];
             deletePolyLine();
             recPath = [];
+            afterpath = [];
             afterpath = data;
             var sidePath = '';
             var bounds = new daum.maps.LatLngBounds();
-               $.each(afterpath, function(i, val){
+               $.each(afterpath, function(i, val){	   
 
                   var latlng = new daum.maps.LatLng(val.mapy,val.mapx);
 
@@ -694,36 +703,25 @@ function deletePin(event){
       
       //arr에서 삭제
       arr.splice(i, 1);
-
-      //markersArr에서 삭제
+      //markersArr에서 삭제	
       markersArr.splice(i, 1);
-      
-      
-      //console.log("getpath의 결과?");
-      //console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
-      //if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){//getpath의 결과 일 경우. 마커를 삭제한다 
-         //markersArr[i].setMap(null);
-      //}else{//아닐 경우, 마커의 이미지를 normalImage로 바꾼다.
-         //markersArr[i].setImage(normalImage);
-      //}
+     	console.log(afterpath);
+     	console.log(cid);
+      console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
+     if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){
+  	   //div 지우기 경로 전
+ 		var top = document.getElementById('pathlist');
+ 		var garbage = document.getElementById(cid);
+ 		top.removeChild(garbage);
+     }else{
+    	   //div 지우기 경로 후
+    		var top1 = document.getElementById('path');
+    		var garbage1 = document.getElementById(cid);
+    		top1.removeChild(garbage1);
+     }
 
-   }   
-   
-   //div 지우기 경로 후
-	var top1 = document.getElementById('path');
-	var garbage1 = document.getElementById(cid);
-	if(!garbage1){
-	top1.removeChild(garbage1);
-	}else{
-   
-   
-   //div 지우기 경로 전
-	var top = document.getElementById('pathlist');
-	var garbage = document.getElementById(cid);
-	if(!garbage){
-	top.removeChild(garbage);
-	}
-	}
+   }	
+	
 	deletePolyLine();
 }
 
@@ -736,7 +734,8 @@ function newpath(){
    arr = new Array();
    markersArr = [];
    markers = [];
-   
+   count = 0;
+   afterpath = [];
    //라인 지우기
    deletePolyLine();
    

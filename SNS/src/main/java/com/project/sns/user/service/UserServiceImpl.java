@@ -75,4 +75,10 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userDao.getFollower(id);
 	}
+
+	@Override
+	public int updatePicture(UserVO vo) {
+		// TODO Auto-generated method stub
+		return userDao.updatePicture(vo);
+	}
 }

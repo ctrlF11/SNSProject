@@ -275,7 +275,7 @@ public class AddrController {
 	
 	@ResponseBody
 	@RequestMapping("/callInfo")
-	public AddrVO callInfo(@RequestParam String contentId, @RequestParam String contentTypeId) throws Exception{
+	public AddrVO callInfo(@RequestParam String contentId) throws Exception{
 		AddrVO vo = service.callInfo(contentId);
 		double star = 0;
 		if(vo.getScope()!=null) {
@@ -290,7 +290,7 @@ public class AddrController {
 			}
 		}
 		String stars = Double.toString(star);
-		if(contentTypeId.equals("39")) {
+		if(vo.getContentTypeId().equals("39")) {
 		AddrVO vo2 = service.callReview(contentId);
 		if(vo2!=null) {
 		vo.setLink1(vo2.getLink1());

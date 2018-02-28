@@ -53,7 +53,6 @@
 			left JOIN Story s
 			ON b.story_seq = s.story_seq 
 			where b.story_seq = #{story_seq}
-			limit #{index},4;
 			
 		</select>
 		<select id="getBoardStoryList" parameterType="BoardVO" resultType="BoardVO" >
@@ -139,12 +138,6 @@
 				board_seq = ${board_seq}
 			</where> 
 		</update>
-		<select  id="getBoardSeq" parameterType="BoardVO" resultType="int">
-			select count(*) from Board
-			<where>
-				board_seq = #{board_seq}
-			</where>
-		</select>
 		<delete id="deleteBoard" parameterType="BoardVO">
 			delete from Board
 			<where>
@@ -243,5 +236,12 @@
 			    select likeId1 from Board
 				where board_seq = #{board_seq}
 				and story_seq = #{story_seq}
+		</select>
+		
+		<select id="getBoardBySeq" parameterType="String" resultType="BoardVO">
+			select * from Board
+			<where>
+			board_seq = #{board_seq}
+			</where>
 		</select>
 </mapper>

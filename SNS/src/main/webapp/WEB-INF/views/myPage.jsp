@@ -1,3 +1,4 @@
+<%@page import="com.project.sns.user.vo.UserVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -15,10 +16,22 @@
 <link rel="stylesheet"
 	href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
+<style>
+.user_image{
+	border-radius: 50%;
+    height: 100px;
+    width: 100px;
+	}
+.img{
+	margin: 10px;
+	}
+</style>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <%
 	String id =	(String) session.getAttribute("id");
 	id = "\"" + id.trim() + "\"";
+	
+	UserVO user = (UserVO)request.getAttribute("user");
 %>
 <script type="text/javascript">
 	$(document).ready(
@@ -119,20 +132,19 @@
 			replyDiv.style.display = "none";
 		}
 	} */
-
-/* 	$('#imageUp').click(function(){
+$(function(){
+	
+ 	$('#imageUp').click(function(){
 		console.log('fileadd');
 		$('input[name="image"]').click();
 	})
 
 	$('input[name="image"]').change(function(event){
 		
-		
 		var form = $('#imageUpload')[0];
-		var formData = new FormData(form);
+		var formData = new FormData(form);	
 		var f = $('input[name="image"]')[0].files[0]
 		formData.append('file',f);	
-		
 		
 		$.ajax({
 			  url: 'uploadAjax.do',
@@ -144,20 +156,31 @@
 			  success: function(data){
 				 // files.push(data);
 				  var str ="";
-
+				  str = "displayFile.do?img_seq="+data;
+				  $('#imageUp').attr("src",str);
+				  updatePicture(str);
 				  
-				  console.log(name);
-				  //if(checkImageType(name)){
-					  str = "<br/><img src='displayFile.do?img_seq="+data+"' style='max-width: 100%; height: auto;'/><br/>";
-				  //}
-				  
-				  $(".uploadedList").append(str);
 			  }
-			}); */
-	
+			}); 
+	})
+})
 
+function updatePicture(value){
+		var uid = '<%=user.getId()%>';
+		$.ajax({
+			url: 'updatePicture.do',
+			data: {"id" : uid, "profile_img" : value},
+			type: 'POST',
+			success:function(data){
+				console.log(data);
+				console.log("성공");
+			}
+		})
+	}
 </script>
 </head>
+<link href="resources/startbootstrap-coming-soon-gh-pages/vendor/font-awesome/css/font-awesome.min.css"
+   rel="stylesheet" type="text/css">
 <body>
 	<div class="wrapper">
 		<div class="box">
@@ -186,12 +209,22 @@
 										<div class="panel panel-default">
 											<div class="card-body">
 												<div class="card-body-top">
-													<img>
-													<%= session.getAttribute("name") %> 님
-													<a>
-														<i class="glyphicon glyphicon-picture" id="imageUp" onclick="">
-														</i>
-													</a>
+													<div class="img">
+													<%
+													if(user.getProfile_img()!=null){
+													%>
+														<img src="<%=user.getProfile_img()%>" id="imageUp" class="user_image"/>
+													<%	
+													}else{
+													%>
+														<img src="resources/image/gazua_icon.png" id="imageUp" class="user_image"/>
+													<%	
+													}
+													%>
+													</div>
+													<div class="user_name">
+														<%= session.getAttribute("name") %> 님		
+													</div>											
 														<form id="imageUpload" method='POST' enctype='multipart/form-data'>
 															<input type="file" name="image" id="file" style="display: none;"/>
 														</form>

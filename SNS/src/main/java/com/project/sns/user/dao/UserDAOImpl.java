@@ -81,4 +81,10 @@ public class UserDAOImpl implements UserDAO{
 		return sqlSession.selectList(namespace+".getFollower", id);
 	}
 
+	@Override
+	public int updatePicture(UserVO vo) {
+		// TODO Auto-generated method stub
+		return sqlSession.update(namespace+".updatePicture", vo);
+	}
+
 }

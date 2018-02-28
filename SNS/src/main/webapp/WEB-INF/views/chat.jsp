@@ -21,19 +21,26 @@
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/facebook/assets/css/original.css">
-<link rel="stylesheet" href="resources/css/message.css?val=1"></link>
+<link rel="stylesheet" href="resources/css/message.css"></link>
 <script src="resources/facebook/assets/js/check.js"></script>
 <link rel="stylesheet"
    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
    src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script type="text/javascript">
-<% 
-String userID = (String) session.getAttribute("id");
-AES aes = new AES();
-userID = aes.setDecrypting(userID);
+<style>
+.avatar-icon{
+	position: relative;
+	}
 
-%>
+.newChatAlarm{
+	position: absolute;
+	}
+.icon_wrap{
+	width:500px;
+	}
+</style>
+<script type="text/javascript">
+
 /*    $(document).ready(
                function() {
                   $('[data-toggle=offcanvas]')
@@ -87,10 +94,13 @@ userID = aes.setDecrypting(userID);
    }
    
    var lastID = 0;
-   var fromID = '<%=userID%>';
+
    var toID = '';
    
    function chatListFunction() {
+	   console.log(fromID);
+	   console.log(toID);
+	   console.log(lastID);
       $.ajax({
          type : "POST",
          url : "chat/list.do",
@@ -178,7 +188,6 @@ $(document).ready(function() {
 $('#submitMessage').click(function() {
    submitFunction();
 });
-
  $(".heading-compose").click(function() {
      $(".side-two").css({
        "left": "0"
@@ -213,13 +222,11 @@ if (check == "board") {
 }
 return false;
 }
-
 function enterkey(){
 if(window.event.keyCode == 13){
    submitFunction();
 }
 }
-
 function getNewChat(value){
 	toID = value.id;
 	lastID = 0;
@@ -230,7 +237,6 @@ function getNewChat(value){
 	chatListFunction();
 	getInfiniteChat();
 }
-
 function getSide(){
 $.ajax({
    url:'chat/getNewFollower.do',
@@ -253,10 +259,15 @@ $.ajax({
     		  side += '<div class="row1 sideBar-body" id="' + follow + '" onclick="getNewChat(this)">';
     		  side += '<div class="col-sm-3 col-xs-3 sideBar-avatar"><div class="avatar-icon">';
     		  if(data[i].picture != null){
-    			  side += '<img src=' + data[i].picture + '/>';
+    			  side += '<img src="' + data[i].picture + '"/>';
     		  }else{
-    			  side += '<img src="https://bootdey.com/img/Content/avatar/avatar1.png">';
-    		  }//chatRead가 0이면 새로운 메세지 표시?? 빨간색 원?? 추가.
+    			  side += '<img src="resources/image/gazua_icon.png">';
+    		  }
+    			if(data[i].toID==fromID){
+    				if(data[i].chatRead==0){
+    					side += '<img src="resources/image/new_alarm.png" class="newChatAlarm" style="height: 20px; width: 20px;"/>';
+    				}
+    			}
     		  side += '</div></div>';
     		  side += '<div class="col-sm-9 col-xs-9 sideBar-main"><div class="row1"><div class="col-sm-8 col-xs-8 sideBar-name">';
     		  side += '<span class="name-meta">'+ data[i].name;
@@ -269,6 +280,10 @@ $.ajax({
       $('#sideBar').html(side);
    }
 })
+}
+
+function newMessage(){
+	$('#newChatAlarmBox').html('<img src="resources/image/new_alarm.png" id="newAlarm"/>');
 }
 </script>
 <style>
@@ -290,6 +305,9 @@ $.ajax({
                 -->
             <div id="main" class="column col-sm-12 col-xs-12" style="overflow-y: auto;">
                <%@ include file="include/topbar.jsp"%>
+               <script type="text/javascript">
+               var fromID = userID;
+               </script>
                <div id="message" class="app">
                <div class="app-one">
                   <div class="col-sm-4 side">
@@ -305,7 +323,7 @@ $.ajax({
                               <%
                                  }else{
                               %>
-                                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                 <img src="resources/image/gazua_icon.png">
                                  
                               <%
                                  }
@@ -337,13 +355,14 @@ $.ajax({
                         List<String> followArr = new ArrayList<String>();
                         for(ChatVO vo : list){
                            String follow = "";
-                           if(userID == vo.getFromID()){
-                              follow = vo.getFromID();
-                           }else{
+                           if(userID.equals(vo.getFromID())){
                               follow = vo.getToID();
+                           }else{
+                              follow = vo.getFromID();
                            }
-                           if(followArr.indexOf(userID)==-1){
+                           if(followArr.indexOf(follow)==-1){
                               followArr.add(follow);
+
                         %>
                             <div class="row1 sideBar-body" id = "<%=follow%>" onclick="getNewChat(this)">
                               <div class="col-sm-3 col-xs-3 sideBar-avatar">
@@ -355,9 +374,16 @@ $.ajax({
                                 <%
                                 }else{
                                 %>
-                                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                   <img src="resources/image/gazua_icon.png">
                                 <%
                                 }
+                                if(vo.getToID().equals(userID)){
+                                  	if(vo.getChatRead()==0){
+                                  		%>
+                                  		<img src="resources/image/new_alarm.png" class="newChatAlarm" style="height: 20px; width: 20px;"/>
+                                  		<%
+                                  	}
+                                  }
                                 %>
                                   
                                 </div>
@@ -406,7 +432,17 @@ $.ajax({
                             <div class="row1 sideBar-body" id = "<%=vo.getId() %>" onclick="getNewChat(this)">
                               <div class="col-sm-3 col-xs-3 sideBar-avatar">
                                 <div class="avatar-icon">
-                                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                <%
+                                if(vo.getProfile_img()!=null){
+                                %>
+                                   <img src="<%=vo.getProfile_img()%>"/>
+                                <%
+                                }else{
+                                %>
+                                   <img src="resources/image/gazua_icon.png">
+                                <%
+                                }
+                                %>
                                 </div>
                               </div>
                               <div class="col-sm-9 col-xs-9 sideBar-main">
@@ -447,6 +483,65 @@ $.ajax({
                                  aria-hidden="true"></i>
                            </div> -->
                         </div>
+                        <!-- 모달 -->
+                        <%
+                        String messageContent = null;
+                        if (session.getAttribute("messageContent")!=null){
+                        	messageContent = (String) session.getAttribute("messageContent");
+                        }
+                        String messageType = null;
+                        if (session.getAttribute("messageType")!=null){
+                        	messageType = (String) session.getAttribute("messageType");
+                        }
+                        if(messageContent != null){
+                        %>
+                        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        	<div class="vertical-alignment-helper">
+                        		<div class="modal-dialog vertical-align-center">
+                        			<div class="modal-content <% if(messageType.equals("오류 메세지")) out.println("panel-warning"); else out.println("panel-success"); %>">
+                        				<div class="modal-header panel-heading">
+                        					<button type="button" class="close" data-dismiss="modal">
+                        						<span aria-hidden="true">"&times</span>
+                        						<span class="sr-only">Close</span>
+                        					</button>
+                        					<h4 class="modal-title"><%=messageType %></h4>
+                        					</div>
+                        					<div class="modal-body"><%=messageContent %></div>
+                        					<div class="modal-footer">
+                        						<button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                        					</div>
+                        				</div>
+                       				</div>
+                        		</div> 
+                        	</div>
+                        	<script>
+                        		$('#messageModal').modal("show");
+                        	</script>
+                        <% 
+                        session.removeAttribute("messageContent");
+                        session.removeAttribute("messageType");
+                        }
+                       	%>
+                       	<div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-hidden="true">
+                       	<div class="vertical-alignment-helper">
+                        		<div class="modal-dialog vertical-align-center">
+                        			<div id="checkType" class="modal-content panel-info">
+                        				<div class="modal-header panel-heading">
+                        					<button type="button" class="close" data-dismiss="modal">
+                        						<span aria-hidden="true">"&times</span>
+                        						<span class="sr-only">Close</span>
+                        					</button>
+                        					<h4 class="modal-title">확인 메시지</h4>
+                        					</div>
+                        					<div id="checkMessage" class="modal-body"></div>
+                        					<div class="modal-footer">
+                        						<button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                        					</div>
+                        				</div>
+                       				</div>
+                        		</div> 
+                        	</div>
+                       	
                         <div class="row1 message" id="conversation">
                            <div class="row1 message-previous">
                               <div class="col-sm-12 previous">

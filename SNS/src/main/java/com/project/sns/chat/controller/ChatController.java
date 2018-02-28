@@ -88,10 +88,10 @@ public class ChatController {
          for(ChatVO vo : list) {
             String name = "";
             UserVO uvo = null;
-            if(id == vo.getFromID()) {
-               name = vo.getFromID();
-            }else {
+            if(id.equals(vo.getFromID())) {
                name = vo.getToID();
+            }else {
+               name = vo.getFromID();
             }
             if(namecheck.indexOf(name)==-1) {
                namecheck.add(name);

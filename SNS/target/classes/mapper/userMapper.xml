@@ -53,12 +53,19 @@
 		</insert>
 		
 		<select id="getFollower" parameterType="string" resultType = "com.project.sns.user.vo.UserVO">
-			select distinct * from SnsUser
+			select * from SnsUser
 			<where>
-			id = (select follower from Follow where #{value} = following)
-			or id = (select following from Follow where #{value} = follower)
+			id = any(select follower from Follow where #{value} = following)
+			or id = any(select following from Follow where #{value} = follower)
 			</where>
 		</select>
+		
+		<update id="updatePicture" parameterType="UserVO">
+			update SnsUser set profile_img = #{profile_img}
+			<where>
+			id = #{id}
+			</where>
+		</update>
 		
 
 </mapper>

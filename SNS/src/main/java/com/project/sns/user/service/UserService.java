@@ -19,4 +19,5 @@ public interface UserService {
 	public int followByPage(HashMap<String, String> ids);
 	
 	public List<UserVO> getFollower(String id);
+	public int updatePicture(UserVO vo);
 }

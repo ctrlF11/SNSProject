@@ -198,7 +198,8 @@ import A.algorithm.AES;
 		int storyCount = boardService.getStoryCount(id);
 		int followingCount = service.getFollowingCount(id);
 		int followerCount = service.getFollowerCount(id);
-		
+		UserVO uvo = service.getUser(id);
+		request.setAttribute("user", uvo);
 		request.setAttribute("storyCount", storyCount);
 		request.setAttribute("followingCount", followingCount);
 		request.setAttribute("followerCount", followerCount);
@@ -250,6 +251,15 @@ import A.algorithm.AES;
     	}
     	
     	return ip;
+    }
+    
+    @RequestMapping("/updatePicture")
+    public int updatePicture(UserVO vo) {
+    	System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+    	System.out.println(vo.getProfile_img());
+    	System.out.println(vo.getId());
+    	int i = service.updatePicture(vo);
+    	return i;
     }
     
     

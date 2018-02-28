@@ -105,14 +105,22 @@ public class BoardController {
 	}// 占쎈쐻占쎈셾占쎈뻻繹먮씮�굲
 
 	@RequestMapping("/modifyBoard")
-	public String writeForm(Model model, HttpServletRequest request, HttpServletResponse res) {
+	public String writeForm(Model model, HttpServletRequest request, HttpServletResponse res, @RequestParam(value="board_seq", required=false) String board_seq) throws Exception {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		id = AES.setDecrypting(id);
+		
+		BoardVO board = new BoardVO();
+		if(board_seq!=null) {//board_seq가 넘어왔을 경우 게시판 수정.
+			board = service.getBoardBySeq(board_seq);
+			request.setAttribute("board", board);
+		}
+
 		List<StoryVO> story = service.getStory(id);
 		if (story != null) {
 			model.addAttribute("story", story);
 		}
+		
 		return "modifyBoard";
 	}
 
@@ -149,17 +157,17 @@ public class BoardController {
 		UserVO myvo = cservice.getUser(id);
 		if (list != null) {
 			for (ChatVO vo : list) {
-				String name = "";
+				String yourId = "";
 				UserVO uvo = null;
-				if (vo.getToID() == id) {
-					name = vo.getFromID();
+				if (vo.getToID().equals(id)) {
+					yourId = vo.getFromID();
 				} else {
-					name = vo.getToID();
+					yourId = vo.getToID();
 				}
-				System.out.println(resultList.indexOf(name));
-				if (namecheck.indexOf(name) == -1) {
-					namecheck.add(name);
-					uvo = cservice.getUser(name);
+				System.out.println(resultList.indexOf(yourId));
+				if (namecheck.indexOf(yourId) == -1) {
+					namecheck.add(yourId);
+					uvo = cservice.getUser(yourId);
 					vo.setName(uvo.getName());
 					vo.setPicture(uvo.getProfile_img());
 					resultList.add(vo);
@@ -178,10 +186,12 @@ public class BoardController {
 		
 		return "chat";
 	}
-
-	@RequestMapping("/deleteBoard")
-	public void deleteBoard(BoardVO vo) {
-		service.deleteBoard(vo);
+	
+	@ResponseBody
+	@RequestMapping("/deleteBoard.do")
+	public int deleteBoard(BoardVO vo) {
+		int data =service.deleteBoard(vo);
+		return data;
 	}
 
 	@RequestMapping("/deleteStory")
@@ -316,11 +326,10 @@ public class BoardController {
 		System.out.println("BoardVO.getTitle() : " + vo.getTitle());
 		vo.setWriter(AES.setDecrypting(vo.getWriter()));
 		// �뜝�뙃�떆源띿삕 �뜝�룞�삕�뜝�룞�삕�솗�뜝�룞�삕
-		int i = service.getBoardSeq(vo);
-		int k = 100;
+		int i = vo.getBoard_seq();
 		if (i == 0) {
 			service.regist(vo);
-		} else
+		}else
 			service.registup(vo);
 	}
 
