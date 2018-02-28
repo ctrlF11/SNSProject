@@ -12,12 +12,13 @@
    content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script>
-var mapContainer = document.getElementById('map'), // 지도의 중심좌표
-mapOption = { 
-center: new daum.maps.LatLng( 37.517136 ,127.03696), // 지도의 중심좌표
-level: 6    // 지도의 확대 레벨
-}; 
 // 지도에 마커를 표시합니다 
+
+var mapContainer = document.getElementById('map'), // 지도의 중심좌표
+ mapOption = { 
+ center: new daum.maps.LatLng(33.451475, 126.570528), // 지도의 중심좌표
+level: 3 // 지도의 확대 레벨
+ }; 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 var positions =  [
       <%
@@ -79,6 +80,7 @@ var contents =  [
 
 // 마커 위에 커스텀오버레이를 표시합니다
 // 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 /* for (var i = 0; i < positions.length; i ++) {
     
     // 마커 이미지의 이미지 크기 입니다
@@ -111,7 +113,6 @@ var contents =  [
     overlay.setMap(null);     
     });
 } */ // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
-var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 for (var i = 0; i < positions.length; i ++) {
     // 마커를 생성합니다
     var imageSize = new daum.maps.Size(24, 35); 
@@ -173,7 +174,7 @@ function makeOutListener(infowindow) {
  */
 </script>
 
-<c:forEach var="user" items="${requestScope.user}"  varStatus="status">
+<c:forEach var="user" items="${requestScope.user}">
 <br/>
    <div class="panel panel-default" id = "table_${status.count}" >
    <div class="card mb-3">
@@ -210,8 +211,8 @@ function makeOutListener(infowindow) {
          if(id.equals(id2))
          {
         %>
-       <button class="btn btn-default"  style = "color :#e1494a"> 수정 </button>
-       <button class="btn btn-default"  style = "color :#e1494a"> 삭제</button>
+       <button class="btn btn-default"  style = "color :#e1494a" id="up${user.board_seq}" onclick="updateBoard(this)"> 수정 </button>
+       <button class="btn btn-default"  style = "color :#e1494a" id="del${user.board_seq}" name="${user.story_seq}" onclick="deleteBoard(this)"> 삭제</button>
        <%}%>
       </div>
       <hr class="my-0">
@@ -273,7 +274,7 @@ function replyList(board_seq,story_seq){
                var a =''; 
                $.each(data, function(key, value){ 
                    a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                   a += '<div class="commentInfo'+value.reply_seq+'"><div class="commentWrap"><a href="#"><img id ="pro" src="resources/image/pre.png" alt="Paris"></a><strong>'+value.rwriter+'</strong>';
+                   a += '<div class="commentInfo'+value.reply_seq+'"><div class="commentWrap"><a href="#"><img id ="pro" src="resources/image/gazua_icon.png" alt="Paris"></a><strong>'+value.rwriter+'</strong>';
                    a += '<button style = "color :#e1494a;" class="btn btn-default" onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+'); style = "color :#e1494a;""> 수정 </button>';
                    a += '<button style = "color :#e1494a;" class="btn btn-default" onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
                    a += '<div class="commentContent'+value.reply_seq+'"> <p>'+value.rcontent +'</p>';
@@ -285,6 +286,30 @@ function replyList(board_seq,story_seq){
            }
        });
 } 
+function updateBoard(value){
+	var upseq = value.id.replace('up','');
+	console.log(upseq);
+	location.replace("modifyBoard.do?board_seq="+upseq);
+	
+}
+
+function deleteBoard(value){
+	var delseq = value.id.replace('del','');
+	var delstr = value.name;
+	console.log(delseq);
+	if(confirm('현재 작성 중이던 글을 삭제하시겠습니까?')){
+			$.ajax({
+				url:"deleteBoard.do",
+				type:"post",
+				data:{board_seq:delseq},
+				success: function(data){
+					location.replace("homeview.do?story_seq="+delstr);
+				}
+			})
+	}else{
+		return false;
+	}
+}
 </script>
 <style>
 #pro {

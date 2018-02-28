@@ -261,7 +261,11 @@ public class BoardServiceImpl implements BoardService {
     public BoardVO getBoardlikeId(BoardVO vo) throws Exception{
     	return dao.getBoardlikeId(vo);
     }
-    
+    	@Override
+	public BoardVO getBoardBySeq(String board_seq) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getBoardBySeq(board_seq);
+	}
     public List<AddrVO> getSavedPath(int story_seq) throws Exception
     {
     	return dao.getSavedPath(story_seq);

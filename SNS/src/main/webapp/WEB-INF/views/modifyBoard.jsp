@@ -1,3 +1,4 @@
+<%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@page import="A.algorithm.AES"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -44,7 +45,7 @@
 	
 #content{
 	width: 100%;
-	height: 300px;
+	height: 500px;
 	background: white;
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -55,17 +56,18 @@
 #searchBox{
 	position: fixed;
 	float: right;
-	background-color: #4CAF50;
+	background-color: white;
 	height : 50px;
-	top: 75px;
-	right: 1%;
+	width : 325px;
+	top: 95px;
+	right: 2%;
 	}
 	
 #searchResult{
 	position: fixed;
 	bottom: 0;
 	right: 0;
-	background-color: #4CAF50;
+	background-color: #303030;
 	height : 250px;
 	width : 50%;
 	}
@@ -88,12 +90,16 @@
 	}
 #glyphicon span {
     font-size: 50px;
-    margin-left : 0;
-    margin-right : 0;
+    top: -15px;
+    left: 5px;
 }
+
+#glyphicon{
+	display: inline-block;
+	float: right;
+	}
 #modifyForm {
 	margin-top : 80px;
-	left: 10px;
 	}
 	
 #mapBox {
@@ -106,19 +112,24 @@
 	
 #searchMap{
 	background-color: white;
-	background-image: url('musica-searcher.png');
+	background-image: url('resources/image/search_icon.jpg');
 	background-position: 2px 2px;
 	background-repeat: no-repeat;
 	padding-left: 40px;
+	margin: auto;
+	border: solid;
 	}
 .image{
 	float:left;
 	top: 0;
+	height: auto;
+	margin-right: 15px;
+	margin-bottom: 15px;
 	}
 .tourbox{
 	background:white;
-	overflow:hidden;
-	height: auto;
+	overflow:auto;
+	height: 200px;
 	clear: left;
 	border-radius: 12px;
 	margin: 5px;
@@ -132,6 +143,29 @@
 }
 .icon_wrap ul  li{
 	display: inline-block;
+	}
+	
+.form-group{
+	width: 95%;
+	}
+	
+#save{
+	margin-right: 20px;
+	margin-bottom: 10px;
+	}
+	
+#title{
+	width: 90%;
+	display: inline;
+	}
+
+#searchTextBox{
+	margin-top: 8px;
+	margin-left: 10px;
+	}
+
+.contentBox{
+	overflow: auto;
 	}
 </style>
 <title>Insert title here</title>
@@ -167,20 +201,18 @@
 					<!-- 글작성 -->
 					<div class='board form-group'>
 						<div class="btitle">
-							<input  class="form-control" type="text" id='title' placeholder='글 제목'/>
+							<!-- <div class="board_title"> -->
+								<input  class="form-control" type="text" id='title' placeholder='글 제목'/>
+							<!-- </div> -->
+							<div id="glyphicon">
+								<span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
+							</div>
 						</div>
-
-						<div class='uploadedList' id="content" contentEditable="true"></div>
+						<div class='uploadedList form-control' id="content" contentEditable="true"></div>
 						<div class='toolBox'>
 							<form id="imageUpload" method='POST' enctype='multipart/form-data'>
 								<input type="file" name="image" id="file"/>
 							</form>
-							<div id="glyphicon">
-								<span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
-								<!-- <span class="glyphicon glyphicon-trash" id="delete" aria-hidden="true"></span>
-								<span class="glyphicon glyphicon-screenshot" id="reloacate" aria-hidden="true"></span> -->
-							</div>
-							<!-- <div class='fileDrop'></div>  -->
 						</div>
 					</div>
 					<hr>
@@ -192,11 +224,14 @@
                    <div class="panel panel-default">
                         <div id="mapBox">
 	                   		<div id="searchBox" style="z-index: 2;">
-	                  			<input type="text" id="searchMap" onkeydown="enterkey();" placeholder="검색.."/><input id = "searchMapBtn" type="button" onclick="searchMap();" value="검색"/>
+	                   			<div id="searchTextBox"style="z-index: 3;">
+	                  				<input type="text" id="searchMap" onkeydown="enterkey();" placeholder="검색.."/>
+	                  				<img src="resources/image/search_btn.jpg" id="searchMapBtn" onclick="searchMap();"/>
+	                  			</div>
 	                   		</div>
 	                   		<div id="map" style="width: 50%; height: 100%;" style="z-index: 1;"></div>
-	                   		<div id="searchResult" style="z-index: 3;">
-	                   			<div id="searchContent" style="z-index: 4;"></div>
+	                   		<div id="searchResult" style="z-index: 4;">
+	                   			<div id="searchContent" style="z-index: 5;"></div>
 	                   		</div>
                     	</div>
                    </div>
@@ -214,28 +249,59 @@
 <script type="text/javascript">
 <%
 String id = (String) session.getAttribute("id");
-AES aes = new AES();
-id = aes.setDecrypting(id);
+AES aes1 = new AES();
+id = aes1.setDecrypting(id);
 %>
 var id = '<%=id%>';
 var files = [];
 var blob;
 var contentId;
-var starvalue;
-//보드 받아올 때 빼오기. 
-var board_seq =3; 
+var starvalue; 
+var board_seq = 0; 
 //선택한 마커
 var selectedMarker = null;
 //검색결과.
 var array = new Array();
 var markersArr = []; 
 var markers = [];
+<%
+BoardVO board = (BoardVO)request.getAttribute("board");
+if(board!=null){
+
+int mod_board_seq = board.getBoard_seq();
+int mod_story_seq = board.getStory_seq();
+String mod_title = board.getTitle();
+String mod_content = board.getContent();
+String mod_contentId = board.getContentId();
+int mod_heart = board.getHeart();
+int mod_star = board.getStar();
+
+%>
+var mod_board_seq = '<%=mod_board_seq%>';
+var mod_story_seq = '<%=mod_story_seq%>';
+var mod_title = '<%=mod_title%>';
+var mod_content = '<%=mod_content%>';
+var mod_contentId = '<%=mod_contentId%>';
+var mod_heart = '<%=mod_heart%>';
+var mod_star = '<%=mod_star%>';
+contentId = mod_contentId;
+board_seq = mod_board_seq;
+$('#storyBox').val(mod_story_seq).prop('selected',true);
+$('#title').val(mod_title);
+$('#content').html(mod_content);
+getInfo(mod_contentId);
+mark(mod_star);
+<%
+}else{
+%>
 $(function(){
 	
 	$('#searchResult').hide();
 	$('#searchContent').hide();
 })	
-	
+<%
+}
+%>	
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
 	mapOption = { 
 	    center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
@@ -323,7 +389,11 @@ function addMarker(position, title, contentid, contenttypeid) {
        // 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
        selectedMarker = marker;
        createArrMarkers();
-	   getDetail(contentid, contenttypeid, title);
+	   starvalue = 0;
+       starcount = 0;
+       locked = 0;
+      
+       getInfo(contentid);
    });
    } 
 
@@ -359,23 +429,118 @@ function deletePolyLine() {
    }
    polylines = [];
 }
-	
-function getInfo(contentid, contenttypeid){
+
+var info;
+function callDetail(contentid, contenttypeid){
+    $.ajax({        
+        url: 'callDetail.do',
+        type: 'get',
+        async: false,
+        data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
+        dataType: 'json',
+        success: function(data){
+        	info = data.response.body.items.item;
+        },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+          alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+      } 
+	});
+    return info;
+}
+
+function getInfo(contentid){
 	var addr;
-	console.log("getInfo 실행");
-	console.log(contentid);
 	$.ajax({
 		url:'callInfo.do',
 		type:'POST',
 		async: false, 
-		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+		data: {"contentId" : contentid},
 		dataType: 'json',
 		success: function(data){
 			addr = data;
+            var contenttypeid = addr.contentTypeId;
+            var myItem = callDetail(contentid, contenttypeid);
+            var output = '<div class="tourbox ' + contentid + '" id="' + contentid + '" text-align:left>';
+        	  output += '<div class="image" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/></div>';
+              output += '<div class="contentBox"><h4 id="title">' + addr.title + '<div class="star" id="star">별점주기'
+            		+ '<img src="empty_star3.png" id="star1" onmouseover=show(1) onclick=mark(1) onmouseout=noshow(1)>'
+            		+ '<img src="empty_star3.png" id="star2" onmouseover=show(2) onclick=mark(2) onmouseout=noshow(2)>'
+            		+ '<img src="empty_star3.png" id="star3" onmouseover=show(3) onclick=mark(3) onmouseout=noshow(3)>'
+            		+ '<img src="empty_star3.png" id="star4" onmouseover=show(4) onclick=mark(4) onmouseout=noshow(4)>'
+            		+ '<img src="empty_star3.png" id="star5" onmouseover=show(5) onclick=mark(5) onmouseout=noshow(5)>'
+            		+'</div></h4>';
+        	  output += '<div class="info">';
+                if(contenttypeid == 12){
+              	  	if(myItem.parking){
+	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+              	  	}if(myItem.restdate){
+	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+              	  	}if(myItem.infocenter){
+	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+              	  	}
+                }else if(contenttypeid == 14){
+              	  	if(myItem.usefee){
+	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+              	  	}if(myItem.usetimeculture){
+	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+              	  	}if(myItem.restdateculture){
+	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+              	  	}if(myItem.infocenterculture){
+	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+              	  	}
+                }else if(contenttypeid == 15){
+              	  	if(myItem.eventplace){
+	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+              	  	}if(myItem.eventstartdate){
+	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+              	  	}if(myItem.playtime){
+	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+              	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
+	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+              	  	}
+                }else if(contenttypeid == 28){
+              	  	if(myItem.usetimeleports){
+	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+              	  	}if(myItem.infocenterleports){
+	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+              	  	}
+                }else if(contenttypeid == 32){
+              	  	if(myItem.reservationurl){
+	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+              	  	}if(myItem.subfacility){
+	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+              	  	}if(myItem.infocenterlodging){
+	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+              	  	}
+                }else if(contenttypeid == 38){
+              	  	if(myItem.saleitem){
+	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+              	  	}if(myItem.opentime){
+	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+              	  	}if(myItem.restdateshopping){
+	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+              	  	}if(myItem.infocenter){
+	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+              	  	}
+                }else if(contenttypeid == 39){
+              	  	if(myItem.treatmenu){
+	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+              	  	}if(myItem.opentimefood){
+	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+              	  	}if(myItem.restdatefood){
+	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+              	  	}if(myItem.infocenterfood){
+	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+              	  	}
+                }
+                output += '</div></div></div>';
+                $('#searchResult').show();
+                $('#searchContent').show();
+                $('#searchContent').html(output);
+
 		}
 		
 	});
-	return addr;
 }
 	
 	
@@ -431,7 +596,7 @@ function getInfo(contentid, contenttypeid){
 		$.ajax({
 			url:'inputBoard.do',
 			type:'POST',
-			data:{story_seq:story_seq, title:title, content:content, writer:id, contentId:contentId, star:starvalue},
+			data:{story_seq:story_seq, title:title, content:content, writer:id, contentId:contentId, star:starvalue, board_seq:board_seq},
 			success: window.location.replace("homeview.do?story_seq="+story_seq)
 				
 		})
@@ -467,7 +632,7 @@ function getInfo(contentid, contenttypeid){
 				  
 				  console.log(name);
 				  //if(checkImageType(name)){
-					  str = "<br/><img src='displayFile.do?img_seq="+data+"' style='max-width: 100%; height: auto;'/><br/>";
+					  str = "<img src='displayFile.do?img_seq="+data+"' style='max-width: 100%; height: auto;'/>";
 				  //}
 				  
 				  $(".uploadedList").append(str);
@@ -545,6 +710,7 @@ function getInfo(contentid, contenttypeid){
 //지도 검색
 function searchMap(){
 	var keyword = $('#searchMap').val();
+	$('#searchMap').val('');
 	if(keyword == null || keyword ==''){
 		alert("검색어를 입력하세요.");
 		return false;
@@ -687,108 +853,10 @@ function panTo(mapy, mapx, contentid, contenttypeid) {
    // 지도 중심을 부드럽게 이동시킵니다
    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
    map.panTo(moveLatLon);
-   getDetail(contentid, contenttypeid);
+   getinfo(contentid);
 }
 
-//자세한 정보 및 별점 화면
-function getDetail(contentid, contenttypeid){
 
-
-   contentId = contentid;			//저장용도
-   starvalue = 0;
-   starcount = 0;
-   locked = 0;
-   $.ajax({        
-       url: 'callDetail.do',
-       type: 'get',
-       data : {"contentId" : contentid, "contentTypeId" : contenttypeid},
-       dataType: 'json',
-       success: function(data){
-     	  var addr = getInfo(contentid, contenttypeid);
-           var myItem = data.response.body.items.item;
-           var output = '<div class="tourbox ' + contentid + '" id="' + contentid + '" text-align:left>';
-           output += '<h4 id="title">' + addr.title + '<div class="star" id="star">별점주기'
-           		+ '<img src="empty_star3.png" id="star1" onmouseover=show(1) onclick=mark(1) onmouseout=noshow(1)>'
-           		+ '<img src="empty_star3.png" id="star2" onmouseover=show(2) onclick=mark(2) onmouseout=noshow(2)>'
-           		+ '<img src="empty_star3.png" id="star3" onmouseover=show(3) onclick=mark(3) onmouseout=noshow(3)>'
-           		+ '<img src="empty_star3.png" id="star4" onmouseover=show(4) onclick=mark(4) onmouseout=noshow(4)>'
-           		+ '<img src="empty_star3.png" id="star5" onmouseover=show(5) onclick=mark(5) onmouseout=noshow(5)>'
-           		+'</div></h4>';
-       	  output += '<div class="image" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/></div>';
-       	  output += '<div class="info">';
-               if(contenttypeid == 12){
-             	  	if(myItem.parking){
-	                    output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
-             	  	}if(myItem.restdate){
-	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
-             	  	}if(myItem.infocenter){
-	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-             	  	}
-               }else if(contenttypeid == 14){
-             	  	if(myItem.usefee){
-	                    output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
-             	  	}if(myItem.usetimeculture){
-	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
-             	  	}if(myItem.restdateculture){
-	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
-             	  	}if(myItem.infocenterculture){
-	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-             	  	}
-               }else if(contenttypeid == 15){
-             	  	if(myItem.eventplace){
-	                    output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
-             	  	}if(myItem.eventstartdate){
-	                    output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
-             	  	}if(myItem.playtime){
-	                    output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
-             	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
-	                    output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-             	  	}
-               }else if(contenttypeid == 28){
-             	  	if(myItem.usetimeleports){
-	                    output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
-             	  	}if(myItem.infocenterleports){
-	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-             	  	}
-               }else if(contenttypeid == 32){
-             	  	if(myItem.reservationurl){
-	                    output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
-             	  	}if(myItem.subfacility){
-	                    output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
-             	  	}if(myItem.infocenterlodging){
-	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-             	  	}
-               }else if(contenttypeid == 38){
-             	  	if(myItem.saleitem){
-	                    output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
-             	  	}if(myItem.opentime){
-	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
-             	  	}if(myItem.restdateshopping){
-	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
-             	  	}if(myItem.infocenter){
-	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-             	  	}
-               }else if(contenttypeid == 39){
-             	  	if(myItem.treatmenu){
-	                    output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
-             	  	}if(myItem.opentimefood){
-	                    output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
-             	  	}if(myItem.restdatefood){
-	                    output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
-             	  	}if(myItem.infocenterfood){
-	                    output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-             	  	}
-               }
-               output += '</div></div>';
-               $('#searchResult').show();
-               $('#searchContent').show();
-               $('#searchContent').html(output);
-       },
-     error: function(XMLHttpRequest, textStatus, errorThrown) { 
-         alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-     } 
-	});
-}
 
 </script>
 </body>

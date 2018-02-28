@@ -29,6 +29,17 @@
  #searchMap{
    background-image: url('resources/image/search_icon.jpg');
    }
+   
+   .scope{
+	float:left;
+	margin: 10px;
+	top: 0;
+	}
+	
+.review{
+	clear: left;
+	margin: 10px;
+	}
 
    
 </style>
@@ -290,6 +301,7 @@ var markersArr = [];  //클릭해서 선택한 배열(빨간색)
 var markers = []; //검색 결과 마커들 모음 (노란색)
 var afterSearchPath = []; //검색 후 결과 배열
 var afterSearchArr = new Array(); //검색 한 결과 객체들 모음
+var afterpath = [];
 
 var selectedMarker = null;
 
@@ -505,6 +517,7 @@ function recommend() {
                var sidePath = "";               //오른쪽 사이드바에 경로 나열
                recPath = [];                  //추천 경로가 담겨질 배열
                afterpath = [];
+			   afterpath = [];
                count++;
                if(count > 1){                  //추천경로 클릭할 때마다 새로운 라인과 마커 생성
                   getpath();
@@ -520,8 +533,8 @@ function recommend() {
                          obj.mapx = positions[j].latlng.ib;
                          obj.title = positions[j].title;
                          arr.push(obj);
-                         //arr.push(positions[j]);
                          afterpath.push(obj);
+                         //arr.push(positions[j]);
                          
                         addMarker(positions[j].latlng,
                               positions[j].title,
@@ -735,6 +748,7 @@ function newpath(){
    markersArr = [];
    markers = [];
    count = 0;
+   afterpath = [];
    //라인 지우기
    deletePolyLine();
    

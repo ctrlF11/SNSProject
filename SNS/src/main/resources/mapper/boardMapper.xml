@@ -244,7 +244,12 @@
 				where board_seq = #{board_seq}
 				and story_seq = #{story_seq}
 		</select>
-		
+				<select id="getBoardBySeq" parameterType="String" resultType="BoardVO">
+			select * from Board
+			<where>
+			board_seq = #{board_seq}
+			</where>
+		</select>
 		<select id="getSavedPath" parameterType="BoardVO" resultType="AddrVO">
 			    select t.title, t.contentId, t.contentTypeId, mapy, mapx
 				from TourMap t, (select contentId from Path <where> story_seq = #{story_seq} </where>) p
