@@ -31,7 +31,6 @@
 .avatar-icon{
 	position: relative;
 	}
-
 .newChatAlarm{
 	position: absolute;
 	}
@@ -40,7 +39,6 @@
 	}
 </style>
 <script type="text/javascript">
-
 /*    $(document).ready(
                function() {
                   $('[data-toggle=offcanvas]')
@@ -94,7 +92,6 @@
    }
    
    var lastID = 0;
-
    var toID = '';
    
    function chatListFunction() {
@@ -281,7 +278,6 @@ $.ajax({
    }
 })
 }
-
 function newMessage(){
 	$('#newChatAlarmBox').html('<img src="resources/image/new_alarm.png" id="newAlarm"/>');
 }
@@ -362,7 +358,6 @@ function newMessage(){
                            }
                            if(followArr.indexOf(follow)==-1){
                               followArr.add(follow);
-
                         %>
                             <div class="row1 sideBar-body" id = "<%=follow%>" onclick="getNewChat(this)">
                               <div class="col-sm-3 col-xs-3 sideBar-avatar">
