@@ -5,7 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
-<link href="resources/startbootstrap-coming-soon-gh-pages/vendor/font-awesome/css/font-awesome.min.css"
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
 <link href="resources/startbootstrap-coming-soon-gh-pages/vendor/font-awesome/css/font-awesome.min.css"
    rel="stylesheet" type="text/css">

@@ -105,7 +105,7 @@ public class BoardController {
 	}// �뜝�뙃�떆源띿삕
 
 	@RequestMapping("/modifyBoard")
-	public String writeForm(Model model, HttpServletRequest request, HttpServletResponse res) {
+	public String writeForm(@RequestParam("board_seq") String board_seq, Model model, HttpServletRequest request, HttpServletResponse res) throws Exception {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		id = AES.setDecrypting(id);

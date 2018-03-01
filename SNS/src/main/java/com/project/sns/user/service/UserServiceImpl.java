@@ -91,6 +91,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updatePicture(UserVO vo) {
 		// TODO Auto-generated method stub
-		return userDao.updatePicture(vo);
+		return dao.updatePicture(vo);
 	}
 }
