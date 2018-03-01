@@ -260,7 +260,16 @@ public class BoardDAOImpl implements BoardDAO {
 			// TODO Auto-generated method stub
 			return sqlSession.selectOne(namespace+".getHeartCount", vo);
 		}
+
+		@Override
+		public BoardVO getBoardBySeq(String board_seq) throws Exception {
+			// TODO Auto-generated method stub
+			return sqlSession.selectOne(namespace+".getBoardBySeq", board_seq);
+		}
 	    
-	    
+	    public List<AddrVO> getSavedPath(int story_seq) throws Exception
+	    {
+	    	return sqlSession.selectList(namespace+".getSavedPath", story_seq);
+	    }
 
 }

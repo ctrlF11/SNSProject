@@ -83,4 +83,6 @@ public interface BoardService {
 	    public BoardVO getBoardlikeId(BoardVO vo) throws Exception;
 		public int getHeart(HashMap map);
 		public int getHeartCount(BoardVO vo);
+	    public BoardVO getBoardBySeq(String board_seq) throws Exception;
+	    public List<AddrVO> getSavedPath(int story_seq) throws Exception;
 }

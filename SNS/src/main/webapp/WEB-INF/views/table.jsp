@@ -5,8 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
-
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
 <link href="resources/startbootstrap-coming-soon-gh-pages/vendor/font-awesome/css/font-awesome.min.css"
    rel="stylesheet" type="text/css">
 <meta name="viewport"
@@ -14,20 +13,20 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
 <script>
 // 지도에 마커를 표시합니다 
+
 var mapContainer = document.getElementById('map'), // 지도의 중심좌표
  mapOption = { 
  center: new daum.maps.LatLng(33.451475, 126.570528), // 지도의 중심좌표
-level: 15 // 지도의 확대 레벨
+level: 3 // 지도의 확대 레벨
  }; 
 var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-// 지도에 마커를 표시합니다 
-
 var positions =  [
       <%
       List<BoardVO> list = (List<BoardVO>) request.getAttribute("user");
          for (int i = 0; i < list.size(); i++) {
       %>
-      {title : "<%=list.get(i).getTitle()%>",
+      {
+       title : "<%=list.get(i).getTitle()%>",
        contenttypeid : "<%=list.get(i).getContentTypeId()%>",
        contentid : "<%=list.get(i).getContentId()%>",
        latlng : new daum.maps.LatLng(<%=list.get(i).getMapy()%>,<%=list.get(i).getMapx()%>)
@@ -177,9 +176,15 @@ function makeOutListener(infowindow) {
 <c:set var="f_result" value="${requestScope.f_result}"></c:set>
 <c:forEach var="user" items="${requestScope.user}">
 <br/>
-   <div class="panel panel-default">
+   <div class="panel panel-default" id = "table_${status.count}" >
    <div class="card mb-3">
-      <div class="card-body">
+   <div class="card-body">
+      스토리 번호 : ${user.story_seq }
+   ${status.count}
+  <%=list.size()%>
+ <input type="hidden" name="count_x${status.count}" value="${user.mapx}">
+ <input type="hidden"  name="count_y${status.count}" value="${user.mapy}">
+ <input type="hidden" id="size" value="<%=list.size()%>">
          <h6 class="card-title mb-1">
             <a
                href="getBoardValue.do?story_seq=${user.story_seq}&writer=${user.writer}">
@@ -187,7 +192,14 @@ function makeOutListener(infowindow) {
                ${user.content}
                </a>
          </h6>
-         <c:set var="id2" value="${user.writer}" scope="request"/>
+        <p class="card-text small" >
+        <a href="#"><strong>by ${user.writer}</strong></a>
+       </p>
+       <p class="card-text small"><strong>
+       ${user.regdate}
+       <c:forEach var="time" items="${requestScope.time}" begin="${status.index}" end="${status.index }">${time}</strong></c:forEach>
+       </p>
+       <c:set var="id2" value="${user.writer}" scope="request"/>
         <%       
          String id = (String) session.getAttribute("id");
          AES aes = new AES();
@@ -197,17 +209,9 @@ function makeOutListener(infowindow) {
          if(id.equals(id2))
          {
         %>
-       <button class="btn btn-default"  style = "color :#e1494a"> 수정 </button>
-       <button class="btn btn-default"  style = "color :#e1494a"> 삭제</button>
+       <button class="btn btn-default"  style = "color :#e1494a" id="up${user.board_seq}" onclick="updateBoard(this)"> 수정 </button>
+       <button class="btn btn-default"  style = "color :#e1494a" id="del${user.board_seq}" name="${user.story_seq}" onclick="deleteBoard(this)"> 삭제</button>
        <%}%>
-        
-       <p class="card-text small" >
-        <a href="#"><strong>by ${user.writer}</strong></a>
-       </p>
-       <p class="card-text small"><strong>
-       ${user.regdate}
-           <c:forEach var="time" items="${requestScope.time}" begin="${status.index}" end="${status.index }">${time}</strong></c:forEach>
-      </p>
       </div>
       <hr class="my-0">
       <div class="card-body py-2 small">
@@ -288,6 +292,31 @@ function replyList(board_seq,story_seq){
            }
        });
 } 
+</script>
+function updateBoard(value){
+	var upseq = value.id.replace('up','');
+	console.log(upseq);
+	location.replace("modifyBoard.do?board_seq="+upseq);
+	
+}
+
+function deleteBoard(value){
+	var delseq = value.id.replace('del','');
+	var delstr = value.name;
+	console.log(delseq);
+	if(confirm('현재 작성 중이던 글을 삭제하시겠습니까?')){
+			$.ajax({
+				url:"deleteBoard.do",
+				type:"post",
+				data:{board_seq:delseq},
+				success: function(data){
+					location.replace("homeview.do?story_seq="+delstr);
+				}
+			})
+	}else{
+		return false;
+	}
+}
 </script>
 <style>
 #pro {

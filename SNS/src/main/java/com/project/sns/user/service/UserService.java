@@ -21,4 +21,5 @@ public interface UserService {
 
 	public List<UserVO> getFollower(String id);
 	public int getFollow(HashMap map);
+	public int updatePicture(UserVO vo);
 }

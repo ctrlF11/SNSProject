@@ -94,4 +94,10 @@ public class UserDAOImpl implements UserDAO{
 
 	
 	
+	@Override
+	public int updatePicture(UserVO vo) {
+		// TODO Auto-generated method stub
+		return sqlSession.update(namespace+".updatePicture", vo);
+	}
+
 }
