@@ -21,4 +21,6 @@ public interface UserDAO {
 	public int followByPage(HashMap<String, String> ids);
 	
 	public List<UserVO> getFollower(String id);
+	public void unFollow(HashMap<String, String> ids);
+	public int getFollow(HashMap map);
 }

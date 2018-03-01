@@ -1,9 +1,12 @@
 <%-- <%@include file ="addT.jsp" %> --%>
+<%@page import="A.algorithm.AES"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="com.project.sns.board.vo.BoardVO"%>
 <%@ page import="java.util.*"%>
+
+
 <link href="resources/startbootstrap-coming-soon-gh-pages/vendor/font-awesome/css/font-awesome.min.css"
    rel="stylesheet" type="text/css">
 <meta name="viewport"
@@ -171,7 +174,7 @@ function makeOutListener(infowindow) {
    }
  */
 </script>
-
+<c:set var="f_result" value="${requestScope.f_result}"></c:set>
 <c:forEach var="user" items="${requestScope.user}">
 <br/>
    <div class="panel panel-default">
@@ -184,7 +187,20 @@ function makeOutListener(infowindow) {
                ${user.content}
                </a>
          </h6>
-  
+         <c:set var="id2" value="${user.writer}" scope="request"/>
+        <%       
+         String id = (String) session.getAttribute("id");
+         AES aes = new AES();
+         id = aes.setDecrypting(id);
+         
+         String id2 = (String) request.getAttribute("id2");
+         if(id.equals(id2))
+         {
+        %>
+       <button class="btn btn-default"  style = "color :#e1494a"> 수정 </button>
+       <button class="btn btn-default"  style = "color :#e1494a"> 삭제</button>
+       <%}%>
+        
        <p class="card-text small" >
         <a href="#"><strong>by ${user.writer}</strong></a>
        </p>
@@ -195,7 +211,7 @@ function makeOutListener(infowindow) {
       </div>
       <hr class="my-0">
       <div class="card-body py-2 small">
-         <a class="mr-3 d-inline-block" name="like${user.board_seq}" onclick="like_button(${user.board_seq},${user.story_seq})" href="#" style = "color :#e1494a;">
+         <a class="mr-3 d-inline-block heart_button" name="like${user.board_seq}" onclick="like_button(${user.board_seq},${user.story_seq})" href="#" style = "color :#e1494a;">
             <i class="fa fa-fw fa-thumbs-up"></i>${user.heart}명 Like
          </a>
          <a class="mr-3 d-inline-block" onclick="togglethis(${user.board_seq})" name="comment" style = "color :#e1494a;">
@@ -203,6 +219,14 @@ function makeOutListener(infowindow) {
          </a>
          <a class="d-inline-block" href="#" style = "color :#e1494a;">
             <i class="fa fa-fw fa-share"></i>Share
+         </a>
+         <a class="mr-3 d-inline-block follow_button" href="#" onclick="follow_button('${user.writer}');" style = "color :#e1494a;">
+			<c:if test="${f_result eq 1}">
+	            <i class="fa fa-fw fa-chain-broken"></i>Unfollow
+			</c:if>
+			<c:if test="${f_result eq 0}">
+	            <i class="fa fa-fw fa-chain"></i>Follow
+			</c:if>
          </a>
       </div>
       </div>
@@ -252,7 +276,7 @@ function replyList(board_seq,story_seq){
                var a =''; 
                $.each(data, function(key, value){ 
                    a += '<div class="commentArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                   a += '<div class="commentInfo'+value.reply_seq+'"><div class="commentWrap"><a href="#"><img id ="pro" src="resources/image/pro.png" alt="Paris"></a><strong>'+value.rwriter+'</strong>';
+                   a += '<div class="commentInfo'+value.reply_seq+'"><div class="commentWrap"><a href="#"><img id ="pro" src="resources/image/pre.png" alt="Paris"></a><strong>'+value.rwriter+'</strong>';
                    a += '<button style = "color :#e1494a;" class="btn btn-default" onclick="replyUpdate('+value.reply_seq+ ',\'' +value.rcontent+ '\',' +value.board_seq+ ',' +value.story_seq+'); style = "color :#e1494a;""> 수정 </button>';
                    a += '<button style = "color :#e1494a;" class="btn btn-default" onclick="replyDelete('+value.reply_seq+','+value.board_seq+ ',' +value.story_seq+ ');"> 삭제 </button> </div>';
                    a += '<div class="commentContent'+value.reply_seq+'"> <p>'+value.rcontent +'</p>';

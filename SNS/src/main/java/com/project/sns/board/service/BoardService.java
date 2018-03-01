@@ -81,4 +81,6 @@ public interface BoardService {
 	    public List<BoardVO> getBoard(BoardVO vo) throws Exception;
 	    public int likeDelete(BoardVO board) throws Exception;
 	    public BoardVO getBoardlikeId(BoardVO vo) throws Exception;
+		public int getHeart(HashMap map);
+		public int getHeartCount(BoardVO vo);
 }

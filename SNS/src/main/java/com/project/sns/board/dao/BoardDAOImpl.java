@@ -140,7 +140,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int deleteBoardByStory(StoryVO vo) {
 		// TODO Auto-generated method stub
-		return sqlSession.delete(namespace+".deleteBoardByStory",vo);
+		return sqlSession.delete(namespace+".deleteBoardByStory", vo);
 	}
 
 	@Override
@@ -248,6 +248,18 @@ public class BoardDAOImpl implements BoardDAO {
 	    {
 	    	return sqlSession.selectOne(namespace+".getBoardlikeId", vo);
 	    }
+
+		@Override
+		public int getHeart(HashMap map) {
+			// TODO Auto-generated method stub
+			return sqlSession.selectOne(namespace+".getHeart", map);
+		}
+
+		@Override
+		public int getHeartCount(BoardVO vo) {
+			// TODO Auto-generated method stub
+			return sqlSession.selectOne(namespace+".getHeartCount", vo);
+		}
 	    
 	    
 

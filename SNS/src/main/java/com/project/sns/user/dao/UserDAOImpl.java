@@ -81,4 +81,17 @@ public class UserDAOImpl implements UserDAO{
 		return sqlSession.selectList(namespace+".getFollower", id);
 	}
 
+	@Override
+	public void unFollow(HashMap<String, String> ids) {
+		// TODO Auto-generated method stub
+		sqlSession.delete(namespace+".unFollow", ids);
+	}
+
+	@Override
+	public int getFollow(HashMap map) {
+		return sqlSession.selectOne(namespace+".getFollow", map);
+	}
+
+	
+	
 }

@@ -1,5 +1,6 @@
 package com.project.sns.user.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -205,18 +206,41 @@ import A.algorithm.AES;
     	return "myPage";
     }
     
-    @RequestMapping("/followByBoard.do")
-    public String followByBoard(@RequestParam("id") String id, @RequestParam("writer") String writer,
-    		HttpServletRequest req, HttpServletResponse res) {
+    @ResponseBody
+    @RequestMapping(value = "/followByBoard.do", produces = "text/html; charset=utf8")
+    public String followByBoard(@RequestParam("writer") String writer,
+    		HttpServletRequest req, HttpServletResponse res) throws IOException {
+    	req.setCharacterEncoding("UTF-8");
+    	res.setContentType("text/html;charset=UTF-8");
+    	HttpSession session = req.getSession();
+    	String id = (String)session.getAttribute("id");
     	id = AES.setDecrypting(id);
+    	String uri = req.getHeader("Referer").substring(26);
+    	System.out.println("id : " + id);
+    	System.out.println("writer : " + writer);
+    	String result = "";
+    	if(id.equals(writer)) {
+    		result = "자기 자신을 팔로우할 수 없습니다.";
+    		return result;
+    	}
     	HashMap<String, String> ids = new HashMap();
     	System.out.println("fBB id : " + id);
     	System.out.println("fBB writer : " + writer);
     	ids.put("id", id);
     	ids.put("writer", writer);
-    	service.followByBoard(ids);
-    	String uri = req.getHeader("Referer").substring(26);
-    	return "redirect:"+uri;
+    	int f_result = service.getFollow(ids);
+    	
+    	if(f_result == 0) {
+    		service.followByBoard(ids);
+    		result = "0";
+    		return result;
+		} else if(f_result == 1){
+			service.unFollow(ids);
+			result = "1";
+		} else {
+			result = "에러. 문의해 주세요.";
+		}
+    	return result;
     }
     
     @ResponseBody

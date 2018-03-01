@@ -261,4 +261,17 @@ public class BoardServiceImpl implements BoardService {
     public BoardVO getBoardlikeId(BoardVO vo) throws Exception{
     	return dao.getBoardlikeId(vo);
     }
+
+	@Override
+	public int getHeart(HashMap map) {
+		return dao.getHeart(map);
+	}
+
+	@Override
+	public int getHeartCount(BoardVO vo) {
+		// TODO Auto-generated method stub
+		return dao.getHeartCount(vo);
+	}
+
+
 }

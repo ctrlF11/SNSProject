@@ -47,12 +47,15 @@
 				following = #{id}
 			</where>
 		</select>
-		<insert id="followByBoard" parameterType="string">
+		<insert id="followByBoard" parameterType="map">
 			insert Follow(follower, following)
 			values(#{id}, #{writer}) 
 		</insert>
+		<insert id="unFollow" parameterType="map">
+			delete from Follow where follower = #{id} and following = #{writer}
+		</insert>
 		
-		<select id="getFollower" parameterType="string" resultType = "com.project.sns.user.vo.UserVO">
+		<select id="getFollower" parameterType="string" resultType = "UserVO">
 			select distinct * from SnsUser
 			<where>
 			id = (select follower from Follow where #{value} = following)
@@ -60,5 +63,13 @@
 			</where>
 		</select>
 		
+		<select id="getFollow" parameterType="map" resultType="int">
+			select count(*) from Follow
+			<where>
+				follower = #{id}
+				and
+				following = #{writer}
+			</where>
+		</select>
 
 </mapper>

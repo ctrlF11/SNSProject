@@ -180,12 +180,6 @@ public class BoardController {
 		service.deleteBoard(vo);
 	}
 
-	@RequestMapping("/deleteStory")
-	public void deleteStory(StoryVO vo) {
-		service.deleteStory(vo);
-		service.deleteBoardByStory(vo);
-	}
-
 	@RequestMapping("/saveImage")
 	public void saveImage(ImageVO vo) throws SQLException {
 		service.saveImage(vo);
@@ -272,6 +266,18 @@ public class BoardController {
 	      for (int i = 0; i < timeS.size(); i++) {
 	         System.out.println(timeS.get(i));
 	      }
+	      map.clear();
+	      HttpSession session = request.getSession();
+	      String id = (String) session.getAttribute("id");
+	      id = AES.setDecrypting(id).trim();
+	      map.put("id", id);
+	      map.put("writer", user.get(0).getWriter());
+	      
+	      System.out.println("map id : " + map.get("id"));
+	      
+	      int f_result = userService.getFollow(map);
+	      	
+	      request.setAttribute("f_result", f_result);
 	      request.setAttribute("user", user);
 	      request.setAttribute("time",timeS);
 	      /*
@@ -382,38 +388,43 @@ public class BoardController {
 		return "table3";
 	}
 
-	@RequestMapping("/likeUp.do") // 댓글 작성
 	@ResponseBody
-	private int likeUp(@RequestParam int board_seq, @RequestParam int story_seq, HttpSession session) throws Exception {
-
+	@RequestMapping("/likeUp.do") // 좋아요
+	private String likeUp(@RequestParam int board_seq, @RequestParam int story_seq, HttpSession session) throws Exception {
 		logger.info("likeUp.do");
+
 		int heart = 0;
 		BoardVO vo = new BoardVO();
-		String id = (String) session.getAttribute("id");
+		String id = (String)session.getAttribute("id");
 		id = aes.setDecrypting(id);
-
-		try {
-			vo.setBoard_seq(board_seq);
-			vo.setStory_seq(story_seq);
-			vo.setHeart_id(id);
+		HashMap map = new HashMap();
+		map.put("heartId", id);
+		map.put("story_seq", story_seq);
+		map.put("hboard_seq", board_seq);
+		
+		int h_result = service.getHeart(map);
+		
+		System.out.println("좋아요 있냐 없냐 : " + h_result);
+		
+		vo.setBoard_seq(board_seq);
+		vo.setStory_seq(story_seq);
+		vo.setHeart_id(id);
+		if(h_result == 0) {
+			vo.setHeart(service.getHeartCount(vo) + 1);
+			heart = vo.getHeart();
 			service.likeInsert(vo);
-			vo.setHeart(service.getBoard(vo).get(0).getHeart());// 좋아요 +1
 			service.likeUp(vo);// 좋아요 +1 업데이트
-			heart = service.getBoard(vo).get(0).getHeart();// +1 된 좋아요 반환
 			System.out.println("좋아요 수 :" + heart);
-			return heart;
-
-		} catch (Exception e) {
-
-			vo.setBoard_seq(board_seq);
-			vo.setStory_seq(story_seq);
-			vo.setHeart_id(id);
-			heart = service.getBoard(vo).get(0).getHeart();
-			heart = heart - 2;
+			return Integer.toString(heart);
+		} else if(h_result == 1) {
+			vo.setHeart(service.getHeartCount(vo) - 1);
+			heart = vo.getHeart();
+			service.likeUp(vo);
 			service.likeDelete(vo);
-			return heart;
+			return Integer.toString(heart);
 		}
-
+	
+		return "에러. 문의해 주세요.";
 	}
 
 	@RequestMapping("/webStart.do")
@@ -421,4 +432,22 @@ public class BoardController {
 		return "web";
 	}
 
+	@RequestMapping("/modifyStory.do")
+	public String modifyStory(@RequestParam("story_seq") int story_seq) {
+		return "modifyStory";
+	}
+
+	@RequestMapping("/deleteStory.do")
+	public String deleteStory(@RequestParam("story_seq") int story_seq, HttpSession session) {
+		StoryVO vo = new StoryVO();
+		String id = (String)session.getAttribute("id");
+		id = AES.setDecrypting(id);
+		vo.setId(id);
+		vo.setStory_seq(story_seq);
+		service.deleteBoardByStory(vo);
+		service.deleteStory(vo);
+		return "redirect:myPage.do";
+	}
+	
+	
 }
