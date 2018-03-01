@@ -1,3 +1,4 @@
+<%@page import="A.algorithm.AES"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -18,6 +19,62 @@
    display:inline-block;
    }
 </style>
+<script type="text/javascript">
+<%
+String userID = (String) session.getAttribute("id");
+if(userID!=null){
+AES aes = new AES();
+userID = aes.setDecrypting(userID);
+%>
+var userID = '<%=userID%>';
+
+$(document).ready(
+		function(){
+			getMessageAlarm();
+			getInfiniteAlarm();
+		});
+<%
+};
+%>
+function getMessageAlarm(){
+	$.ajax({
+		type : "POST",
+		url : "chat/getNewFollower.do",
+		contentType : "application/json; charset=UTF-8",
+		success : function(data){
+			console.log(data);
+		      var namecheck = [];
+		      for(var i = 0; i < data.length; i++){
+		    	  var follow = "";
+		    	  if(userID == data[i].fromID){
+		    		  follow = data[i].toID;
+		    	  }else{
+		    		  follow = data[i].fromID;
+		    	  }
+		    	  if(namecheck.indexOf(follow)==-1){
+		    		  namecheck.push(follow);
+		    			if(data[i].toID==userID){
+		    				if(data[i].chatRead==0){
+		    					$('#message_icon').attr("src",'resources/image/message_new.jpg');
+		    				}
+		    				else{
+		    					$('#message_icon').attr("src",'resources/image/message_btn.jpg');
+		    				}
+		    			}
+		    	  }
+		      }
+		}
+		
+	})
+}
+
+function getInfiniteAlarm(){
+	setInterval(function(){
+		getMessageAlarm();
+	}, 30000); //30초에 1번 실행
+}
+
+</script>
 </head>
 <body>
                <div class="navbar navbar-blue navbar-static-top">
@@ -26,7 +83,7 @@
                    -->
                   <nav class="navbar-collapse" role="navigation">
                      <!-- 검색 폼. -->
-                     <a href="mainHomeView.do" class="navbar-brand"><img src="문민웅-메인페이지_02.jpg"></img></a>
+                     <a href="mainHomeView.do" class="navbar-brand"><img src="resources/image/문민웅-메인페이지_02.jpg"></img></a>
                      <div class="search_wrap" id="search_wrap">
                         <form class="navbar-form navbar-left" method="post" onsubmit="return checkgo();" id="searchForm">
                            <div class="input-group input-group-sm">
@@ -51,41 +108,44 @@
                            <%
                               if(session.getAttribute("id") == null) {
                                  %>
-                                    <a href="login.do"><img src="login.jpg" /></a>
+                                    <a href="login.do"><img src="resources/image/login.jpg"></img></a>
                                  <%
                               }
                               else {
                                  %>
-                                    <a href="logout.do"><img src="img/logout.jpg" /></a>
+                                    <a href="logout.do"><img src="resources/image/logout.jpg"></img></a>
                                  <%
                               }
                            %>
                            </li>
                            <li>
-                              <a href="newMap.do"><img src="path.jpg" role="button"></a>
-                              </img>
+                              <a href="newMap.do" role="button"><img src="resources/image/path.jpg"/></a>
                            </li>
                            <li>
-                              <a href="message.do" role="button"><img src="img/message.jpg"></a>
+                           <%
+                           	
+                           %>
+                              <a href="message.do" role="button"><img id="message_icon" src="resources/image/message_btn.jpg"/></a>
                            </li>
                            <li>
-                              <a href="modifyBoard.do"><img src="write.jpg" onclick="message.do"></img></a>
+                              <a href="modifyBoard.do"><img src="resources/image/write.jpg"></img></a>
                            </li>
-                           <!-- 드롭다운(클릭하면 밑으로 튀어나오는 메뉴) -->
-                           <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                              <img src="mypage.jpg"></img></a>
-                           <ul class="dropdown-menu">
-                             <li><a href="myPage.do">마이페이지</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                             <li><a href="">More</a></li>
-                           </ul>
-                          </li>
+                           <li>
+                                 
+                             <a href="myPage.do"><img src="resources/image/mypage.jpg"></img></a>
+                           </li>
                         </ul>
                      </div>
                   </nav>
                </div>
 </body>
+function checkId(event){
+	var id = <%=session.getAttribute("id")%>;
+	 if(id == null) {
+		 alert("회원만 이용 가능합니다.");
+		 location.href = "login.do";
+		 event.preventDefault();
+	 }
+}
+</script>
 </html>

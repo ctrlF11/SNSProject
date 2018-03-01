@@ -130,11 +130,11 @@
 		
 		
 	<insert id="inputBoard" parameterType="BoardVO">
-			insert into Board(story_seq, title, content, writer, mtitle, contentId, heart, star)
-			values (#{story_seq}, #{title}, #{content}, #{writer}, #{mtitle}, #{contentId}, 0 , #{star})
+			insert into Board(story_seq, title, content, writer, contentId, heart, star)
+			values (#{story_seq}, #{title}, #{content}, #{writer}, #{contentId}, 0 , #{star})
 		</insert>
 		<update id="updateBoard" parameterType="BoardVO">
-			update Board set title = #{title}, content = #{content}, mtitle = #{mtitle}, contentId = #{contentId}, star = #{star}
+			update Board set title = #{title}, content = #{content}, contentId = #{contentId}, star = #{star}
 			<where>
 				board_seq = ${board_seq}
 			</where> 
@@ -243,6 +243,7 @@
 				where board_seq = #{board_seq}
 				and story_seq = #{story_seq}
 		</select>
+<<<<<<< HEAD
 		
 		<select id="getHeart" parameterType="map" resultType="int">
 				select count(*) from heartList
@@ -261,4 +262,17 @@
 			</where>
 		</select>
 		
+=======
+				<select id="getBoardBySeq" parameterType="String" resultType="BoardVO">
+			select * from Board
+			<where>
+			board_seq = #{board_seq}
+			</where>
+		</select>
+		<select id="getSavedPath" parameterType="BoardVO" resultType="AddrVO">
+			    select t.title, t.contentId, t.contentTypeId, mapy, mapx
+				from TourMap t, (select contentId from Path <where> story_seq = #{story_seq} </where>) p
+				where t.contentId = p.contentId
+		</select>
+>>>>>>> refs/remotes/origin/Leejh
 </mapper>

@@ -28,6 +28,7 @@
 		</foreach>
 	</insert>
 
+<!--MAP -->
 	<select id="getAddress" parameterType="int" resultType="AddrVO">
 		select * from TourMap
 	</select>
@@ -54,16 +55,6 @@
 		<result property="heart" column="sum(heart)" />
 	</resultMap>
 	
-<!-- SAVE PATH -->
-   <insert id="insertPath" parameterType="BoardVO">
-      insert into Path (id, contentId, count) values
-      ( #{writer},#{contentId},#{count} )
-   </insert>
-   
-   <select id="getCount" parameterType="int" resultType="int">
-     select max(count) from Path <where> id = #{id} </where>
-   </select>	
-	
 	<select id="getStarAvg" parameterType="String" resultType="double">
    	 	select COALESCE(AVG(star),0) from Board
    	 	<where>
@@ -78,8 +69,22 @@
    	<resultMap id="getStarMap" type="BoardVO">
 		<result property="contentId" column="contentId" />
 		<result property="star" column="AVG(star)" />
-	</resultMap>
-   	
+	</resultMap>	
+	
+<!-- SAVE PATH -->
+   <insert id="insertPath" parameterType="BoardVO">
+      insert into Path (id, contentId, story_seq) values
+      ( #{writer},#{contentId},#{story_seq} )
+   </insert>
+   
+   	<select id="getStoryseq" parameterType="int" resultType="int">
+		select max(story_seq) from Story 
+		<where> 
+			id = #{id}
+		</where>
+	</select>
+	
+<!-- Detail -->   	
    	 <select id="callInfo" parameterType="String" resultType="AddrVO">
    	 	select * from TourMap
    	 	<where>

@@ -74,7 +74,7 @@ public class ChatController {
       return entity;
    }
    
-   //chat.jsp side-one에 추가할 대화기록
+   //chat.jsp side-one�뿉 異붽��븷 ���솕湲곕줉
    @RequestMapping("/getNewFollower")
    public List<ChatVO> getNewFollower(HttpSession session){
       String id = (String) session.getAttribute("id");
@@ -88,10 +88,10 @@ public class ChatController {
          for(ChatVO vo : list) {
             String name = "";
             UserVO uvo = null;
-            if(id == vo.getFromID()) {
-               name = vo.getFromID();
-            }else {
+            if(id.equals(vo.getFromID())) {
                name = vo.getToID();
+            }else {
+               name = vo.getFromID();
             }
             if(namecheck.indexOf(name)==-1) {
                namecheck.add(name);

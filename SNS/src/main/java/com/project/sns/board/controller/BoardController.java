@@ -109,6 +109,13 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		id = AES.setDecrypting(id);
+		
+		BoardVO board = new BoardVO();
+		if(board_seq!=null) {//board_seq가 넘어왔을 경우 게시판 수정.
+			board = service.getBoardBySeq(board_seq);
+			request.setAttribute("board", board);
+		}
+
 		List<StoryVO> story = service.getStory(id);
 		if (story != null) {
 			model.addAttribute("story", story);
@@ -149,17 +156,17 @@ public class BoardController {
 		UserVO myvo = cservice.getUser(id);
 		if (list != null) {
 			for (ChatVO vo : list) {
-				String name = "";
+				String yourId = "";
 				UserVO uvo = null;
-				if (vo.getToID() == id) {
-					name = vo.getFromID();
+				if (vo.getToID().equals(id)) {
+					yourId = vo.getFromID();
 				} else {
-					name = vo.getToID();
+					yourId = vo.getToID();
 				}
-				System.out.println(resultList.indexOf(name));
-				if (namecheck.indexOf(name) == -1) {
-					namecheck.add(name);
-					uvo = cservice.getUser(name);
+				System.out.println(resultList.indexOf(yourId));
+				if (namecheck.indexOf(yourId) == -1) {
+					namecheck.add(yourId);
+					uvo = cservice.getUser(yourId);
 					vo.setName(uvo.getName());
 					vo.setPicture(uvo.getProfile_img());
 					resultList.add(vo);
@@ -168,16 +175,28 @@ public class BoardController {
 		}
 		//팔로워 모음
 		List<UserVO> followerlist = userService.getFollower(id);
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!11followerlist");
+		for(UserVO vo : followerlist){
+			System.out.println(vo.getName());
+		}
 		request.setAttribute("myInfo", myvo);
 		request.setAttribute("chatList", resultList);
 		request.setAttribute("follower", followerlist);
 		
 		return "chat";
 	}
+	
+	@ResponseBody
+	@RequestMapping("/deleteBoard.do")
+	public int deleteBoard(BoardVO vo) {
+		int data =service.deleteBoard(vo);
+		return data;
+	}
 
-	@RequestMapping("/deleteBoard")
-	public void deleteBoard(BoardVO vo) {
-		service.deleteBoard(vo);
+	@RequestMapping("/deleteStory")
+	public void deleteStory(StoryVO vo) {
+		service.deleteStory(vo);
+		service.deleteBoardByStory(vo);
 	}
 
 	@RequestMapping("/saveImage")
@@ -328,9 +347,8 @@ public class BoardController {
 		System.out.println("BoardVO.getFiles() : " + vo.getFiles());
 		System.out.println("BoardVO.getTitle() : " + vo.getTitle());
 		vo.setWriter(AES.setDecrypting(vo.getWriter()));
-		// 占쌉시깍옙 占쏙옙占쏙옙확占쏙옙
-		int i = service.getBoardSeq(vo);
-		int k = 100;
+		// �뜝�뙃�떆源띿삕 �뜝�룞�삕�뜝�룞�삕�솗�뜝�룞�삕
+		int i = vo.getBoard_seq();
 		if (i == 0) {
 			service.regist(vo);
 		} else
@@ -449,5 +467,13 @@ public class BoardController {
 		return "redirect:myPage.do";
 	}
 	
+	
+	//저장된 경로들 불러오기
+	@RequestMapping("/loadPath.do")
+	public @ResponseBody List<AddrVO> loadPath(HttpServletRequest request, @RequestParam int story_seq) throws Exception {
+		List<AddrVO> pathList = service.getSavedPath(story_seq);
+		return pathList;
+		
+	}
 	
 }

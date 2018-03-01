@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="https://ajax.googleapis.com/ajax/ls/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <meta name="viewport"
    content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1993b1e3b0175008e57aef80bfdd05b0"></script>
@@ -15,12 +15,22 @@
 <link rel="stylesheet"
    href="resources/facebook/assets/css/facebook2.css">
 <link rel="stylesheet" href="resources/css/map.css" type="text/css"/>
+
 <!-- <script type="text/javascript" src="resources/js/map.js"></script> -->
 <script type="text/javascript" src="resources/facebook/assets/js/jquery.js"></script>
 <script type="text/javascript" src="resources/facebook/assets/js/bootstrap.js"></script>
-<style>
 
-.scope{
+
+<style>
+   
+ #sidemenu {
+	background-image: url("resources/image/pathbackground.jpg");
+}
+ #searchMap{
+   background-image: url('resources/image/search_icon.jpg');
+   }
+   
+   .scope{
 	float:left;
 	margin: 10px;
 	top: 0;
@@ -30,11 +40,16 @@
 	clear: left;
 	margin: 10px;
 	}
-	
+
+   
 </style>
+
 <title>TourSNS</title>
+
 </head>
 <body>   
+
+
 
 <div class="wrapper">
       <div class="box">
@@ -53,28 +68,44 @@
       <div id="mask"></div>
       <div id="window"></div>
       <div id="mapBox">
-      	<div id="searchBox" style="z-index: 2;">
-	      <input type="text" id="searchMap" onkeydown="enterkey();"/><input id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
-		</div>
-      	<div id="map" style="z-index: 1;" ></div> 
+         <div id="searchBox" style="z-index: 2;">
+             <div id="searchTextBox"style="z-index: 3;">
+         <input type="text" id="searchMap" onkeydown="enterkey();"/> <img src="resources/image/search_btn.jpg" id = "searchMapBtn" type="button" value="검색" onclick="searchMap();"/>
+      		</div>
+        </div>
+         <div id="map" style="z-index: 1;" ></div> 
       </div>
       
       <!-- 오른쪽 사이드 -->  
       <div id="sidemenu">  
-      	<button class="sideBtn" id="getpath" onclick="getpath()">경로 찾기</button>
-      	<button class="sideBtn" id="newpath" onclick="newpath()">경로 새로고침</button>
-      	<button class="sideBtn" id="savepath" onclick="savepath()">경로 저장</button>
-      	<ul class="accordian">
-      		<li class="accordian--box">
-      			<h3 id="recommend" onclick="recommend()">추천코스</h3>    			
-      			<h4 id="pathlist"></h4>
-      		</li>
-      	</ul>
-		<div id="path"></div>
-      	<div>
-      		<select id="selectHour"></select>
-      		<select id="selectMinute"></select>
-      	</div>       
+         <button class="sideBtn" id="getpath" onclick="recommend()"><img src="resources/image/path.png"></button>
+         <button class="sideBtn" id="newpath" onclick="newpath()"><img src="resources/image/pathreset.png"></button>
+         <button class="sideBtn" id="savepath" onclick="savepath()"><img src="resources/image/pathsave.png"></button>
+      <div></div>
+	 <!-- 출발 시간 -->
+          <div style = "padding-top : 15px; padding-left : 25px;">
+          	<span style = "color : white; font-size : 17px; float : left; ">출발 시간 </span>
+        	
+ 			<input type="text" id="startTime" onclick="setTime()" readonly></input>
+
+			<div id="timeOption" style = "float : left;">
+				<input type='text' id='hour' value="00" onchange="hourSetting(this.value)"></input>
+					<button class="timeBtn" onclick="upHour()"><img src= "resources/image/timeup.png"></button>
+					<button class="timeBtn" onclick="downHour()"><img src= "resources/image/timedown.jpg"></button>
+					<span style = "color : white; font-size : 17px;">:</span>
+				 <input type='text' id='minute' value="00" onchange="minuteSetting(this.value)"></input>
+					<button class="timeBtn" onclick="upMinute()"><img src= "resources/image/timeup.png"></button>
+					<button class="timeBtn" onclick="downMinute()"><img src= "resources/image/timedown.jpg"></button>
+				 <select id ="ampm">
+					 <option value='AM'>AM</option>
+					 <option value='PM'>PM</option>
+				 </select>
+			</div>
+         </div> 
+		<h4 id="pathlist"></h4>
+		
+      <div id="path"></div>
+     
       </div>      
    </div>
             </div>         
@@ -83,36 +114,7 @@
    </div>
 <script>
 
-
-
- var accModule = function() {
-
-     // private member (비공개 멤버, 고유멤버)
-     var acc_wrap = $('.accordian'),
-       question = $('#recommend'),
-       answer = $('#pathlist');
-
-     // privilieged member(공용 인터페이스)
-     return {
-       runInit: function() {
-         this.accHandler();
-       },
-       accHandler: function() {
-         var accordian = {
-           targetClick: function(e) {
-             var eTarget = $(e.currentTarget);
-
-             
-             eTarget.next().slideDown();
-           }
-         };
-         question.on('click', accordian.targetClick);
-       }
-     }
-   }();
-
-   // 실행
-   accModule.runInit(); 
+$('#timeOption').hide();
 
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
@@ -264,10 +266,10 @@ function displayArea(coordinates, name, gucode) {
             duration: 350
         }});         
         
-        sigungucode = gucode;      				//클릭한 구의 시군구코드 넘겨줌            
+        sigungucode = gucode;                  //클릭한 구의 시군구코드 넘겨줌            
 
         deletePolygon(polygons);               //폴리곤 제거      
-        guName.setMap(null);					//구 이름 제거
+        guName.setMap(null);               //구 이름 제거
    });
 
 }
@@ -299,6 +301,7 @@ var markersArr = [];  //클릭해서 선택한 배열(빨간색)
 var markers = []; //검색 결과 마커들 모음 (노란색)
 var afterSearchPath = []; //검색 후 결과 배열
 var afterSearchArr = new Array(); //검색 한 결과 객체들 모음
+var afterpath = [];
 
 var selectedMarker = null;
 
@@ -338,12 +341,12 @@ function addMarker(position, title, contentid, contenttypeid) {
 
    //만약 arr에 존재하는 marker라면 빨간색 마커로 생성하겠다. 그리고 markerArr에 추가하겠다.
    if(arr.findIndex(function(item){return item.contentId === contentid})>-1){
-   	createArrMarkers(marker);
-   	
-   	if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
-   		//markersArr에도 존재한다면?
-   		return false;
-   	}
+      createArrMarkers(marker);
+      
+      if(markersArr.findIndex(function(item){return item.contentId === contentid})>-1){
+         //markersArr에도 존재한다면?
+         return false;
+      }
    }
    
    // 마커 객체에 마커아이디와 마커의 기본 이미지를 추가합니다
@@ -401,7 +404,7 @@ function addMarker(position, title, contentid, contenttypeid) {
        }
        var i = arr.findIndex(function(item){return item.contentId === contentid});
        if(i > -1){
-    	   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           return false;
        }
 
@@ -417,7 +420,7 @@ function addMarker(position, title, contentid, contenttypeid) {
       markersArr.push(this);
       
       var outputTitle = '<div class="pin" value="'+ contenttypeid + '" id="' + contentid + '" text-align:left>';
-                     outputTitle += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + contentid + '" onclick="deletePin(this)"></div>' 
+                     outputTitle += '<h4 class="title"><img src="resources/image/pathsidex.png" class= "xbtn" id="d' + contentid + '" onclick="deletePin(this)">' 
                               + "<a href='javascript:panTo(" + position.jb + ',' + position.ib + ',' + contentid + ',' + contenttypeid + ")'>"
                               + title + '</a></h4></div>';
       $('#path').append(outputTitle);
@@ -452,7 +455,15 @@ function deletePolygon(polygons) {
    polygons = [];
 }
 
-//팝업 레이어
+//팝업 레이어 닫기 버튼
+function popupX() {
+	var mask = document.getElementById("mask");
+	var window = document.getElementById("window");
+	mask.style.display = 'none';
+	window.style.display = 'none';
+}
+
+ //팝업 레이어
 function wrapWindowByMask() {
 
    // 뒤 검은 마스크를 클릭시에도 모두 제거하도록 처리합니다.
@@ -460,6 +471,7 @@ function wrapWindowByMask() {
       $(this).hide();
       $('#window').hide();
    });
+
 
    var maskHeight = $('#map').height();
    var maskWidth = $('#map').width(); //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
@@ -478,7 +490,8 @@ function wrapWindowByMask() {
    $('#window').css({
       'left' : left,
       'top' : top,
-      'position' : 'absolute'
+      'position' : 'absolute',
+      'display' : 'inline'
    });
 
    $('#window').show();
@@ -488,21 +501,27 @@ var count = 0;
 
 //경로 추천
 function recommend() {
-   
+   if(sigungucode==''){
+      alert("시군구를 입력해주세요.");
+      return false;
+   }
    $.ajax({
             url : 'getPath.do',
             type : 'get',
             dataType : 'json',
-            data : {'sigungucode' : sigungucode, 'hour' : $('#selectHour').val(), 'minute' : $('#selectMinute').val()},
+            data : {'sigungucode' : sigungucode, 'startTime' : $('#startTime').val()},
             success : function(jsonData) {
 
 
                var path = jsonData.path;
-               var sidePath = "";					//오른쪽 사이드바에 경로 나열
-               recPath = [];						//추천 경로가 담겨질 배열
+               var sidePath = "";               //오른쪽 사이드바에 경로 나열
+               recPath = [];                  //추천 경로가 담겨질 배열
+               afterpath = [];
+			   afterpath = [];
                count++;
-               if(count > 1){						//추천경로 클릭할 때마다 새로운 라인과 마커 생성
-                  newpath();
+               if(count > 1){                  //추천경로 클릭할 때마다 새로운 라인과 마커 생성
+                  getpath();
+                     return false;
                }
                for (var i = path.length - 1; i >= 0; i--) {
                   for (var j = 0; j < positions.length; j++) {
@@ -514,6 +533,7 @@ function recommend() {
                          obj.mapx = positions[j].latlng.ib;
                          obj.title = positions[j].title;
                          arr.push(obj);
+                         afterpath.push(obj);
                          //arr.push(positions[j]);
                          
                         addMarker(positions[j].latlng,
@@ -522,7 +542,7 @@ function recommend() {
                               positions[j].contenttypeid);
                               
                         sidePath += '<div class="pinn ' + positions[j].contentid + '" id="' + positions[j].contentid + '">';
-                        sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="d' + positions[j].contentid + '"onclick="deletePin(this)"></div>'
+                        sidePath += '<h4 class="title"><img src="resources/image/pathsidex.png" class= "xbtn" id="d' + positions[j].contentid + '"onclick="deletePin(this)">'
                                   + "<a href='javascript:panTo(" + positions[j].mapy + "," + positions[j].mapx + "," + positions[j].contentid + "," + positions[j].contenttypeid + ")'>"
                                   + positions[j].title + "</a>" + '</h4>';
                         sidePath += '</div>'; 
@@ -569,6 +589,7 @@ function getpath(){
             markersArr = [];
             deletePolyLine();
             recPath = [];
+            afterpath = [];
             afterpath = data;
             var sidePath = '';
             var bounds = new daum.maps.LatLngBounds();
@@ -581,7 +602,7 @@ function getpath(){
                   addMarker(latlng, val.title, val.contentId, val.contentTypeId);
                   
                   sidePath += '<div class="pinn" id="' + val.contentId +  '"text-align:left>';
-                  sidePath += '<h4 class="title"><div class="glyphicon glyphicon-remove" id="' + val.contentId + '"onclick="deletePin(this)"></div>'
+                  sidePath += '<h4 class="title"><img src="resources/image/pathsidex.png" class= "xbtn" id="' + val.contentId + '"onclick="deletePin(this)">'
                            + "<a href='javascript:panTo(" + val.mapy + "," + val.mapx +"," +  val.contentId + "," + val.contentTypeId + ")'>"
                            + val.title + "</a>" + '</h4>';
                   sidePath += '</div>';
@@ -682,6 +703,7 @@ function drawLine(recPath){
    polylines.push(polyline); //배열에 라인 담기 
 }
 
+
 //엑스표 누르면 arr와 div 삭제
 function deletePin(event){
    var cid = (event.id).replace('d','');
@@ -694,37 +716,26 @@ function deletePin(event){
       
       //arr에서 삭제
       arr.splice(i, 1);
-
       //markersArr에서 삭제
       markersArr.splice(i, 1);
-      
-      
-      //console.log("getpath의 결과?");
-      //console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
-      //if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){//getpath의 결과 일 경우. 마커를 삭제한다 
-         //markersArr[i].setMap(null);
-      //}else{//아닐 경우, 마커의 이미지를 normalImage로 바꾼다.
-         //markersArr[i].setImage(normalImage);
-      //}
+        console.log(afterpath);
+        console.log(cid);
+      console.log(afterpath.findIndex(function(item){return item.contentId === cid}));
+     if(afterpath.findIndex(function(item){return item.contentId === cid})>-1){
+        //div 지우기 경로 전
+       var top = document.getElementById('pathlist');
+       var garbage = document.getElementById(cid);
+       top.removeChild(garbage);
+     }else{
+          //div 지우기 경로 후
+          var top1 = document.getElementById('path');
+          var garbage1 = document.getElementById(cid);
+          top1.removeChild(garbage1);
+     }
 
    }   
    
-   //div 지우기 경로 후
-	var top1 = document.getElementById('path');
-	var garbage1 = document.getElementById(cid);
-	if(!garbage1){
-	top1.removeChild(garbage1);
-	}else{
-   
-   
-   //div 지우기 경로 전
-	var top = document.getElementById('pathlist');
-	var garbage = document.getElementById(cid);
-	if(!garbage){
-	top.removeChild(garbage);
-	}
-	}
-	deletePolyLine();
+   deletePolyLine();
 }
 
 //경로 새로고침
@@ -736,7 +747,8 @@ function newpath(){
    arr = new Array();
    markersArr = [];
    markers = [];
-   
+   count = 0;
+   afterpath = [];
    //라인 지우기
    deletePolyLine();
    
@@ -747,9 +759,9 @@ function newpath(){
 
 
 function getDetail(contentid, contenttypeid){
-	wrapWindowByMask();
-	var contentid = contentid;
-	var contenttypeid = contenttypeid;
+   wrapWindowByMask();
+   var contentid = contentid;
+   var contenttypeid = contenttypeid;
     $.ajax({        
         url: 'callDetail.do',
         type: 'get',
@@ -757,109 +769,113 @@ function getDetail(contentid, contenttypeid){
         dataType: 'json',
         success: function(data){
             var addr = getInfo(contentid, contenttypeid);
-        	var myItem = data.response.body.items.item;
+           var myItem = data.response.body.items.item;
             var output = '<div class="pin1 ' + contentid + '" id="' + contentid + '" text-align:left>';
-            	output += '<h4 id="title">' + addr.title + '</h4>';
-            	output += '<div class="scope" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/>';
+               output += '<div class="pin-top"><div id="title" style="background-image: url(\'' + 'resources/image/popup-top.png' + '\');"><font size="4em">' + addr.title + '</font><a id="popup-X" href="#" onclick="popupX()">';
+               output += '<img src="resources/image/popup-X.png"></a></div></div>';
+               output += '<div class="scope" ><img src = "' + addr.firstimage + '" style="height: 250px; width: 350px; float:left"/>';
             if(addr.scope && addr.scope !="0" && addr.scope!="0.0"){
-            	output += '<p><div class="glyphicon glyphicon-star" />' + addr.scope + '</p></div>';
-            }else output += '</div>';
-            if(contenttypeid == 12){
-          	  	if(myItem.parking){
-                   output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
-          	  	}if(myItem.restdate){
-                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
-          	  	}if(myItem.infocenter){
-                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-          	  	}
-            }else if(contenttypeid == 14){
-          	  	if(myItem.usefee){
-                   output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
-          	  	}if(myItem.usetimeculture){
-                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
-          	  	}if(myItem.restdateculture){
-                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
-          	  	}if(myItem.infocenterculture){
-                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
-          	  	}
-            }else if(contenttypeid == 15){
-          	  	if(myItem.eventplace){
-                   output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
-          	  	}if(myItem.eventstartdate){
-                   output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
-          	  	}if(myItem.playtime){
-                   output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
-          	  	}if(myItem.sponsor1 || myItem.sponsor1tel){
-                   output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
-          	  	}
-            }else if(contenttypeid == 28){
-          	  	if(myItem.usetimeleports){
-                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
-          	  	}if(myItem.infocenterleports){
-                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
-          	  	}
-            }else if(contenttypeid == 32){
-          	  	if(myItem.reservationurl){
-                   output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
-          	  	}if(myItem.subfacility){
-                   output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
-          	  	}if(myItem.infocenterlodging){
-                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
-          	  	}
-            }else if(contenttypeid == 38){
-          	  	if(myItem.saleitem){
-                   output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
-          	  	}if(myItem.opentime){
-                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
-          	  	}if(myItem.restdateshopping){
-                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
-          	  	}if(myItem.infocenter){
-                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
-          	  	}
-            }else if(contenttypeid == 39){
-          	  	if(myItem.treatmenu){
-                   output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
-          	  	}if(myItem.opentimefood){
-                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
-          	  	}if(myItem.restdatefood){
-                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
-          	  	}if(myItem.infocenterfood){
-                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
-          	  	}
+               output += '<p><div class="glyphicon glyphicon-star" />' + addr.scope + '</p>';
             }
-            if(addr.image1 && addr.link1){
-            	output += '<p class="p">리뷰보기:(클릭으로 이동) </p><a class="review" href="' + addr.link1 + '"><img src="' + addr.image1 + '"/>'
-            			+ '</a>';
-            }if(addr.image2 && addr.link2){
-            	output += '<a class="review" href="' + addr.link2 + '"><img src="' + addr.image2 + '"/>'
-    			+ '</a>';
-   			}if(addr.image3 && addr.link3){
-            	output += '<a class="review" href="' + addr.link3 + '"><img src="' + addr.image3 + '"/>'
-    			+ '</a>';
-    		}
+               if(addr.image1 && addr.link1){
+                   output += '<p class="p">리뷰보기:(클릭으로 이동) </p><a class="review" href="' + addr.link1 + '"><img src="' + addr.image1 + '"/>'
+                         + '</a>';
+                }if(addr.image2 && addr.link2){
+                   output += '<a class="review" href="' + addr.link2 + '"><img src="' + addr.image2 + '"/>'
+                 + '</a>';
+                }if(addr.image3 && addr.link3){
+                   output += '<a class="review" href="' + addr.link3 + '"><img src="' + addr.image3 + '"/>'
+                 + '</a>';
+             	}
+            
+            output += '</div>';
+            if(contenttypeid == 12){
+                  if(myItem.parking){
+                   output += '<p class="p" >'+'주차장 : ' + myItem.parking+'</p>';
+                  }if(myItem.restdate){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdate + '</p>';
+                  }if(myItem.infocenter){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }
+            }else if(contenttypeid == 14){
+                  if(myItem.usefee){
+                   output += '<p class="p" >'+'입장료 : ' + myItem.usefee+'</p>';
+                  }if(myItem.usetimeculture){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeculture+'</p>';
+                  }if(myItem.restdateculture){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateculture + '</p>';
+                  }if(myItem.infocenterculture){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterculture + '</p>';
+                  }
+            }else if(contenttypeid == 15){
+                  if(myItem.eventplace){
+                   output += '<p class="p" >'+'행사 장소 : ' + myItem.eventplace+'</p>';
+                  }if(myItem.eventstartdate){
+                   output += '<p class="p" >'+'행사 일정 : ' + myItem.eventstartdate + '~' + myItem.eventenddate +'</p>';
+                  }if(myItem.playtime){
+                   output += '<p class="p" >' +'행사 시간 : ' + myItem.playtime + '</p>';
+                  }if(myItem.sponsor1 || myItem.sponsor1tel){
+                   output += '<p class="p" >' +'주최처 : ' + myItem.sponsor1 + " tel) " + myItem.sponsor1tel + '</p>';
+                  }
+            }else if(contenttypeid == 28){
+                  if(myItem.usetimeleports){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.usetimeleports+'</p>';
+                  }if(myItem.infocenterleports){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterleports + '</p>';
+                  }
+            }else if(contenttypeid == 32){
+                  if(myItem.reservationurl){
+                   output += '<p class="p" >'+'예약 : ' + myItem.reservationurl+'</p>';
+                  }if(myItem.subfacility){
+                   output += '<p class="p" >' +'시설 : ' + myItem.subfacility + '</p>';
+                  }if(myItem.infocenterlodging){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterlodging + '</p>';
+                  }
+            }else if(contenttypeid == 38){
+                  if(myItem.saleitem){
+                   output += '<p class="p" >'+'취급물품 : ' + myItem.saleitem+'</p>';
+                  }if(myItem.opentime){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentime+'</p>';
+                  }if(myItem.restdateshopping){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdateshopping + '</p>';
+                  }if(myItem.infocenter){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenter + '</p>';
+                  }
+            }else if(contenttypeid == 39){
+                  if(myItem.treatmenu){
+                   output += '<p class="p" >'+'메뉴 : ' + myItem.treatmenu+'</p>';
+                  }if(myItem.opentimefood){
+                   output += '<p class="p" >'+'운영시간 : ' + myItem.opentimefood+'</p>';
+                  }if(myItem.restdatefood){
+                   output += '<p class="p" >' +'휴무일 : ' + myItem.restdatefood + '</p>';
+                  }if(myItem.infocenterfood){
+                   output += '<p class="p" >' +'연락처 : ' + myItem.infocenterfood + '</p>';
+                  }
+            }
+            
                 output += '</div>';
                 $('#window').html(output);
         },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
           alert("Status: " + textStatus); alert("Error: " + errorThrown); 
       } 
- 	});
+    });
 }
 
 function getInfo(contentid, contenttypeid){
-	var addr;
-	$.ajax({
-		url:'callInfo.do',
-		type:'POST',
-		async: false, 
-		data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
-		dataType: 'json',
-		success: function(data){
-			addr = data;
-		}
-		
-	});
-	return addr;
+   var addr;
+   $.ajax({
+      url:'callInfo.do',
+      type:'POST',
+      async: false, 
+      data: {"contentId" : contentid, "contentTypeId" : contenttypeid},
+      dataType: 'json',
+      success: function(data){
+         addr = data;
+      }
+      
+   });
+   return addr;
 }
 
 //행정구역 표시 텍스트
@@ -902,75 +918,180 @@ AddText.prototype.draw = function() {
 
 };
 
-
-//시간
-$(function setHour(){
-	var result = "";			//select에 들어갈 값
-	var value = "";				//option에 들어갈 값
-
-	result += "<option value='hh'>" + "시" + "</option>";	
-	for(var i=0; i<24; i++){	
-		if(i<10){	
-			value = "0" + i;
-		} else {
-			value = i;
-		}
-		result += "<option value=" + value + ">" + value + "</option>";
-	}
-
-	$('#selectHour').empty();
-	$('#selectHour').append(result);
-	
-})
-
-//분
-$(function setMinute(){
-	var result = "";			//select에 들어갈 값
-	var value = "";				//option에 들어갈 값
-	
-	result += "<option value='mm'>" + "분" + "</option>";	
-	for(var i=0; i<6; i++){	
-			if(i==0){
-				value = "0" + i
-			} else {
-				value = i*10;
-			}			
-		result += "<option value=" + value + ">" + value + "</option>";
-	}
-
-	$('#selectMinute').empty();
-	$('#selectMinute').append(result);
-})
-
-
- //경로저장
+//경로저장
 function savepath(){
-	
-	var id = "<%=request.getAttribute("id")%>";		
-	var oneAlert = 0;									//alert 한번만 나오도록 하기 위해서 사용
+   
+   var id = "<%=request.getAttribute("id")%>";      
 
-	if(id == null){
-		alert("회원만 이용 가능합니다.");
-		//로그인 화면으로 이동하게 ??
-	} else {		
-
-	for(var i=0; i<arr.length; i++){
-
-  	$.ajax({
-		url:'insertPath.do',
-		data:{"writer" : id, "contentId" : arr[i].contentId},	
-		success: function(){
-			if(oneAlert==0)
-				alert("경로가 저장되었습니다.");
-				oneAlert++;
-		}
-	
-	})
-	}
-	} 
-
+   if(id == "null"){
+      alert("회원만 이용 가능합니다.");
+	  location.href = "login.do";
+   } else {      
+      var storyName = prompt('새로운 스토리명을 입력해주세요.');
+      if(storyName!=null && storyName!=''){
+         $.ajax({                           //스토리 저장
+            url : "inputStory.do",
+            data : {"id":id, "story_title":storyName},
+            success : function(){
+               for(var i=0; i<arr.length; i++){
+                  $.post("insertPath.do", {"contentId" : arr[i].contentId}, function(){            //경로 저장
+                  })            
+               }
+               alert("스토리가 저장 되었습니다.");
+            },
+            error : function(){
+               alert("코스를 먼저 찾아주세요.");
+            }
+         })
+      }	
+   } 
 }
 
-</script>      
+//시간 설정
+function setTime(){
+	$('#timeOption').toggle();
+}
+
+//0~12의 숫자 입력(시간)
+function hourSetting(value){
+	
+	if(value>=12){					//12시 이상 입력 하면 12로 설정
+		$('#hour').val(12);
+	} else if(value>0 && value<12){
+		if(value<10){				//두자리 이하면 앞에 '0'설정
+			value = "0" + value;
+			$('#hour').val(value);
+		}
+	} else {
+		$('#hour').val("00");		//문자 or 0이하의 값은 모두 00으로 설정
+	};
+	changeTime();
+
+}
+//0~59의 숫자 입력(분)
+function minuteSetting(value){
+	if(value>=59){					//59분 이상 입력 하면 59로 설정
+		$('#minute').val(59);
+	} else if(value>0 && value<59){
+		if(value<10){				//두자리 이하면 앞에 '0'설정
+			value = "0" + value;
+			$('#minute').val(value);
+		}
+	} else {
+		$('#minute').val("00");		//문자 or 0이하의 값은 모두 00으로 설정
+	};
+	changeTime();
+}
+
+//+1시간
+function upHour(){
+	var hour = 0;
+	if(typeof $('#hour').val()=="string"){			//처음 넘어오는 value는 string이라서 number로 바꿔준다.
+		hour = Number($('#hour').val());
+	}
+	hour = hour + 1;
+	if(hour<10){									//한자리 숫자는 앞에 '0'추가해서 두자리 맞춰주기 위함
+		hour = "0" + hour;
+		$('#hour').val(hour);
+		changeTime();
+	} else if(hour>12){								//12시가 넘어가면 다시 00으로 맞춰준다.
+		hour = "00";
+		$('#hour').val(hour);
+		changeTime();
+	}
+	$('#hour').val(hour);
+	changeTime();
+	
+}
+//-1시간
+function downHour(){
+	var hour = 0;
+	if(typeof $('#hour').val()=="string"){			//처음 넘어오는 value는 string이라서 number로 바꿔준다.
+		hour = Number($('#hour').val());
+	}
+	hour = hour - 1;
+	if(hour<0){										//0보다 밑이면 다시 12시로 설정
+		hour = 12;
+		$('#hour').val(hour);
+		changeTime();
+	} else {								
+		if(hour<10){									//한자리 숫자는 앞에 '0'추가해서 두자리 맞춰주기 위함
+			hour = "0" + hour;
+			$('#hour').val(hour);
+			changeTime();
+		}
+	}
+	$('#hour').val(hour);	
+	changeTime();
+}
+//+10분
+function upMinute(){
+	var minute = 0;
+	if(typeof $('#minute').val()=="string"){			//처음 넘어오는 value는 string이라서 number로 바꿔준다.
+		minute = Number($('#minute').val());
+	}
+	minute = minute + 10;
+	if(minute<10){									//한자리 숫자는 앞에 '0'추가해서 두자리 맞춰주기 위함
+		minute = "0" + minute;
+		$('#minute').val(minute);	
+		changeTime();
+	} else if(minute>50){								//12시가 넘어가면 다시 00으로 맞춰준다.
+		minute = "00";
+		$('#minute').val(minute);
+		changeTime();
+	}
+	$('#minute').val(minute);	
+	changeTime();
+}
+//-10분
+function downMinute(){
+	var minute = 0;
+	if(typeof $('#minute').val()=="string"){			//처음 넘어오는 value는 string이라서 number로 바꿔준다.
+		minute = Number($('#minute').val());
+	}
+	minute = minute - 10;
+	if(minute<0){										//0보다 밑이면 다시 12시로 설정
+		minute = 50;
+		$('#minute').val(minute);
+		changeTime();
+	} else {								
+		if(minute<10){									//한자리 숫자는 앞에 '0'추가해서 두자리 맞춰주기 위함
+			minute = "0" + minute;
+			$('#minute').val(minute);	
+			changeTime();
+		}
+	}
+	$('#minute').val(minute);
+	changeTime();
+	
+}
+
+//AM,PM 선택
+$('#ampm').change(function(){
+	changeTime();
+})
+
+//변경된 출발 시간 text value로 저장
+function changeTime(){
+	var hour = $('#hour').val();
+	var min = $('#minute').val();
+	var ampm = $('#ampm').val();
+
+	$('#startTime').val(hour + ":" + min + ampm);
+}
+
+//00:00 보여주기 용도 
+$(function time(){
+	var hour = $('#hour').val();
+	var min = $('#minute').val();
+	var ampm = $('#ampm').val();
+	$('#startTime').val(hour + ":" + min + ampm);
+})
+
+
+
+
+</script>  
+
 </body>
 </html>

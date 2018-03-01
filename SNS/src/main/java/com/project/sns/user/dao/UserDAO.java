@@ -23,4 +23,5 @@ public interface UserDAO {
 	public List<UserVO> getFollower(String id);
 	public void unFollow(HashMap<String, String> ids);
 	public int getFollow(HashMap map);
+	public int updatePicture(UserVO vo);
 }

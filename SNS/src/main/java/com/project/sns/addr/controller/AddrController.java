@@ -275,7 +275,7 @@ public class AddrController {
 	
 	@ResponseBody
 	@RequestMapping("/callInfo")
-	public AddrVO callInfo(@RequestParam String contentId, @RequestParam String contentTypeId) throws Exception{
+	public AddrVO callInfo(@RequestParam String contentId) throws Exception{
 		AddrVO vo = service.callInfo(contentId);
 		double star = 0;
 		if(vo.getScope()!=null) {
@@ -290,7 +290,7 @@ public class AddrController {
 			}
 		}
 		String stars = Double.toString(star);
-		if(contentTypeId.equals("39")) {
+		if(vo.getContentTypeId().equals("39")) {
 		AddrVO vo2 = service.callReview(contentId);
 		if(vo2!=null) {
 		vo.setLink1(vo2.getLink1());
@@ -308,54 +308,38 @@ public class AddrController {
 		return vo;
 	}
 
-	@RequestMapping("/Address.do")
-	public String Address(HttpServletRequest req) throws Exception {
-		List<AddrVO> list = service.getAddress();
-		req.setAttribute("list", list);		
-		return "Map";
-	}
-
 	 @RequestMapping("/newMap")
-	 public String path2(HttpServletRequest req, HttpSession session)throws Exception{
+	 public String path2(HttpServletRequest request, HttpSession session)throws Exception{
 	    List<AddrVO> list = service.getAddress();
-	    req.setAttribute("list", list);   
+	    request.setAttribute("list", list);   
 	    
 	    if(session.getAttribute("id") != null) {				//로그인이 되어있을 때만 pathCount를(경로 묶음) 불러온다.
 	    	
 	    	String id = (String) session.getAttribute("id");
 	    	id = AES.setDecrypting(id);
 
-	    req.setAttribute("id", id);
+	    request.setAttribute("id", id);
 	    }
 	    return "path2";
 	 }
 
 	  @RequestMapping("/insertPath.do")
-	    public void insertPath(HttpServletRequest request, HttpServletResponse response, BoardVO vo) throws Exception {
+	    public void insertPath(HttpSession session, BoardVO vo) throws Exception {
 
-	    	Integer pathCount = 0;
-	    	try {
-	    		 pathCount = service.getCount(vo.getWriter());
-	    	} catch (Exception e) {
-	    		pathCount = 0;	
-	    	}
-	    	pathCount = pathCount + 1;
-	    	vo.setCount(pathCount);
+	    	String id = (String) session.getAttribute("id");
+	    	id = AES.setDecrypting(id);
+	    	
+		int storySeq = service.getStoryseq(id);
+		
+	    vo.setWriter(id);
+	    	vo.setStory_seq(storySeq);
 	    	service.insertPath(vo);
 	    
 	    }
-	 
-	//추가!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	   @RequestMapping("/Path.do")
-	   public String Path(HttpServletRequest req) throws Exception{
-		   List<AddrVO> list = service.getAddress();
-		   req.setAttribute("list", list);   
-		   return "path";
-	   }
 	
 	//Dijkstra - 코스추천 길찾기
 	@RequestMapping("/getPath.do")
-	public @ResponseBody Map<String, Object> getPath(HttpServletRequest req, @RequestParam String sigungucode, @RequestParam String hour, @RequestParam String minute) throws Exception {
+	public @ResponseBody Map<String, Object> getPath(@RequestParam String sigungucode, @RequestParam String startTime) throws Exception {
 		
 		
 		//날씨 API
@@ -431,12 +415,19 @@ public class AddrController {
 		String curDate = dataFormat.format(cal.getTime());
 		
 		int time = 0;
-		if(hour.equals("hh") && minute.equals("mm")) {					//select box가 "시", "분" 으로 설정되어 있으면 현재시간으로 계산
+		String sTime = startTime.replace(":", "");
+		String ampm = sTime.substring(4);
+		System.out.println(sTime.substring(0,4));
+		if(sTime.substring(0,4).equals("0000")) {
 			time = Integer.parseInt(curDate.substring(8));
-		} else {														//입력된 출발 시간으로 계산
-			String hhmm = hour + minute;
-			time = Integer.parseInt(hhmm);
+		} else if(ampm.equals("PM")){
+			time = Integer.parseInt(sTime.substring(0,4)) + 1200;
 		}
+		
+		if(ampm.equals("PM")) {
+			time = Integer.parseInt(sTime.substring(0,4)) + 1200;
+		}
+
      		
 		for(int i=0; i<list.size(); i++) {
 			tempMap = new HashMap<>();
