@@ -105,10 +105,11 @@ public class BoardController {
 	}// �뜝�뙃�떆源띿삕
 
 	@RequestMapping("/modifyBoard")
-	public String writeForm(@RequestParam("board_seq") String board_seq, Model model, HttpServletRequest request, HttpServletResponse res) throws Exception {
+	public String writeForm(Model model, HttpServletRequest request, HttpServletResponse res) throws Exception {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		id = AES.setDecrypting(id);
+		String board_seq = request.getParameter("board_seq");
 		
 		BoardVO board = new BoardVO();
 		if(board_seq!=null) {//board_seq가 넘어왔을 경우 게시판 수정.
