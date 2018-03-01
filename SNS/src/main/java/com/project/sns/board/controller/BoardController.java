@@ -64,11 +64,11 @@ public class BoardController {
 
 		BoardVO vo = new BoardVO();
 		vo.setWriter(boardUser);
-		System.out.println("스토리 값 : " + vo.getWriter());
+		System.out.println("�뒪�넗由� 媛� : " + vo.getWriter());
 		return service.getBoardStoryList(vo);
 	}
 
-	@RequestMapping("/getMainBoardList.do") // 占쏙옙占쏙옙화占쏙옙 占쏟동깍옙 占쌜억옙
+	@RequestMapping("/getMainBoardList.do") // �뜝�룞�삕�뜝�룞�삕�솕�뜝�룞�삕 �뜝�룦�룞源띿삕 �뜝�뙗�뼲�삕
 	public String getMainBoardList(@RequestParam("index") int index, HttpServletRequest request) throws Exception {
 		TIME_MAXIMUM time = new TIME_MAXIMUM();
 		logger.info("getMainBoardList");
@@ -102,7 +102,7 @@ public class BoardController {
 			return "home1";
 		}
 
-	}// �뜝�뙃�떆源띿삕
+	}// 占쎈쐻占쎈셾占쎈뻻繹먮씮�굲
 
 	@RequestMapping("/modifyBoard")
 	public String writeForm(Model model, HttpServletRequest request, HttpServletResponse res) {
@@ -166,7 +166,7 @@ public class BoardController {
 				}
 			}
 		}
-		//팔로워 모음
+		//�뙏濡쒖썙 紐⑥쓬
 		List<UserVO> followerlist = userService.getFollower(id);
 		request.setAttribute("myInfo", myvo);
 		request.setAttribute("chatList", resultList);
@@ -201,14 +201,14 @@ public class BoardController {
 		return "home1";
 	}
 
-	@RequestMapping("/list.do") // 댓글 리스트
+	@RequestMapping("/list.do") // �뙎湲� 由ъ뒪�듃
 	@ResponseBody
 	private List<ReplyVO> replyList(Model model, ReplyVO vo) throws Exception {
 		logger.info("list.do");
 		return service.replyList(vo);
 	}
 
-	@RequestMapping("/insert.do") // 댓글 작성
+	@RequestMapping("/insert.do") // �뙎湲� �옉�꽦
 	@ResponseBody
 	private int replyInsert(@RequestParam int board_seq, @RequestParam int story_seq, @RequestParam String rcontent,
 			HttpSession se) throws Exception {
@@ -223,21 +223,21 @@ public class BoardController {
 		reply.setStory_seq(story_seq);
 		;
 		System.out.println("insert.do : " + rcontent + " : " + board_seq);
-		// 로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지
-		// 않았기때문에 임시로 "test"라는 값을 입력해놨습니다.
+		// 濡쒓렇�씤 湲곕뒫�쓣 援ы쁽�뻽嫄곕굹 �뵲濡� �뙎湲� �옉�꽦�옄瑜� �엯�젰諛쏅뒗 �뤌�씠 �엳�떎硫� �엯�젰 諛쏆븘�삩 媛믪쑝濡� �궗�슜�븯硫� �맗�땲�떎. ���뒗 �뵲濡� �뤌�쓣 援ы쁽�븯吏�
+		// �븡�븯湲곕븣臾몄뿉 �엫�떆濡� "test"�씪�뒗 媛믪쓣 �엯�젰�빐�넧�뒿�땲�떎.
 		reply.setRwriter(id);
 		return service.replyInsert(reply);
 	}
 
 	@ResponseBody
-	@RequestMapping("/update.do") // 댓글 수정
+	@RequestMapping("/update.do") // �뙎湲� �닔�젙
 	private int mCommentServiceUpdateProc(ReplyVO reply) throws Exception {
 		logger.info("update.do");
 		return service.replyUpdate(reply);
 	}
 
 	@ResponseBody
-	@RequestMapping("/delete.do") // 댓글 삭제
+	@RequestMapping("/delete.do") // �뙎湲� �궘�젣
 	private int mCommentServiceDelete(ReplyVO reply) throws Exception {
 		logger.info("delete.do");
 		return service.replyDelete(reply);
@@ -246,7 +246,6 @@ public class BoardController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-
 
 	   @RequestMapping("/getBoardList.do")
 	   public String getBoardList(@RequestParam("index") int index, @RequestParam("story_seq") int story_seq,
@@ -295,9 +294,9 @@ public class BoardController {
 	 * getBoardStoryList(HttpServletRequest request, HttpSession se) throws
 	 * Exception {
 	 * 
-	 * String id = (String) se.getAttribute("id"); System.out.println("아이디 : " +
-	 * id); id = aes.setDecrypting(id); System.out.println("복호화한 아이디 : " + id);
-	 * BoardVO vo = new BoardVO(); vo.setWriter(id); System.out.println("스토리 값 : " +
+	 * String id = (String) se.getAttribute("id"); System.out.println("�븘�씠�뵒 : " +
+	 * id); id = aes.setDecrypting(id); System.out.println("蹂듯샇�솕�븳 �븘�씠�뵒 : " + id);
+	 * BoardVO vo = new BoardVO(); vo.setWriter(id); System.out.println("�뒪�넗由� 媛� : " +
 	 * vo.getWriter()); return service.getBoardStoryList(vo); }
 	 */
 
@@ -328,7 +327,7 @@ public class BoardController {
 		System.out.println("BoardVO.getFiles() : " + vo.getFiles());
 		System.out.println("BoardVO.getTitle() : " + vo.getTitle());
 		vo.setWriter(AES.setDecrypting(vo.getWriter()));
-		// 占쌉시깍옙 占쏙옙占쏙옙확占쏙옙
+		// �뜝�뙃�떆源띿삕 �뜝�룞�삕�뜝�룞�삕�솗�뜝�룞�삕
 		int i = service.getBoardSeq(vo);
 		int k = 100;
 		if (i == 0) {
@@ -338,7 +337,7 @@ public class BoardController {
 	}
 
 	/*
-	 * @RequestMapping("/insert.do") // 댓글 작성
+	 * @RequestMapping("/insert.do") // �뙎湲� �옉�꽦
 	 * 
 	 * @ResponseBody private int replyInsert(@RequestParam int
 	 * board_seq, @RequestParam int story_seq, @RequestParam String rcontent) throws
@@ -346,9 +345,9 @@ public class BoardController {
 	 * 
 	 * ReplyVO reply = new ReplyVO(); reply.setBoard_seq(board_seq);
 	 * reply.setRcontent(rcontent); reply.setStory_seq(story_seq); ;
-	 * System.out.println("insert.do : " + rcontent + " : " + board_seq); // 로그인 기능을
-	 * 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력 받아온 값으로 사용하면 됩니다. 저는 따로 폼을 구현하지 // 않았기때문에 임시로
-	 * "test"라는 값을 입력해놨습니다. reply.setRwriter("test"); return
+	 * System.out.println("insert.do : " + rcontent + " : " + board_seq); // 濡쒓렇�씤 湲곕뒫�쓣
+	 * 援ы쁽�뻽嫄곕굹 �뵲濡� �뙎湲� �옉�꽦�옄瑜� �엯�젰諛쏅뒗 �뤌�씠 �엳�떎硫� �엯�젰 諛쏆븘�삩 媛믪쑝濡� �궗�슜�븯硫� �맗�땲�떎. ���뒗 �뵲濡� �뤌�쓣 援ы쁽�븯吏� // �븡�븯湲곕븣臾몄뿉 �엫�떆濡�
+	 * "test"�씪�뒗 媛믪쓣 �엯�젰�빐�넧�뒿�땲�떎. reply.setRwriter("test"); return
 	 * service.replyInsert(reply); }
 	 */
 
@@ -363,9 +362,9 @@ public class BoardController {
 			throws Exception {
 		logger.info("getStoryList.do");
 		request.setCharacterEncoding("UTF-8");
-		System.out.println("아이디 : " + id);
+		System.out.println("�븘�씠�뵒 : " + id);
 		id = AES.setDecrypting(id);
-		System.out.println("복호화한 아이디 : " + id);
+		System.out.println("蹂듯샇�솕�븳 �븘�씠�뵒 : " + id);
 
 		List<StoryVO> list = service.getStoryAll(id);
 		request.setAttribute("list", list);
@@ -388,6 +387,10 @@ public class BoardController {
 		return "table3";
 	}
 
+<<<<<<< HEAD
+=======
+	@RequestMapping("/likeUp.do") // �뙎湲� �옉�꽦
+>>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject
 	@ResponseBody
 	@RequestMapping("/likeUp.do") // 좋아요
 	private String likeUp(@RequestParam int board_seq, @RequestParam int story_seq, HttpSession session) throws Exception {
@@ -413,6 +416,7 @@ public class BoardController {
 			vo.setHeart(service.getHeartCount(vo) + 1);
 			heart = vo.getHeart();
 			service.likeInsert(vo);
+<<<<<<< HEAD
 			service.likeUp(vo);// 좋아요 +1 업데이트
 			System.out.println("좋아요 수 :" + heart);
 			return Integer.toString(heart);
@@ -420,6 +424,21 @@ public class BoardController {
 			vo.setHeart(service.getHeartCount(vo) - 1);
 			heart = vo.getHeart();
 			service.likeUp(vo);
+=======
+			vo.setHeart(service.getBoard(vo).get(0).getHeart());// 醫뗭븘�슂 +1
+			service.likeUp(vo);// 醫뗭븘�슂 +1 �뾽�뜲�씠�듃
+			heart = service.getBoard(vo).get(0).getHeart();// +1 �맂 醫뗭븘�슂 諛섑솚
+			System.out.println("醫뗭븘�슂 �닔 :" + heart);
+			return heart;
+
+		} catch (Exception e) {
+
+			vo.setBoard_seq(board_seq);
+			vo.setStory_seq(story_seq);
+			vo.setHeart_id(id);
+			heart = service.getBoard(vo).get(0).getHeart();
+			heart = heart - 2;
+>>>>>>> branch 'kimit' of https://github.com/ctrlF11/SNSProject
 			service.likeDelete(vo);
 			return Integer.toString(heart);
 		}

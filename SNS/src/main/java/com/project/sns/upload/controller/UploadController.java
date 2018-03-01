@@ -87,7 +87,7 @@ public class UploadController {
   @ResponseBody
   @RequestMapping(value ="/uploadAjax", method=RequestMethod.POST)
 //                  produces = "text/plain;charset=UTF-8")
-  				
+              
   //public ResponseEntity<String> uploadAjax(MultipartFile file)throws Exception{
   public int uploadAjax(MultipartFile file)throws Exception{
     
@@ -127,7 +127,7 @@ public class UploadController {
   @ResponseBody
   @RequestMapping("/displayFile")
   //public ResponseEntity<byte[]>  displayFile(String fileName)throws Exception{
-	public ResponseEntity<byte[]>  displayFile(int img_seq)throws Exception{
+   public ResponseEntity<byte[]>  displayFile(int img_seq)throws Exception{
     
 //    InputStream in = null; 
     ResponseEntity<byte[]> entity = null;
@@ -153,10 +153,10 @@ public class UploadController {
 //        headers.add("Content-Disposition", "attachment; filename=\""+ 
 //          new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
 //      }
-    	byte[] fi = (byte[])service.getImage(img_seq).getImage(); 
-    	entity = new ResponseEntity<byte[]>(fi,HttpStatus.CREATED);
-    	
-    	
+       byte[] fi = (byte[])service.getImage(img_seq).getImage(); 
+       entity = new ResponseEntity<byte[]>(fi,HttpStatus.CREATED);
+       
+       
 //        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), 
 //          headers, 
 //          HttpStatus.CREATED);
@@ -221,4 +221,3 @@ public class UploadController {
 //  }  
 
 }
-
