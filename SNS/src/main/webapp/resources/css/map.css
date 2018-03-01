@@ -2,96 +2,96 @@
 @import url('https://cdn.rawgit.com/singihae/Webfonts/master/style.css');
 
 #setDiv {
-	text-align: center;
+   text-align: center;
 }
 
 #mask {
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 888;
-	background-color: #000;
-	display: none;
+   position: absolute;
+   left: 0;
+   top: 0;
+   z-index: 888;
+   background-color: #000;
+   display: none;
 }
 
 #window {
-	display: none;
-	background-color: #ffffff;
-	height: 443px;
-	z-index: 999;
-	width: 693px;
-	border: 1px;
-	border-radius: 12px;
-	solid: #ccc;
-	position: fixed;
-	overflow: auto;
+   display: none;
+   background-color: #ffffff;
+   height: 443px;
+   z-index: 999;
+   width: 693px;
+   border: 1px;
+   border-radius: 12px;
+   solid: #ccc;
+   position: fixed;
+   overflow: auto;
 }
 
 #sidemenu {
-	width: 400px;
-	height: 100vh;
-	padding-top: 70px;
-	float: right;
+   width: 400px;
+   height: 100vh;
+   padding-top: 70px;
+   float: right;
 }
 
 #map {
-	position: absolute;
-	/* padding-left: 100px; */
-	width: calc(100% - 400px);
-	height: 100vh;
-	float: left;
+   position: absolute;
+   /* padding-left: 100px; */
+   width: calc(100% - 400px);
+   height: 100vh;
+   float: left;
 }
 
 .area {
-	position: absolute;
-	background: #fff;
-	border: 1px solid #888;
-	border-radius: 3px;
-	font-size: 12px;
-	top: -5px;
-	left: 15px;
-	padding: 2px;
+   position: absolute;
+   background: #fff;
+   border: 1px solid #888;
+   border-radius: 3px;
+   font-size: 12px;
+   top: -5px;
+   left: 15px;
+   padding: 2px;
 }
 
 .sideBtn{
-	border : 0px;
-	padding : 0px;
+   border : 0px;
+   padding : 0px;
 }
 
 .sideBtn img {
-	background-color: #2a2d34;
+   background-color: #2a2d34;
 }
 
 .pin{
-	background:white;
-	overflow:hidden;
-	height: auto;
-	border: 1px solid black;
-	clear: left;
-	border-radius: 12px;
-	}
-	
+   background:white;
+   overflow:hidden;
+   height: auto;
+   border: 1px solid black;
+   clear: left;
+   border-radius: 12px;
+   }
+   
 .pinn{
-	background:white;
-	overflow:hidden;
-	height: auto;
-	border: 1px solid black;
-	clear: left;
-	border-radius: 12px;
-	}
-	
-	
-.p{	
-	 text-align:left;
-	}
-	
+   background:white;
+   overflow:hidden;
+   height: auto;
+   border: 1px solid black;
+   clear: left;
+   border-radius: 12px;
+   }
+   
+   
+.p{   
+    text-align:left;
+   }
+   
 #searchTextBox{
    margin-top: 8px;
    margin-left: 10px;
    }
-	
+   
 #searchBox{
-	
+   
    position: fixed;
    float: left;
    background-color: white;
@@ -99,7 +99,7 @@
    width : 325px;
    top: 95px;
    right: 80%;
-	}
+   }
 
 #searchMap{
    background-color: white;
@@ -111,11 +111,11 @@
    }
 
 .xbtn{
-	float: right;
-	font-size: 20px;
-	right: 3%;
-	}
-	
+   float: right;
+   font-size: 20px;
+   right: 3%;
+   }
+   
 .scope{
    float:left;
    margin: 10px;
@@ -128,76 +128,76 @@
    }
    
 #title{
-	color : white;
-	width: 100%;
-	margin: 0px;
-	height: 54px;
-	vertical-align: middle;
-	line-height: 54px;
+   color : white;
+   width: 100%;
+   margin: 0px;
+   height: 54px;
+   vertical-align: middle;
+   line-height: 54px;
 }
    
 #time{
-	float : left;
-	margin-left:10px;
+   float : left;
+   margin-left:10px;
 }
 
 #hour{
-	float : left;
-	width : 50px;
-	height : 33px;
-	text-align:center;
+   float : left;
+   width : 50px;
+   height : 33px;
+   text-align:center;
 }
 
 #minute{
-	width : 50px;
-	height : 33px;
-	text-align:center;
+   width : 50px;
+   height : 33px;
+   text-align:center;
 }
 
 #ampm{
-	width : 50px;
-	height : 33px;
+   width : 50px;
+   height : 33px;
 }
 
 #path{
-	padding-top : 30px;
+   padding-top : 30px;
 }
 
 .timeBtn{
-	border : 0px;
-	padding : 0px;
+   border : 0px;
+   padding : 0px;
 }
 
 .review {
-	margin-top: 5px;
-	margin-left: 26px;
+   margin-top: 5px;
+   margin-left: 26px;
 }
 
 .review img {
-	width: 75px;
-	height: 75px;
+   width: 75px;
+   height: 75px;
 }
 
 .pin-top {
-	height: 53px;
-	margin-top: 0;
+   height: 53px;
+   margin-top: 0;
 }
 
 #popup-X {
-	float: right;
+   float: right;
 }
 
 #savedPath a {
-	font-family:'BM JUA','배달의민족 주아',sans-serif;
-	font-size : 17px;
-	color : #483C32;
-	font-weight: bold;
+   font-family:'BM JUA','배달의민족 주아',sans-serif;
+   font-size : 17px;
+   color : #483C32;
+   font-weight: bold;
 }
 #savedPath a:hover {
-	color : #E41B17;
+   color : #E41B17;
 }
 #savedPath a:focus {
 
-	color : #E41B17;
+   color : #E41B17;
 
 }
