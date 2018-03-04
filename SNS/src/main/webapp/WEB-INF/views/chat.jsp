@@ -149,7 +149,7 @@
    function getInfiniteChat() {
       setInterval(function() {
          chatListFunction();
-      }, 30000); //30초에 1번 실행
+      }, 3000); //3초에 1번 실행
    }
    
    $(document)

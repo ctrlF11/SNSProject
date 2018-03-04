@@ -128,7 +128,6 @@ var index = 0;
 $(function(){
       index = 0;
       var story_seq = <%=request.getAttribute("story_seq")%>;
-      alert("받아온 스토리 번호 : " + story_seq);
       getBoard(story_seq);
 //       $("#main").scroll(function(){
 //          var sh = $("#main").scrollTop() + $("#main").height();
@@ -160,8 +159,6 @@ function togglethis(num) {
 
 function getBoardScroll(story)
 {
-   alert("스크롤 인덱스:"+index);
-   alert("만나서 실행");
    index += 4;
    $.ajax({
       url : 'getBoardList.do',
@@ -170,7 +167,6 @@ function getBoardScroll(story)
              story_seq : story
                },
       success : function(data){
-         alert("만나서 실행 성공");
          $("#col-sm-6").append(data);
       }
    })
@@ -186,7 +182,6 @@ function getBoard(story_seq){
                },
       success : function(data) {
          $("#col-sm-6").html(data);
-         alert("비동기 진입전");
           getStory(story_seq);
       }
    })
@@ -212,7 +207,6 @@ function getStory(story_seq)
                    b += '<input type ="hidden" value ="'+value.story_seq+'" name = "storyHidden">';
                    if(story_seq == value.story_seq)
                    {
-                      alert("같은거 출력:"+story_seq +"같은거 출력 :"+value.story_seq);
                       b += '<h3 onclick = "story_button('+value.story_seq+')"><a href = "#"><strong style ="color:#e1494a; font-weight:bold;">#'+title+'</strong></a></h3>';
                    }
                    else
@@ -234,7 +228,6 @@ function getStory(story_seq)
                      b += '<input type ="hidden" value ="'+value.story_seq+'" name = "storyHidden">';
                      if(story_seq == value.story_seq)
                      {
-                        alert("같은거 출력:"+story_seq +"같은거 출력 :"+value.story_seq);
                         b += '<h3 onclick = "story_button('+value.story_seq+')"><a href = "#"><strong style ="color:#e1494a; font-weight:bold;">#'+title+'</strong></a></h3>';
                      }
                      else
@@ -255,9 +248,7 @@ function getStory(story_seq)
 
 function story_button(story)
 {
-      alert("스토리 번호 : "+story);
          index = 0;
-         alert("index ="+index);
        $.ajax({
          url : 'getBoardList.do',
          data : {
@@ -391,7 +382,6 @@ function follow_button(writer) {
 
 //좋아요
 	function like_button(board_seq, story_seq) {
-		alert("좋아요 버튼 눌림");
 		$.ajax({
 			url : 'likeUp.do',
 			data : {
@@ -400,7 +390,6 @@ function follow_button(writer) {
 			},
 			success : function(data) {
 				if(isNaN(data) == true) {
-					alert(data);
 				}
 				if(isNaN(data) == false) {
 					var a = '';
@@ -435,8 +424,6 @@ function follow_button(writer) {
       function checkgo() {
          var check = document.getElementById("search_category").value;
          var keyword = document.getElementById("srch-term").value;
-         alert(check);
-         alert(keyword);
          if (keyword == "") {
             alert("키워드를 입력해주세요.");
             return false;
@@ -486,7 +473,6 @@ function follow_button(writer) {
          
   setTimeout(function () { // (A)
              var size = $('#size').val()
-             alert("size : " + size ) ;
              scroll_follow(size);
            }, 1000);
   

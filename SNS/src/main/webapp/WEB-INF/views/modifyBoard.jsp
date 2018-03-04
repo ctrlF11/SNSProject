@@ -138,9 +138,6 @@
 	float: right;
 	}
 	
-#search_wrap form, #search_wrap div, #search_wrap{
-	display: inline;
-}
 .icon_wrap ul  li{
 	display: inline-block;
 	}
@@ -154,7 +151,7 @@
 	margin-bottom: 10px;
 	}
 	
-#title{
+#btitle{
 	width: 90%;
 	display: inline;
 	}
@@ -201,9 +198,9 @@
 					<!-- 글작성 -->
 					<div class='board form-group'>
 						<div class="btitle">
-							<!-- <div class="board_title"> -->
-								<input  class="form-control" type="text" id='title' placeholder='글 제목'/>
-							<!-- </div> -->
+							 <!-- <div class="board_title">  -->
+								<input  class="form-control" type="text" id='btitle' placeholder='글 제목'/>
+							 <!-- </div> --> 
 							<div id="glyphicon">
 								<span class="glyphicon glyphicon-picture" id="imageUp" aria-hidden="true"></span>
 							</div>
@@ -392,6 +389,7 @@ function addMarker(position, title, contentid, contenttypeid) {
 	   starvalue = 0;
        starcount = 0;
        locked = 0;
+       contentId = contentid;
       
        getInfo(contentid);
    });
@@ -462,7 +460,7 @@ function getInfo(contentid){
             var myItem = callDetail(contentid, contenttypeid);
             var output = '<div class="tourbox ' + contentid + '" id="' + contentid + '" text-align:left>';
         	  output += '<div class="image" ><img src = "' + addr.firstimage + '" style="height: 150px; width: 150px"/></div>';
-              output += '<div class="contentBox"><h4 id="title">' + addr.title + '<div class="star" id="star">별점주기'
+              output += '<div class="contentBox"><h4 id="stitle">' + addr.title + '<div class="star" id="star">별점주기'
             		+ '<img src="empty_star3.png" id="star1" onmouseover=show(1) onclick=mark(1) onmouseout=noshow(1)>'
             		+ '<img src="empty_star3.png" id="star2" onmouseover=show(2) onclick=mark(2) onmouseout=noshow(2)>'
             		+ '<img src="empty_star3.png" id="star3" onmouseover=show(3) onclick=mark(3) onmouseout=noshow(3)>'

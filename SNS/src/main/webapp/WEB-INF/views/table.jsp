@@ -139,7 +139,7 @@ for (var i = 0; i < positions.length; i ++) {
     var infowindow = new daum.maps.InfoWindow({
         content : contents[i].value
     });
-    (function(marker, infowindow) {
+/*     (function(marker, infowindow) {
         // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
         daum.maps.event.addListener(marker, 'mouseover', function(){
             infowindow.open(map, marker);
@@ -149,7 +149,7 @@ for (var i = 0; i < positions.length; i ++) {
         daum.maps.event.addListener(marker, 'mouseout', function(){
             infowindow.close();
         });
-    })(marker, infowindow);
+    })(marker, infowindow); */
     
 
     
@@ -180,7 +180,6 @@ function updateBoard(value){
 
 	   var upseq = value.id.replace('up','');
 
-	   console.log(upseq);
 
 	   location.replace("modifyBoard.do?board_seq="+upseq);
 
@@ -396,19 +395,16 @@ function makeOutListener(infowindow) {
    <div class="panel panel-default" id = "table_${status.count}" >
    <div class="card mb-3">
    <div class="card-body">
-      스토리 번호 : ${user.story_seq }
-   ${status.count}
-  <%=list.size()%>
  <input type="hidden" name="count_x${status.count}" value="${user.mapx}">
  <input type="hidden"  name="count_y${status.count}" value="${user.mapy}">
   <input type="hidden"  name="${user.title}" value="${user.title}">
  <input type="hidden" id="size" value="<%=list.size()%>">
          <h6 class="card-title mb-1">
-            <a
+            <div
                href="getBoardValue.do?story_seq=${user.story_seq}&writer=${user.writer}">
                <input type="hidden" id="boardUser" value="${user.writer}"  />
                ${user.content}
-               </a>
+               </div	>
          </h6>
   
         

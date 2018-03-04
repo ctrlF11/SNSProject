@@ -37,7 +37,6 @@
 	}
 	
 .review{
-	clear: left;
 	margin: 10px;
 	}
 
@@ -88,7 +87,7 @@
         	
  			<input type="text" id="startTime" onclick="setTime()" readonly></input>
 
-			<div id="timeOption" style = "float : left;">
+			<div id="timeOption" style = "float : left; margin: 10px 0;">
 				<input type='text' id='hour' value="00" onchange="hourSetting(this.value)"></input>
 					<button class="timeBtn" onclick="upHour()"><img src= "resources/image/timeup.png"></button>
 					<button class="timeBtn" onclick="downHour()"><img src= "resources/image/timedown.jpg"></button>
