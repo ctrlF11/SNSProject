@@ -49,7 +49,7 @@
 		left JOIN Story s
 		ON b.story_seq = s.story_seq
 		where b.story_seq = #{story_seq}
-		limit #{index},4;
+		order by regdate desc
 
 	</select>
 	<select id="getBoardStoryList" parameterType="BoardVO"

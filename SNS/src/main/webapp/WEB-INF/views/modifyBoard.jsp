@@ -183,7 +183,8 @@
 					<!--  스토리  -->
 					<div class='story form-group'>
 						<form class='storyForm'>
-							<select name='storyBox' id='storyBox' class='form-control' onchange='loadPath()'>
+							<!-- <select name='storyBox' id='storyBox' class='form-control' onchange='loadPath()'> -->
+							<select name='storyBox' id='storyBox' class='form-control'>
 								<option>스토리 선택</option>
 								<c:forEach items="${story}" var="story">
 									<option value='${story.story_seq}'>${story.story_title}</option>
@@ -581,7 +582,7 @@ function getInfo(contentid){
 	$('#save').click(function(){
 		
 		var story_seq = $('#storyBox').val();
-		var title = $('#title').val();
+		var title = $('#btitle').val();
 		var content = $('#content').html();
 		console.log("SAVE 후의 star " + starvalue);
 		if(starvalue==null || starvalue==0){
@@ -810,7 +811,7 @@ function mark(star){
 
 var count = 0;				//이전 마커를 지우기 위해서 사용
 //저장된 경로(스토리) 출력
-function loadPath(){
+/* function loadPath(){
 	var pathes = [];
 	var story_seq = $('#storyBox').val();
 	count++;
@@ -833,14 +834,16 @@ function loadPath(){
 				addMarker(latlng, pathList[i].title, pathList[i].contentId, pathList[i].contentTypeId);				
 	            pathes.push(latlng);				//polyline 그리기 용도
 			}
+			if(pathList[0]){
 			panTo(pathList[0].mapy, pathList[0].mapx, pathList[0].contentId, pathList[0].contentTypeId);      //스토리의 처음 위치를 보여줍니다.
 			$('#savedPath').html(path);				//경로리스트 보여주기
 			drawLine(pathes);						//라인 그리기
+			}
 
 			
 		}
 	})
-}
+} */
 
 //클릭하면 해당 위치로 이동 (인포윈도우)
 function panTo(mapy, mapx, contentid, contenttypeid) {

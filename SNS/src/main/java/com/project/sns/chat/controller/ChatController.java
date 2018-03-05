@@ -78,8 +78,8 @@ public class ChatController {
    @RequestMapping("/getNewFollower")
    public List<ChatVO> getNewFollower(HttpSession session){
       String id = (String) session.getAttribute("id");
-       AES aes = new AES();
-       id = aes.setDecrypting(id);
+      AES aes = new AES();
+      id = aes.setDecrypting(id);
        
       List<ChatVO> resultList = new ArrayList<ChatVO>();
       List<ChatVO> list = (List<ChatVO>)service.getFollowerList(id);
